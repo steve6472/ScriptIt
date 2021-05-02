@@ -4,6 +4,7 @@ import steve6472.scriptit.Command;
 import steve6472.scriptit.Script;
 import steve6472.scriptit.TypeDeclarations;
 import steve6472.scriptit.expression.Type;
+import steve6472.scriptit.expression.Value;
 
 /**********************
  * Created by steve6472 (Mirek Jozefek)
@@ -15,7 +16,7 @@ public class ImportType extends Command
 {
 	Type typeToImport;
 
-	public ImportType(String line)
+	public ImportType(Script script, String line)
 	{
 		super(line);
 
@@ -29,11 +30,20 @@ public class ImportType extends Command
 				break;
 			}
 		}
+
+		if (typeToImport != null)
+			script.namespace.importType(typeToImport);
 	}
 
 	@Override
-	public void execute(Script script)
+	public Value execute(Script script)
 	{
-		script.namespace.importType(typeToImport);
+		return null;
+	}
+
+	@Override
+	public String toString()
+	{
+		return "ImportType{" + "typeToImport=" + typeToImport + '}';
 	}
 }

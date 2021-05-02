@@ -1,8 +1,6 @@
 package steve6472.scriptit;
 
-import steve6472.scriptit.commands.AssignValue;
-import steve6472.scriptit.commands.DeclareValue;
-import steve6472.scriptit.commands.ImportType;
+import steve6472.scriptit.commands.*;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -42,7 +40,6 @@ public class Main
 		return a + b * a;
 	}
 
-	string adr = vec2((8 + func(2, 3)) * 3, 2).toString();
 	*/
 	private static final String source =
 """
@@ -51,48 +48,121 @@ import int;
 import double;
 import string;
 import bool;
+
 import char;
 import vec2;
 
 int a;
 //int b = 5;
 //int c = 9 + 10 * 6;
-//a = c * (b + 3);
-a = 5 * int(double(3.2)*6.2);
+a = int(double(3.2)*6.2 * 5.0);
+a.print(); // 99
+//b.print();
+//c.print();
+
+function int stuff(int varA, int varB)
+{
+	function int prnt()
+	{
+		"inside function thingie".print();
+	}
+	int temp = varA * varB;
+	temp.print();
+	prnt();
+	return temp + varA;
+}
+
+int i = stuff(2, 3); // inside function thingie
+i.print(); // 8
+
+"before adr".print(); // before adr
+
+string adr = vec2(8 + stuff(3, 6) * 3, 2).toString();
+adr.print();
+
 
 """;
 
-	private static Map<Pattern, BiFunction<Script, String, Command>> commandMap = new HashMap<>();
+	public static final boolean DEBUG = true;
+
+	private static final Map<Pattern, BiFunction<Script, String, Command>> commandMap = new HashMap<>();
 
 	static
 	{
-		commandMap.put(Stuff.IMPORT, (script, line) -> new ImportType(line));
-		commandMap.put(Stuff.VALUE_DECLARATION, (script, line) -> new DeclareValue(line));
-		commandMap.put(Stuff.VALUE_ASSIGN, (script, line) -> new AssignValue(line));
+		commandMap.put(Regexes.IMPORT, ImportType::new);
+		commandMap.put(Regexes.VALUE_DECLARATION, (script, line) -> new DeclareValue(line));
+		commandMap.put(Regexes.VALUE_ASSIGN, (script, line) -> new AssignValue(line));
+		commandMap.put(Regexes.VALUE_DECLARATION_ASSIGN, (script, line) -> new DeclareAssignValue(line));
+		commandMap.put(Regexes.RETURN, (script, line) -> new ReturnValue(line));
+		commandMap.put(Regexes.DECLARE_FUNCTION, DeclareFunction::new);
 	}
 
 	public static void main(String[] args)
 	{
-		Script script = new Script();
-		int i = 0;
-		while (i < source.length())
-		{
-			Object[] arr = nextLine(i);
-			String line = (String) arr[0];
-			commandMap.forEach(((pattern, command) ->
-			{
-				Matcher matcher = Stuff.VALUE_DECLARATION.matcher(line);
-				if (matcher.matches())
-				{
-					script.commands.add(command.apply(script, line));
-				}
-			}));
-			System.out.println(line);
-			i = (int) arr[1];
-		}
+		Script script = createScript(source);
+
+		System.out.println("\n".repeat(3));
+//		script.printCode();
+		script.run();
 	}
 
-	private static Object[] nextLine(int start)
+	public static Script createScript(String code)
+	{
+		return createScript(null, code);
+	}
+
+	public static Script createScript(Script parentScript, String code)
+	{
+		Script script = new Script(parentScript);
+		int i = 0;
+		while (i < code.length())
+		{
+			Object[] arr = nextLine(code, i);
+			String line = (String) arr[0];
+			if (line.isBlank())
+			{
+				if ((int) arr[1] >= code.length())
+					break;
+				continue;
+			}
+			if (DEBUG)
+				System.out.println("Processing line '" + line + "'");
+			boolean foundCommand = false;
+			for (Map.Entry<Pattern, BiFunction<Script, String, Command>> entry : commandMap.entrySet())
+			{
+				Pattern pattern = entry.getKey();
+				BiFunction<Script, String, Command> command = entry.getValue();
+				Matcher matcher = pattern.matcher(line);
+				if (matcher.matches())
+				{
+					if (DEBUG)
+						System.out.println(line + " matches " + pattern.pattern());
+					try
+					{
+						script.commands.add(command.apply(script, line));
+						foundCommand = true;
+						break;
+					} catch (Exception ex)
+					{
+						System.out.println(line);
+						ex.printStackTrace();
+						System.exit(1);
+					}
+				}
+			}
+			if (!foundCommand)
+			{
+				if (DEBUG)
+					System.out.println("No Pattern matched, defaulting to expression");
+				script.commands.add(new EvalExpression(line));
+			}
+			i = (int) arr[1];
+		}
+
+		return script;
+	}
+
+	public static Object[] nextLine(String text, int start)
 	{
 		StringBuilder bobThe = new StringBuilder();
 
@@ -101,48 +171,66 @@ a = 5 * int(double(3.2)*6.2);
 		boolean insideString = false;
 		boolean escaped = false;
 
-		for (i = start; i < source.length(); i++)
+		int bCounter = 0;
+
+		for (i = start; i < text.length(); i++)
 		{
-			char c = source.charAt(i);
+			char ch = text.charAt(i);
 			// Skip single line comments
-			if (c == '/' && source.charAt(i + 1) == '/')
+			if (!insideString && ch == '/' && text.charAt(i + 1) == '/')
 			{
-				while (c != '\n')
+				while (ch != '\n')
 				{
-					c = source.charAt(i);
 					i++;
+					ch = text.charAt(i);
 				}
 			}
 
-			if (c == ';' && !insideString)
+			if (ch == '{')
+			{
+				bCounter++;
+			}
+
+			if (ch == '}')
+			{
+				bCounter--;
+				if (bCounter == 0)
+				{
+					i++;
+					bobThe.append(ch);
+					return new Object[] {bobThe.toString().trim(), i};
+				}
+			}
+
+			if (ch == ';' && !insideString && bCounter == 0)
 			{
 				i++;
 				break;
 			}
 
-			if (c == '\\')
+			if (ch == '\\')
 			{
 				escaped = true;
 			}
 
-			if (c == '\n' && !escaped)
+			if (ch == '\n' && !escaped)
 			{
 				continue;
 			}
 
-			if (c == '"' && !escaped)
+			if (ch == '"' && !escaped)
 			{
 				insideString = !insideString;
 			}
 
-			if (c == '"' && escaped)
+			if (ch == '"' && escaped)
 			{
 				escaped = false;
 			}
 
-			bobThe.append(c);
+			bobThe.append(ch);
 		}
 
-		return new Object[] {bobThe.toString(), i};
+		return new Object[] {bobThe.toString().trim(), i};
 	}
 }

@@ -1,5 +1,8 @@
 package steve6472.scriptit.expression;
 
+import steve6472.scriptit.MathFunctions;
+import steve6472.scriptit.Script;
+
 import java.util.*;
 
 import static steve6472.scriptit.TypeDeclarations.*;
@@ -18,67 +21,7 @@ public class ExpressionParser
 
 	private static final Type[] NO_PARAMETERS = new Type[0];
 
-	public Map<String, Value> variables;
-	public Map<FunctionParameters, Constructor> constructors;
-
-	public ExpressionParser()
-	{
-		this.variables = new HashMap<>();
-		this.constructors = new HashMap<>();
-
-		// Technically a double constructors
-		addConstructor(FunctionParameters.function("sqrt").addType(DOUBLE).build(), a -> new Value(DOUBLE, Math.sqrt(a[0].getDouble("v"))));
-		addConstructor(FunctionParameters.function("sin").addType(DOUBLE).build(), a -> new Value(DOUBLE, Math.sin(a[0].getDouble("v"))));
-		addConstructor(FunctionParameters.function("cos").addType(DOUBLE).build(), a -> new Value(DOUBLE, Math.cos(a[0].getDouble("v"))));
-		addConstructor(FunctionParameters.function("tan").addType(DOUBLE).build(), a -> new Value(DOUBLE, Math.tan(a[0].getDouble("v"))));
-	}
-
-	public void addVariable(String name, Value value)
-	{
-		variables.put(name, value);
-	}
-
-	public void addConstructor(FunctionParameters parameters, Constructor function)
-	{
-		constructors.put(parameters, function);
-	}
-
-//	public void addFunction(FunctionParameters parameters, Function function)
-//	{
-//		constructors.put(parameters, function);
-//	}
-
-	public Constructor getFunction(String name, Type[] types)
-	{
-		if (DEBUG)
-			System.out.println("Looking for function with name '" + name + "' and types " + Arrays.toString(types));
-
-		main: for (Map.Entry<FunctionParameters, Constructor> entry : constructors.entrySet())
-		{
-			FunctionParameters k = entry.getKey();
-			Constructor v = entry.getValue();
-			if (!k.getName().equals(name))
-				continue;
-			if (k.getTypes().length != types.length)
-				continue;
-			for (int i = 0; i < types.length; i++)
-			{
-				if (k.getTypes()[i] != types[i])
-				{
-					continue main;
-				}
-			}
-			return v;
-		}
-		return null;
-	}
-
-	public Expression parse(String str)
-	{
-		return parse(str, null);
-	}
-
-	public Expression parse(final String str, List<String> unknownNames)
+	public Expression parse(final String str)
 	{
 		return new Object()
 		{
@@ -90,8 +33,8 @@ public class ExpressionParser
 					System.out.println(s);
 			}
 
-			final List<Expression> functionParameters = new ArrayList<>();
-			final ExpressionStack previousTypes = new ExpressionStack(32);
+			final Stack<List<Expression>> functionParameters = new Stack<>(64);
+			final Stack<Expression> previousTypes = new Stack<>(32);
 
 			void nextChar()
 			{
@@ -131,6 +74,7 @@ public class ExpressionParser
 
 			Expression parseExpression()
 			{
+				print("Parsing expression");
 				Expression x = parseTerm();
 				for (; ; )
 				{
@@ -138,20 +82,27 @@ public class ExpressionParser
 					{
 						Expression a = x;
 						Expression b = parseTerm();
-						Value aEval = a.eval();
-						Value bEval = b.eval();
-						x = () -> aEval.type.addFunctions.get(bEval.type).apply(aEval, bEval);
+						x = (script) ->
+						{
+							Value aEval = a.eval(script);
+							Value bEval = b.eval(script);
+							return aEval.type.addFunctions.get(bEval.type).apply(aEval, bEval);
+						};
 					} else if (eat('-'))
 					{
 						Expression a = x;
 						Expression b = parseTerm();
-						Value aEval = a.eval();
-						Value bEval = b.eval();
-						x = () -> aEval.type.subFunctions.get(bEval.type).apply(aEval, bEval);
+						x = (script) ->
+						{
+							Value aEval = a.eval(script);
+							Value bEval = b.eval(script);
+							return aEval.type.subFunctions.get(bEval.type).apply(aEval, bEval);
+						};
 					} else if (eat(','))
 					{
 						Expression a = parseExpression();
-						functionParameters.add(a);
+						print("Adding parameter " + a);
+						functionParameters.peek().add(a);
 						return x;
 					} else if (eat('.'))
 					{
@@ -166,23 +117,31 @@ public class ExpressionParser
 
 			Expression parseTerm()
 			{
+				print("Parsing term");
 				Expression x = parseFactor();
 				for (; ; )
 				{
+					print("term");
 					if (eat('*'))
 					{
 						Expression a = x;
 						Expression b = parseFactor();
-						Value aEval = a.eval();
-						Value bEval = b.eval();
-						x = () -> aEval.type.mulFunctions.get(bEval.type).apply(aEval, bEval);
+						x = (script) ->
+						{
+							Value aEval = a.eval(script);
+							Value bEval = b.eval(script);
+							return aEval.type.mulFunctions.get(bEval.type).apply(aEval, bEval);
+						};
 					} else if (eat('/'))
 					{
 						Expression a = x;
 						Expression b = parseFactor();
-						Value aEval = a.eval();
-						Value bEval = b.eval();
-						x = () -> aEval.type.divFunctions.get(bEval.type).apply(aEval, bEval);
+						x = (script) ->
+						{
+							Value aEval = a.eval(script);
+							Value bEval = b.eval(script);
+							return aEval.type.divFunctions.get(bEval.type).apply(aEval, bEval);
+						};
 					} else
 					{
 						return x;
@@ -192,47 +151,70 @@ public class ExpressionParser
 
 			Expression parseFactor()
 			{
+				print("Parsing factor");
 				if (eat('+'))
 				{
-					Value value = parseFactor().eval();
-					Value v = value.type.unaryAddFunctions.get(value.type).apply(value);
-					return () -> v; // unary plus
+					Expression expression = parseFactor();
+					return (script) ->
+					{
+						Value value = expression.eval(script);
+						return value.type.unaryAddFunctions.get(value.type).apply(value);
+					}; // unary plus
 				}
 				if (eat('-'))
 				{
-					Value value = parseFactor().eval();
-					Value v = value.type.unarySubFunctions.get(value.type).apply(value);
-					return () -> v; // unary minus
+					Expression expression = parseFactor();
+					print("Returning unary minus");
+					return (script) ->
+					{
+						Value value = expression.eval(script);
+						return value.type.unarySubFunctions.get(value.type).apply(value);
+					}; // unary minus
 				}
 				if (eat('*'))
 				{
-					Value value = parseFactor().eval();
-					Value v = value.type.unaryMulFunctions.get(value.type).apply(value);
-					return () -> v; // unary mul
+					Expression expression = parseFactor();
+					return (script) ->
+					{
+						Value value = expression.eval(script);
+						return value.type.unaryMulFunctions.get(value.type).apply(value);
+					}; // unary mul
 				}
 				if (eat('/'))
 				{
-					Value value = parseFactor().eval();
-					Value v = value.type.unaryDivFunctions.get(value.type).apply(value);
-					return () -> v; // unary div
+					Expression expression = parseFactor();
+					return (script) ->
+					{
+						Value value = expression.eval(script);
+						return value.type.unaryDivFunctions.get(value.type).apply(value);
+					}; // unary div
 				}
 				if (eat('^'))
 				{
-					Value value = parseFactor().eval();
-					Value v = value.type.unaryPowFunctions.get(value.type).apply(value);
-					return () -> v; // unary div
+					Expression expression = parseFactor();
+					return (script) ->
+					{
+						Value value = expression.eval(script);
+						return value.type.unaryPowFunctions.get(value.type).apply(value);
+					}; // unary div
 				}
 				if (eat('~'))
 				{
-					Value value = parseFactor().eval();
-					Value v = value.type.unaryNegFunctions.get(value.type).apply(value);
-					return () -> v; // unary neg
+					Expression expression = parseFactor();
+					return (scipt) ->
+					{
+						Value value = expression.eval(scipt);
+						return value.type.unaryNegFunctions.get(value.type).apply(value);
+					}; // unary neg
 				}
 				if (eat('!'))
 				{
-					Value value = parseFactor().eval();
-					Value v = value.type.unaryNotFunctions.get(value.type).apply(value);
-					return () -> v; // unary not
+					Expression expression = parseFactor();
+					return (script) ->
+					{
+						Value value = expression.eval(script);
+						return value.type.unaryNotFunctions.get(value.type).apply(value);
+					}; // unary not
 				}
 
 				Expression x;
@@ -243,7 +225,7 @@ public class ExpressionParser
 					if (ch == '"')
 					{
 						print("Empty string");
-						x = () -> new Value(STRING, "");
+						x = (script) -> new Value(STRING, "");
 					} else
 					{
 						boolean escape = false;
@@ -263,7 +245,7 @@ public class ExpressionParser
 						nextChar();
 						print(bobTheBuilder.toString());
 						String s = bobTheBuilder.toString();
-						x = () -> new Value(STRING, s);
+						x = (script) -> new Value(STRING, s);
 					}
 				} else if (eat('\''))
 				{
@@ -278,14 +260,16 @@ public class ExpressionParser
 
 					print("Char: '" + c + "'");
 
-					x = () -> new Value(CHAR, c);
+					x = (script) -> new Value(CHAR, c);
 				} else if (eat('('))
 				{ // parentheses
+					functionParameters.push(new ArrayList<>());
 					if (ch == ')')
 					{
 						print("Empty function");
 						eat(')');
-						x = () -> null;
+						functionParameters.pop();
+						x = null;
 					} else
 					{
 						x = parseExpression();
@@ -306,13 +290,13 @@ public class ExpressionParser
 						double xx = Double.parseDouble(str.substring(startPos, this.pos));
 						print("parsed to double " + xx);
 						Value val = new Value(DOUBLE, xx);
-						x = () -> val;
+						x = (script) -> val;
 					} else
 					{
 						int xx = Integer.parseInt(str.substring(startPos, this.pos));
 						print("parsed to int " + xx);
 						Value val = new Value(INT, xx);
-						x = () -> val;
+						x = (script) -> val;
 					}
 				} else if ((ch >= 'A' && ch <= 'Z') || (ch >= 'a' && ch <= 'z') || ch == '_') // can only start with [a-zA-Z_]
 				{ // functions
@@ -325,71 +309,97 @@ public class ExpressionParser
 					if (ch == '(')
 					{
 						Expression exp = parseFactor();
-						Value ev;
-						ev = exp.eval();
-						if (!functionParameters.isEmpty() || ev != null)
+						if (exp != null && functionParameters.peek().isEmpty())
 						{
-							Type[] typeArr = new Type[functionParameters.size() + 1];
-							Value[] arr = new Value[functionParameters.size() + 1];
-							arr[0] = ev;
-							typeArr[0] = arr[0].type;
-							print("Function param: " + ev);
-							for (int i = 0; i < functionParameters.size(); i++)
+							print("One param function");
+							x = (script) ->
 							{
-								Expression functionParameter = functionParameters.get(i);
-								Value eval = functionParameter.eval();
-								arr[functionParameters.size() - i] = eval;
-								typeArr[functionParameters.size() - i] = eval.type;
-								print("Function param: " + eval);
-							}
-							functionParameters.clear();
-							if (!previousTypes.isEmpty())
-							{
-								x = () ->
+								Type[] typeArr = new Type[1];
+								Value[] arr = new Value[1];
+								arr[0] = exp.eval(script);
+								typeArr[0] = arr[0].type;
+								print("Function param: " + arr[0]);
+								if (!previousTypes.isEmpty())
 								{
-									Value eval = previousTypes.pop().eval();
+									Value eval = previousTypes.pop().eval(script);
 									Function function = eval.type.getFunction(name, typeArr);
 									if (function == null)
 										throw new RuntimeException("Unknown function '" + name + "' with types " + Arrays.toString(typeArr));
 									return function.apply(eval, arr);
-								};
-							} else
-							{
-								x = () ->
+								} else
 								{
-									Constructor function = getFunction(name, typeArr);
+									Constructor function = script.namespace.getFunction(name, typeArr);
 									if (function == null)
 										throw new RuntimeException("Unknown function '" + name + "' with types " + Arrays.toString(typeArr));
 									return function.apply(arr);
-								};
-							}
+								}
+							};
+						}
+						else if (!functionParameters.isEmpty() && !functionParameters.peek().isEmpty() && exp != null)
+						{
+							print("Function");
+							functionParameters.printStack();
+							List<Expression> peek = functionParameters.peek();
+							x = (script) ->
+							{
+								Type[] typeArr = new Type[peek.size() + 1];
+								Value[] arr = new Value[peek.size() + 1];
+								arr[0] = exp.eval(script);
+								typeArr[0] = arr[0].type;
+								print("Function param: " + arr[0]);
+								for (int i = 0; i < peek.size(); i++)
+								{
+									Expression functionParameter = peek.get(i);
+									Value eval = functionParameter.eval(script);
+									arr[peek.size() - i] = eval;
+									typeArr[peek.size() - i] = eval.type;
+									print("Function param: " + eval);
+								}
+								if (!previousTypes.isEmpty())
+								{
+									Value eval = previousTypes.pop().eval(script);
+									Function function = eval.type.getFunction(name, typeArr);
+									if (function == null)
+										throw new RuntimeException("Unknown function '" + name + "' with types " + Arrays.toString(typeArr));
+									return function.apply(eval, arr);
+								} else
+								{
+									Constructor function = script.namespace.getFunction(name, typeArr);
+									if (function == null)
+										throw new RuntimeException("Unknown function '" + name + "' with types " + Arrays.toString(typeArr));
+									return function.apply(arr);
+								}
+							};
 						} else
 						{
+							print("Procedure");
+							// Procedure (function with no parameters)
 							if (!previousTypes.isEmpty())
 							{
-								x = () ->
+								Expression peek = previousTypes.pop();
+								x = (script) ->
 								{
-									Value eval = previousTypes.pop().eval();
+									Value eval = peek.eval(script);
 									return eval.type.getFunction(name, NO_PARAMETERS).apply(eval);
 								};
 							} else
 							{
-								x = () -> getFunction(name, NO_PARAMETERS).apply();
+								x = (script) -> script.namespace.getFunction(name, NO_PARAMETERS).apply();
 							}
 						}
+						functionParameters.pop();
 					} else
 					{
-						if (variables.containsKey(name))
+						x = (scipt) ->
 						{
-							x = () -> variables.get(name);
-						} else
-						{
-							x = () -> variables.get(name);
-							if (unknownNames == null)
+							if (scipt.namespace.valueMap.containsKey(name))
+							{
+								return scipt.namespace.valueMap.get(name);
+							} else
+							{
 								throw new RuntimeException("Unknown variable/function name: " + name);
-							else
-								unknownNames.add(name);
-						}
+							}
+						};
 					}
 				} else
 				{
@@ -398,9 +408,13 @@ public class ExpressionParser
 
 				if (eat('^'))
 				{
-					Value v = x.eval();
-					Value eval = parseFactor().eval();
-					x = () -> v.type.powFunctions.get(eval.type).apply(v, eval); // exponentiation
+					Expression a = x;
+					x = (script) ->
+					{
+						Value v = a.eval(script);
+						Value eval = parseFactor().eval(script);
+						return v.type.powFunctions.get(eval.type).apply(v, eval);
+					}; // exponentiation
 				}
 
 				return x;
@@ -411,26 +425,36 @@ public class ExpressionParser
 	public static void main(String[] args)
 	{
 		ExpressionParser parser = new ExpressionParser();
-		parser.addVariable("pi", new Value(DOUBLE, Math.PI));
-		parser.addVariable("true", new Value(BOOL, true));
-		parser.addVariable("false", new Value(BOOL, false));
 
-		VEC2.importIntoParser(parser);
-		STRING.importIntoParser(parser);
-		CHAR.importIntoParser(parser);
-		BOOL.importIntoParser(parser);
-		DOUBLE.importIntoParser(parser);
-		INT.importIntoParser(parser);
+		Script script = new Script();
+		script.namespace.importType(INT);
+		script.namespace.importType(STRING);
+		script.namespace.importType(VEC2);
 
-		Expression exp = parser.parse("int(6)*7");
-//		Expression exp = parser.parse("(\"Hello\" + \" world!\").print()");
+		MathFunctions.definePi(script);
+		MathFunctions.importMathFunctionsRad(script);
+
+		script.namespace.addConstructor(FunctionParameters.function("stuff").addType(INT).addType(INT).build(), (arags) -> {
+			int temp = arags[0].getInt() * arags[1].getInt();
+			return new Value(INT, temp + arags[0].getInt());
+		});
+
+//		Expression exp = parser.parse("int(7)");
+//		Expression exp = parser.parse("-(6*7)");
+//		Expression exp = parser.parse("int(6)*7");
+		Expression exp = parser.parse("(\"Hello\" + \" world!\").print()");
 //		Expression exp = parser.parse("(\"Hello\" + ' ' + \"world\" + '!').len() * 2");
-//		Expression exp = parser.parse("string(\"_1\\\"3_\").print()");'
-//		Expression exp = parser.parse("vec2(0, 9).-toString().print()");
+//		Expression exp = parser.parse("string(\"_1\\\"3_\").print()");
+//		Expression exp = parser.parse("vec2(0, 9).-toString()");
 //		Expression exp = parser.parse("string(\"Hello World\").-len()");
 //		Expression exp = parser.parse("\"Hello World\"-3");
+//		Expression exp = parser.parse("(\"#-\"*10 + '#').print()");
+//		Expression exp = parser.parse("vec2(8 + stuff(3, int(6)) * 4, 2).toString()"); // [92.0, 2.0]
 //		System.out.println(unknownNames)
-		Value eval = exp.eval();
-		System.out.println(eval);
+		for (int i = 0; i < 1; i++)
+		{
+			Value eval = exp.eval(script);
+			System.out.println(eval);
+		}
 	}
 }

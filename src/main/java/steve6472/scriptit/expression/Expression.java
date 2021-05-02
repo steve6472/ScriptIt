@@ -1,5 +1,7 @@
 package steve6472.scriptit.expression;
 
+import steve6472.scriptit.Script;
+
 /**********************
  * Created by steve6472 (Mirek Jozefek)
  * On date: 5/1/2021
@@ -9,5 +11,5 @@ package steve6472.scriptit.expression;
 @FunctionalInterface
 public interface Expression
 {
-	Value eval();
+	Value eval(Script scipt);
 }

@@ -1,5 +1,7 @@
 package steve6472.scriptit;
 
+import steve6472.scriptit.expression.Value;
+
 /**********************
  * Created by steve6472 (Mirek Jozefek)
  * On date: 4/30/2021
@@ -13,5 +15,5 @@ public abstract class Command
 
 	}
 
-	public abstract void execute(Script script);
+	public abstract Value execute(Script script);
 }

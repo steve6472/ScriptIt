@@ -2,6 +2,7 @@ package steve6472.scriptit.commands;
 
 import steve6472.scriptit.Command;
 import steve6472.scriptit.Script;
+import steve6472.scriptit.expression.Value;
 
 /**********************
  * Created by steve6472 (Mirek Jozefek)
@@ -17,8 +18,8 @@ public class IncreseScope extends Command
 	}
 
 	@Override
-	public void execute(Script script)
+	public Value execute(Script script)
 	{
-
+		return null;
 	}
 }

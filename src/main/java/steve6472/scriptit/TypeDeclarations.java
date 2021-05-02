@@ -78,6 +78,7 @@ public class TypeDeclarations
 
 
 		INT.addConstructor(FunctionParameters.constructor(INT).addType(INT).build(), par -> new Value(INT, par[0].getInt()));
+		INT.addConstructor(FunctionParameters.constructor(INT).addType(DOUBLE).build(), par -> new Value(INT, (int) par[0].getDouble()));
 		INT.addConstructor(FunctionParameters.constructor(INT).build(), par -> new Value(INT, 0));
 
 		INT.addAddFunction(INT, (left, right) -> new Value(INT, i(left) + i(right)));

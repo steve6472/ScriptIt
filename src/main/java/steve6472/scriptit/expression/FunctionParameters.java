@@ -1,6 +1,7 @@
 package steve6472.scriptit.expression;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**********************
@@ -33,6 +34,12 @@ public class FunctionParameters
 	public static FunctionParametersBuilder constructor(Type type)
 	{
 		return new FunctionParametersBuilder(type.getKeyword());
+	}
+
+	@Override
+	public String toString()
+	{
+		return "FunctionParameters{" + "name='" + name + '\'' + ", types=" + Arrays.toString(types) + '}';
 	}
 
 	public static FunctionParametersBuilder function(String name)

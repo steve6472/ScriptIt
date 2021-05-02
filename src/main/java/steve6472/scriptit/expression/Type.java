@@ -1,5 +1,6 @@
 package steve6472.scriptit.expression;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -35,9 +36,14 @@ public class Type
 		constructors = new HashMap<>();
 	}
 
-	public void importIntoParser(ExpressionParser parser)
+//	public void importIntoParser(ExpressionParser parser)
+//	{
+//		constructors.forEach(parser::addConstructor);
+//	}
+
+	public HashMap<FunctionParameters, Constructor> getConstructors()
 	{
-		constructors.forEach(parser::addConstructor);
+		return constructors;
 	}
 
 	public void addConstructor(FunctionParameters parameters, Constructor constructor)
@@ -63,7 +69,8 @@ public class Type
 
 	public Function getFunction(String name, Type[] types)
 	{
-//		System.out.println("Looking for function in type '" + keyword + "' with name '" + name + "' and types " + Arrays.toString(types));
+		if (ExpressionParser.DEBUG)
+			System.out.println("Looking for function in type '" + keyword + "' with name '" + name + "' and types " + Arrays.toString(types));
 
 		main: for (Map.Entry<FunctionParameters, Function> entry : functions.entrySet())
 		{

@@ -6,25 +6,25 @@ import java.util.List;
 /**
  * https://stackoverflow.com/questions/16240014/stack-array-using-pop-and-push/17535157
  */
-public class ExpressionStack
+public class Stack<T>
 {
-	private final List<Expression> stack;
+	private final List<T> stack;
 
-	public ExpressionStack(int size)
+	public Stack(int size)
 	{
 		stack = new ArrayList<>(size);
 	}
 
-	public void push(Expression exp)
+	public void push(T exp)
 	{
 		stack.add(0, exp);
 	}
 
-	public Expression pop()
+	public T pop()
 	{
 		if (!stack.isEmpty())
 		{
-			Expression exp = stack.get(0);
+			T exp = stack.get(0);
 			stack.remove(0);
 			return exp;
 		} else
@@ -33,15 +33,9 @@ public class ExpressionStack
 		}
 	}
 
-	public Expression peek()
+	public T peek()
 	{
-		if (!stack.isEmpty())
-		{
-			return stack.get(0);
-		} else
-		{
-			return null;// Or any invalid value
-		}
+		return stack.get(0);
 	}
 
 	public boolean isEmpty()
@@ -49,4 +43,8 @@ public class ExpressionStack
 		return stack.isEmpty();
 	}
 
+	public void printStack()
+	{
+		System.out.println(stack);
+	}
 }

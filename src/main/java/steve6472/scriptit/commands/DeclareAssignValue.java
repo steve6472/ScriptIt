@@ -12,17 +12,17 @@ import steve6472.scriptit.expression.Value;
  * Project: ScriptIt
  *
  ***********************/
-public class AssignValue extends Command
+public class DeclareAssignValue extends Command
 {
 	String name;
 	Expression expression;
 
-	public AssignValue(String line)
+	public DeclareAssignValue(String line)
 	{
 		super(line);
 
 		String[] split = line.split("\s*=\s*", 2);
-		name = split[0];
+		name = split[0].split("\s+")[1];
 		ExpressionParser parser = new ExpressionParser();
 		expression = parser.parse(split[1]);
 	}
@@ -31,16 +31,13 @@ public class AssignValue extends Command
 	public Value execute(Script script)
 	{
 		Value eval = expression.eval(script);
-		Value value = script.namespace.getValue(name);
-		if (value.type != eval.type)
-			throw new RuntimeException("Type mismatch");
-		value.values = eval.values;
+		script.namespace.addValue(name, eval);
 		return null;
 	}
 
 	@Override
 	public String toString()
 	{
-		return "AssignValue{" + "name='" + name + '\'' + ", expression=" + expression + '}';
+		return "DeclareAssignValue{" + "name='" + name + '\'' + ", expression=" + expression + '}';
 	}
 }

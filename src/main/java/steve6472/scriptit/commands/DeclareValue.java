@@ -36,8 +36,15 @@ public class DeclareValue extends Command
 	}
 
 	@Override
-	public void execute(Script script)
+	public Value execute(Script script)
 	{
 		script.namespace.addValue(name, new Value(type));
+		return null;
+	}
+
+	@Override
+	public String toString()
+	{
+		return "DeclareValue{" + "name='" + name + '\'' + ", type=" + type + '}';
 	}
 }

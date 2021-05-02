@@ -8,7 +8,7 @@ import java.util.regex.Pattern;
  * Project: ScriptIt
  *
  ***********************/
-public class Stuff
+public class Regexes
 {
 	public static final Pattern IS_PURE_NUMBER = Pattern.compile("([+-]?\\d*(\\.\\d+)?)+");
 
@@ -28,6 +28,20 @@ public class Stuff
 	 * import int
 	 */
 	public static final Pattern IMPORT = Pattern.compile("^import\s+[a-zA-Z][a-zA-Z0-9]*");
+	/**
+	 * function int name(...
+	 */
+	public static final Pattern DECLARE_FUNCTION = Pattern.compile("^function\s+[a-zA-Z][a-zA-Z0-9_]*\s+[a-zA-Z][a-zA-Z0-9_]*\\(.+");
+	/**
+	 * function operator* (...
+	 * Allowed operators: +, -, *, /, ^, <<, >>
+	 *     (byte shift operators are not supported yet due to Expression Parser being able to read only one character and im too lazy to add more)
+	 */
+	public static final Pattern OPERATOR_OVERLOAD_FUNCTION = Pattern.compile("^function\s+operator([\\+\\-\\*\\/\\^]|(<<)|(>>))\s*\\(");
+	/**
+	 * retrun ...
+	 */
+	public static final Pattern RETURN = Pattern.compile("^return\s+[a-zA-Z].*");
 }
 
 

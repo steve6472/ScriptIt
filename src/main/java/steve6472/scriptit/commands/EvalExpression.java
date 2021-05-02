@@ -12,35 +12,32 @@ import steve6472.scriptit.expression.Value;
  * Project: ScriptIt
  *
  ***********************/
-public class AssignValue extends Command
+public class EvalExpression extends Command
 {
-	String name;
 	Expression expression;
+	String code;
 
-	public AssignValue(String line)
+	public EvalExpression(String line)
 	{
 		super(line);
 
-		String[] split = line.split("\s*=\s*", 2);
-		name = split[0];
 		ExpressionParser parser = new ExpressionParser();
-		expression = parser.parse(split[1]);
+		expression = parser.parse(line);
+		code = line;
 	}
 
 	@Override
 	public Value execute(Script script)
 	{
-		Value eval = expression.eval(script);
-		Value value = script.namespace.getValue(name);
-		if (value.type != eval.type)
-			throw new RuntimeException("Type mismatch");
-		value.values = eval.values;
+		expression.eval(script);
 		return null;
 	}
 
 	@Override
 	public String toString()
 	{
-		return "AssignValue{" + "name='" + name + '\'' + ", expression=" + expression + '}';
+		if (code != null)
+			System.out.println(code);
+		return "EvalExpression{" + "expression=" + expression + '}';
 	}
 }
