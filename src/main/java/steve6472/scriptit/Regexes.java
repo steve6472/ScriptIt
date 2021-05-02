@@ -15,15 +15,15 @@ public class Regexes
 	/**
 	 * string adr
 	 */
-	public static final Pattern VALUE_DECLARATION = Pattern.compile("^[a-zA-Z][a-zA-Z0-9]*\s+[a-zA-Z_][a-zA-Z0-9_]*\\s*");
+	public static final Pattern VALUE_DECLARATION = Pattern.compile("^[a-zA-Z][a-zA-Z0-9]*\\s+[a-zA-Z_][a-zA-Z0-9_]*\\s*");
 	/**
 	 * adr = vec2((8 + function(2, 3)) * 3, 2).toString()
 	 */
-	public static final Pattern VALUE_ASSIGN = Pattern.compile("^[a-zA-Z_][a-zA-Z0-9_]*\s*=\s*.+[^\\.]");
+	public static final Pattern VALUE_ASSIGN = Pattern.compile("^[a-zA-Z_][a-zA-Z0-9_]*\\s*=\\s*.+[^\\.]");
 	/**
 	 * string adr = vec2((8 + function(2, 3)) * 3, 2).toString()
 	 */
-	public static final Pattern VALUE_DECLARATION_ASSIGN = Pattern.compile("^[a-zA-Z][a-zA-Z0-9]*\s+[a-zA-Z_][a-zA-Z0-9_]*\s*=\s*.+[^\\.]");
+	public static final Pattern VALUE_DECLARATION_ASSIGN = Pattern.compile("^[a-zA-Z][a-zA-Z0-9]*\\s+[a-zA-Z_][a-zA-Z0-9_]*\\s*=\\s*.+[^\\.]");
 	/**
 	 * import int
 	 */
@@ -31,17 +31,17 @@ public class Regexes
 	/**
 	 * function int name(...
 	 */
-	public static final Pattern DECLARE_FUNCTION = Pattern.compile("^function\s+[a-zA-Z][a-zA-Z0-9_]*\s+[a-zA-Z][a-zA-Z0-9_]*\\(.+");
+	public static final Pattern DECLARE_FUNCTION = Pattern.compile("^function\\s+[a-zA-Z][a-zA-Z0-9_]*\\s+[a-zA-Z][a-zA-Z0-9_]*\\(.+");
 	/**
 	 * function operator* (...
 	 * Allowed operators: +, -, *, /, ^, <<, >>
 	 *     (byte shift operators are not supported yet due to Expression Parser being able to read only one character and im too lazy to add more)
 	 */
-	public static final Pattern OPERATOR_OVERLOAD_FUNCTION = Pattern.compile("^function\s+operator([\\+\\-\\*\\/\\^]|(<<)|(>>))\s*\\(");
+	public static final Pattern OPERATOR_OVERLOAD_FUNCTION = Pattern.compile("^function\\s+operator([\\+\\-\\*\\/\\^]|(<<)|(>>))\s*\\(");
 	/**
 	 * retrun ...
 	 */
-	public static final Pattern RETURN = Pattern.compile("^return\s+[a-zA-Z].*");
+	public static final Pattern RETURN = Pattern.compile("^return\\s+[a-zA-Z].*");
 }
 
 

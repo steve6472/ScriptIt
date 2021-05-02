@@ -338,7 +338,6 @@ public class ExpressionParser
 						else if (!functionParameters.isEmpty() && !functionParameters.peek().isEmpty() && exp != null)
 						{
 							print("Function");
-							functionParameters.printStack();
 							List<Expression> peek = functionParameters.peek();
 							x = (script) ->
 							{

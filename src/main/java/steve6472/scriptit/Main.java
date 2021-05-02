@@ -2,7 +2,7 @@ package steve6472.scriptit;
 
 import steve6472.scriptit.commands.*;
 
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.function.BiFunction;
 import java.util.regex.Matcher;
@@ -81,11 +81,12 @@ string adr = vec2(8 + stuff(3, 6) * 3, 2).toString();
 adr.print();
 
 
+
 """;
 
 	public static final boolean DEBUG = false;
 
-	private static final Map<Pattern, BiFunction<Script, String, Command>> commandMap = new HashMap<>();
+	private static final Map<Pattern, BiFunction<Script, String, Command>> commandMap = new LinkedHashMap<>();
 
 	static
 	{
@@ -101,7 +102,6 @@ adr.print();
 	{
 		Script script = createScript(source);
 
-		System.out.println("\n".repeat(3));
 //		script.printCode();
 		script.run();
 	}
@@ -131,6 +131,8 @@ adr.print();
 			for (Map.Entry<Pattern, BiFunction<Script, String, Command>> entry : commandMap.entrySet())
 			{
 				Pattern pattern = entry.getKey();
+				if (DEBUG)
+					System.out.println("Trying " + pattern.pattern());
 				BiFunction<Script, String, Command> command = entry.getValue();
 				Matcher matcher = pattern.matcher(line);
 				if (matcher.matches())
@@ -144,7 +146,7 @@ adr.print();
 						break;
 					} catch (Exception ex)
 					{
-						System.out.println(line);
+						System.err.println(line);
 						ex.printStackTrace();
 						System.exit(1);
 					}

@@ -12,7 +12,6 @@ public abstract class Command
 {
 	public Command(String line)
 	{
-
 	}
 
 	public abstract Value execute(Script script);
