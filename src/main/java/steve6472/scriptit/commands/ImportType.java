@@ -32,7 +32,7 @@ public class ImportType extends Command
 		}
 
 		if (typeToImport != null)
-			script.namespace.importType(typeToImport);
+			script.importType(typeToImport);
 	}
 
 	@Override

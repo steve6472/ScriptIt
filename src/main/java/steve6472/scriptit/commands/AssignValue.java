@@ -31,7 +31,7 @@ public class AssignValue extends Command
 	public Value execute(Script script)
 	{
 		Value eval = expression.eval(script);
-		Value value = script.namespace.getValue(name);
+		Value value = script.getValue(name);
 		if (value.type != eval.type)
 			throw new RuntimeException("Type mismatch");
 		value.values = eval.values;

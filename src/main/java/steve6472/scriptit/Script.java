@@ -1,9 +1,13 @@
 package steve6472.scriptit;
 
-import steve6472.scriptit.expression.Value;
+import steve6472.scriptit.expression.*;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
+
+import static steve6472.scriptit.TypeDeclarations.BOOL;
 
 /**********************
  * Created by steve6472 (Mirek Jozefek)
@@ -13,7 +17,7 @@ import java.util.List;
  ***********************/
 public class Script
 {
-	public Namespace namespace;
+	private final Namespace namespace;
 
 	public List<Command> commands;
 
@@ -23,6 +27,10 @@ public class Script
 	{
 		namespace = new Namespace();
 		commands = new ArrayList<>();
+
+		// Force true and false booleans into namespace
+		addValue("true", new Value(BOOL, true));
+		addValue("false", new Value(BOOL, false));
 	}
 
 	@SuppressWarnings("IncompleteCopyConstructor")
@@ -66,5 +74,119 @@ public class Script
 		{
 			System.out.println(c.toString());
 		}
+	}
+
+
+
+
+
+	public void importType(Type type)
+	{
+		namespace.typeMap.put(type.getKeyword(), type);
+	}
+
+	public boolean isType(String name)
+	{
+		return namespace.typeMap.containsKey(name);
+	}
+
+	public Type getType(String name)
+	{
+		return namespace.typeMap.get(name);
+	}
+
+	public void addValue(String name, Value value)
+	{
+		namespace.valueMap.put(name, value);
+	}
+
+	public Value getValue(String name)
+	{
+		Value value = namespace.valueMap.get(name);
+		if (value == null && parent != null)
+			return parent.getValue(name);
+		return value;
+	}
+
+	public void addConstructor(FunctionParameters parameters, Constructor constructor)
+	{
+		namespace.constructorMap.put(parameters, constructor);
+	}
+
+	public boolean hasValue(String name)
+	{
+		boolean b = namespace.valueMap.containsKey(name);
+		if (!b && parent != null)
+		{
+			return parent.hasValue(name);
+		}
+		return b;
+	}
+
+	public Constructor getFunction(String name, Type[] types)
+	{
+		if (ExpressionParser.DEBUG)
+			System.out.println("Looking for function with name '" + name + "' and types " + Arrays.toString(types));
+
+		//		System.out.println("\n\n\n");
+		//		System.out.println("Looking for function with name '" + name + "' and types " + Arrays.toString(types));
+		//		System.out.println(constructorMap);
+		//		System.out.println("\n\n\n");
+
+		main: for (Map.Entry<FunctionParameters, Constructor> e : namespace.constructorMap.entrySet())
+		{
+			FunctionParameters parameters = e.getKey();
+			Constructor constructor = e.getValue();
+
+			if (!parameters.getName().equals(name))
+				continue;
+			if (parameters.getTypes().length != types.length)
+				continue;
+			for (int i = 0; i < types.length; i++)
+			{
+				if (parameters.getTypes()[i] != types[i])
+				{
+					continue main;
+				}
+			}
+			if (ExpressionParser.DEBUG)
+				System.out.println("Found function " + parameters + " " + constructor);
+			return constructor;
+		}
+
+		Type type = namespace.typeMap.get(name);
+
+		if (type == null)
+			throw new RuntimeException("Type with name '" + name + "' not found!");
+
+		if (ExpressionParser.DEBUG)
+			System.out.println("Found type " + type);
+
+		main: for (Map.Entry<FunctionParameters, Constructor> entry : type.getConstructors().entrySet())
+		{
+			FunctionParameters k = entry.getKey();
+			Constructor v = entry.getValue();
+			if (!k.getName().equals(name))
+				continue;
+			if (k.getTypes().length != types.length)
+				continue;
+			for (int i = 0; i < types.length; i++)
+			{
+				if (k.getTypes()[i] != types[i])
+				{
+					continue main;
+				}
+			}
+			if (ExpressionParser.DEBUG)
+				System.out.println("Found function " + k + " " + v);
+			return v;
+		}
+
+		if (parent != null)
+		{
+			return parent.getFunction(name, types);
+		}
+
+		throw new RuntimeException("Function with name " + name + " and types " + Arrays.toString(types) + " not found!");
 	}
 }

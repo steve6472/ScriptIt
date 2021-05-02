@@ -66,7 +66,7 @@ public class DeclareFunction extends Command
 			String[] paramSplit = param.split("\s+");
 			String paramType = paramSplit[0];
 			String paramName = paramSplit[1];
-			Type type = parentScript.namespace.getType(paramType);
+			Type type = parentScript.getType(paramType);
 			if (type == null)
 				throw new RuntimeException("Type '" + paramType + "' not found!");
 			paramNames[i] = paramName;
@@ -98,17 +98,17 @@ public class DeclareFunction extends Command
 			type = null;
 		} else
 		{
-			type = parentScript.namespace.getType(returnType);
+			type = parentScript.getType(returnType);
 
 			if (type == null)
 				throw new RuntimeException("Type '" + returnType + "' not found!");
 		}
 
-		parentScript.namespace.addConstructor(functionParameters, (args) ->
+		parentScript.addConstructor(functionParameters, (args) ->
 		{
 			for (int i = 0; i < args.length; i++)
 			{
-				script.namespace.addValue(paramNames[i], args[i]);
+				script.addValue(paramNames[i], args[i]);
 			}
 
 			Value run = script.run();

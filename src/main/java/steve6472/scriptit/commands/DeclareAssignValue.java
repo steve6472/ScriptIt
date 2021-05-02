@@ -31,7 +31,7 @@ public class DeclareAssignValue extends Command
 	public Value execute(Script script)
 	{
 		Value eval = expression.eval(script);
-		script.namespace.addValue(name, eval);
+		script.addValue(name, eval);
 		return null;
 	}
 

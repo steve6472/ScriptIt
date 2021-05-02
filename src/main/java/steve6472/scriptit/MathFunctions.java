@@ -15,16 +15,14 @@ public class MathFunctions
 {
 	public static void importMathFunctionsRad(Script script)
 	{
-		Namespace namespace = script.namespace;
-		namespace.addConstructor(FunctionParameters.function("sqrt").addType(DOUBLE).build(), a -> new Value(DOUBLE, Math.sqrt(a[0].getDouble("v"))));
-		namespace.addConstructor(FunctionParameters.function("sin").addType(DOUBLE).build(), a -> new Value(DOUBLE, Math.sin(a[0].getDouble("v"))));
-		namespace.addConstructor(FunctionParameters.function("cos").addType(DOUBLE).build(), a -> new Value(DOUBLE, Math.cos(a[0].getDouble("v"))));
-		namespace.addConstructor(FunctionParameters.function("tan").addType(DOUBLE).build(), a -> new Value(DOUBLE, Math.tan(a[0].getDouble("v"))));
+		script.addConstructor(FunctionParameters.function("sqrt").addType(DOUBLE).build(), a -> new Value(DOUBLE, Math.sqrt(a[0].getDouble("v"))));
+		script.addConstructor(FunctionParameters.function("sin").addType(DOUBLE).build(), a -> new Value(DOUBLE, Math.sin(a[0].getDouble("v"))));
+		script.addConstructor(FunctionParameters.function("cos").addType(DOUBLE).build(), a -> new Value(DOUBLE, Math.cos(a[0].getDouble("v"))));
+		script.addConstructor(FunctionParameters.function("tan").addType(DOUBLE).build(), a -> new Value(DOUBLE, Math.tan(a[0].getDouble("v"))));
 	}
 
 	public static void definePi(Script script)
 	{
-		Namespace namespace = script.namespace;
-		namespace.addValue("pi", new Value(DOUBLE, Math.PI));
+		script.addValue("pi", new Value(DOUBLE, Math.PI));
 	}
 }

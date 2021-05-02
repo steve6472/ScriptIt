@@ -69,6 +69,7 @@ function int stuff(int varA, int varB)
 	int temp = varA * varB;
 	temp.print();
 	prnt();
+	a.print();
 	return temp + varA;
 }
 
@@ -80,7 +81,26 @@ i.print(); // 8
 string adr = vec2(8 + stuff(3, 6) * 3, 2).toString();
 adr.print();
 
-
+//class vec3
+//{
+//	double x;
+//	double y;
+//	double z;
+//
+//	constructor()
+//	{
+//		this.x = 0;
+//		this.y = 0;
+//		this.z = 0;
+//	}
+//
+//	constructor(double x, double y, double z)
+//	{
+//		this.x = x;
+//		this.y = y;
+//		this.z = z;
+//	}
+//}
 
 """;
 

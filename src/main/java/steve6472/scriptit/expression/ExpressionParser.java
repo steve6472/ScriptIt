@@ -328,7 +328,7 @@ public class ExpressionParser
 									return function.apply(eval, arr);
 								} else
 								{
-									Constructor function = script.namespace.getFunction(name, typeArr);
+									Constructor function = script.getFunction(name, typeArr);
 									if (function == null)
 										throw new RuntimeException("Unknown function '" + name + "' with types " + Arrays.toString(typeArr));
 									return function.apply(arr);
@@ -363,7 +363,7 @@ public class ExpressionParser
 									return function.apply(eval, arr);
 								} else
 								{
-									Constructor function = script.namespace.getFunction(name, typeArr);
+									Constructor function = script.getFunction(name, typeArr);
 									if (function == null)
 										throw new RuntimeException("Unknown function '" + name + "' with types " + Arrays.toString(typeArr));
 									return function.apply(arr);
@@ -383,7 +383,7 @@ public class ExpressionParser
 								};
 							} else
 							{
-								x = (script) -> script.namespace.getFunction(name, NO_PARAMETERS).apply();
+								x = (script) -> script.getFunction(name, NO_PARAMETERS).apply();
 							}
 						}
 						functionParameters.pop();
@@ -391,9 +391,9 @@ public class ExpressionParser
 					{
 						x = (scipt) ->
 						{
-							if (scipt.namespace.valueMap.containsKey(name))
+							if (scipt.hasValue(name))
 							{
-								return scipt.namespace.valueMap.get(name);
+								return scipt.getValue(name);
 							} else
 							{
 								throw new RuntimeException("Unknown variable/function name: " + name);
@@ -426,14 +426,14 @@ public class ExpressionParser
 		ExpressionParser parser = new ExpressionParser();
 
 		Script script = new Script();
-		script.namespace.importType(INT);
-		script.namespace.importType(STRING);
-		script.namespace.importType(VEC2);
+		script.importType(INT);
+		script.importType(STRING);
+		script.importType(VEC2);
 
 		MathFunctions.definePi(script);
 		MathFunctions.importMathFunctionsRad(script);
 
-		script.namespace.addConstructor(FunctionParameters.function("stuff").addType(INT).addType(INT).build(), (arags) -> {
+		script.addConstructor(FunctionParameters.function("stuff").addType(INT).addType(INT).build(), (arags) -> {
 			int temp = arags[0].getInt() * arags[1].getInt();
 			return new Value(INT, temp + arags[0].getInt());
 		});

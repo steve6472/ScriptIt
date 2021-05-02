@@ -38,7 +38,7 @@ public class DeclareValue extends Command
 	@Override
 	public Value execute(Script script)
 	{
-		script.namespace.addValue(name, new Value(type));
+		script.addValue(name, new Value(type));
 		return null;
 	}
 
