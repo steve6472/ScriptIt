@@ -62,7 +62,7 @@ a.print(); // 99
 
 function int stuff(int varA, int varB)
 {
-	function int prnt()
+	function void prnt()
 	{
 		"inside function thingie".print();
 	}
@@ -83,7 +83,7 @@ adr.print();
 
 """;
 
-	public static final boolean DEBUG = true;
+	public static final boolean DEBUG = false;
 
 	private static final Map<Pattern, BiFunction<Script, String, Command>> commandMap = new HashMap<>();
 

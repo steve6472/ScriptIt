@@ -57,7 +57,6 @@ public class DeclareFunction extends Command
 			System.out.println("body = " + body);
 		}
 
-//		Type[] paramTypes = new Type[parameters.length];
 		String[] paramNames = new String[parameters.length];
 
 		FunctionParameters.FunctionParametersBuilder paramsBuilder = FunctionParameters.function(name);
@@ -70,7 +69,6 @@ public class DeclareFunction extends Command
 			Type type = parentScript.namespace.getType(paramType);
 			if (type == null)
 				throw new RuntimeException("Type '" + paramType + "' not found!");
-//			paramTypes[i] = type;
 			paramNames[i] = paramName;
 			paramsBuilder = paramsBuilder.addType(type);
 		}
@@ -94,6 +92,18 @@ public class DeclareFunction extends Command
 		if (Main.DEBUG)
 			System.out.println("functionParameters = " + functionParameters);
 
+		Type type;
+		if (returnType.equals("void"))
+		{
+			type = null;
+		} else
+		{
+			type = parentScript.namespace.getType(returnType);
+
+			if (type == null)
+				throw new RuntimeException("Type '" + returnType + "' not found!");
+		}
+
 		parentScript.namespace.addConstructor(functionParameters, (args) ->
 		{
 			for (int i = 0; i < args.length; i++)
@@ -101,7 +111,17 @@ public class DeclareFunction extends Command
 				script.namespace.addValue(paramNames[i], args[i]);
 			}
 
-			return script.run();
+			Value run = script.run();
+			if (type == null)
+			{
+				if (run == null)
+					return null;
+				else
+					throw new RuntimeException("Return type does not match function signature, expected 'void' got '" + run.type + "'");
+			}
+			if (run.type != type)
+				throw new RuntimeException("Return type does not match function signature, expected '" + type + "' got '" + run.type + "'");
+			return run;
 		});
 	}
 
