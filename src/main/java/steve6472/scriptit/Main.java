@@ -48,70 +48,95 @@ import int;
 import double;
 import string;
 import bool;
-
 import char;
 import vec2;
 
-int a;
-//int b = 5;
-//int c = 9 + 10 * 6;
-a = int(double(3.2)*6.2 * 5.0);
-a.print(); // 99
-//b.print();
-//c.print();
-
-function int stuff(int varA, int varB)
-{
-	function void prnt()
-	{
-		"inside function thingie".print();
-	}
-	int temp = varA * varB;
-	temp.print();
-	prnt();
-	a.print();
-	return temp + varA;
-}
-
-int i = stuff(2, 3); // inside function thingie
-i.print(); // 8
-
-"before adr".print(); // before adr
-
-string adr = vec2(8 + stuff(3, 6) * 3, 2).toString();
-adr.print();
-
-//class vec3
+//int a;
+////int b = 5;
+////int c = 9 + 10 * 6;
+//a = int(double(3.2)*6.2 * 5.0);
+//a.print(); // 99
+////b.print();
+////c.print();
+//
+//function void testExpressionParser()
 //{
-//	double x;
-//	double y;
-//	double z;
-//
-//	constructor()
-//	{
-//		this.x = 0;
-//		this.y = 0;
-//		this.z = 0;
-//	}
-//
-//	constructor(double x, double y, double z)
-//	{
-//		this.x = x;
-//		this.y = y;
-//		this.z = z;
-//	}
+//	int(7).print();
+//	(-(6 * 7)).print();
+//	(int(6) * 7).print();
+//	("Hello" + " world!").print();
+//	(("Hello" + ' ' + "world" + '!').len() * 2).print();
+//	string("_1\\"3_").print();
+//	vec2(0, 9).-toString().print();
+//	string("Hello World").-len().print();
+//	("Hello World"-3).print();
+//	("#-" * 10 + '#').print();
+//	vec2(8 + stuff(3, int(6)) * 4, 2).toString().print(); // [92.0, 2.0]
 //}
+//
+//testExpressionParser();
+//
+//// This somehow works...
+//function void output(string text)
+//{
+//	text.print();
+//}
+//
+//output("Hi World!");
+//
+//function int stuff(int varA, int varB)
+//{
+//	function void prnt()
+//	{
+//		"inside function thingie".print();
+//	}
+//	int temp = varA * varB;
+//	temp.print();
+//	prnt();
+//	a.print();
+//	return temp + varA;
+//}
+//
+//int i = stuff(2, 3); // inside function thingie
+//i.print(); // 8
+//
+//"before adr".print(); // before adr
+//
+//string adr = vec2(8 + stuff(3, 6) * 3, 2).toString();
+//adr.print();
+
+class vec3
+{
+	double x;
+	double y;
+	double z;
+
+	constructor()
+	{
+		x = 0;
+		y = 0;
+		z = 0;
+	}
+
+	constructor(double X, double Y, double Z)
+	{
+		this.x = X;
+		this.y = Y;
+		this.z = Z;
+	}
+}
 
 """;
 
-	public static final boolean DEBUG = false;
+	public static final boolean DEBUG = true;
 
 	private static final Map<Pattern, BiFunction<Script, String, Command>> commandMap = new LinkedHashMap<>();
 
 	static
 	{
 		commandMap.put(Regexes.IMPORT, ImportType::new);
-		commandMap.put(Regexes.VALUE_DECLARATION, (script, line) -> new DeclareValue(line));
+		commandMap.put(Regexes.DECLARE_TYPE, DeclareType::new);
+		commandMap.put(Regexes.VALUE_DECLARATION, DeclareValue::new);
 		commandMap.put(Regexes.VALUE_ASSIGN, (script, line) -> new AssignValue(line));
 		commandMap.put(Regexes.VALUE_DECLARATION_ASSIGN, (script, line) -> new DeclareAssignValue(line));
 		commandMap.put(Regexes.RETURN, (script, line) -> new ReturnValue(line));

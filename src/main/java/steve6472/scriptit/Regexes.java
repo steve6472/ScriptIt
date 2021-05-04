@@ -33,11 +33,15 @@ public class Regexes
 	 */
 	public static final Pattern DECLARE_FUNCTION = Pattern.compile("^function\\s+[a-zA-Z][a-zA-Z0-9_]*\\s+[a-zA-Z][a-zA-Z0-9_]*\\(.+");
 	/**
+	 * class vec3
+	 */
+	public static final Pattern DECLARE_TYPE = Pattern.compile("^class\\s+[a-zA-Z][a-zA-Z0-9_]*\\s*\\{?.*");
+	/**
 	 * function operator* (...
-	 * Allowed operators: +, -, *, /, ^, <<, >>
+	 * Allowed operators: +, -, *, /, %, ~, &, |, ^, !, <<, >>, &&, ||
 	 *     (byte shift operators are not supported yet due to Expression Parser being able to read only one character and im too lazy to add more)
 	 */
-	public static final Pattern OPERATOR_OVERLOAD_FUNCTION = Pattern.compile("^function\\s+operator([\\+\\-\\*\\/\\^]|(<<)|(>>))\s*\\(");
+	public static final Pattern OPERATOR_OVERLOAD_FUNCTION = Pattern.compile("^function\\s+operator([\\+\\-\\*\\/%~&\\|\\^!]|(<<)|(>>)|(&&)|(\\|\\|))\\s*\\(");
 	/**
 	 * retrun ...
 	 */

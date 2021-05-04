@@ -1,6 +1,7 @@
 package steve6472.scriptit;
 
 import steve6472.scriptit.expression.FunctionParameters;
+import steve6472.scriptit.expression.Operator;
 import steve6472.scriptit.expression.Type;
 import steve6472.scriptit.expression.Value;
 
@@ -52,13 +53,12 @@ public class TypeDeclarations
 		DOUBLE.addConstructor(FunctionParameters.constructor(DOUBLE).addType(INT).build(), par -> new Value(DOUBLE, par[0].getDouble()));
 		DOUBLE.addConstructor(FunctionParameters.constructor(DOUBLE).build(), par -> new Value(DOUBLE, 0));
 
-		DOUBLE.addAddFunction(DOUBLE, (left, right) -> new Value(DOUBLE, d(left) + d(right)));
-		DOUBLE.addSubFunction(DOUBLE, (left, right) -> new Value(DOUBLE, d(left) - d(right)));
-		DOUBLE.addMulFunction(DOUBLE, (left, right) -> new Value(DOUBLE, d(left) * d(right)));
-		DOUBLE.addDivFunction(DOUBLE, (left, right) -> new Value(DOUBLE, d(left) / d(right)));
-		DOUBLE.addPowFunction(DOUBLE, (left, right) -> new Value(DOUBLE, Math.pow(d(left), d(right))));
-		DOUBLE.unarySubFunctions.put(DOUBLE, (itself -> new Value(DOUBLE, -d(itself))));
-		DOUBLE.unaryAddFunctions.put(DOUBLE, (itself -> new Value(DOUBLE, d(itself))));
+		DOUBLE.addBinaryOperator(DOUBLE, Operator.ADD, (left, right) -> new Value(DOUBLE, d(left) + d(right)));
+		DOUBLE.addBinaryOperator(DOUBLE, Operator.SUB, (left, right) -> new Value(DOUBLE, d(left) - d(right)));
+		DOUBLE.addBinaryOperator(DOUBLE, Operator.MUL, (left, right) -> new Value(DOUBLE, d(left) * d(right)));
+		DOUBLE.addBinaryOperator(DOUBLE, Operator.DIV, (left, right) -> new Value(DOUBLE, d(left) / d(right)));
+		DOUBLE.addUnaryOperator(Operator.SUB, (itself -> itself.setValue(-itself.getDouble())));
+		DOUBLE.addUnaryOperator(Operator.ADD, (itself -> itself));
 		DOUBLE.addProcedure(FunctionParameters.function("print").build(), (itself, args) -> System.out.println("double[val=" + d(itself) + "]"));
 
 		BOOL.addConstructor(FunctionParameters.constructor(BOOL).addType(STRING).build(), par -> new Value(BOOL, Boolean.parseBoolean(par[0].getString())));
@@ -72,8 +72,7 @@ public class TypeDeclarations
 //		BOOL.addPowFunction(DOUBLE, (left, right) -> new Value(DOUBLE, Math.pow(d(left), d(right))));
 //		BOOL.unarySubFunctions.put(DOUBLE, (itself -> new Value(DOUBLE, -d(itself))));
 //		BOOL.unaryAddFunctions.put(DOUBLE, (itself -> new Value(DOUBLE, d(itself))));
-		BOOL.unaryNegFunctions.put(BOOL, (itself -> new Value(BOOL, !b(itself))));
-		BOOL.unaryNotFunctions.put(BOOL, (itself -> new Value(BOOL, !b(itself))));
+		BOOL.addUnaryOperator(Operator.NOT, (itself -> itself.setValue(itself.getBoolean())));
 		BOOL.addProcedure(FunctionParameters.function("print").build(), (itself, args) -> System.out.println("bool[val=" + b(itself) + "]"));
 
 
@@ -81,32 +80,32 @@ public class TypeDeclarations
 		INT.addConstructor(FunctionParameters.constructor(INT).addType(DOUBLE).build(), par -> new Value(INT, (int) par[0].getDouble()));
 		INT.addConstructor(FunctionParameters.constructor(INT).build(), par -> new Value(INT, 0));
 
-		INT.addAddFunction(INT, (left, right) -> new Value(INT, i(left) + i(right)));
-		INT.addSubFunction(INT, (left, right) -> new Value(INT, i(left) - i(right)));
-		INT.addMulFunction(INT, (left, right) -> new Value(INT, i(left) * i(right)));
-		INT.addDivFunction(INT, (left, right) -> new Value(INT, i(left) / i(right)));
+		INT.addBinaryOperator(INT, Operator.ADD, (left, right) -> new Value(INT, i(left) + i(right)));
+		INT.addBinaryOperator(INT, Operator.SUB, (left, right) -> new Value(INT, i(left) - i(right)));
+		INT.addBinaryOperator(INT, Operator.MUL, (left, right) -> new Value(INT, i(left) * i(right)));
+		INT.addBinaryOperator(INT, Operator.DIV, (left, right) -> new Value(INT, i(left) / i(right)));
 
-		INT.addAddFunction(DOUBLE, (left, right) -> new Value(DOUBLE, i(left) + d(right)));
-		INT.addSubFunction(DOUBLE, (left, right) -> new Value(DOUBLE, i(left) - d(right)));
-		INT.addMulFunction(DOUBLE, (left, right) -> new Value(DOUBLE, i(left) * d(right)));
-		INT.addDivFunction(DOUBLE, (left, right) -> new Value(DOUBLE, i(left) / d(right)));
+		INT.addBinaryOperator(DOUBLE, Operator.ADD, (left, right) -> new Value(DOUBLE, i(left) + d(right)));
+		INT.addBinaryOperator(DOUBLE, Operator.SUB, (left, right) -> new Value(DOUBLE, i(left) - d(right)));
+		INT.addBinaryOperator(DOUBLE, Operator.MUL, (left, right) -> new Value(DOUBLE, i(left) * d(right)));
+		INT.addBinaryOperator(DOUBLE, Operator.DIV, (left, right) -> new Value(DOUBLE, i(left) / d(right)));
 
-		INT.addPowFunction(INT, (left, right) -> new Value(INT, (int) Math.pow(i(left), i(right))));
-		INT.unarySubFunctions.put(INT, (itself -> new Value(INT, -i(itself))));
-		INT.unaryAddFunctions.put(INT, (itself -> new Value(INT, i(itself))));
-		INT.unaryNegFunctions.put(INT, (itself -> new Value(INT, ~i(itself))));
+		INT.addUnaryOperator(Operator.SUB, (itself -> itself.setValue(-itself.getInt())));
+		INT.addUnaryOperator(Operator.ADD, (itself -> itself));
+		INT.addUnaryOperator(Operator.NEG, (itself -> itself.setValue(~itself.getInt())));
+
 		INT.addProcedure(FunctionParameters.function("print").build(), (itself, args) -> System.out.println("int[val=" + i(itself) + "]"));
 
 		STRING.addConstructor(FunctionParameters.constructor(STRING).addType(STRING).build(), par -> new Value(STRING, par[0].getString()));
 		STRING.addConstructor(FunctionParameters.constructor(STRING).build(), par -> new Value(STRING, ""));
 
-		STRING.addAddFunction(STRING, (left, right) -> new Value(STRING, s(left) + s(right)));
-		STRING.addAddFunction(CHAR, (left, right) -> new Value(STRING, s(left) + c(right)));
-		STRING.addSubFunction(INT, (left, right) -> new Value(STRING, s(left).substring(0, s(left).length() - i(right)))); // remove n characters from back
-		STRING.addMulFunction(INT, (left, right) -> new Value(STRING, s(left).repeat(i(right)))); // repeat the string n times
+		STRING.addBinaryOperator(STRING, Operator.ADD, (left, right) -> new Value(STRING, s(left) + s(right)));
+		STRING.addBinaryOperator(CHAR, Operator.ADD, (left, right) -> new Value(STRING, s(left) + c(right)));
+		STRING.addBinaryOperator(INT, Operator.SUB, (left, right) -> new Value(STRING, s(left).substring(0, s(left).length() - i(right)))); // remove n characters from back
+		STRING.addBinaryOperator(INT, Operator.MUL, (left, right) -> new Value(STRING, s(left).repeat(i(right)))); // repeat the string n times
 //		STRING.addDivFunction(DOUBLE, (left, right) -> new Value(DOUBLE, d(left) / d(right)));
 //		STRING.addPowFunction(DOUBLE, (left, right) -> new Value(DOUBLE, Math.pow(d(left), d(right))));
-		STRING.unarySubFunctions.put(STRING, (itself -> new Value(STRING, new StringBuilder(s(itself)).reverse().toString()))); // reverse the string
+		STRING.addUnaryOperator(Operator.SUB, (itself -> itself.setValue(new StringBuilder(s(itself)).reverse().toString()))); // reverse the string
 //		STRING.unaryAddFunctions.put(DOUBLE, (itself -> new Value(DOUBLE, d(itself))));
 //		STRING.functions.put(FunctionParameters.function("length").build(), ((itself, args) -> new Value(DOUBLE, ((String) itself.value).length())));
 		STRING.addFunction(FunctionParameters.function("len").build(), ((itself, args) -> new Value(INT, itself.getString().length())));
@@ -139,18 +138,19 @@ public class TypeDeclarations
 		});
 		VEC2.addConstructor(FunctionParameters.constructor(VEC2).build(), par -> new Value(VEC2, new double[] {0, 0}));
 
-		VEC2.addAddFunction(VEC2, (left, right) -> new Value(VEC2).setValue("x", left.getDouble("x") + right.getDouble("x")).setValue("y", left.getDouble("y") + right.getDouble("y")));
-		VEC2.addSubFunction(VEC2, (left, right) -> new Value(VEC2).setValue("x", left.getDouble("x") - right.getDouble("x")).setValue("y", left.getDouble("y") - right.getDouble("y")));
-		VEC2.addMulFunction(VEC2, (left, right) -> new Value(VEC2).setValue("x", left.getDouble("x") * right.getDouble("x")).setValue("y", left.getDouble("y") * right.getDouble("y")));
-		VEC2.addDivFunction(VEC2, (left, right) -> new Value(VEC2).setValue("x", left.getDouble("x") / right.getDouble("x")).setValue("y", left.getDouble("y") / right.getDouble("y")));
+		VEC2.addBinaryOperator(VEC2, Operator.ADD, (left, right) -> new Value(VEC2).setValue("x", left.getDouble("x") + right.getDouble("x")).setValue("y", left.getDouble("y") + right.getDouble("y")));
+		VEC2.addBinaryOperator(VEC2, Operator.SUB, (left, right) -> new Value(VEC2).setValue("x", left.getDouble("x") - right.getDouble("x")).setValue("y", left.getDouble("y") - right.getDouble("y")));
+		VEC2.addBinaryOperator(VEC2, Operator.MUL, (left, right) -> new Value(VEC2).setValue("x", left.getDouble("x") * right.getDouble("x")).setValue("y", left.getDouble("y") * right.getDouble("y")));
+		VEC2.addBinaryOperator(VEC2, Operator.DIV, (left, right) -> new Value(VEC2).setValue("x", left.getDouble("x") / right.getDouble("x")).setValue("y", left.getDouble("y") / right.getDouble("y")));
 
-		VEC2.addAddFunction(DOUBLE, (left, right) -> new Value(VEC2).setValue("x", left.getDouble("x") + right.getDouble()).setValue("y", left.getDouble("y") + right.getDouble()));
-		VEC2.addSubFunction(DOUBLE, (left, right) -> new Value(VEC2).setValue("x", left.getDouble("x") - right.getDouble()).setValue("y", left.getDouble("y") - right.getDouble()));
-		VEC2.addMulFunction(DOUBLE, (left, right) -> new Value(VEC2).setValue("x", left.getDouble("x") * right.getDouble()).setValue("y", left.getDouble("y") * right.getDouble()));
-		VEC2.addDivFunction(DOUBLE, (left, right) -> new Value(VEC2).setValue("x", left.getDouble("x") / right.getDouble()).setValue("y", left.getDouble("y") / right.getDouble()));
+		VEC2.addBinaryOperator(DOUBLE, Operator.ADD, (left, right) -> new Value(VEC2).setValue("x", left.getDouble("x") + right.getDouble()).setValue("y", left.getDouble("y") + right.getDouble()));
+		VEC2.addBinaryOperator(DOUBLE, Operator.SUB, (left, right) -> new Value(VEC2).setValue("x", left.getDouble("x") - right.getDouble()).setValue("y", left.getDouble("y") - right.getDouble()));
+		VEC2.addBinaryOperator(DOUBLE, Operator.MUL, (left, right) -> new Value(VEC2).setValue("x", left.getDouble("x") * right.getDouble()).setValue("y", left.getDouble("y") * right.getDouble()));
+		VEC2.addBinaryOperator(DOUBLE, Operator.DIV, (left, right) -> new Value(VEC2).setValue("x", left.getDouble("x") / right.getDouble()).setValue("y", left.getDouble("y") / right.getDouble()));
 
-		VEC2.unarySubFunctions.put(VEC2, (itself -> new Value(VEC2).setValue("x", -itself.getDouble("x")).setValue("y", -itself.getDouble("y"))));
-		VEC2.unaryAddFunctions.put(VEC2, (itself -> new Value(VEC2).setValue("x", itself.getDouble("x")).setValue("y", itself.getDouble("y"))));
+		VEC2.addUnaryOperator(Operator.SUB, itself -> itself.setValue("x", -itself.getDouble("x")).setValue("y", -itself.getDouble("y")));
+		VEC2.addUnaryOperator(Operator.ADD, itself -> itself);
+
 		VEC2.addFunction(FunctionParameters.function("normalize").build(), (itself, args) -> {
 			double x = itself.getDouble("x");
 			double y = itself.getDouble("y");

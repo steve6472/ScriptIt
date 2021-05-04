@@ -3,7 +3,9 @@ package steve6472.scriptit.expression;
 import steve6472.scriptit.MathFunctions;
 import steve6472.scriptit.Script;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 import static steve6472.scriptit.TypeDeclarations.*;
 
@@ -17,7 +19,8 @@ import static steve6472.scriptit.TypeDeclarations.*;
  ***********************/
 public class ExpressionParser
 {
-	public static boolean DEBUG = false;
+	public static boolean EVAL_DEBUG = false;
+	public static boolean PARSE_DEBUG = false;
 
 	private static final Type[] NO_PARAMETERS = new Type[0];
 
@@ -27,9 +30,15 @@ public class ExpressionParser
 		{
 			int pos = -1, ch;
 
-			void print(String s)
+			void printParse(String s)
 			{
-				if (DEBUG)
+				if (PARSE_DEBUG)
+					System.out.println(s);
+			}
+
+			void printEval(String s)
+			{
+				if (EVAL_DEBUG)
 					System.out.println(s);
 			}
 
@@ -38,22 +47,38 @@ public class ExpressionParser
 
 			void nextChar()
 			{
-				print("" + (char) ch);
+				printParse("" + (char) ch);
 				ch = (++pos < str.length()) ? str.charAt(pos) : -1;
 			}
 
 			boolean eat(int charToEat)
 			{
-				print("eat till " + (char) charToEat);
+				printParse("eat till " + (char) charToEat);
 				while (ch == ' ' || ch == '\n')
 					nextChar();
 				if (ch == charToEat)
 				{
 					nextChar();
-					print("found");
+					printParse("found");
 					return true;
 				}
-				print("not found");
+				printParse("not found");
+				return false;
+			}
+
+			boolean eat(char charToEat1, char charToEat2)
+			{
+				printParse("eat till " + charToEat1 + " " + charToEat2);
+				while (ch == ' ' || ch == '\n')
+					nextChar();
+				if (ch == charToEat1 && pos < str.length() && str.charAt(pos + 1) == charToEat2)
+				{
+					nextChar();
+					nextChar();
+					printParse("found");
+					return true;
+				}
+				printParse("not found");
 				return false;
 			}
 
@@ -74,7 +99,7 @@ public class ExpressionParser
 
 			Expression parseExpression()
 			{
-				print("Parsing expression");
+				printParse("Parsing expression");
 				Expression x = parseTerm();
 				for (; ; )
 				{
@@ -86,7 +111,7 @@ public class ExpressionParser
 						{
 							Value aEval = a.eval(script);
 							Value bEval = b.eval(script);
-							return aEval.type.addFunctions.get(bEval.type).apply(aEval, bEval);
+							return aEval.type.binary.get(bEval.type).get(Operator.ADD).apply(aEval, bEval);
 						};
 					} else if (eat('-'))
 					{
@@ -96,12 +121,12 @@ public class ExpressionParser
 						{
 							Value aEval = a.eval(script);
 							Value bEval = b.eval(script);
-							return aEval.type.subFunctions.get(bEval.type).apply(aEval, bEval);
+							return aEval.type.binary.get(bEval.type).get(Operator.SUB).apply(aEval, bEval);
 						};
 					} else if (eat(','))
 					{
 						Expression a = parseExpression();
-						print("Adding parameter " + a);
+						printParse("Adding parameter " + a);
 						functionParameters.peek().add(a);
 						return x;
 					} else if (eat('.'))
@@ -117,11 +142,11 @@ public class ExpressionParser
 
 			Expression parseTerm()
 			{
-				print("Parsing term");
+				printParse("Parsing term");
 				Expression x = parseFactor();
 				for (; ; )
 				{
-					print("term");
+					printParse("term");
 					if (eat('*'))
 					{
 						Expression a = x;
@@ -130,7 +155,7 @@ public class ExpressionParser
 						{
 							Value aEval = a.eval(script);
 							Value bEval = b.eval(script);
-							return aEval.type.mulFunctions.get(bEval.type).apply(aEval, bEval);
+							return aEval.type.binary.get(bEval.type).get(Operator.MUL).apply(aEval, bEval);
 						};
 					} else if (eat('/'))
 					{
@@ -140,7 +165,7 @@ public class ExpressionParser
 						{
 							Value aEval = a.eval(script);
 							Value bEval = b.eval(script);
-							return aEval.type.divFunctions.get(bEval.type).apply(aEval, bEval);
+							return aEval.type.binary.get(bEval.type).get(Operator.DIV).apply(aEval, bEval);
 						};
 					} else
 					{
@@ -151,80 +176,42 @@ public class ExpressionParser
 
 			Expression parseFactor()
 			{
-				print("Parsing factor");
-				if (eat('+'))
+				printParse("Parsing factor");
+				for (Operator op : Operator.getUnaryOps())
 				{
-					Expression expression = parseFactor();
-					return (script) ->
+					if (op.getOperator().length() == 1)
 					{
-						Value value = expression.eval(script);
-						return value.type.unaryAddFunctions.get(value.type).apply(value);
-					}; // unary plus
-				}
-				if (eat('-'))
-				{
-					Expression expression = parseFactor();
-					print("Returning unary minus");
-					return (script) ->
+						if (eat(op.getOperator().charAt(0)))
+						{
+							Expression expression = parseFactor();
+							return (script) ->
+							{
+								Value value = expression.eval(script);
+								return value.type.unary.get(value.type).get(op).apply(value);
+							};
+						}
+					} else
 					{
-						Value value = expression.eval(script);
-						return value.type.unarySubFunctions.get(value.type).apply(value);
-					}; // unary minus
-				}
-				if (eat('*'))
-				{
-					Expression expression = parseFactor();
-					return (script) ->
-					{
-						Value value = expression.eval(script);
-						return value.type.unaryMulFunctions.get(value.type).apply(value);
-					}; // unary mul
-				}
-				if (eat('/'))
-				{
-					Expression expression = parseFactor();
-					return (script) ->
-					{
-						Value value = expression.eval(script);
-						return value.type.unaryDivFunctions.get(value.type).apply(value);
-					}; // unary div
-				}
-				if (eat('^'))
-				{
-					Expression expression = parseFactor();
-					return (script) ->
-					{
-						Value value = expression.eval(script);
-						return value.type.unaryPowFunctions.get(value.type).apply(value);
-					}; // unary div
-				}
-				if (eat('~'))
-				{
-					Expression expression = parseFactor();
-					return (scipt) ->
-					{
-						Value value = expression.eval(scipt);
-						return value.type.unaryNegFunctions.get(value.type).apply(value);
-					}; // unary neg
-				}
-				if (eat('!'))
-				{
-					Expression expression = parseFactor();
-					return (script) ->
-					{
-						Value value = expression.eval(script);
-						return value.type.unaryNotFunctions.get(value.type).apply(value);
-					}; // unary not
+						if (eat(op.getOperator().charAt(0), op.getOperator().charAt(1)))
+						{
+							Expression expression = parseFactor();
+							return (script) ->
+							{
+								Value value = expression.eval(script);
+								return value.type.unary.get(value.type).get(op).apply(value);
+							};
+						}
+					}
 				}
 
 				Expression x;
 				int startPos = this.pos;
 				if (eat('"'))
 				{
-					print("String!");
+					printParse("String!");
 					if (ch == '"')
 					{
-						print("Empty string");
+						printParse("Empty string");
 						x = (script) -> new Value(STRING, "");
 					} else
 					{
@@ -243,13 +230,13 @@ public class ExpressionParser
 							escape = false;
 						}
 						nextChar();
-						print(bobTheBuilder.toString());
+						printParse(bobTheBuilder.toString());
 						String s = bobTheBuilder.toString();
 						x = (script) -> new Value(STRING, s);
 					}
 				} else if (eat('\''))
 				{
-					print("Char!");
+					printParse("Char!");
 					if (ch == '\'')
 					{
 						throw new IllegalArgumentException("Character has no char assigned!");
@@ -258,7 +245,7 @@ public class ExpressionParser
 					nextChar();
 					nextChar();
 
-					print("Char: '" + c + "'");
+					printParse("Char: '" + c + "'");
 
 					x = (script) -> new Value(CHAR, c);
 				} else if (eat('('))
@@ -266,7 +253,7 @@ public class ExpressionParser
 					functionParameters.push(new ArrayList<>());
 					if (ch == ')')
 					{
-						print("Empty function");
+						printParse("Empty function");
 						eat(')');
 						functionParameters.pop();
 						x = null;
@@ -277,7 +264,7 @@ public class ExpressionParser
 					}
 				} else if ((ch >= '0' && ch <= '9') || ch == '.')
 				{ // numbers
-					print("number?");
+					printParse("number?");
 					boolean foundDot = false;
 					while ((ch >= '0' && ch <= '9') || ch == '.')
 					{
@@ -288,37 +275,37 @@ public class ExpressionParser
 					if (foundDot)
 					{
 						double xx = Double.parseDouble(str.substring(startPos, this.pos));
-						print("parsed to double " + xx);
+						printParse("parsed to double " + xx);
 						Value val = new Value(DOUBLE, xx);
 						x = (script) -> val;
 					} else
 					{
 						int xx = Integer.parseInt(str.substring(startPos, this.pos));
-						print("parsed to int " + xx);
+						printParse("parsed to int " + xx);
 						Value val = new Value(INT, xx);
 						x = (script) -> val;
 					}
 				} else if ((ch >= 'A' && ch <= 'Z') || (ch >= 'a' && ch <= 'z') || ch == '_') // can only start with [a-zA-Z_]
 				{ // functions
-					print("function?");
+					printParse("function?");
 					while ((ch >= 'A' && ch <= 'Z') || (ch >= 'a' && ch <= 'z') || (ch >= '0' && ch <= '9') || ch == '_')
 						nextChar();
 					String name = str.substring(startPos, this.pos);
-					print("function name: " + name);
+					printParse("function name: " + name);
 
 					if (ch == '(')
 					{
 						Expression exp = parseFactor();
 						if (exp != null && functionParameters.peek().isEmpty())
 						{
-							print("One param function");
+							printParse("One param function");
 							x = (script) ->
 							{
 								Type[] typeArr = new Type[1];
 								Value[] arr = new Value[1];
 								arr[0] = exp.eval(script);
 								typeArr[0] = arr[0].type;
-								print("Function param: " + arr[0]);
+								printParse("Function param: " + arr[0]);
 								if (!previousTypes.isEmpty())
 								{
 									Value eval = previousTypes.pop().eval(script);
@@ -337,7 +324,7 @@ public class ExpressionParser
 						}
 						else if (!functionParameters.isEmpty() && !functionParameters.peek().isEmpty() && exp != null)
 						{
-							print("Function");
+							printParse("Function");
 							List<Expression> peek = functionParameters.peek();
 							x = (script) ->
 							{
@@ -345,14 +332,14 @@ public class ExpressionParser
 								Value[] arr = new Value[peek.size() + 1];
 								arr[0] = exp.eval(script);
 								typeArr[0] = arr[0].type;
-								print("Function param: " + arr[0]);
+								printEval("Function param: " + arr[0]);
 								for (int i = 0; i < peek.size(); i++)
 								{
 									Expression functionParameter = peek.get(i);
 									Value eval = functionParameter.eval(script);
 									arr[peek.size() - i] = eval;
 									typeArr[peek.size() - i] = eval.type;
-									print("Function param: " + eval);
+									printEval("Function param: " + eval);
 								}
 								if (!previousTypes.isEmpty())
 								{
@@ -371,7 +358,7 @@ public class ExpressionParser
 							};
 						} else
 						{
-							print("Procedure");
+							printParse("Procedure");
 							// Procedure (function with no parameters)
 							if (!previousTypes.isEmpty())
 							{
@@ -405,16 +392,16 @@ public class ExpressionParser
 					throw new RuntimeException("Unexpected: " + (char) ch);
 				}
 
-				if (eat('^'))
-				{
-					Expression a = x;
-					x = (script) ->
-					{
-						Value v = a.eval(script);
-						Value eval = parseFactor().eval(script);
-						return v.type.powFunctions.get(eval.type).apply(v, eval);
-					}; // exponentiation
-				}
+//				if (eat('^'))
+//				{
+//					Expression a = x;
+//					x = (script) ->
+//					{
+//						Value v = a.eval(script);
+//						Value eval = parseFactor().eval(script);
+//						return v.type.powFunctions.get(eval.type).apply(v, eval);
+//					}; // exponentiation
+//				}
 
 				return x;
 			}
@@ -438,10 +425,10 @@ public class ExpressionParser
 			return new Value(INT, temp + arags[0].getInt());
 		});
 
-//		Expression exp = parser.parse("int(7)");
+		Expression exp = parser.parse("int(7)");
 //		Expression exp = parser.parse("-(6*7)");
 //		Expression exp = parser.parse("int(6)*7");
-		Expression exp = parser.parse("(\"Hello\" + \" world!\").print()");
+//		Expression exp = parser.parse("(\"Hello\" + \" world!\").print()");
 //		Expression exp = parser.parse("(\"Hello\" + ' ' + \"world\" + '!').len() * 2");
 //		Expression exp = parser.parse("string(\"_1\\\"3_\").print()");
 //		Expression exp = parser.parse("vec2(0, 9).-toString()");

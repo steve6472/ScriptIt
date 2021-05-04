@@ -17,7 +17,7 @@ public class DeclareValue extends Command
 	String name;
 	Type type;
 
-	public DeclareValue(String line)
+	public DeclareValue(Script script, String line)
 	{
 		super(line);
 

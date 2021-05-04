@@ -8,38 +8,22 @@ public class Type
 {
 	private final String keyword;
 
-	public HashMap<Type, OperatorOverloadFunction> addFunctions, subFunctions, mulFunctions, divFunctions, powFunctions;
-	public HashMap<Type, UnaryOperatorOverloadFunction> unaryAddFunctions, unarySubFunctions, unaryMulFunctions, unaryDivFunctions, unaryPowFunctions, unaryNegFunctions, unaryNotFunctions;
+	public HashMap<Type, HashMap<Operator, OperatorOverloadFunction>> binary;
+	public HashMap<Type, HashMap<Operator, UnaryOperatorOverloadFunction>> unary;
 
-	private HashMap<FunctionParameters, Constructor> constructors;
-	private HashMap<FunctionParameters, Function> functions;
+	private final HashMap<FunctionParameters, Constructor> constructors;
+	private final HashMap<FunctionParameters, Function> functions;
 
 	public Type(String keyword)
 	{
 		this.keyword = keyword;
 
-		addFunctions = new HashMap<>();
-		subFunctions = new HashMap<>();
-		mulFunctions = new HashMap<>();
-		divFunctions = new HashMap<>();
-		powFunctions = new HashMap<>();
-
-		unaryAddFunctions = new HashMap<>();
-		unarySubFunctions = new HashMap<>();
-		unaryMulFunctions = new HashMap<>();
-		unaryDivFunctions = new HashMap<>();
-		unaryPowFunctions = new HashMap<>();
-		unaryNegFunctions = new HashMap<>();
-		unaryNotFunctions = new HashMap<>();
+		binary = new HashMap<>();
+		unary = new HashMap<>();
 
 		functions = new HashMap<>();
 		constructors = new HashMap<>();
 	}
-
-//	public void importIntoParser(ExpressionParser parser)
-//	{
-//		constructors.forEach(parser::addConstructor);
-//	}
 
 	public HashMap<FunctionParameters, Constructor> getConstructors()
 	{
@@ -69,7 +53,7 @@ public class Type
 
 	public Function getFunction(String name, Type[] types)
 	{
-		if (ExpressionParser.DEBUG)
+		if (ExpressionParser.PARSE_DEBUG)
 			System.out.println("Looking for function in type '" + keyword + "' with name '" + name + "' and types " + Arrays.toString(types));
 
 		main: for (Map.Entry<FunctionParameters, Function> entry : functions.entrySet())
@@ -97,29 +81,26 @@ public class Type
 		return keyword;
 	}
 
-	public void addAddFunction(Type rightOperand, OperatorOverloadFunction function)
+	public void addBinaryOperator(Type rightOperandType, Operator operator, OperatorOverloadFunction function)
 	{
-		addFunctions.put(rightOperand, function);
+		HashMap<Operator, OperatorOverloadFunction> map = binary.get(rightOperandType);
+		if (map == null)
+		{
+			map = new HashMap<>();
+		}
+		map.put(operator, function);
+		binary.put(rightOperandType, map);
 	}
 
-	public void addSubFunction(Type rightOperand, OperatorOverloadFunction function)
+	public void addUnaryOperator(Operator operator, UnaryOperatorOverloadFunction function)
 	{
-		subFunctions.put(rightOperand, function);
-	}
-
-	public void addMulFunction(Type rightOperand, OperatorOverloadFunction function)
-	{
-		mulFunctions.put(rightOperand, function);
-	}
-
-	public void addDivFunction(Type rightOperand, OperatorOverloadFunction function)
-	{
-		divFunctions.put(rightOperand, function);
-	}
-
-	public void addPowFunction(Type rightOperand, OperatorOverloadFunction function)
-	{
-		powFunctions.put(rightOperand, function);
+		HashMap<Operator, UnaryOperatorOverloadFunction> map = unary.get(this);
+		if (map == null)
+		{
+			map = new HashMap<>();
+		}
+		map.put(operator, function);
+		unary.put(this, map);
 	}
 
 	@Override

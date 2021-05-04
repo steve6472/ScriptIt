@@ -77,22 +77,17 @@ public class Script
 	}
 
 
-
-
-
 	public void importType(Type type)
 	{
 		namespace.typeMap.put(type.getKeyword(), type);
 	}
 
-	public boolean isType(String name)
-	{
-		return namespace.typeMap.containsKey(name);
-	}
-
 	public Type getType(String name)
 	{
-		return namespace.typeMap.get(name);
+		Type type = namespace.typeMap.get(name);
+		if (type == null && parent != null)
+			return parent.getType(name);
+		return type;
 	}
 
 	public void addValue(String name, Value value)
@@ -123,16 +118,21 @@ public class Script
 		return b;
 	}
 
-	public Constructor getFunction(String name, Type[] types)
+	public void printConstructors()
 	{
-		if (ExpressionParser.DEBUG)
-			System.out.println("Looking for function with name '" + name + "' and types " + Arrays.toString(types));
+		if (parent != null)
+			parent.printConstructors();
+		System.out.println("");
 
-		//		System.out.println("\n\n\n");
-		//		System.out.println("Looking for function with name '" + name + "' and types " + Arrays.toString(types));
-		//		System.out.println(constructorMap);
-		//		System.out.println("\n\n\n");
+		namespace.constructorMap.forEach((params, cons) ->
+		{
+			System.out.println(params);
+		});
+	}
 
+	private Constructor findFunction(String name, Type[] types)
+	{
+		Constructor con = null;
 		main: for (Map.Entry<FunctionParameters, Constructor> e : namespace.constructorMap.entrySet())
 		{
 			FunctionParameters parameters = e.getKey();
@@ -149,17 +149,39 @@ public class Script
 					continue main;
 				}
 			}
-			if (ExpressionParser.DEBUG)
+			if (ExpressionParser.EVAL_DEBUG)
 				System.out.println("Found function " + parameters + " " + constructor);
-			return constructor;
+			con = constructor;
+			break;
 		}
 
-		Type type = namespace.typeMap.get(name);
+		if (con == null && parent != null)
+			return parent.findFunction(name, types);
+		return con;
+	}
+
+	public Constructor getFunction(String name, Type[] types)
+	{
+		if (ExpressionParser.EVAL_DEBUG)
+		{
+			System.out.println("Looking for function with name '" + name + "' and types " + Arrays.toString(types));
+			printConstructors();
+		}
+
+		//		System.out.println("\n\n\n");
+		//		System.out.println("Looking for function with name '" + name + "' and types " + Arrays.toString(types));
+		//		System.out.println("\n\n\n");
+
+		Constructor c = findFunction(name, types);
+		if (c != null)
+			return c;
+
+		Type type = getType(name);
 
 		if (type == null)
 			throw new RuntimeException("Type with name '" + name + "' not found!");
 
-		if (ExpressionParser.DEBUG)
+		if (ExpressionParser.EVAL_DEBUG)
 			System.out.println("Found type " + type);
 
 		main: for (Map.Entry<FunctionParameters, Constructor> entry : type.getConstructors().entrySet())
@@ -177,7 +199,7 @@ public class Script
 					continue main;
 				}
 			}
-			if (ExpressionParser.DEBUG)
+			if (ExpressionParser.EVAL_DEBUG)
 				System.out.println("Found function " + k + " " + v);
 			return v;
 		}
