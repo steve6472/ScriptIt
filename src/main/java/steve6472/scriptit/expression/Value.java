@@ -1,32 +1,60 @@
 package steve6472.scriptit.expression;
 
+import steve6472.scriptit.TypeDeclarations;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
 public class Value
 {
-	private static final String SINGLE_VALUE = " ";
+	/**
+	 * The value is "PRIMITIVE VALUE" with space, which is (hopefully) impossible to get from the Script
+	 */
+	public static final String SINGLE_VALUE = "PRIMITIVE VALUE";
 
+	public final boolean isPrimitive;
 	public Type type;
 	public Map<String, Object> values;
 
-	public Value(Type type)
+	/**
+	 * DOUBLE, INT, STRING, CHAR, BOOL are primitive
+	 * @param type type
+	 * @return new value with automatically assigned isPrimitive based on type
+	 */
+	public static Value newValue(Type type)
 	{
+		return new Value(TypeDeclarations.isPrimitive(type), type);
+	}
+
+	public static Value newValue(Type type, Object value)
+	{
+		return new Value(TypeDeclarations.isPrimitive(type), type, value);
+	}
+
+	private Value(boolean isPrimitive, Type type)
+	{
+		this.isPrimitive = isPrimitive;
 		this.type = type;
 		this.values = new HashMap<>();
 	}
 
-	public Value(Type type, Object value)
+	private Value(boolean isPrimitive, Type type, Object value)
 	{
-		this(type, SINGLE_VALUE, value);
+		this(isPrimitive, type, SINGLE_VALUE, value);
 	}
 
-	public Value(Type type, String valueName, Object value)
+	private Value(boolean isPrimitive, Type type, String valueName, Object value)
 	{
+		this.isPrimitive = isPrimitive;
 		this.type = type;
 		this.values = new HashMap<>();
 		setValue(valueName, value);
+	}
+
+	public boolean isPrimitive()
+	{
+		return isPrimitive;
 	}
 
 	public Value setValue(String name, Object value)
@@ -41,29 +69,39 @@ public class Value
 		return this;
 	}
 
-	public boolean getBoolean(String name)
+	public Value getValue(String name)
 	{
-		return (boolean) values.get(name);
+		return (Value) values.get(name);
 	}
 
-	public int getInt(String name)
+	public Object get(String name)
 	{
-		return (int) values.get(name);
+		return values.get(name);
 	}
 
-	public double getDouble(String name)
+	public boolean getBooleanValue(String name)
 	{
-		return (double) values.get(name);
+		return ((Value) values.get(name)).getBoolean();
 	}
 
-	public char getChar(String name)
+	public int getIntValue(String name)
 	{
-		return (char) values.get(name);
+		return ((Value) values.get(name)).getInt();
 	}
 
-	public String getString(String name)
+	public double getDoubleValue(String name)
 	{
-		return (String) values.get(name);
+		return ((Value) values.get(name)).getDouble();
+	}
+
+	public char getCharValue(String name)
+	{
+		return ((Value) values.get(name)).getChar();
+	}
+
+	public String getStringValue(String name)
+	{
+		return ((Value) values.get(name)).getString();
 	}
 
 
@@ -97,7 +135,9 @@ public class Value
 	@Override
 	public String toString()
 	{
-		return "Value{" + "type=" + type + ", values=" + values + '}';
+		if (isPrimitive)
+			return "{" + type.getKeyword() + "=" + values.get(SINGLE_VALUE) + "}";
+		return "Value{" + "type=" + type.getKeyword() + ", values=" + values + '}';
 	}
 
 	@Override

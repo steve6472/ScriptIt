@@ -27,11 +27,15 @@ public class Regexes
 	/**
 	 * import int
 	 */
-	public static final Pattern IMPORT = Pattern.compile("^import\s+[a-zA-Z][a-zA-Z0-9]*");
+	public static final Pattern IMPORT = Pattern.compile("^import\\s+[a-zA-Z][a-zA-Z0-9]*");
 	/**
 	 * function int name(...
 	 */
 	public static final Pattern DECLARE_FUNCTION = Pattern.compile("^function\\s+[a-zA-Z][a-zA-Z0-9_]*\\s+[a-zA-Z][a-zA-Z0-9_]*\\(.+");
+	/**
+	 * constructor(...
+	 */
+	public static final Pattern DECLARE_CONSTRUCTOR = Pattern.compile("^constructor\\s*\\(.+");
 	/**
 	 * class vec3
 	 */
@@ -46,6 +50,10 @@ public class Regexes
 	 * retrun ...
 	 */
 	public static final Pattern RETURN = Pattern.compile("^return\\s+[a-zA-Z].*");
+	/**
+	 * this.x = 5
+	 */
+	public static final Pattern THIS_ASSIGN = Pattern.compile("^this\\.[a-zA-Z_][a-zA-Z0-9_]*\\s*=\\s*.+[^\\.]");
 }
 
 

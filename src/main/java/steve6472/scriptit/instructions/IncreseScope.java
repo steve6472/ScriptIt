@@ -1,6 +1,6 @@
-package steve6472.scriptit.commands;
+package steve6472.scriptit.instructions;
 
-import steve6472.scriptit.Command;
+import steve6472.scriptit.Instruction;
 import steve6472.scriptit.Script;
 import steve6472.scriptit.expression.Value;
 
@@ -10,9 +10,9 @@ import steve6472.scriptit.expression.Value;
  * Project: ScriptIt
  *
  ***********************/
-public class DecreseScope extends Command
+public class IncreseScope extends Instruction
 {
-	public DecreseScope(String line)
+	public IncreseScope(String line)
 	{
 		super(line);
 	}

@@ -1,6 +1,6 @@
-package steve6472.scriptit.commands;
+package steve6472.scriptit.instructions.type;
 
-import steve6472.scriptit.Command;
+import steve6472.scriptit.Instruction;
 import steve6472.scriptit.Script;
 import steve6472.scriptit.expression.Expression;
 import steve6472.scriptit.expression.ExpressionParser;
@@ -12,17 +12,19 @@ import steve6472.scriptit.expression.Value;
  * Project: ScriptIt
  *
  ***********************/
-public class DeclareAssignValue extends Command
+public class ThisAssignValue extends Instruction
 {
 	String name;
 	Expression expression;
+	public Value thisValue;
 
-	public DeclareAssignValue(String line)
+	public ThisAssignValue(Script script, String line)
 	{
 		super(line);
 
-		String[] split = line.split("\s*=\s*", 2);
-		name = split[0].split("\s+")[1];
+		// Remove "this." and split it to value name and explression
+		String[] split = line.replaceAll("^this\\.", "").split("\s*=\s*", 2);
+		name = split[0];
 		ExpressionParser parser = new ExpressionParser();
 		expression = parser.parse(split[1]);
 	}
@@ -31,7 +33,10 @@ public class DeclareAssignValue extends Command
 	public Value execute(Script script)
 	{
 		Value eval = expression.eval(script);
-		script.addValue(name, eval);
+//		eval.values.forEach((name, valu) -> {
+//			thisValue.setValue()
+//		});
+		thisValue.setValue(name, eval);
 		return null;
 	}
 

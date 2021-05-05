@@ -19,6 +19,7 @@
         <option value="Interface" />
         <option value="Class" />
         <option value="Enum" />
+        <option value="Record" />
       </list>
     </option>
   </component>
@@ -45,7 +46,7 @@
     <property name="project.structure.last.edited" value="Modules" />
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.19655173" />
-    <property name="settings.editor.selected.configurable" value="MavenSettings" />
+    <property name="settings.editor.selected.configurable" value="preferences.pluginManager" />
   </component>
   <component name="RecentsManager">
     <key name="CreateTestDialog.Recents.Supers">
@@ -55,9 +56,11 @@
       <recent name="steve6472.scriptit.math" />
     </key>
     <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="steve6472.scriptit.instructions.type" />
+      <recent name="steve6472.scriptit.expression" />
+      <recent name="steve6472.scriptit.commands.type" />
       <recent name="steve6472.scriptit.commands" />
       <recent name="steve6472.scriptit" />
-      <recent name="steve6472.scriptit.math" />
     </key>
   </component>
   <component name="RunManager" selected="Application.Main">
@@ -108,9 +111,20 @@
       </pinned-members>
     </pin-to-top-manager>
     <watches-manager>
-      <inline-watch fileUrl="file://$PROJECT_DIR$/src/main/java/steve6472/scriptit/Script.java" line="18">
+      <inline-watch fileUrl="file://$PROJECT_DIR$/src/main/java/steve6472/scriptit/Script.java" line="16">
         <watch expression="((Scope)((Script)this).scope).variables" language="JAVA" custom="steve6472.scriptit.Script,steve6472.scriptit.Scope" />
       </inline-watch>
     </watches-manager>
+  </component>
+  <component name="regexState">
+    <option name="map">
+      <map>
+        <entry key="flags" value="0" />
+        <entry key="mode" value="3" />
+        <entry key="regex" value="^this\." />
+        <entry key="replacement" value="" />
+        <entry key="text" value="this.x = 0" />
+      </map>
+    </option>
   </component>
 </project>

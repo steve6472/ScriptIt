@@ -1,6 +1,6 @@
-package steve6472.scriptit.commands;
+package steve6472.scriptit.instructions;
 
-import steve6472.scriptit.Command;
+import steve6472.scriptit.Instruction;
 import steve6472.scriptit.Script;
 import steve6472.scriptit.expression.Expression;
 import steve6472.scriptit.expression.ExpressionParser;
@@ -12,17 +12,15 @@ import steve6472.scriptit.expression.Value;
  * Project: ScriptIt
  *
  ***********************/
-public class AssignValue extends Command
+public class ReturnValue extends Instruction
 {
-	String name;
 	Expression expression;
 
-	public AssignValue(String line)
+	public ReturnValue(String line)
 	{
 		super(line);
 
-		String[] split = line.split("\s*=\s*", 2);
-		name = split[0];
+		String[] split = line.split("return\s*", 2);
 		ExpressionParser parser = new ExpressionParser();
 		expression = parser.parse(split[1]);
 	}
@@ -30,17 +28,15 @@ public class AssignValue extends Command
 	@Override
 	public Value execute(Script script)
 	{
-		Value eval = expression.eval(script);
-		Value value = script.getValue(name);
-		if (value.type != eval.type)
-			throw new RuntimeException("Type mismatch");
-		value.values = eval.values;
-		return null;
+		return expression.eval(script);
+//		if (value.type != eval.type)
+//			throw new RuntimeException("Type mismatch");
+//		value.values = eval.values;
 	}
 
 	@Override
 	public String toString()
 	{
-		return "AssignValue{" + "name='" + name + '\'' + ", expression=" + expression + '}';
+		return "ReturnValue{" + "expression=" + expression + '}';
 	}
 }

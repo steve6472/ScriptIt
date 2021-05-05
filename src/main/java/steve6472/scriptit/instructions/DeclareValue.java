@@ -1,10 +1,11 @@
-package steve6472.scriptit.commands;
+package steve6472.scriptit.instructions;
 
-import steve6472.scriptit.Command;
+import steve6472.scriptit.Instruction;
 import steve6472.scriptit.Script;
-import steve6472.scriptit.TypeDeclarations;
 import steve6472.scriptit.expression.Type;
 import steve6472.scriptit.expression.Value;
+
+import static steve6472.scriptit.expression.Value.newValue;
 
 /**********************
  * Created by steve6472 (Mirek Jozefek)
@@ -12,7 +13,7 @@ import steve6472.scriptit.expression.Value;
  * Project: ScriptIt
  *
  ***********************/
-public class DeclareValue extends Command
+public class DeclareValue extends Instruction
 {
 	String name;
 	Type type;
@@ -25,20 +26,16 @@ public class DeclareValue extends Command
 		String keyword = split[0];
 		name = split[1];
 
-		for (Type t : TypeDeclarations.BASIC_TYPES)
-		{
-			if (t.getKeyword().equals(keyword))
-			{
-				type = t;
-				break;
-			}
-		}
+		type = script.getType(keyword);
+
+		if (type == null)
+			throw new RuntimeException("Type '" + keyword + "' not found");
 	}
 
 	@Override
 	public Value execute(Script script)
 	{
-		script.addValue(name, new Value(type));
+		script.addValue(name, newValue(type));
 		return null;
 	}
 

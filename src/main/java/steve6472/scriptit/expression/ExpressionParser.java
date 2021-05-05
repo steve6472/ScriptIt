@@ -1,6 +1,6 @@
 package steve6472.scriptit.expression;
 
-import steve6472.scriptit.MathFunctions;
+import steve6472.scriptit.ImportableFunctions;
 import steve6472.scriptit.Script;
 
 import java.util.ArrayList;
@@ -8,6 +8,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import static steve6472.scriptit.TypeDeclarations.*;
+import static steve6472.scriptit.expression.Value.newValue;
 
 /**********************
  * <br>Created by Boann<br>
@@ -212,7 +213,7 @@ public class ExpressionParser
 					if (ch == '"')
 					{
 						printParse("Empty string");
-						x = (script) -> new Value(STRING, "");
+						x = (script) -> newValue(STRING, "");
 					} else
 					{
 						boolean escape = false;
@@ -232,7 +233,7 @@ public class ExpressionParser
 						nextChar();
 						printParse(bobTheBuilder.toString());
 						String s = bobTheBuilder.toString();
-						x = (script) -> new Value(STRING, s);
+						x = (script) -> newValue(STRING, s);
 					}
 				} else if (eat('\''))
 				{
@@ -247,7 +248,7 @@ public class ExpressionParser
 
 					printParse("Char: '" + c + "'");
 
-					x = (script) -> new Value(CHAR, c);
+					x = (script) -> newValue(CHAR, c);
 				} else if (eat('('))
 				{ // parentheses
 					functionParameters.push(new ArrayList<>());
@@ -276,13 +277,13 @@ public class ExpressionParser
 					{
 						double xx = Double.parseDouble(str.substring(startPos, this.pos));
 						printParse("parsed to double " + xx);
-						Value val = new Value(DOUBLE, xx);
+						Value val = newValue(DOUBLE, xx);
 						x = (script) -> val;
 					} else
 					{
 						int xx = Integer.parseInt(str.substring(startPos, this.pos));
 						printParse("parsed to int " + xx);
-						Value val = new Value(INT, xx);
+						Value val = newValue(INT, xx);
 						x = (script) -> val;
 					}
 				} else if ((ch >= 'A' && ch <= 'Z') || (ch >= 'a' && ch <= 'z') || ch == '_') // can only start with [a-zA-Z_]
@@ -417,12 +418,12 @@ public class ExpressionParser
 		script.importType(STRING);
 		script.importType(VEC2);
 
-		MathFunctions.definePi(script);
-		MathFunctions.importMathFunctionsRad(script);
+		ImportableFunctions.definePi(script);
+		ImportableFunctions.importMathFunctionsRad(script);
 
 		script.addConstructor(FunctionParameters.function("stuff").addType(INT).addType(INT).build(), (arags) -> {
 			int temp = arags[0].getInt() * arags[1].getInt();
-			return new Value(INT, temp + arags[0].getInt());
+			return newValue(INT, temp + arags[0].getInt());
 		});
 
 		Expression exp = parser.parse("int(7)");

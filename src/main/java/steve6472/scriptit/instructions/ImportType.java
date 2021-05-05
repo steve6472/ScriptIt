@@ -1,6 +1,6 @@
-package steve6472.scriptit.commands;
+package steve6472.scriptit.instructions;
 
-import steve6472.scriptit.Command;
+import steve6472.scriptit.Instruction;
 import steve6472.scriptit.Script;
 import steve6472.scriptit.TypeDeclarations;
 import steve6472.scriptit.expression.Type;
@@ -12,7 +12,7 @@ import steve6472.scriptit.expression.Value;
  * Project: ScriptIt
  *
  ***********************/
-public class ImportType extends Command
+public class ImportType extends Instruction
 {
 	Type typeToImport;
 

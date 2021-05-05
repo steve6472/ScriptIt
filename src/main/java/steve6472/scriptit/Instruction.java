@@ -8,9 +8,9 @@ import steve6472.scriptit.expression.Value;
  * Project: ScriptIt
  *
  ***********************/
-public abstract class Command
+public abstract class Instruction
 {
-	public Command(String line)
+	public Instruction(String line)
 	{
 	}
 

@@ -1,5 +1,7 @@
 package steve6472.scriptit.expression;
 
+import steve6472.scriptit.Log;
+
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
@@ -23,6 +25,21 @@ public class Type
 
 		functions = new HashMap<>();
 		constructors = new HashMap<>();
+
+		addProcedure(FunctionParameters.function("_printAllValues").build(), (itself, args) ->
+		{
+			System.out.println(Log.CYAN + itself + Log.RESET);
+			itself.values.forEach((n, v) ->
+			{
+				if (n.equals(Value.SINGLE_VALUE))
+				{
+					System.out.println("VALUE=" + v);
+				} else
+				{
+					System.out.println(n + "=" + v);
+				}
+			});
+		});
 	}
 
 	public HashMap<FunctionParameters, Constructor> getConstructors()

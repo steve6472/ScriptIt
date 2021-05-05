@@ -1,6 +1,6 @@
-package steve6472.scriptit.commands;
+package steve6472.scriptit.instructions;
 
-import steve6472.scriptit.Command;
+import steve6472.scriptit.Instruction;
 import steve6472.scriptit.Script;
 import steve6472.scriptit.expression.Expression;
 import steve6472.scriptit.expression.ExpressionParser;
@@ -12,31 +12,32 @@ import steve6472.scriptit.expression.Value;
  * Project: ScriptIt
  *
  ***********************/
-public class ReturnValue extends Command
+public class EvalExpression extends Instruction
 {
 	Expression expression;
+	String code;
 
-	public ReturnValue(String line)
+	public EvalExpression(String line)
 	{
 		super(line);
 
-		String[] split = line.split("return\s*", 2);
 		ExpressionParser parser = new ExpressionParser();
-		expression = parser.parse(split[1]);
+		expression = parser.parse(line);
+		code = line;
 	}
 
 	@Override
 	public Value execute(Script script)
 	{
-		return expression.eval(script);
-//		if (value.type != eval.type)
-//			throw new RuntimeException("Type mismatch");
-//		value.values = eval.values;
+		expression.eval(script);
+		return null;
 	}
 
 	@Override
 	public String toString()
 	{
-		return "ReturnValue{" + "expression=" + expression + '}';
+		if (code != null)
+			System.out.println(code);
+		return "EvalExpression{" + "expression=" + expression + '}';
 	}
 }

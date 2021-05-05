@@ -2,12 +2,10 @@ package steve6472.scriptit;
 
 import steve6472.scriptit.expression.*;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static steve6472.scriptit.TypeDeclarations.BOOL;
+import static steve6472.scriptit.expression.Value.newValue;
 
 /**********************
  * Created by steve6472 (Mirek Jozefek)
@@ -17,33 +15,40 @@ import static steve6472.scriptit.TypeDeclarations.BOOL;
  ***********************/
 public class Script
 {
-	private final Namespace namespace;
+	private final HashMap<String, Type> typeMap = new HashMap<>();
+	private final HashMap<String, Value> valueMap = new HashMap<>();
+	private final Map<FunctionParameters, Constructor> constructorMap = new HashMap<>();
 
-	public List<Command> commands;
+	public List<Instruction> instructions;
 
 	private Script parent;
 
 	public Script()
 	{
-		namespace = new Namespace();
-		commands = new ArrayList<>();
+		instructions = new ArrayList<>();
 
 		// Force true and false booleans into namespace
-		addValue("true", new Value(BOOL, true));
-		addValue("false", new Value(BOOL, false));
+		addValue("true", newValue(BOOL, true));
+		addValue("false", newValue(BOOL, false));
 	}
 
 	@SuppressWarnings("IncompleteCopyConstructor")
 	public Script(Script parent)
 	{
-		namespace = new Namespace();
-		commands = new ArrayList<>();
+		instructions = new ArrayList<>();
 		this.parent = parent;
+	}
+
+	public void print()
+	{
+		System.out.println(typeMap);
+		System.out.println(valueMap);
+		System.out.println(constructorMap);
 	}
 
 	public Value run()
 	{
-		for (Command c : commands)
+		for (Instruction c : instructions)
 		{
 			Value execute = c.execute(this);
 			if (execute != null)
@@ -55,12 +60,12 @@ public class Script
 
 	public Value runDebug()
 	{
-		for (Command c : commands)
+		for (Instruction c : instructions)
 		{
 			System.out.println(c.toString());
 			Value execute = c.execute(this);
 			System.out.println("\nNamespace: ");
-			namespace.print();
+			print();
 			if (execute != null)
 				return execute;
 		}
@@ -68,23 +73,37 @@ public class Script
 		return null;
 	}
 
+	public void importTypesToScript(Script dest)
+	{
+		typeMap.forEach((name, type) -> dest.importType(type));
+		if (parent != null)
+			parent.importTypesToScript(dest);
+	}
+
+	public List<Type> getImportedTypes()
+	{
+		List<Type> types = new ArrayList<>(typeMap.values());
+		if (parent != null)
+			types.addAll(parent.getImportedTypes());
+		return types;
+	}
+
 	public void printCode()
 	{
-		for (Command c : commands)
+		for (Instruction c : instructions)
 		{
 			System.out.println(c.toString());
 		}
 	}
 
-
 	public void importType(Type type)
 	{
-		namespace.typeMap.put(type.getKeyword(), type);
+		typeMap.put(type.getKeyword(), type);
 	}
 
 	public Type getType(String name)
 	{
-		Type type = namespace.typeMap.get(name);
+		Type type = typeMap.get(name);
 		if (type == null && parent != null)
 			return parent.getType(name);
 		return type;
@@ -92,12 +111,12 @@ public class Script
 
 	public void addValue(String name, Value value)
 	{
-		namespace.valueMap.put(name, value);
+		valueMap.put(name, value);
 	}
 
 	public Value getValue(String name)
 	{
-		Value value = namespace.valueMap.get(name);
+		Value value = valueMap.get(name);
 		if (value == null && parent != null)
 			return parent.getValue(name);
 		return value;
@@ -105,12 +124,20 @@ public class Script
 
 	public void addConstructor(FunctionParameters parameters, Constructor constructor)
 	{
-		namespace.constructorMap.put(parameters, constructor);
+		constructorMap.put(parameters, constructor);
+	}
+
+	public void addProcedure(FunctionParameters parameters, ClassProcedure procedure)
+	{
+		constructorMap.put(parameters, a -> {
+			procedure.apply(a);
+			return null;
+		});
 	}
 
 	public boolean hasValue(String name)
 	{
-		boolean b = namespace.valueMap.containsKey(name);
+		boolean b = valueMap.containsKey(name);
 		if (!b && parent != null)
 		{
 			return parent.hasValue(name);
@@ -124,7 +151,7 @@ public class Script
 			parent.printConstructors();
 		System.out.println("");
 
-		namespace.constructorMap.forEach((params, cons) ->
+		constructorMap.forEach((params, cons) ->
 		{
 			System.out.println(params);
 		});
@@ -133,7 +160,7 @@ public class Script
 	private Constructor findFunction(String name, Type[] types)
 	{
 		Constructor con = null;
-		main: for (Map.Entry<FunctionParameters, Constructor> e : namespace.constructorMap.entrySet())
+		main: for (Map.Entry<FunctionParameters, Constructor> e : constructorMap.entrySet())
 		{
 			FunctionParameters parameters = e.getKey();
 			Constructor constructor = e.getValue();
