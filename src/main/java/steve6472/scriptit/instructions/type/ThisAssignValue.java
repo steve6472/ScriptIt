@@ -33,9 +33,6 @@ public class ThisAssignValue extends Instruction
 	public Value execute(Script script)
 	{
 		Value eval = expression.eval(script);
-//		eval.values.forEach((name, valu) -> {
-//			thisValue.setValue()
-//		});
 		thisValue.setValue(name, eval);
 		return null;
 	}

@@ -84,7 +84,7 @@ public class DeclareType extends Instruction
 					for (int i = 0; i < args.length; i++)
 					{
 						Pair<String, Type> param = parameterMap.get(i);
-						constructorScript.addValue(param.a(), newValue(param.b(), args[i]));
+						constructorScript.addValue(param.a(), args[i]);
 					}
 
 					Value returnValue = newValue(newType);
