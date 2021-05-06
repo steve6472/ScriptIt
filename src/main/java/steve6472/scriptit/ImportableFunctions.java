@@ -2,6 +2,10 @@ package steve6472.scriptit;
 
 import steve6472.scriptit.expression.FunctionParameters;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.function.Consumer;
+
 import static steve6472.scriptit.TypeDeclarations.*;
 import static steve6472.scriptit.expression.Value.newValue;
 
@@ -13,6 +17,20 @@ import static steve6472.scriptit.expression.Value.newValue;
  ***********************/
 public class ImportableFunctions
 {
+	private static final Map<String, Consumer<Script>> importMap = new HashMap<>();
+
+	static
+	{
+		importMap.put("mathFunctionsRad", ImportableFunctions::importMathFunctionsRad);
+		importMap.put("printFunctions", ImportableFunctions::importPrintFunctions);
+		importMap.put("log", ImportableFunctions::importColorPrint);
+	}
+
+	public static void importFunctions(Script script, String functions)
+	{
+		importMap.get(functions).accept(script);
+	}
+
 	public static void importMathFunctionsRad(Script script)
 	{
 		script.addConstructor(FunctionParameters.function("sqrt").addType(DOUBLE).build(), a -> newValue(DOUBLE, Math.sqrt(a[0].getDouble())));

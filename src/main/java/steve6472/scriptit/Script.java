@@ -46,6 +46,11 @@ public class Script
 		System.out.println(constructorMap);
 	}
 
+	public Map<FunctionParameters, Constructor> getConstructorMap()
+	{
+		return constructorMap;
+	}
+
 	public Value run()
 	{
 		for (Instruction c : instructions)

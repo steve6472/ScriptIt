@@ -56,14 +56,14 @@
       <recent name="steve6472.scriptit.math" />
     </key>
     <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="steve6472.scriptit.instructions" />
       <recent name="steve6472.scriptit.instructions.type" />
       <recent name="steve6472.scriptit.expression" />
       <recent name="steve6472.scriptit.commands.type" />
       <recent name="steve6472.scriptit.commands" />
-      <recent name="steve6472.scriptit" />
     </key>
   </component>
-  <component name="RunManager" selected="Application.Main">
+  <component name="RunManager" selected="Application.ExpressionParser">
     <configuration name="ExpressionParser" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="steve6472.scriptit.expression.ExpressionParser" />
       <module name="ScriptIt" />
@@ -80,8 +80,8 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Application.Main" />
         <item itemvalue="Application.ExpressionParser" />
+        <item itemvalue="Application.Main" />
       </list>
     </recent_temporary>
   </component>
@@ -119,11 +119,11 @@
   <component name="regexState">
     <option name="map">
       <map>
-        <entry key="flags" value="0" />
-        <entry key="mode" value="1" />
-        <entry key="regex" value="^return\s+[a-zA-Z].*" />
+        <entry key="flags" value="2" />
+        <entry key="mode" value="0" />
+        <entry key="regex" value="^operator\s*([\+\-\*\/%~&amp;\||\^!]||(&lt;&lt;)||(&gt;&gt;)||(&amp;&amp;)||(\||\||))\s*\(" />
         <entry key="replacement" value="" />
-        <entry key="text" value="return " />
+        <entry key="text" value="operator+ (vec3 other)&#9;{&#9;&#9;return vec3();&#9;}" />
       </map>
     </option>
   </component>

@@ -25,6 +25,11 @@ public class ReturnValue extends Instruction
 		expression = parser.parse(split[1]);
 	}
 
+	public ReturnValue()
+	{
+		super("");
+	}
+
 	@Override
 	public Value execute(Script script)
 	{

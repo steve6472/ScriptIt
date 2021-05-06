@@ -42,6 +42,15 @@ public class Type
 		});
 	}
 
+	public void print()
+	{
+		System.out.println("keyword = " + keyword);
+		System.out.println("binary = " + binary);
+		System.out.println("unary = " + unary);
+		System.out.println("constructors = " + constructors);
+		System.out.println("functions = " + functions);
+	}
+
 	public HashMap<FunctionParameters, Constructor> getConstructors()
 	{
 		return constructors;

@@ -173,5 +173,8 @@ public class TypeDeclarations
 //		});
 		VEC2.addFunction(FunctionParameters.function("toString").build(), (itself, args) -> newValue(STRING, "[x=" + itself.getValue("x").getDouble() + ",y=" + itself.getValue("y").getDouble() + "]"));
 		VEC2.addProcedure(FunctionParameters.function("print").build(), (itself, args) -> System.out.println("vec2[x=" + itself.getValue("x").getDouble() + ",y=" + itself.getValue("y").getDouble() + "]"));
+
+		VEC2.addFunction(FunctionParameters.function("getX").build(), ((itself, args) -> itself.getValue("x")));
+		VEC2.addFunction(FunctionParameters.function("getY").build(), ((itself, args) -> itself.getValue("y")));
 	}
 }

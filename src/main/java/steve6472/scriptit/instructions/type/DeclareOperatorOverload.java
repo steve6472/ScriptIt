@@ -1,6 +1,7 @@
 package steve6472.scriptit.instructions.type;
 
 import steve6472.scriptit.Script;
+import steve6472.scriptit.expression.Operator;
 
 /**********************
  * Created by steve6472 (Mirek Jozefek)
@@ -8,13 +9,14 @@ import steve6472.scriptit.Script;
  * Project: ScriptIt
  *
  ***********************/
-public class DeclareTypeConstructor extends UncallableInstruction
+public class DeclareOperatorOverload extends UncallableInstruction
 {
 	public final String[] names;
 	public final String[] types;
 	public final String body;
+	public final Operator operator;
 
-	public DeclareTypeConstructor(Script parentScript, String line)
+	public DeclareOperatorOverload(Script parentScript, String line)
 	{
 		super(line);
 
@@ -25,6 +27,24 @@ public class DeclareTypeConstructor extends UncallableInstruction
 		String tempBody = mainSplit[1].trim();
 		body = tempBody.substring(1, tempBody.length() - 1).trim(); // remove first '{' and last '}'
 //		System.out.println("body = " + body);
+		String operator = mainSplit[0].split("\\(", 2)[0].replace("operator", "").trim();
+//		System.out.println("operator = " + operator);
+
+		Operator foundOperator = null;
+
+		for (Operator op : Operator.values())
+		{
+			if (op.getOperator().equals(operator))
+			{
+				foundOperator = op;
+				break;
+			}
+		}
+
+		if (foundOperator == null)
+			throw new IllegalArgumentException("Operator '" + operator + "' is not supported!");
+
+		this.operator = foundOperator;
 
 		String[] parameters = parametersString.split("\\s*,\\s*");
 

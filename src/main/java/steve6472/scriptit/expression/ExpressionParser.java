@@ -5,6 +5,7 @@ import steve6472.scriptit.Script;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 
 import static steve6472.scriptit.TypeDeclarations.*;
@@ -20,8 +21,8 @@ import static steve6472.scriptit.expression.Value.newValue;
  ***********************/
 public class ExpressionParser
 {
-	public static boolean EVAL_DEBUG = false;
-	public static boolean PARSE_DEBUG = false;
+	public static boolean EVAL_DEBUG = true;
+	public static boolean PARSE_DEBUG = true;
 
 	private static final Type[] NO_PARAMETERS = new Type[0];
 
@@ -101,18 +102,31 @@ public class ExpressionParser
 			Expression parseExpression()
 			{
 				printParse("Parsing expression");
+				String A = str.substring(pos);
 				Expression x = parseTerm();
 				for (; ; )
 				{
 					if (eat('+'))
 					{
 						Expression a = x;
+						String S = str.substring(pos);
 						Expression b = parseTerm();
+						String s = str.substring(pos);
 						x = (script) ->
 						{
+							System.out.println("\n\n\n\n");
 							Value aEval = a.eval(script);
 							Value bEval = b.eval(script);
-							return aEval.type.binary.get(bEval.type).get(Operator.ADD).apply(aEval, bEval);
+							Type type = aEval.type;
+							HashMap<Type, HashMap<Operator, OperatorOverloadFunction>> binary = type.binary;
+							System.out.println(A);
+							System.out.println(S);
+							System.out.println(s);
+							System.out.println(aEval.type);
+							System.out.println(bEval.type);
+							HashMap<Operator, OperatorOverloadFunction> operatorOperatorOverloadFunctionHashMap = binary.get(bEval.type);
+							OperatorOverloadFunction operatorOverloadFunction = operatorOperatorOverloadFunctionHashMap.get(Operator.ADD);
+							return operatorOverloadFunction.apply(aEval, bEval);
 						};
 					} else if (eat('-'))
 					{
@@ -416,6 +430,7 @@ public class ExpressionParser
 		Script script = new Script();
 		script.importType(INT);
 		script.importType(STRING);
+		script.importType(DOUBLE);
 		script.importType(VEC2);
 
 		ImportableFunctions.definePi(script);
@@ -426,7 +441,9 @@ public class ExpressionParser
 			return newValue(INT, temp + arags[0].getInt());
 		});
 
-		Expression exp = parser.parse("int(7)");
+		Expression exp = parser.parse("1.0 + vec2(2.0, 3.0).getX()");
+
+//		Expression exp = parser.parse("int(7)");
 //		Expression exp = parser.parse("-(6*7)");
 //		Expression exp = parser.parse("int(6)*7");
 //		Expression exp = parser.parse("(\"Hello\" + \" world!\").print()");

@@ -4,10 +4,7 @@ import steve6472.scriptit.*;
 import steve6472.scriptit.expression.FunctionParameters;
 import steve6472.scriptit.expression.Type;
 import steve6472.scriptit.expression.Value;
-import steve6472.scriptit.instructions.type.DeclareTypeConstructor;
-import steve6472.scriptit.instructions.type.DeclareTypeFunction;
-import steve6472.scriptit.instructions.type.DeclareTypeValue;
-import steve6472.scriptit.instructions.type.ThisAssignValue;
+import steve6472.scriptit.instructions.type.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,6 +39,7 @@ public class DeclareType extends Instruction
 
 		Script tempScript = Main.createScript(valueBody, false, Main.typeCommandMap);
 		parentScript.importTypesToScript(tempScript);
+		tempScript.importType(newType);
 
 		for (Instruction ins : tempScript.instructions)
 		{
@@ -61,6 +59,31 @@ public class DeclareType extends Instruction
 				}
 			}
 
+			if (ins instanceof DeclareOperatorOverload dec)
+			{
+				Type rightOperand = tempScript.getType(dec.types[0]);
+				String rightOperandName = dec.names[0];
+
+				Script functionScript = Main.createScript(dec.body, true, Main.mainCommandMap, tempScript.getImportedTypes(), parentScript.getConstructorMap());
+
+				newType.addBinaryOperator(rightOperand, dec.operator, (left, right) ->
+				{
+					// load values of itself into the script
+					left.values.forEach((k, v) -> functionScript.addValue(k, (Value) v));
+					functionScript.addValue(rightOperandName, right);
+
+					editInstructions(functionScript.instructions, left);
+
+					Value result = functionScript.run();
+					if (result == null)
+						throw new RuntimeException("Function didn't return anything!");
+					if (result.type != newType)
+						throw new RuntimeException("Function return incorrect type!");
+
+					return result;
+				});
+			}
+
 			if (ins instanceof DeclareTypeConstructor dec)
 			{
 				FunctionParameters.FunctionParametersBuilder paramsBuilder = FunctionParameters.constructor(newType);
@@ -77,7 +100,7 @@ public class DeclareType extends Instruction
 					paramsBuilder = paramsBuilder.addType(type);
 				}
 
-				Script constructorScript = Main.createScript(dec.body, true, Main.mainCommandMap, tempScript.getImportedTypes());
+				Script constructorScript = Main.createScript(dec.body, true, Main.mainCommandMap, tempScript.getImportedTypes(), parentScript.getConstructorMap());
 
 				newType.addConstructor(paramsBuilder.build(), args ->
 				{
@@ -94,13 +117,7 @@ public class DeclareType extends Instruction
 
 					Value returnValue = newValue(newType);
 
-					for (Instruction instruction : constructorScript.instructions)
-					{
-						if (instruction instanceof ThisAssignValue instruct)
-						{
-							instruct.thisValue = returnValue;
-						}
-					}
+					editInstructions(constructorScript.instructions, returnValue);
 
 					constructorScript.run();
 
@@ -126,7 +143,7 @@ public class DeclareType extends Instruction
 
 				Type returnType;
 
-				Script functionScript = Main.createScript(dec.body, true, Main.mainCommandMap, tempScript.getImportedTypes());
+				Script functionScript = Main.createScript(dec.body, true, Main.mainCommandMap, tempScript.getImportedTypes(), parentScript.getConstructorMap());
 
 				if (dec.returnType.equals("void"))
 				{
@@ -146,13 +163,7 @@ public class DeclareType extends Instruction
 							functionScript.addValue(param.a(), args[i]);
 						}
 
-						for (Instruction instruction : functionScript.instructions)
-						{
-							if (instruction instanceof ThisAssignValue instruct)
-							{
-								instruct.thisValue = itself;
-							}
-						}
+						editInstructions(functionScript.instructions, itself);
 
 						functionScript.run();
 					});
@@ -176,13 +187,7 @@ public class DeclareType extends Instruction
 							functionScript.addValue(param.a(), args[i]);
 						}
 
-						for (Instruction instruction : functionScript.instructions)
-						{
-							if (instruction instanceof ThisAssignValue instruct)
-							{
-								instruct.thisValue = itself;
-							}
-						}
+						editInstructions(functionScript.instructions, itself);
 
 						Value result = functionScript.run();
 						if (result == null)
@@ -197,6 +202,21 @@ public class DeclareType extends Instruction
 		}
 
 		parentScript.importType(newType);
+	}
+
+	private void editInstructions(List<Instruction> instructions, Value itself)
+	{
+		for (Instruction instruction : instructions)
+		{
+			if (instruction instanceof ThisAssignValue instruct)
+			{
+				instruct.thisValue = itself;
+			}
+			if (instruction instanceof ReturnTypeThisValue instruct)
+			{
+				instruct.thisValue = itself;
+			}
+		}
 	}
 
 	private Type findType(Script script, String keyword)

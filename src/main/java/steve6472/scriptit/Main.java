@@ -1,11 +1,10 @@
 package steve6472.scriptit;
 
+import steve6472.scriptit.expression.Constructor;
+import steve6472.scriptit.expression.FunctionParameters;
 import steve6472.scriptit.expression.Type;
 import steve6472.scriptit.instructions.*;
-import steve6472.scriptit.instructions.type.DeclareTypeConstructor;
-import steve6472.scriptit.instructions.type.DeclareTypeFunction;
-import steve6472.scriptit.instructions.type.DeclareTypeValue;
-import steve6472.scriptit.instructions.type.ThisAssignValue;
+import steve6472.scriptit.instructions.type.*;
 
 import java.util.Collection;
 import java.util.LinkedHashMap;
@@ -149,11 +148,13 @@ class vec3
 		("vec3[x=" + string(x) + ",y=" + string(y) + ",z=" + string(z) + "]").printRaw();
 	}
 	
-	/*
 	operator+ (vec3 other)
 	{
-		return 0;
-	}*/
+		this.x = x + other.getX();
+		this.y = y + other.getY();
+		this.z = z + other.getZ();
+		return this;
+	}
 }
 
 class TestClass
@@ -203,10 +204,14 @@ test.setY(6.3);
 test.print();
 " ".printRaw();
 logReset();
-/*
+
+logBrightYellow();
+" ".printRaw();
 vec3 ad = vec3(6.5, 4.3, 2.1) + test;
 ad._printAllValues();
-*/
+" ".printRaw();
+logReset();
+
 TestClass testClass = TestClass(6.9);
 testClass._printAllValues();
 " ".printRaw();
@@ -217,33 +222,71 @@ testClass._printAllValues();
 
 """;
 
-	public static final boolean DEBUG = true;
+	static String otherCode =
+"""
+import double;
+import string;
+
+import functions log;
+
+class vec3
+{
+	public double x;
+	public double y;
+	public double z;
+	
+	constructor(double X, double Y, double Z)
+	{
+		this.x = X;
+		this.y = Y;
+		this.z = Z;
+	}
+	
+	operator+ (vec3 other)
+	{
+		double d = 1000.1 + other.getX();
+		
+		return this;
+	}
+}
+
+vec3 v = vec3(1.2, 3.4, 5.6);
+vec3 V = vec3(6.5, 4.3, 2.1);
+
+vec3 ad = v + V;
+
+""";
+
+	public static final boolean DEBUG = false;
 
 	public static final Map<Pattern, BiFunction<Script, String, Instruction>> mainCommandMap = new LinkedHashMap<>();
 	public static final Map<Pattern, BiFunction<Script, String, Instruction>> typeCommandMap = new LinkedHashMap<>();
 
 	static
 	{
+		mainCommandMap.put(Regexes.IMPORT_FUNCTIONS, ImportFunctions::new);
 		mainCommandMap.put(Regexes.IMPORT, ImportType::new);
 		mainCommandMap.put(Regexes.THIS_ASSIGN, ThisAssignValue::new);
 		mainCommandMap.put(Regexes.DECLARE_TYPE, DeclareType::new);
+		typeCommandMap.put(Regexes.DECLARE_FUNCTION, DeclareTypeFunction::new); // only in type's functions
 		mainCommandMap.put(Regexes.RETURN, (script, line) -> new ReturnValue(line));
 		mainCommandMap.put(Regexes.VALUE_DECLARATION, DeclareValue::new);
 		mainCommandMap.put(Regexes.VALUE_ASSIGN, (script, line) -> new AssignValue(line));
 		mainCommandMap.put(Regexes.VALUE_DECLARATION_ASSIGN, (script, line) -> new DeclareAssignValue(line));
 		mainCommandMap.put(Regexes.DECLARE_FUNCTION, DeclareFunction::new);
 
+		mainCommandMap.put(Regexes.IMPORT_FUNCTIONS, ImportFunctions::new);
 		typeCommandMap.put(Regexes.IMPORT, ImportType::new);
+		typeCommandMap.put(Regexes.OPERATOR_OVERLOAD_FUNCTION, DeclareOperatorOverload::new);
 		typeCommandMap.put(Regexes.TYPE_VALUE_DECLARATION, DeclareTypeValue::new);
 		typeCommandMap.put(Regexes.DECLARE_CONSTRUCTOR, DeclareTypeConstructor::new);
-		typeCommandMap.put(Regexes.RETURN, (script, line) -> new ReturnValue(line));
-		typeCommandMap.put(Regexes.DECLARE_FUNCTION, DeclareTypeFunction::new);
+		typeCommandMap.put(Regexes.RETURN_THIS, (script, line) -> new ReturnTypeThisValue());
 	}
 
 	public static void main(String[] args)
 	{
-		Script script = createScript(source, true, mainCommandMap);
-		ImportableFunctions.importColorPrint(script);
+		Script script = createScript(otherCode, true, mainCommandMap);
+//		ImportableFunctions.importColorPrint(script);
 
 //		script.printCode();
 		script.run();
@@ -251,20 +294,20 @@ testClass._printAllValues();
 
 	public static Script createScript(String code, boolean evalFallback, Map<Pattern, BiFunction<Script, String, Instruction>> commandMap)
 	{
-		return createScript(null, code, evalFallback, commandMap, null);
+		return createScript(null, code, evalFallback, commandMap, null, null);
 	}
 
 	public static Script createScript(Script parent, String code, boolean evalFallback, Map<Pattern, BiFunction<Script, String, Instruction>> commandMap)
 	{
-		return createScript(parent, code, evalFallback, commandMap, null);
+		return createScript(parent, code, evalFallback, commandMap, null, null);
 	}
 
-	public static Script createScript(String code, boolean evalFallback, Map<Pattern, BiFunction<Script, String, Instruction>> commandMap, Collection<Type> preImportedTypes)
+	public static Script createScript(String code, boolean evalFallback, Map<Pattern, BiFunction<Script, String, Instruction>> commandMap, Collection<Type> preImportedTypes, Map<FunctionParameters, Constructor> preImportedFunctions)
 	{
-		return createScript(null, code, evalFallback, commandMap, preImportedTypes);
+		return createScript(null, code, evalFallback, commandMap, preImportedTypes, preImportedFunctions);
 	}
 
-	public static Script createScript(Script parentScript, String code, boolean evalFallback, Map<Pattern, BiFunction<Script, String, Instruction>> commandMap, Collection<Type> preImportedTypes)
+	public static Script createScript(Script parentScript, String code, boolean evalFallback, Map<Pattern, BiFunction<Script, String, Instruction>> commandMap, Collection<Type> preImportedTypes, Map<FunctionParameters, Constructor> preImportedFunctions)
 	{
 		Script script = new Script(parentScript);
 
@@ -274,6 +317,11 @@ testClass._printAllValues();
 			{
 				script.importType(preImportedType);
 			}
+		}
+
+		if (preImportedFunctions != null)
+		{
+			preImportedFunctions.forEach(script::addConstructor);
 		}
 
 		int i = 0;
