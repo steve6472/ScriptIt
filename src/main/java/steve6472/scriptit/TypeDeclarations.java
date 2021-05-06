@@ -67,6 +67,7 @@ public class TypeDeclarations
 		DOUBLE.addUnaryOperator(Operator.SUB, (itself -> itself.setValue(-itself.getDouble())));
 		DOUBLE.addUnaryOperator(Operator.ADD, (itself -> itself));
 		DOUBLE.addProcedure(FunctionParameters.function("print").build(), (itself, args) -> System.out.println("double[val=" + d(itself) + "]"));
+		DOUBLE.addFunction(FunctionParameters.function("toString").build(), (itself, args) -> newValue(STRING, itself.getDouble()));
 
 		BOOL.addConstructor(FunctionParameters.constructor(BOOL).addType(STRING).build(), par -> newValue(BOOL, Boolean.parseBoolean(par[0].getString())));
 		BOOL.addConstructor(FunctionParameters.constructor(BOOL).addType(INT).build(), par -> newValue(BOOL, par[0].getInt() > 0));
@@ -104,6 +105,7 @@ public class TypeDeclarations
 		INT.addProcedure(FunctionParameters.function("print").build(), (itself, args) -> System.out.println("int[val=" + i(itself) + "]"));
 
 		STRING.addConstructor(FunctionParameters.constructor(STRING).addType(STRING).build(), par -> newValue(STRING, par[0].getString()));
+		STRING.addConstructor(FunctionParameters.constructor(STRING).addType(DOUBLE).build(), par -> newValue(STRING, String.valueOf(par[0].getDouble())));
 		STRING.addConstructor(FunctionParameters.constructor(STRING).build(), par -> newValue(STRING, ""));
 
 		STRING.addBinaryOperator(STRING, Operator.ADD, (left, right) -> newValue(STRING, s(left) + s(right)));

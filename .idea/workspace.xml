@@ -120,10 +120,10 @@
     <option name="map">
       <map>
         <entry key="flags" value="0" />
-        <entry key="mode" value="3" />
-        <entry key="regex" value="^this\." />
+        <entry key="mode" value="1" />
+        <entry key="regex" value="^return\s+[a-zA-Z].*" />
         <entry key="replacement" value="" />
-        <entry key="text" value="this.x = 0" />
+        <entry key="text" value="return " />
       </map>
     </option>
   </component>

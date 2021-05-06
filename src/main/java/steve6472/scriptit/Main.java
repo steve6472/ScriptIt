@@ -3,6 +3,7 @@ package steve6472.scriptit;
 import steve6472.scriptit.expression.Type;
 import steve6472.scriptit.instructions.*;
 import steve6472.scriptit.instructions.type.DeclareTypeConstructor;
+import steve6472.scriptit.instructions.type.DeclareTypeFunction;
 import steve6472.scriptit.instructions.type.DeclareTypeValue;
 import steve6472.scriptit.instructions.type.ThisAssignValue;
 
@@ -135,12 +136,13 @@ class vec3
 		this.z = Z;
 	}
 	
-/*
-	function void print()
+	function int print(int t)
 	{
-		("vec3[x=" + string(x) + ",y=" + string(y) + ",z=" + string(z) + "]).printRaw();
+		t.print();
+		x.print();
+		("vec3[x=" + string(x) + ",y=" + string(y) + ",z=" + string(z) + "]").printRaw();
+		return 0;
 	}
-	*/
 }
 
 class TestClass
@@ -183,6 +185,7 @@ test._printAllValues();
 test = vec3(1.2, 3.4, 5.6);
 test._printAllValues();
 " ".printRaw();
+test.print(177013);
 
 TestClass testClass = TestClass(6.9);
 testClass._printAllValues();
@@ -213,6 +216,8 @@ testClass._printAllValues();
 		typeCommandMap.put(Regexes.IMPORT, ImportType::new);
 		typeCommandMap.put(Regexes.VALUE_DECLARATION, DeclareTypeValue::new);
 		typeCommandMap.put(Regexes.DECLARE_CONSTRUCTOR, DeclareTypeConstructor::new);
+		typeCommandMap.put(Regexes.RETURN, (script, line) -> new ReturnValue(line));
+		typeCommandMap.put(Regexes.DECLARE_FUNCTION, DeclareTypeFunction::new);
 	}
 
 	public static void main(String[] args)

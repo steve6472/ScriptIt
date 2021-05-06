@@ -1,10 +1,14 @@
 package steve6472.scriptit.instructions;
 
-import steve6472.scriptit.*;
+import steve6472.scriptit.Instruction;
+import steve6472.scriptit.Main;
+import steve6472.scriptit.Pair;
+import steve6472.scriptit.Script;
 import steve6472.scriptit.expression.FunctionParameters;
 import steve6472.scriptit.expression.Type;
 import steve6472.scriptit.expression.Value;
 import steve6472.scriptit.instructions.type.DeclareTypeConstructor;
+import steve6472.scriptit.instructions.type.DeclareTypeFunction;
 import steve6472.scriptit.instructions.type.DeclareTypeValue;
 import steve6472.scriptit.instructions.type.ThisAssignValue;
 
@@ -101,6 +105,68 @@ public class DeclareType extends Instruction
 
 					return returnValue;
 				});
+			}
+
+			if (ins instanceof DeclareTypeFunction dec)
+			{
+				FunctionParameters.FunctionParametersBuilder paramsBuilder = FunctionParameters.function(dec.functionName);
+				List<Pair<String, Type>> parameterMap = new ArrayList<>();
+
+				for (int i = 0; i < dec.types.length; i++)
+				{
+					Type type = tempScript.getType(dec.types[i]);
+					if (type == null)
+					{
+						throw new RuntimeException("Type '" + dec.types[i] + "' not found!");
+					}
+					parameterMap.add(new Pair<>(dec.names[i], type));
+					paramsBuilder = paramsBuilder.addType(type);
+				}
+
+				Type returnType;
+
+				Script functionScript = Main.createScript(dec.body, true, Main.mainCommandMap, tempScript.getImportedTypes());
+
+				if (dec.returnType.equals("void"))
+				{
+					throw new IllegalArgumentException("Void not supported yet!");
+				} else
+				{
+					returnType = tempScript.getType(dec.returnType);
+
+					newType.addFunction(paramsBuilder.build(), (itself, args) ->
+					{
+						// load values of itself into the script
+						itself.values.forEach((k, v) -> functionScript.addValue(k, (Value) v));
+
+						if (args.length != dec.types.length)
+						{
+							throw new RuntimeException("Argument count is incorrect! Expected " + dec.types.length + ", got " + args.length);
+						}
+
+						for (int i = 0; i < args.length; i++)
+						{
+							Pair<String, Type> param = parameterMap.get(i);
+							functionScript.addValue(param.a(), args[i]);
+						}
+
+						for (Instruction instruction : functionScript.instructions)
+						{
+							if (instruction instanceof ThisAssignValue instruct)
+							{
+								instruct.thisValue = itself;
+							}
+						}
+
+						Value result = functionScript.run();
+						if (result == null)
+							throw new RuntimeException("Function didn't return anything!");
+						if (result.type != returnType)
+							throw new RuntimeException("Function return incorrect type!");
+
+						return result;
+					});
+				}
 			}
 		}
 

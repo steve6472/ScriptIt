@@ -49,7 +49,7 @@ public class Regexes
 	/**
 	 * retrun ...
 	 */
-	public static final Pattern RETURN = Pattern.compile("^return\\s+[a-zA-Z].*");
+	public static final Pattern RETURN = Pattern.compile("^return\\s+[a-zA-Z0-9].*");
 	/**
 	 * this.x = 5
 	 */
