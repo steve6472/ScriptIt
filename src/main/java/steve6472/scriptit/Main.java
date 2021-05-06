@@ -118,9 +118,9 @@ adr.print();
 
 class vec3
 {
-	double x;
-	double y;
-	double z;
+	public double x;
+	public double y;
+	public double z;
 
 	constructor()
 	{
@@ -143,6 +143,17 @@ class vec3
 		("vec3[x=" + string(x) + ",y=" + string(y) + ",z=" + string(z) + "]").printRaw();
 		return 0;
 	}
+	
+	function void print()
+	{
+		("vec3[x=" + string(x) + ",y=" + string(y) + ",z=" + string(z) + "]").printRaw();
+	}
+	
+	/*
+	operator+ (vec3 other)
+	{
+		return 0;
+	}*/
 }
 
 class TestClass
@@ -184,9 +195,18 @@ test._printAllValues();
 
 test = vec3(1.2, 3.4, 5.6);
 test._printAllValues();
+logBrightMagenta();
 " ".printRaw();
 test.print(177013);
-
+test.getX().print();
+test.setY(6.3);
+test.print();
+" ".printRaw();
+logReset();
+/*
+vec3 ad = vec3(6.5, 4.3, 2.1) + test;
+ad._printAllValues();
+*/
 TestClass testClass = TestClass(6.9);
 testClass._printAllValues();
 " ".printRaw();
@@ -207,14 +227,14 @@ testClass._printAllValues();
 		mainCommandMap.put(Regexes.IMPORT, ImportType::new);
 		mainCommandMap.put(Regexes.THIS_ASSIGN, ThisAssignValue::new);
 		mainCommandMap.put(Regexes.DECLARE_TYPE, DeclareType::new);
+		mainCommandMap.put(Regexes.RETURN, (script, line) -> new ReturnValue(line));
 		mainCommandMap.put(Regexes.VALUE_DECLARATION, DeclareValue::new);
 		mainCommandMap.put(Regexes.VALUE_ASSIGN, (script, line) -> new AssignValue(line));
 		mainCommandMap.put(Regexes.VALUE_DECLARATION_ASSIGN, (script, line) -> new DeclareAssignValue(line));
-		mainCommandMap.put(Regexes.RETURN, (script, line) -> new ReturnValue(line));
 		mainCommandMap.put(Regexes.DECLARE_FUNCTION, DeclareFunction::new);
 
 		typeCommandMap.put(Regexes.IMPORT, ImportType::new);
-		typeCommandMap.put(Regexes.VALUE_DECLARATION, DeclareTypeValue::new);
+		typeCommandMap.put(Regexes.TYPE_VALUE_DECLARATION, DeclareTypeValue::new);
 		typeCommandMap.put(Regexes.DECLARE_CONSTRUCTOR, DeclareTypeConstructor::new);
 		typeCommandMap.put(Regexes.RETURN, (script, line) -> new ReturnValue(line));
 		typeCommandMap.put(Regexes.DECLARE_FUNCTION, DeclareTypeFunction::new);
@@ -223,6 +243,7 @@ testClass._printAllValues();
 	public static void main(String[] args)
 	{
 		Script script = createScript(source, true, mainCommandMap);
+		ImportableFunctions.importColorPrint(script);
 
 //		script.printCode();
 		script.run();

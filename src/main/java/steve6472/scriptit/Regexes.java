@@ -41,11 +41,11 @@ public class Regexes
 	 */
 	public static final Pattern DECLARE_TYPE = Pattern.compile("^class\\s+[a-zA-Z][a-zA-Z0-9_]*\\s*\\{?.*");
 	/**
-	 * function operator* (...
+	 * operator* (...
 	 * Allowed operators: +, -, *, /, %, ~, &, |, ^, !, <<, >>, &&, ||
 	 *     (byte shift operators are not supported yet due to Expression Parser being able to read only one character and im too lazy to add more)
 	 */
-	public static final Pattern OPERATOR_OVERLOAD_FUNCTION = Pattern.compile("^function\\s+operator([\\+\\-\\*\\/%~&\\|\\^!]|(<<)|(>>)|(&&)|(\\|\\|))\\s*\\(");
+	public static final Pattern OPERATOR_OVERLOAD_FUNCTION = Pattern.compile("^operator([\\+\\-\\*\\/%~&\\|\\^!]|(<<)|(>>)|(&&)|(\\|\\|))\\s*\\(");
 	/**
 	 * retrun ...
 	 */
@@ -54,6 +54,10 @@ public class Regexes
 	 * this.x = 5
 	 */
 	public static final Pattern THIS_ASSIGN = Pattern.compile("^this\\.[a-zA-Z_][a-zA-Z0-9_]*\\s*=\\s*.+[^\\.]");
+	/**
+	 * public string adr
+	 */
+	public static final Pattern TYPE_VALUE_DECLARATION = Pattern.compile("^((public)|(private))?\\s*[a-zA-Z][a-zA-Z0-9]*\\s+[a-zA-Z_][a-zA-Z0-9_]*\\s*");
 }
 
 

@@ -30,6 +30,28 @@ public class ImportableFunctions
 		script.addProcedure(FunctionParameters.function("print").addType(BOOL).build(), a -> System.out.println(a[0].getBoolean()));
 	}
 
+	public static void importColorPrint(Script script)
+	{
+		script.addProcedure(FunctionParameters.function("logBlack").build(), a -> Log.black());
+		script.addProcedure(FunctionParameters.function("logRed").build(), a -> Log.red());
+		script.addProcedure(FunctionParameters.function("logGreen").build(), a -> Log.green());
+		script.addProcedure(FunctionParameters.function("logYellow").build(), a -> Log.yellow());
+		script.addProcedure(FunctionParameters.function("logBlue").build(), a -> Log.blue());
+		script.addProcedure(FunctionParameters.function("logMagenta").build(), a -> Log.magenta());
+		script.addProcedure(FunctionParameters.function("logCyan").build(), a -> Log.cyan());
+		script.addProcedure(FunctionParameters.function("logWhite").build(), a -> Log.white());
+		script.addProcedure(FunctionParameters.function("logReset").build(), a -> Log.reset());
+
+		script.addProcedure(FunctionParameters.function("logBrightBlack").build(), a -> Log.brightBlack());
+		script.addProcedure(FunctionParameters.function("logBrightRed").build(), a -> Log.brightRed());
+		script.addProcedure(FunctionParameters.function("logBrightGreen").build(), a -> Log.brightGreen());
+		script.addProcedure(FunctionParameters.function("logBrightYellow").build(), a -> Log.brightYellow());
+		script.addProcedure(FunctionParameters.function("logBrightBlue").build(), a -> Log.brightBlue());
+		script.addProcedure(FunctionParameters.function("logBrightMagenta").build(), a -> Log.brightMagenta());
+		script.addProcedure(FunctionParameters.function("logBrightCyan").build(), a -> Log.brightCyan());
+		script.addProcedure(FunctionParameters.function("logBrightWhite").build(), a -> Log.brightWhite());
+	}
+
 	public static void definePi(Script script)
 	{
 		script.addValue("pi", newValue(DOUBLE, Math.PI));
