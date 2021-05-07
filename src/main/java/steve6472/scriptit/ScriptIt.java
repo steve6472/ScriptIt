@@ -22,7 +22,7 @@ import java.util.regex.Pattern;
  ***********************/
 public class ScriptIt
 {
-	public static final boolean DEBUG = false;
+	public static final boolean DEBUG = true;
 
 	public static final Map<Pattern, TriFunction<Workspace, Script, String, Instruction>> mainCommandMap = new LinkedHashMap<>();
 	public static final Map<Pattern, TriFunction<Workspace, Script, String, Instruction>> typeCommandMap = new LinkedHashMap<>();
@@ -32,6 +32,9 @@ public class ScriptIt
 		mainCommandMap.put(Regexes.IMPORT_FUNCTIONS, ImportFunctions::new);
 		mainCommandMap.put(Regexes.IMPORT, ImportType::new);
 		mainCommandMap.put(Regexes.WHILE, WhileLoop::new);
+		mainCommandMap.put(Regexes.FOR, ForLoop::new);
+		mainCommandMap.put(Regexes.BREAK, (w, s, l) -> new Break());
+		mainCommandMap.put(Regexes.CONTINUE, (w, s, l) -> new Continue());
 		mainCommandMap.put(Regexes.THIS_ASSIGN, (workspace, script, line) -> new ThisAssignValue(script, line));
 		mainCommandMap.put(Regexes.DECLARE_TYPE, DeclareType::new);
 		mainCommandMap.put(Regexes.RETURN_THIS, (workspace, script, line) -> new ReturnTypeThisValue());
@@ -91,10 +94,10 @@ public class ScriptIt
 		BasicFunctions.addMathFunctions(workspace);
 		BasicFunctions.addPrintFunctions(workspace);
 
-		Script script = createScript(workspace, readFromFile(new File("scripts/main.scriptit")), true, mainCommandMap);
+		Script script = createScript(workspace, readFromFile(new File("scripts/loops.scriptit")), true, mainCommandMap);
 
-//		script.run();
-		basicDelayedScriptLoop(script);
+		script.run();
+//		basicDelayedScriptLoop(script);
 	}
 
 	public static void basicDelayedScriptLoop(Script script)
@@ -164,7 +167,7 @@ public class ScriptIt
 				if (matcher.matches())
 				{
 					if (DEBUG)
-						System.out.println(line + " matches " + Log.MAGENTA + pattern.pattern() + Log.RESET);
+						System.out.println(line + " matches " + Log.MAGENTA + pattern.pattern() + Log.RESET + " " + command.apply(workspace, script, line).getClass().getCanonicalName());
 					try
 					{
 						script.instructions.add(command.apply(workspace, script, line));

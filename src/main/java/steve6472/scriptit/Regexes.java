@@ -23,7 +23,7 @@ public class Regexes
 	/**
 	 * string adr = vec2((8 + function(2, 3)) * 3, 2).toString()
 	 */
-	public static final Pattern VALUE_DECLARATION_ASSIGN = Pattern.compile("^[a-zA-Z][a-zA-Z0-9]*\\s+[a-zA-Z_][a-zA-Z0-9_]*\\s*=\\s*.+[^\\.]");
+	public static final Pattern VALUE_DECLARATION_ASSIGN = Pattern.compile("^[a-zA-Z][a-zA-Z0-9]*\\s+[a-zA-Z0-9_]*\\s*=\\s*.+[^\\.]");
 	/**
 	 * import int
 	 */
@@ -74,6 +74,18 @@ public class Regexes
 	 * while (...) ...
 	 */
 	public static final Pattern WHILE = Pattern.compile("^while\\s+\\(.+\\).*");
+	/**
+	 * break
+	 */
+	public static final Pattern BREAK = Pattern.compile("^break");
+	/**
+	 * continue
+	 */
+	public static final Pattern CONTINUE = Pattern.compile("^continue");
+	/**
+	 * for (int iter = 0, iter < 0, iter = iter + 1)
+	 */
+	public static final Pattern FOR = Pattern.compile("^for\\s+\\(.*,.*,.*\\).*");
 }
 
 

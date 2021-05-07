@@ -129,9 +129,9 @@
       <map>
         <entry key="flags" value="2" />
         <entry key="mode" value="1" />
-        <entry key="regex" value="^while\\s+(.+).*" />
+        <entry key="regex" value="^[a-zA-Z][a-zA-Z0-9]*\s+[a-zA-Z0-9_]*\s*=\s*.+[^\.]" />
         <entry key="replacement" value="" />
-        <entry key="text" value="while (a)" />
+        <entry key="text" value="int iter = 0" />
       </map>
     </option>
   </component>

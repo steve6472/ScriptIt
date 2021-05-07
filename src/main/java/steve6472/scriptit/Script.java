@@ -54,6 +54,11 @@ public class Script
 		return constructorMap;
 	}
 
+	public HashMap<String, Value> getValueMap()
+	{
+		return valueMap;
+	}
+
 	public Value run()
 	{
 		for (Instruction c : instructions)

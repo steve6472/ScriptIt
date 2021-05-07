@@ -8,8 +8,6 @@ import steve6472.scriptit.expression.Expression;
 import steve6472.scriptit.expression.ExpressionParser;
 import steve6472.scriptit.expression.Value;
 
-import java.util.Arrays;
-
 /**********************
  * Created by steve6472 (Mirek Jozefek)
  * On date: 5/7/2021
@@ -30,9 +28,6 @@ public class WhileLoop extends Instruction
 		body = body.substring(1, body.length() - 1); // remove first '{' and last '}'
 
 		String condition = mainSplit[0].split("\\(", 2)[1];
-		System.out.println("mainSplit = " + Arrays.toString(mainSplit));
-		System.out.println("body = " + body);
-		System.out.println("condition = " + condition);
 
 		ExpressionParser parser = new ExpressionParser();
 		this.condition = parser.parse(condition);
@@ -42,8 +37,21 @@ public class WhileLoop extends Instruction
 	@Override
 	public Value execute(Script script)
 	{
-		while (condition.eval(script).getBoolean())
-			this.script.run();
+		m: while (condition.eval(script).getBoolean())
+		{
+			for (Instruction c : this.script.instructions)
+			{
+				if (c instanceof Break)
+					break m;
+
+				if (c instanceof Continue)
+					continue m;
+
+				Value execute = c.execute(this.script);
+				if (execute != null)
+					return execute;
+			}
+		}
 		return null;
 	}
 }
