@@ -222,41 +222,6 @@ testClass._printAllValues();
 
 """;
 
-	static String otherCode =
-"""
-import double;
-import string;
-
-import functions log;
-
-class vec3
-{
-	public double x;
-	public double y;
-	public double z;
-	
-	constructor(double X, double Y, double Z)
-	{
-		this.x = X;
-		this.y = Y;
-		this.z = Z;
-	}
-	
-	operator+ (vec3 other)
-	{
-		double d = 1000.1 + other.getX();
-		
-		return this;
-	}
-}
-
-vec3 v = vec3(1.2, 3.4, 5.6);
-vec3 V = vec3(6.5, 4.3, 2.1);
-
-vec3 ad = v + V;
-
-""";
-
 	public static final boolean DEBUG = false;
 
 	public static final Map<Pattern, BiFunction<Script, String, Instruction>> mainCommandMap = new LinkedHashMap<>();
@@ -268,27 +233,26 @@ vec3 ad = v + V;
 		mainCommandMap.put(Regexes.IMPORT, ImportType::new);
 		mainCommandMap.put(Regexes.THIS_ASSIGN, ThisAssignValue::new);
 		mainCommandMap.put(Regexes.DECLARE_TYPE, DeclareType::new);
-		typeCommandMap.put(Regexes.DECLARE_FUNCTION, DeclareTypeFunction::new); // only in type's functions
+		mainCommandMap.put(Regexes.RETURN_THIS, (script, line) -> new ReturnTypeThisValue());
 		mainCommandMap.put(Regexes.RETURN, (script, line) -> new ReturnValue(line));
 		mainCommandMap.put(Regexes.VALUE_DECLARATION, DeclareValue::new);
 		mainCommandMap.put(Regexes.VALUE_ASSIGN, (script, line) -> new AssignValue(line));
 		mainCommandMap.put(Regexes.VALUE_DECLARATION_ASSIGN, (script, line) -> new DeclareAssignValue(line));
 		mainCommandMap.put(Regexes.DECLARE_FUNCTION, DeclareFunction::new);
 
-		mainCommandMap.put(Regexes.IMPORT_FUNCTIONS, ImportFunctions::new);
+		typeCommandMap.put(Regexes.IMPORT_FUNCTIONS, ImportFunctions::new);
+		typeCommandMap.put(Regexes.DECLARE_FUNCTION, DeclareTypeFunction::new);
 		typeCommandMap.put(Regexes.IMPORT, ImportType::new);
 		typeCommandMap.put(Regexes.OPERATOR_OVERLOAD_FUNCTION, DeclareOperatorOverload::new);
 		typeCommandMap.put(Regexes.TYPE_VALUE_DECLARATION, DeclareTypeValue::new);
 		typeCommandMap.put(Regexes.DECLARE_CONSTRUCTOR, DeclareTypeConstructor::new);
-		typeCommandMap.put(Regexes.RETURN_THIS, (script, line) -> new ReturnTypeThisValue());
 	}
 
 	public static void main(String[] args)
 	{
-		Script script = createScript(otherCode, true, mainCommandMap);
-//		ImportableFunctions.importColorPrint(script);
+		Script script = createScript(source, true, mainCommandMap);
+		ImportableFunctions.importColorPrint(script);
 
-//		script.printCode();
 		script.run();
 	}
 

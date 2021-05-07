@@ -1,6 +1,5 @@
 package steve6472.scriptit.expression;
 
-import steve6472.scriptit.ImportableFunctions;
 import steve6472.scriptit.Script;
 
 import java.util.ArrayList;
@@ -21,8 +20,8 @@ import static steve6472.scriptit.expression.Value.newValue;
  ***********************/
 public class ExpressionParser
 {
-	public static boolean EVAL_DEBUG = true;
-	public static boolean PARSE_DEBUG = true;
+	public static boolean EVAL_DEBUG = false;
+	public static boolean PARSE_DEBUG = false;
 
 	private static final Type[] NO_PARAMETERS = new Type[0];
 
@@ -64,7 +63,6 @@ public class ExpressionParser
 					printParse("found");
 					return true;
 				}
-				printParse("not found");
 				return false;
 			}
 
@@ -80,7 +78,6 @@ public class ExpressionParser
 					printParse("found");
 					return true;
 				}
-				printParse("not found");
 				return false;
 			}
 
@@ -119,11 +116,6 @@ public class ExpressionParser
 							Value bEval = b.eval(script);
 							Type type = aEval.type;
 							HashMap<Type, HashMap<Operator, OperatorOverloadFunction>> binary = type.binary;
-							System.out.println(A);
-							System.out.println(S);
-							System.out.println(s);
-							System.out.println(aEval.type);
-							System.out.println(bEval.type);
 							HashMap<Operator, OperatorOverloadFunction> operatorOperatorOverloadFunctionHashMap = binary.get(bEval.type);
 							OperatorOverloadFunction operatorOverloadFunction = operatorOperatorOverloadFunctionHashMap.get(Operator.ADD);
 							return operatorOverloadFunction.apply(aEval, bEval);
@@ -144,10 +136,6 @@ public class ExpressionParser
 						printParse("Adding parameter " + a);
 						functionParameters.peek().add(a);
 						return x;
-					} else if (eat('.'))
-					{
-						previousTypes.push(x);
-						return parseExpression();
 					} else
 					{
 						return x;
@@ -182,6 +170,10 @@ public class ExpressionParser
 							Value bEval = b.eval(script);
 							return aEval.type.binary.get(bEval.type).get(Operator.DIV).apply(aEval, bEval);
 						};
+					} else if (eat('.'))
+					{
+						previousTypes.push(x);
+						return parseExpression();
 					} else
 					{
 						return x;
@@ -433,13 +425,8 @@ public class ExpressionParser
 		script.importType(DOUBLE);
 		script.importType(VEC2);
 
-		ImportableFunctions.definePi(script);
-		ImportableFunctions.importMathFunctionsRad(script);
-
-		script.addConstructor(FunctionParameters.function("stuff").addType(INT).addType(INT).build(), (arags) -> {
-			int temp = arags[0].getInt() * arags[1].getInt();
-			return newValue(INT, temp + arags[0].getInt());
-		});
+		//		ImportableFunctions.definePi(script);
+//		ImportableFunctions.importMathFunctionsRad(script);
 
 		Expression exp = parser.parse("1.0 + vec2(2.0, 3.0).getX()");
 
