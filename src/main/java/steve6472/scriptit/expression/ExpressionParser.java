@@ -4,7 +4,6 @@ import steve6472.scriptit.Script;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
 
 import static steve6472.scriptit.TypeDeclarations.*;
@@ -81,6 +80,17 @@ public class ExpressionParser
 				return false;
 			}
 
+			boolean eat(String s)
+			{
+				if (s.length() == 1)
+				{
+					return eat(s.charAt(0));
+				} else
+				{
+					return eat(s.charAt(0), s.charAt(1));
+				}
+			}
+
 			Expression parse()
 			{
 				nextChar();
@@ -102,40 +112,34 @@ public class ExpressionParser
 				Expression x = parseTerm();
 				for (; ; )
 				{
-					if (eat('+'))
-					{
-						Expression a = x;
-						Expression b = parseTerm();
-						x = (script) ->
-						{
-							Value aEval = a.eval(script);
-							Value bEval = b.eval(script);
-							Type type = aEval.type;
-							HashMap<Type, HashMap<Operator, OperatorOverloadFunction>> binary = type.binary;
-							HashMap<Operator, OperatorOverloadFunction> operatorOperatorOverloadFunctionHashMap = binary.get(bEval.type);
-							OperatorOverloadFunction operatorOverloadFunction = operatorOperatorOverloadFunctionHashMap.get(Operator.ADD);
-							return operatorOverloadFunction.apply(aEval, bEval);
-						};
-					} else if (eat('-'))
-					{
-						Expression a = x;
-						Expression b = parseTerm();
-						x = (script) ->
-						{
-							Value aEval = a.eval(script);
-							Value bEval = b.eval(script);
-							return aEval.type.binary.get(bEval.type).get(Operator.SUB).apply(aEval, bEval);
-						};
-					} else if (eat(','))
+					if (eat(','))
 					{
 						Expression a = parseExpression();
 						printParse("Adding parameter " + a);
 						functionParameters.peek().add(a);
 						return x;
-					} else
-					{
-						return x;
 					}
+
+					boolean found = false;
+
+					for (Operator op : Operator.getMainOps())
+					{
+						if (eat(op.getOperator()))
+						{
+							found = true;
+							Expression a = x;
+							Expression b = parseTerm();
+							x = (script) ->
+							{
+								Value aEval = a.eval(script);
+								Value bEval = b.eval(script);
+								return aEval.type.binary.get(bEval.type).get(op).apply(aEval, bEval);
+							};
+						}
+					}
+
+					if (!found)
+						return x;
 				}
 			}
 
@@ -146,34 +150,33 @@ public class ExpressionParser
 				for (; ; )
 				{
 					printParse("term");
-					if (eat('*'))
-					{
-						Expression a = x;
-						Expression b = parseFactor();
-						x = (script) ->
-						{
-							Value aEval = a.eval(script);
-							Value bEval = b.eval(script);
-							return aEval.type.binary.get(bEval.type).get(Operator.MUL).apply(aEval, bEval);
-						};
-					} else if (eat('/'))
-					{
-						Expression a = x;
-						Expression b = parseFactor();
-						x = (script) ->
-						{
-							Value aEval = a.eval(script);
-							Value bEval = b.eval(script);
-							return aEval.type.binary.get(bEval.type).get(Operator.DIV).apply(aEval, bEval);
-						};
-					} else if (eat('.'))
+
+					if (eat('.'))
 					{
 						previousTypes.push(x);
 						return parseExpression();
-					} else
-					{
-						return x;
 					}
+
+					boolean found = false;
+
+					for (Operator op : Operator.getTermOps())
+					{
+						if (eat(op.getOperator()))
+						{
+							found = true;
+							Expression a = x;
+							Expression b = parseFactor();
+							x = (script) ->
+							{
+								Value aEval = a.eval(script);
+								Value bEval = b.eval(script);
+								return aEval.type.binary.get(bEval.type).get(op).apply(aEval, bEval);
+							};
+						}
+					}
+
+					if (!found)
+						return x;
 				}
 			}
 

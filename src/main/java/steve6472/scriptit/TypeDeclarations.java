@@ -28,6 +28,8 @@ public class TypeDeclarations
 
 	public static final Type VEC2 = new Type("vec2");
 
+	public static final Value TRUE = newValue(BOOL, true);
+	public static final Value FALSE = newValue(BOOL, false);
 
 	private static double d(Object o)
 	{
@@ -69,6 +71,14 @@ public class TypeDeclarations
 		DOUBLE.addBinaryOperator(DOUBLE, Operator.SUB, (left, right) -> newValue(DOUBLE, d(left) - d(right)));
 		DOUBLE.addBinaryOperator(DOUBLE, Operator.MUL, (left, right) -> newValue(DOUBLE, d(left) * d(right)));
 		DOUBLE.addBinaryOperator(DOUBLE, Operator.DIV, (left, right) -> newValue(DOUBLE, d(left) / d(right)));
+
+		DOUBLE.addBinaryOperator(DOUBLE, Operator.EQUAL, (left, right) -> left.getDouble() == right.getDouble() ? TRUE : FALSE);
+		DOUBLE.addBinaryOperator(DOUBLE, Operator.NOT_EQUAL, (left, right) -> left.getDouble() != right.getDouble() ? TRUE : FALSE);
+		DOUBLE.addBinaryOperator(DOUBLE, Operator.LESS_THAN, (left, right) -> left.getDouble() < right.getDouble() ? TRUE : FALSE);
+		DOUBLE.addBinaryOperator(DOUBLE, Operator.GREATER_THAN, (left, right) -> left.getDouble() > right.getDouble() ? TRUE : FALSE);
+		DOUBLE.addBinaryOperator(DOUBLE, Operator.LESS_THAN_EQUAL, (left, right) -> left.getDouble() <= right.getDouble() ? TRUE : FALSE);
+		DOUBLE.addBinaryOperator(DOUBLE, Operator.GREATER_THAN_EQUAL, (left, right) -> left.getDouble() >= right.getDouble() ? TRUE : FALSE);
+
 		DOUBLE.addUnaryOperator(Operator.SUB, (itself -> itself.setValue(-itself.getDouble())));
 		DOUBLE.addUnaryOperator(Operator.ADD, (itself -> itself));
 		DOUBLE.addProcedure(FunctionParameters.function("print").build(), (itself, args) -> System.out.println("double[val=" + d(itself) + "]"));
@@ -77,6 +87,8 @@ public class TypeDeclarations
 		BOOL.addConstructor(FunctionParameters.constructor(BOOL).addType(STRING).build(), par -> newValue(BOOL, Boolean.parseBoolean(par[0].getString())));
 		BOOL.addConstructor(FunctionParameters.constructor(BOOL).addType(INT).build(), par -> newValue(BOOL, par[0].getInt() > 0));
 		BOOL.addConstructor(FunctionParameters.constructor(BOOL).build(), par -> newValue(BOOL, false));
+
+		BOOL.addBinaryOperator(BOOL, Operator.EQUAL, (left, right) -> left.getBoolean() == right.getBoolean() ? TRUE : FALSE);
 
 //		BOOL.addAddFunction(DOUBLE, (left, right) -> new Value(DOUBLE, d(left) + d(right)));
 //		BOOL.addSubFunction(DOUBLE, (left, right) -> new Value(DOUBLE, d(left) - d(right)));
@@ -103,6 +115,20 @@ public class TypeDeclarations
 		INT.addBinaryOperator(DOUBLE, Operator.MUL, (left, right) -> newValue(DOUBLE, i(left) * d(right)));
 		INT.addBinaryOperator(DOUBLE, Operator.DIV, (left, right) -> newValue(DOUBLE, i(left) / d(right)));
 
+		INT.addBinaryOperator(INT, Operator.EQUAL, (left, right) -> left.getInt() == right.getInt() ? TRUE : FALSE);
+		INT.addBinaryOperator(INT, Operator.NOT_EQUAL, (left, right) -> left.getInt() != right.getInt() ? TRUE : FALSE);
+		INT.addBinaryOperator(INT, Operator.LESS_THAN, (left, right) -> left.getInt() < right.getInt() ? TRUE : FALSE);
+		INT.addBinaryOperator(INT, Operator.GREATER_THAN, (left, right) -> left.getInt() > right.getInt() ? TRUE : FALSE);
+		INT.addBinaryOperator(INT, Operator.LESS_THAN_EQUAL, (left, right) -> left.getInt() <= right.getInt() ? TRUE : FALSE);
+		INT.addBinaryOperator(INT, Operator.GREATER_THAN_EQUAL, (left, right) -> left.getInt() >= right.getInt() ? TRUE : FALSE);
+
+		INT.addBinaryOperator(DOUBLE, Operator.EQUAL, (left, right) -> left.getInt() == right.getDouble() ? TRUE : FALSE);
+		INT.addBinaryOperator(DOUBLE, Operator.NOT_EQUAL, (left, right) -> left.getInt() != right.getDouble() ? TRUE : FALSE);
+		INT.addBinaryOperator(DOUBLE, Operator.LESS_THAN, (left, right) -> left.getInt() < right.getDouble() ? TRUE : FALSE);
+		INT.addBinaryOperator(DOUBLE, Operator.GREATER_THAN, (left, right) -> left.getInt() > right.getDouble() ? TRUE : FALSE);
+		INT.addBinaryOperator(DOUBLE, Operator.LESS_THAN_EQUAL, (left, right) -> left.getInt() <= right.getDouble() ? TRUE : FALSE);
+		INT.addBinaryOperator(DOUBLE, Operator.GREATER_THAN_EQUAL, (left, right) -> left.getInt() >= right.getDouble() ? TRUE : FALSE);
+
 		INT.addUnaryOperator(Operator.SUB, (itself -> itself.setValue(-itself.getInt())));
 		INT.addUnaryOperator(Operator.ADD, (itself -> itself));
 		INT.addUnaryOperator(Operator.NEG, (itself -> itself.setValue(~itself.getInt())));
@@ -112,6 +138,9 @@ public class TypeDeclarations
 		STRING.addConstructor(FunctionParameters.constructor(STRING).addType(STRING).build(), par -> newValue(STRING, par[0].getString()));
 		STRING.addConstructor(FunctionParameters.constructor(STRING).addType(DOUBLE).build(), par -> newValue(STRING, String.valueOf(par[0].getDouble())));
 		STRING.addConstructor(FunctionParameters.constructor(STRING).build(), par -> newValue(STRING, ""));
+
+		STRING.addBinaryOperator(STRING, Operator.EQUAL, (left, right) -> left.getString().equals(right.getString()) ? TRUE : FALSE);
+		STRING.addBinaryOperator(STRING, Operator.NOT_EQUAL, (left, right) -> !left.getString().equals(right.getString()) ? TRUE : FALSE);
 
 		STRING.addBinaryOperator(STRING, Operator.ADD, (left, right) -> newValue(STRING, s(left) + s(right)));
 		STRING.addBinaryOperator(CHAR, Operator.ADD, (left, right) -> newValue(STRING, s(left) + c(right)));

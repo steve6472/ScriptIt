@@ -4,9 +4,6 @@ import steve6472.scriptit.expression.*;
 
 import java.util.*;
 
-import static steve6472.scriptit.TypeDeclarations.BOOL;
-import static steve6472.scriptit.expression.Value.newValue;
-
 /**********************
  * Created by steve6472 (Mirek Jozefek)
  * On date: 5/2/2021
@@ -28,8 +25,8 @@ public class Script
 		instructions = new ArrayList<>();
 
 		// Force true and false booleans into namespace
-		addValue("true", newValue(BOOL, true));
-		addValue("false", newValue(BOOL, false));
+		addValue("true", TypeDeclarations.TRUE);
+		addValue("false", TypeDeclarations.FALSE);
 	}
 
 	@SuppressWarnings("IncompleteCopyConstructor")

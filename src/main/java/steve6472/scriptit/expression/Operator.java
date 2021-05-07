@@ -22,6 +22,13 @@ public enum Operator
 	LSH("<<", BINARY),
 	RSH(">>", BINARY),
 
+	EQUAL("==", BINARY),
+	NOT_EQUAL("!=", BINARY),
+	LESS_THAN_EQUAL("<=", BINARY),
+	GREATER_THAN_EQUAL(">=", BINARY),
+	LESS_THAN("<", BINARY),
+	GREATER_THAN(">", BINARY),
+
 	NOT("!", UNARY),
 	AND("&&", BINARY),
 	OR("||", BINARY),
@@ -29,11 +36,23 @@ public enum Operator
 	PRE_INC("++", UNARY),
 	PRE_DEC("--", UNARY);
 
+	private static final Operator[] MAIN_OPS = {ADD, SUB, BIT_OR};
 	private static final Operator[] UNARY_OPS = {ADD, SUB, NEG, NOT, PRE_INC, PRE_DEC};
+	private static final Operator[] TERM_OPS = {MUL, DIV, MOD, AND, OR, BIT_AND, BIT_XOR, EQUAL, NOT_EQUAL, LSH, RSH, LESS_THAN_EQUAL, GREATER_THAN_EQUAL, LESS_THAN, GREATER_THAN};
+
+	public static Operator[] getMainOps()
+	{
+		return MAIN_OPS;
+	}
 
 	public static Operator[] getUnaryOps()
 	{
 		return UNARY_OPS;
+	}
+
+	public static Operator[] getTermOps()
+	{
+		return TERM_OPS;
 	}
 
 	private final String operator;
