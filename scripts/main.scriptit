@@ -195,6 +195,14 @@ bool boolTest = 5.0 >= 5.0;
 boolTest.print();
 " ".printRaw();
 
+int i = 5;
+
+while (i > 0)
+{
+    i.print();
+    i = i - 1;
+}
+
 " -- Delay Test Start -- ".printRaw();
 "5".printRaw();
 delay 1000;

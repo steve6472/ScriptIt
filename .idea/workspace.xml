@@ -128,10 +128,10 @@
     <option name="map">
       <map>
         <entry key="flags" value="2" />
-        <entry key="mode" value="0" />
-        <entry key="regex" value="^operator\s*([\+\-\*\/%~&amp;\||\^!]||(&lt;&lt;)||(&gt;&gt;)||(&amp;&amp;)||(\||\||))\s*\(" />
+        <entry key="mode" value="1" />
+        <entry key="regex" value="^while\\s+(.+).*" />
         <entry key="replacement" value="" />
-        <entry key="text" value="operator+ (vec3 other)&#9;{&#9;&#9;return vec3();&#9;}" />
+        <entry key="text" value="while (a)" />
       </map>
     </option>
   </component>

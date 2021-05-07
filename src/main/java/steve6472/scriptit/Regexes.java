@@ -70,6 +70,10 @@ public class Regexes
 	 * delay 7
 	 */
 	public static final Pattern DELAY = Pattern.compile("^delay\\s+[0-9]+");
+	/**
+	 * while (...) ...
+	 */
+	public static final Pattern WHILE = Pattern.compile("^while\\s+\\(.+\\).*");
 }
 
 

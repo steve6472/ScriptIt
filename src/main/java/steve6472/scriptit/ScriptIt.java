@@ -31,6 +31,7 @@ public class ScriptIt
 	{
 		mainCommandMap.put(Regexes.IMPORT_FUNCTIONS, ImportFunctions::new);
 		mainCommandMap.put(Regexes.IMPORT, ImportType::new);
+		mainCommandMap.put(Regexes.WHILE, WhileLoop::new);
 		mainCommandMap.put(Regexes.THIS_ASSIGN, (workspace, script, line) -> new ThisAssignValue(script, line));
 		mainCommandMap.put(Regexes.DECLARE_TYPE, DeclareType::new);
 		mainCommandMap.put(Regexes.RETURN_THIS, (workspace, script, line) -> new ReturnTypeThisValue());
