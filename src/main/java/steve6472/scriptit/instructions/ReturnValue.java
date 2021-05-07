@@ -34,9 +34,6 @@ public class ReturnValue extends Instruction
 	public Value execute(Script script)
 	{
 		return expression.eval(script);
-//		if (value.type != eval.type)
-//			throw new RuntimeException("Type mismatch");
-//		value.values = eval.values;
 	}
 
 	@Override

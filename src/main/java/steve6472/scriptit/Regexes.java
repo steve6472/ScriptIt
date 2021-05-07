@@ -66,6 +66,10 @@ public class Regexes
 	 * import functions log
 	 */
 	public static final Pattern IMPORT_FUNCTIONS = Pattern.compile("^import\\s+functions\\s+[a-zA-Z][a-zA-Z0-9]*");
+	/**
+	 * delay 7
+	 */
+	public static final Pattern DELAY = Pattern.compile("^delay\\s+[0-9]+");
 }
 
 

@@ -3,6 +3,7 @@ package steve6472.scriptit;
 import steve6472.scriptit.expression.Constructor;
 import steve6472.scriptit.expression.FunctionParameters;
 import steve6472.scriptit.expression.Type;
+import steve6472.scriptit.expression.Value;
 import steve6472.scriptit.instructions.*;
 import steve6472.scriptit.instructions.type.*;
 
@@ -38,6 +39,7 @@ public class ScriptIt
 		mainCommandMap.put(Regexes.VALUE_ASSIGN, (workspace, script, line) -> new AssignValue(line));
 		mainCommandMap.put(Regexes.VALUE_DECLARATION_ASSIGN, (workspace, script, line) -> new DeclareAssignValue(line));
 		mainCommandMap.put(Regexes.DECLARE_FUNCTION, DeclareFunction::new);
+		mainCommandMap.put(Regexes.DELAY, (workspace, script, line) -> new Delay(line));
 
 		typeCommandMap.put(Regexes.IMPORT_FUNCTIONS, ImportFunctions::new);
 		typeCommandMap.put(Regexes.DECLARE_FUNCTION, (workspace, script, line) -> new DeclareTypeFunction(script, line));
@@ -90,7 +92,19 @@ public class ScriptIt
 
 		Script script = createScript(workspace, readFromFile(new File("scripts/main.scriptit")), true, mainCommandMap);
 
-		script.run();
+//		script.run();
+		basicDelayedScriptLoop(script);
+	}
+
+	public static void basicDelayedScriptLoop(Script script)
+	{
+		boolean loop = true;
+		while (loop)
+		{
+			Value value = script.runWithDelay();
+			if (value != null)
+				loop = !value.getBoolean();
+		}
 	}
 
 	public static Script createScript(Workspace workspace, String code, boolean evalFallback, Map<Pattern, TriFunction<Workspace, Script, String, Instruction>> commandMap)

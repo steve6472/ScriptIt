@@ -1,8 +1,11 @@
 package steve6472.scriptit;
 
 import steve6472.scriptit.expression.*;
+import steve6472.scriptit.instructions.Delay;
 
 import java.util.*;
+import java.util.function.BiFunction;
+import java.util.function.Supplier;
 
 /**********************
  * Created by steve6472 (Mirek Jozefek)
@@ -34,6 +37,9 @@ public class Script
 	{
 		instructions = new ArrayList<>();
 		this.parent = parent;
+
+		addValue("true", TypeDeclarations.TRUE);
+		addValue("false", TypeDeclarations.FALSE);
 	}
 
 	public void print()
@@ -55,6 +61,54 @@ public class Script
 			Value execute = c.execute(this);
 			if (execute != null)
 				return execute;
+		}
+
+		return null;
+	}
+
+	/**
+	 * Calls runWithDelay(Supplier<Long> delayStart, BiFunction<Long, Long, Boolean> shouldAdvance);<br>
+	 * Uses '<b>System::currentTimeMillis</b>' as delayStart<br>
+	 * Uses '<b>(start, delay) -> System.currentTimeMillis() - start >= delay</b>' as shouldAdvance<br>
+	 *
+	 * @return Value
+	 */
+	public Value runWithDelay()
+	{
+		return runWithDelay(System::currentTimeMillis, (start, delay) -> System.currentTimeMillis() - start >= delay);
+	}
+
+	private int delayIndex = 0;
+	private long delayStart = -1;
+
+	public Value runWithDelay(Supplier<Long> delayStart, BiFunction<Long, Long, Boolean> shouldAdvance)
+	{
+		if (delayIndex >= instructions.size())
+			delayIndex = 0;
+
+		while (delayIndex < instructions.size())
+		{
+			Instruction c = instructions.get(delayIndex);
+			if (c instanceof Delay delay)
+			{
+				if (this.delayStart == -1)
+					this.delayStart = delayStart.get();
+				if (shouldAdvance.apply(this.delayStart, delay.delay))
+				{
+					delayIndex++;
+					this.delayStart = -1;
+					continue;
+				} else
+				{
+					return null;
+				}
+			}
+
+			Value execute = c.execute(this);
+			if (execute != null)
+				return execute;
+
+			delayIndex++;
 		}
 
 		return null;
