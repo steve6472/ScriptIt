@@ -21,7 +21,7 @@ public class DeclareType extends Instruction
 {
 	Script script;
 
-	public DeclareType(Script parentScript, String line)
+	public DeclareType(Workspace workspace, Script parentScript, String line)
 	{
 		super(line);
 
@@ -37,7 +37,7 @@ public class DeclareType extends Instruction
 
 		Type newType = new Type(keyword);
 
-		Script tempScript = Main.createScript(valueBody, false, Main.typeCommandMap);
+		Script tempScript = Main.createScript(workspace, valueBody, false, Main.typeCommandMap);
 		parentScript.importTypesToScript(tempScript);
 		tempScript.importType(newType);
 
@@ -64,7 +64,7 @@ public class DeclareType extends Instruction
 				Type rightOperand = tempScript.getType(dec.types[0]);
 				String rightOperandName = dec.names[0];
 
-				Script functionScript = Main.createScript(dec.body, true, Main.mainCommandMap, tempScript.getImportedTypes(), parentScript.getConstructorMap());
+				Script functionScript = Main.createScript(workspace, dec.body, true, Main.mainCommandMap, tempScript.getImportedTypes(), parentScript.getConstructorMap());
 
 				newType.addBinaryOperator(rightOperand, dec.operator, (left, right) ->
 				{
@@ -100,7 +100,7 @@ public class DeclareType extends Instruction
 					paramsBuilder = paramsBuilder.addType(type);
 				}
 
-				Script constructorScript = Main.createScript(dec.body, true, Main.mainCommandMap, tempScript.getImportedTypes(), parentScript.getConstructorMap());
+				Script constructorScript = Main.createScript(workspace, dec.body, true, Main.mainCommandMap, tempScript.getImportedTypes(), parentScript.getConstructorMap());
 
 				newType.addConstructor(paramsBuilder.build(), args ->
 				{
@@ -143,7 +143,7 @@ public class DeclareType extends Instruction
 
 				Type returnType;
 
-				Script functionScript = Main.createScript(dec.body, true, Main.mainCommandMap, tempScript.getImportedTypes(), parentScript.getConstructorMap());
+				Script functionScript = Main.createScript(workspace, dec.body, true, Main.mainCommandMap, tempScript.getImportedTypes(), parentScript.getConstructorMap());
 
 				if (dec.returnType.equals("void"))
 				{

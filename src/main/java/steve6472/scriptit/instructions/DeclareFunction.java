@@ -3,6 +3,7 @@ package steve6472.scriptit.instructions;
 import steve6472.scriptit.Instruction;
 import steve6472.scriptit.Main;
 import steve6472.scriptit.Script;
+import steve6472.scriptit.Workspace;
 import steve6472.scriptit.expression.FunctionParameters;
 import steve6472.scriptit.expression.Type;
 import steve6472.scriptit.expression.Value;
@@ -19,7 +20,7 @@ public class DeclareFunction extends Instruction
 {
 	Script script;
 
-	public DeclareFunction(Script parentScript, String line)
+	public DeclareFunction(Workspace workspace, Script parentScript, String line)
 	{
 		super(line);
 
@@ -80,7 +81,7 @@ public class DeclareFunction extends Instruction
 			System.out.println("\n".repeat(3));
 			System.out.println("Function script: ");
 		}
-		script = Main.createScript(parentScript, body, true, Main.mainCommandMap);
+		script = Main.createScript(workspace, parentScript, body, true, Main.mainCommandMap);
 		if (Main.DEBUG)
 		{
 			System.out.println("Function script end");

@@ -1,7 +1,5 @@
 package steve6472.scriptit;
 
-import steve6472.scriptit.expression.Expression;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,6 +13,11 @@ public class Stack<T>
 	public Stack(int size)
 	{
 		stack = new ArrayList<>(size);
+	}
+
+	public Stack()
+	{
+		stack = new ArrayList<>();
 	}
 
 	public void push(T exp)
@@ -35,9 +38,19 @@ public class Stack<T>
 		}
 	}
 
+	public T get(int index)
+	{
+		return stack.get(index);
+	}
+
 	public boolean isEmpty()
 	{
 		return stack.isEmpty();
 	}
 
+	@Override
+	public String toString()
+	{
+		return "Stack{" + "stack=" + stack + '}';
+	}
 }

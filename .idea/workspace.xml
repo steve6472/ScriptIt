@@ -17,9 +17,9 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="Interface" />
-        <option value="Class" />
         <option value="Record" />
         <option value="Enum" />
+        <option value="Class" />
       </list>
     </option>
   </component>
@@ -103,6 +103,14 @@
           <properties class="java.lang.RuntimeException" package="java.lang" />
           <option name="timeStamp" value="20" />
         </breakpoint>
+        <line-breakpoint enabled="true" type="java-method">
+          <url>jar://$PROJECT_DIR$/../Java/16/lib/src.zip!/java.base/java/io/PrintStream.java</url>
+          <line>715</line>
+          <properties class="java.io.PrintStream" method="writeln">
+            <option name="EMULATED" value="true" />
+          </properties>
+          <option name="timeStamp" value="28" />
+        </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
     <pin-to-top-manager>

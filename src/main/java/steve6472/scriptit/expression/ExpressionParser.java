@@ -99,19 +99,15 @@ public class ExpressionParser
 			Expression parseExpression()
 			{
 				printParse("Parsing expression");
-				String A = str.substring(pos);
 				Expression x = parseTerm();
 				for (; ; )
 				{
 					if (eat('+'))
 					{
 						Expression a = x;
-						String S = str.substring(pos);
 						Expression b = parseTerm();
-						String s = str.substring(pos);
 						x = (script) ->
 						{
-							System.out.println("\n\n\n\n");
 							Value aEval = a.eval(script);
 							Value bEval = b.eval(script);
 							Type type = aEval.type;

@@ -5,6 +5,7 @@ import steve6472.scriptit.expression.Operator;
 import steve6472.scriptit.expression.Type;
 import steve6472.scriptit.expression.Value;
 
+import static steve6472.scriptit.expression.Value.SINGLE_VALUE;
 import static steve6472.scriptit.expression.Value.newValue;
 
 /**********************
@@ -15,14 +16,18 @@ import static steve6472.scriptit.expression.Value.newValue;
  ***********************/
 public class TypeDeclarations
 {
+	/*
+	 * Primitives
+	 */
 	public static final Type DOUBLE = new Type("double");
 	public static final Type INT = new Type("int");
 	public static final Type STRING = new Type("string");
 	public static final Type CHAR = new Type("char");
 	public static final Type BOOL = new Type("bool");
+	public static final Type ARRAY = new Type("array");
+
 	public static final Type VEC2 = new Type("vec2");
 
-	public static final Type[] BASIC_TYPES = {INT, DOUBLE, CHAR, BOOL, STRING, VEC2};
 
 	private static double d(Object o)
 	{
@@ -51,7 +56,7 @@ public class TypeDeclarations
 
 	public static boolean isPrimitive(Type type)
 	{
-		return type == DOUBLE || type == INT || type == STRING || type == CHAR || type == BOOL;
+		return type == DOUBLE || type == INT || type == STRING || type == CHAR || type == BOOL || type == ARRAY;
 	}
 
 	static
@@ -136,6 +141,15 @@ public class TypeDeclarations
 		//		CHAR.unaryAddFunctions.put(DOUBLE, (itself -> new Value(DOUBLE, d(itself))));
 		//		CHAR.functions.put(FunctionParameters.function("length").build(), ((itself, args) -> new Value(DOUBLE, ((String) itself.value).length())));
 		CHAR.addProcedure(FunctionParameters.function("prnt").build(), (itself, args) -> System.out.println("char[val='" + c(itself) + "']"));
+
+		// TODO: upon importing new types add them to .push(type) function
+		ARRAY.addConstructor(FunctionParameters.constructor(ARRAY).build(), par -> newValue(ARRAY, new Stack<Value>()));
+		ARRAY.addFunction(FunctionParameters.function("push").addType(DOUBLE).build(), (itself, args) -> {
+			((Stack<Value>) itself.get(SINGLE_VALUE)).push(args[0]);
+			return itself;
+		});
+		ARRAY.addFunction(FunctionParameters.function("pop").build(), ((itself, args) -> ((Stack<Value>) itself.get(SINGLE_VALUE)).pop()));
+		ARRAY.addFunction(FunctionParameters.function("get").addType(INT).build(), ((itself, args) -> ((Stack<Value>) itself.get(SINGLE_VALUE)).get(args[0].getInt())));
 
 
 		VEC2.addConstructor(FunctionParameters.constructor(VEC2).addType(DOUBLE).addType(DOUBLE).build(), par -> newValue(VEC2).setValue("x", newValue(DOUBLE, par[0].getDouble())).setValue("y", newValue(DOUBLE, par[1].getDouble())));
