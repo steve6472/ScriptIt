@@ -63,7 +63,7 @@
       <recent name="steve6472.scriptit.commands" />
     </key>
   </component>
-  <component name="RunManager" selected="Application.Main">
+  <component name="RunManager" selected="Application.ScriptIt">
     <configuration name="ExpressionParser" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="steve6472.scriptit.expression.ExpressionParser" />
       <module name="ScriptIt" />
@@ -71,8 +71,8 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="Main" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="steve6472.scriptit.Main" />
+    <configuration name="ScriptIt" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="steve6472.scriptit.ScriptIt" />
       <module name="ScriptIt" />
       <method v="2">
         <option name="Make" enabled="true" />
@@ -80,7 +80,7 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Application.Main" />
+        <item itemvalue="Application.ScriptIt" />
         <item itemvalue="Application.ExpressionParser" />
       </list>
     </recent_temporary>

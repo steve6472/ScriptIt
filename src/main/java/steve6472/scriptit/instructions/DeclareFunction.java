@@ -1,7 +1,7 @@
 package steve6472.scriptit.instructions;
 
 import steve6472.scriptit.Instruction;
-import steve6472.scriptit.Main;
+import steve6472.scriptit.ScriptIt;
 import steve6472.scriptit.Script;
 import steve6472.scriptit.Workspace;
 import steve6472.scriptit.expression.FunctionParameters;
@@ -41,7 +41,7 @@ public class DeclareFunction extends Instruction
 			if (parameters[0].isBlank())
 				parameters = new String[0];
 
-		if (Main.DEBUG)
+		if (ScriptIt.DEBUG)
 		{
 			System.out.println("split = " + Arrays.toString(split));
 			System.out.println("returnType = " + returnType);
@@ -74,15 +74,15 @@ public class DeclareFunction extends Instruction
 			paramsBuilder = paramsBuilder.addType(type);
 		}
 
-		if (Main.DEBUG)
+		if (ScriptIt.DEBUG)
 		{
 			System.out.println("paramNames = " + Arrays.toString(paramNames));
 
 			System.out.println("\n".repeat(3));
 			System.out.println("Function script: ");
 		}
-		script = Main.createScript(workspace, parentScript, body, true, Main.mainCommandMap);
-		if (Main.DEBUG)
+		script = ScriptIt.createScript(workspace, parentScript, body, true, ScriptIt.mainCommandMap);
+		if (ScriptIt.DEBUG)
 		{
 			System.out.println("Function script end");
 			System.out.println("\n".repeat(3));
@@ -90,7 +90,7 @@ public class DeclareFunction extends Instruction
 
 		FunctionParameters functionParameters = paramsBuilder.build();
 
-		if (Main.DEBUG)
+		if (ScriptIt.DEBUG)
 			System.out.println("functionParameters = " + functionParameters);
 
 		Type type;

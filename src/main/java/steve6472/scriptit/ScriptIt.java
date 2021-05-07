@@ -18,7 +18,7 @@ import java.util.regex.Pattern;
  * Project: ScriptIt
  *
  ***********************/
-public class Main
+public class ScriptIt
 {
 	/*
 	 * Multi
