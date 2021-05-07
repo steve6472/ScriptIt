@@ -6,6 +6,7 @@ import steve6472.scriptit.expression.Type;
 import steve6472.scriptit.instructions.*;
 import steve6472.scriptit.instructions.type.*;
 
+import java.io.*;
 import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -20,216 +21,6 @@ import java.util.regex.Pattern;
  ***********************/
 public class ScriptIt
 {
-	/*
-	 * Multi
-	 * Line
-	 * Comment
-	 */
-
-	/*
-	class vec2
-	{
-		int x;
-		int y;
-
-		constructor vec2(int x, int y)
-		{
-			this.x = x;
-			this.y = y;
-		}
-	}
-
-	function int func(int a, int b)
-	{
-		return a + b * a;
-	}
-
-	*/
-	private static final String source =
-"""
-// Imports
-import int;
-import double;
-import string;
-import bool;
-import char;
-import vec2;
-import array;
-
-import functions log;
-
-int a;
-//int b = 5;
-//int c = 9 + 10 * 6;
-a = int(double(3.2)*6.2 * 5.0);
-a.print(); // 99
-//b.print();
-//c.print();
-
-function void testExpressionParser()
-{
-	int(7).print();
-	(-(6 * 7)).print();
-	(int(6) * 7).print();
-	("Hello" + " world!").print();
-	(("Hello" + ' ' + "world" + '!').len() * 2).print();
-	string("_1\\"3_").print();
-	vec2(0, 9).-toString().print();
-	string("Hello World").-len().print();
-	("Hello World"-3).print();
-	("#-" * 10 + '#').print();
-	vec2(8 + stuff(3, int(6)) * 4, 2).toString().print(); // [92.0, 2.0]
-	(vec2(6.9, 4.2) * 7.5).print(); //vec2[x=51.75,y=31.5]
-}
-
-testExpressionParser();
-
-
-// This somehow works...
-function void output(string text)
-{
-	text.print();
-}
-
-output("Hi World!");
-
-function int stuff(int varA, int varB)
-{
-	function void prnt()
-	{
-		"inside function thingie".print();
-	}
-	int temp = varA * varB;
-	temp.print();
-	prnt();
-	a.print();
-	return temp + varA;
-}
-
-int i = stuff(2, 3); // inside function thingie
-i.print(); // 8
-
-"before adr".print(); // before adr
-
-string adr = vec2(8 + stuff(3, 6) * 3, 2).toString();
-adr.print();
-
-
-class vec3
-{
-	public double x;
-	public double y;
-	public double z;
-
-	constructor()
-	{
-		this.x = 0.0;
-		this.y = 0.0;
-		this.z = 0.0;
-	}
-	
-	constructor(double X, double Y, double Z)
-	{
-		this.x = X;
-		this.y = Y;
-		this.z = Z;
-	}
-	
-	function int print(int t)
-	{
-		t.print();
-		x.print();
-		("vec3[x=" + string(x) + ",y=" + string(y) + ",z=" + string(z) + "]").printRaw();
-		return 0;
-	}
-	
-	function void print()
-	{
-		("vec3[x=" + string(x) + ",y=" + string(y) + ",z=" + string(z) + "]").printRaw();
-	}
-	
-	operator+ (vec3 other)
-	{
-		this.x = x + other.getX();
-		this.y = y + other.getY();
-		this.z = z + other.getZ();
-		return this;
-	}
-}
-
-class TestClass
-{
-	double x;
-	
-	constructor(double X)
-	{
-		this.x = X;
-	}
-	
-	constructor()
-	{
-		this.x = 0.0;
-	}
-}
-
-string helloStringTest = "Hello World!";
-helloStringTest._printAllValues();
-helloStringTest.printRaw();
-" ".printRaw();
-
-int intTest = 5;
-intTest._printAllValues();
-" ".printRaw();
-
-double doubleTest = 5.2;
-doubleTest._printAllValues();
-" ".printRaw();
-
-array arr = array();
-arr.push(doubleTest);
-arr.push(6.9);
-arr.push(doubleTest);
-arr._printAllValues();
-arr.get(1).print();
-" ".printRaw();
-
-vec2 vec2Test = vec2(3.0, 6.0);
-vec2Test._printAllValues();
-vec2Test.print();
-" ".printRaw();
-
-vec3 test = vec3();
-test._printAllValues();
-" ".printRaw();
-
-test = vec3(1.2, 3.4, 5.6);
-test._printAllValues();
-logBrightMagenta();
-" ".printRaw();
-test.print(177013);
-test.getX().print();
-test.setY(6.3);
-test.print();
-" ".printRaw();
-logReset();
-
-logBrightYellow();
-" ".printRaw();
-vec3 ad = vec3(6.5, 4.3, 2.1) + test;
-ad._printAllValues();
-" ".printRaw();
-logReset();
-
-TestClass testClass = TestClass(6.9);
-testClass._printAllValues();
-" ".printRaw();
-
-testClass = TestClass();
-testClass._printAllValues();
-" ".printRaw();
-
-""";
-
 	public static final boolean DEBUG = false;
 
 	public static final Map<Pattern, TriFunction<Workspace, Script, String, Instruction>> mainCommandMap = new LinkedHashMap<>();
@@ -256,6 +47,32 @@ testClass._printAllValues();
 		typeCommandMap.put(Regexes.DECLARE_CONSTRUCTOR, (workspace, script, line) -> new DeclareTypeConstructor(script, line));
 	}
 
+	public static String readFromFile(File file)
+	{
+		if (!file.exists())
+			throw new IllegalArgumentException("File not found");
+		if (file.isDirectory())
+			throw new IllegalArgumentException("File is a directory");
+
+		StringBuilder bobTheBuilder = new StringBuilder();
+
+		try
+		{
+			BufferedReader reader = new BufferedReader(new FileReader(file));
+			String s;
+			while ((s = reader.readLine()) != null)
+			{
+				bobTheBuilder.append(s).append("\n");
+			}
+
+		} catch (IOException e)
+		{
+			e.printStackTrace();
+		}
+
+		return bobTheBuilder.toString();
+	}
+
 	public static void main(String[] args)
 	{
 		Workspace workspace = new Workspace();
@@ -271,7 +88,7 @@ testClass._printAllValues();
 		BasicFunctions.addMathFunctions(workspace);
 		BasicFunctions.addPrintFunctions(workspace);
 
-		Script script = createScript(workspace, source, true, mainCommandMap);
+		Script script = createScript(workspace, readFromFile(new File("scripts/main.scriptit")), true, mainCommandMap);
 
 		script.run();
 	}

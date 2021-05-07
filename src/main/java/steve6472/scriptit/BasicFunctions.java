@@ -18,9 +18,32 @@ public class BasicFunctions
 		String libName = "math";
 
 		workspace.addConstructor(libName, FunctionParameters.function("sqrt").addType(DOUBLE).build(), a -> newValue(DOUBLE, Math.sqrt(a[0].getDouble())));
+		workspace.addConstructor(libName, FunctionParameters.function("pow").addType(DOUBLE).addType(DOUBLE).build(), a -> newValue(DOUBLE, Math.pow(a[0].getDouble(), a[1].getDouble())));
+
+		// goniometric functions
 		workspace.addConstructor(libName, FunctionParameters.function("sin").addType(DOUBLE).build(), a -> newValue(DOUBLE, Math.sin(a[0].getDouble())));
 		workspace.addConstructor(libName, FunctionParameters.function("cos").addType(DOUBLE).build(), a -> newValue(DOUBLE, Math.cos(a[0].getDouble())));
 		workspace.addConstructor(libName, FunctionParameters.function("tan").addType(DOUBLE).build(), a -> newValue(DOUBLE, Math.tan(a[0].getDouble())));
+		workspace.addConstructor(libName, FunctionParameters.function("asin").addType(DOUBLE).build(), a -> newValue(DOUBLE, Math.asin(a[0].getDouble())));
+		workspace.addConstructor(libName, FunctionParameters.function("acos").addType(DOUBLE).build(), a -> newValue(DOUBLE, Math.acos(a[0].getDouble())));
+		workspace.addConstructor(libName, FunctionParameters.function("atan").addType(DOUBLE).build(), a -> newValue(DOUBLE, Math.atan(a[0].getDouble())));
+
+		workspace.addConstructor(libName, FunctionParameters.function("toRadians").addType(DOUBLE).build(), a -> newValue(DOUBLE, Math.toRadians(a[0].getDouble())));
+		workspace.addConstructor(libName, FunctionParameters.function("toDegrees").addType(DOUBLE).build(), a -> newValue(DOUBLE, Math.toDegrees(a[0].getDouble())));
+
+		workspace.addConstructor(libName, FunctionParameters.function("exp").addType(DOUBLE).build(), a -> newValue(DOUBLE, Math.exp(a[0].getDouble())));
+		workspace.addConstructor(libName, FunctionParameters.function("log").addType(DOUBLE).build(), a -> newValue(DOUBLE, Math.log(a[0].getDouble())));
+
+		workspace.addConstructor(libName, FunctionParameters.function("ceil").addType(DOUBLE).build(), a -> newValue(DOUBLE, Math.ceil(a[0].getDouble())));
+		workspace.addConstructor(libName, FunctionParameters.function("floor").addType(DOUBLE).build(), a -> newValue(DOUBLE, Math.floor(a[0].getDouble())));
+		workspace.addConstructor(libName, FunctionParameters.function("rint").addType(DOUBLE).build(), a -> newValue(DOUBLE, Math.rint(a[0].getDouble())));
+		workspace.addConstructor(libName, FunctionParameters.function("round").addType(DOUBLE).build(), a -> newValue(DOUBLE, Math.round(a[0].getDouble())));
+
+		workspace.addConstructor(libName, FunctionParameters.function("abs").addType(DOUBLE).build(), a -> newValue(DOUBLE, Math.abs(a[0].getDouble())));
+
+		workspace.addConstructor(libName, FunctionParameters.function("min").addType(DOUBLE).addType(DOUBLE).build(), a -> newValue(DOUBLE, Math.min(a[0].getDouble(), a[1].getDouble())));
+		workspace.addConstructor(libName, FunctionParameters.function("max").addType(DOUBLE).addType(DOUBLE).build(), a -> newValue(DOUBLE, Math.max(a[0].getDouble(), a[1].getDouble())));
+
 		workspace.addConstructor(libName, FunctionParameters.function("tan").addType(DOUBLE).build(), a -> newValue(DOUBLE, Math.tan(a[0].getDouble())));
 
 		workspace.addConstructor(libName, FunctionParameters.function("pi").build(), a -> newValue(DOUBLE, Math.PI));
