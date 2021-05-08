@@ -22,7 +22,7 @@ import java.util.regex.Pattern;
  ***********************/
 public class ScriptIt
 {
-	public static final boolean DEBUG = true;
+	public static final boolean DEBUG = false;
 
 	public static final Map<Pattern, TriFunction<Workspace, Script, String, Instruction>> mainCommandMap = new LinkedHashMap<>();
 	public static final Map<Pattern, TriFunction<Workspace, Script, String, Instruction>> typeCommandMap = new LinkedHashMap<>();
@@ -33,6 +33,7 @@ public class ScriptIt
 		mainCommandMap.put(Regexes.IMPORT, ImportType::new);
 		mainCommandMap.put(Regexes.WHILE, WhileLoop::new);
 		mainCommandMap.put(Regexes.FOR, ForLoop::new);
+		mainCommandMap.put(Regexes.IF, If::new);
 		mainCommandMap.put(Regexes.BREAK, (w, s, l) -> new Break());
 		mainCommandMap.put(Regexes.CONTINUE, (w, s, l) -> new Continue());
 		mainCommandMap.put(Regexes.THIS_ASSIGN, (workspace, script, line) -> new ThisAssignValue(script, line));
@@ -94,7 +95,7 @@ public class ScriptIt
 		BasicFunctions.addMathFunctions(workspace);
 		BasicFunctions.addPrintFunctions(workspace);
 
-		Script script = createScript(workspace, readFromFile(new File("scripts/loops.scriptit")), true, mainCommandMap);
+		Script script = createScript(workspace, readFromFile(new File("scripts/while.scriptit")), true, mainCommandMap);
 
 		script.run();
 //		basicDelayedScriptLoop(script);
@@ -105,7 +106,7 @@ public class ScriptIt
 		boolean loop = true;
 		while (loop)
 		{
-			Value value = script.runWithDelay();
+			Value value = script.run();
 			if (value != null)
 				loop = !value.getBoolean();
 		}

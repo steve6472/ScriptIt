@@ -85,7 +85,11 @@ public class Regexes
 	/**
 	 * for (int iter = 0, iter < 0, iter = iter + 1)
 	 */
-	public static final Pattern FOR = Pattern.compile("^for\\s+\\(.*,.*,.*\\).*");
+	public static final Pattern FOR = Pattern.compile("^for\\s*\\(.*,.*,.*\\).*");
+	/**
+	 * if (a > 0) {...
+	 */
+	public static final Pattern IF = Pattern.compile("^if\\s*\\(.*\\).*\\{.*");
 }
 
 

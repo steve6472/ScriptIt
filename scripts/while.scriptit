@@ -1,0 +1,23 @@
+import int;
+import double;
+import string;
+import bool;
+import char;
+import vec2;
+import array;
+
+import functions log;
+
+int i = 10;
+
+while (true)
+{
+    i = i - 1;
+    i.print();
+
+    if (i <= 0)
+    {
+        "ZERO".printRaw();
+        break;
+    }
+}

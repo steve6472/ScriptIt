@@ -133,7 +133,18 @@ public class ExpressionParser
 							{
 								Value aEval = a.eval(script);
 								Value bEval = b.eval(script);
-								return aEval.type.binary.get(bEval.type).get(op).apply(aEval, bEval);
+								try
+								{
+									return aEval.type.binary.get(bEval.type).get(op).apply(aEval, bEval);
+								} catch (Exception ex)
+								{
+									System.err.println(aEval.type);
+									System.err.println(bEval.type);
+									System.err.println(op);
+									ex.printStackTrace();
+									System.exit(2);
+									return null;
+								}
 							};
 						}
 					}
@@ -150,12 +161,6 @@ public class ExpressionParser
 				for (; ; )
 				{
 					printParse("term");
-
-					if (eat('.'))
-					{
-						previousTypes.push(x);
-						return parseExpression();
-					}
 
 					boolean found = false;
 
@@ -183,6 +188,7 @@ public class ExpressionParser
 			Expression parseFactor()
 			{
 				printParse("Parsing factor");
+
 				for (Operator op : Operator.getUnaryOps())
 				{
 					if (op.getOperator().length() == 1)
@@ -396,6 +402,12 @@ public class ExpressionParser
 				} else
 				{
 					throw new RuntimeException("Unexpected: " + (char) ch);
+				}
+
+				if (eat('.'))
+				{
+					previousTypes.push(x);
+					return parseExpression();
 				}
 
 //				if (eat('^'))

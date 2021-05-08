@@ -59,34 +59,23 @@ public class Script
 		return valueMap;
 	}
 
-	public Value run()
-	{
-		for (Instruction c : instructions)
-		{
-			Value execute = c.execute(this);
-			if (execute != null)
-				return execute;
-		}
+	private Supplier<Long> delayStartSupplier = System::currentTimeMillis;
+	private BiFunction<Long, Long, Boolean> shouldAdvance = (start, delay) -> System.currentTimeMillis() - start >= delay;
 
-		return null;
+	public void setGetDelayStart(Supplier<Long> delayStartSupplier)
+	{
+		this.delayStartSupplier = delayStartSupplier;
 	}
 
-	/**
-	 * Calls runWithDelay(Supplier<Long> delayStart, BiFunction<Long, Long, Boolean> shouldAdvance);<br>
-	 * Uses '<b>System::currentTimeMillis</b>' as delayStart<br>
-	 * Uses '<b>(start, delay) -> System.currentTimeMillis() - start >= delay</b>' as shouldAdvance<br>
-	 *
-	 * @return Value
-	 */
-	public Value runWithDelay()
+	public void setShouldAdvancet(BiFunction<Long, Long, Boolean> shouldAdvance)
 	{
-		return runWithDelay(System::currentTimeMillis, (start, delay) -> System.currentTimeMillis() - start >= delay);
+		this.shouldAdvance = shouldAdvance;
 	}
 
 	private int delayIndex = 0;
 	private long delayStart = -1;
 
-	public Value runWithDelay(Supplier<Long> delayStart, BiFunction<Long, Long, Boolean> shouldAdvance)
+	public Value run()
 	{
 		if (delayIndex >= instructions.size())
 			delayIndex = 0;
@@ -97,7 +86,7 @@ public class Script
 			if (c instanceof Delay delay)
 			{
 				if (this.delayStart == -1)
-					this.delayStart = delayStart.get();
+					this.delayStart = delayStartSupplier.get();
 				if (shouldAdvance.apply(this.delayStart, delay.delay))
 				{
 					delayIndex++;

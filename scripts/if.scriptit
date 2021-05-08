@@ -1,0 +1,42 @@
+import int;
+import double;
+import string;
+import bool;
+import char;
+import vec2;
+import array;
+
+import functions log;
+
+double a = 2.0;
+vec2 v = vec2(3.0, 6.5);
+
+if (a >= v.getX())
+{
+    (string(a) + " is greater or equal 5.0").printRaw();
+}
+
+if (a >= 5.0)
+{
+    (string(a) + " is reater or equal 5.0").printRaw();
+}
+
+if (a == 5.0)
+{
+    (string(a) + " is Equal 5.0").printRaw();
+}
+
+if (a > 5.0)
+{
+    (string(a) + " is Greater 5.0").printRaw();
+}
+
+if (a <= 5.0)
+{
+    (string(a) + " is Less or equal 5.0").printRaw();
+}
+
+if (a < 5.0)
+{
+    (string(a) + " is Less or equal 5.0").printRaw();
+}

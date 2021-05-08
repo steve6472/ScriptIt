@@ -43,12 +43,16 @@
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrary" value="Groovy JUnit" />
     <property name="com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrarySuperClass.Groovy JUnit" value="groovy.util.GroovyTestCase" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/scripts" />
     <property name="project.structure.last.edited" value="Modules" />
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.19655173" />
     <property name="settings.editor.selected.configurable" value="preferences.rainbow.brackets" />
   </component>
   <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="D:\ScriptIt\scripts" />
+    </key>
     <key name="CreateTestDialog.Recents.Supers">
       <recent name="groovy.util.GroovyTestCase" />
     </key>
@@ -129,9 +133,9 @@
       <map>
         <entry key="flags" value="2" />
         <entry key="mode" value="1" />
-        <entry key="regex" value="^[a-zA-Z][a-zA-Z0-9]*\s+[a-zA-Z0-9_]*\s*=\s*.+[^\.]" />
+        <entry key="regex" value="^if\s*\(.*\).*\{.*" />
         <entry key="replacement" value="" />
-        <entry key="text" value="int iter = 0" />
+        <entry key="text" value="if (a &gt; 0) {...sedf" />
       </map>
     </option>
   </component>
