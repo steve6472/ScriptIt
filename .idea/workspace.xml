@@ -68,9 +68,16 @@
       <recent name="steve6472.scriptit.commands" />
     </key>
   </component>
-  <component name="RunManager" selected="Application.ScriptIt">
+  <component name="RunManager" selected="Application.MyParser">
     <configuration name="ExpressionParser" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="steve6472.scriptit.expression.ExpressionParser" />
+      <module name="ScriptIt" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="MyParser" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="steve6472.scriptit.MyParser" />
       <module name="ScriptIt" />
       <method v="2">
         <option name="Make" enabled="true" />
@@ -92,9 +99,10 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Application.MyParser" />
+        <item itemvalue="Application.ExpressionParser" />
         <item itemvalue="Application.ScriptIt" />
         <item itemvalue="Java Scratch.Scratch" />
-        <item itemvalue="Application.ExpressionParser" />
       </list>
     </recent_temporary>
   </component>

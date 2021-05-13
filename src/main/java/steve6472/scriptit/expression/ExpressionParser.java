@@ -19,8 +19,8 @@ import static steve6472.scriptit.expression.Value.newValue;
  ***********************/
 public class ExpressionParser
 {
-	public static boolean EVAL_DEBUG = false;
-	public static boolean PARSE_DEBUG = false;
+	public static boolean EVAL_DEBUG = true;
+	public static boolean PARSE_DEBUG = true;
 
 	private static final Type[] NO_PARAMETERS = new Type[0];
 
@@ -308,33 +308,7 @@ public class ExpressionParser
 					if (ch == '(')
 					{
 						Expression exp = parseFactor();
-						if (exp != null && functionParameters.peek().isEmpty())
-						{
-							printParse("One param function");
-							x = (script) ->
-							{
-								Type[] typeArr = new Type[1];
-								Value[] arr = new Value[1];
-								arr[0] = exp.eval(script);
-								typeArr[0] = arr[0].type;
-								printParse("Function param: " + arr[0]);
-								if (!previousTypes.isEmpty())
-								{
-									Value eval = previousTypes.pop().eval(script);
-									Function function = eval.type.getFunction(name, typeArr);
-									if (function == null)
-										throw new RuntimeException("Unknown function '" + name + "' with types " + Arrays.toString(typeArr));
-									return function.apply(eval, arr);
-								} else
-								{
-									Constructor function = script.getFunction(name, typeArr);
-									if (function == null)
-										throw new RuntimeException("Unknown function '" + name + "' with types " + Arrays.toString(typeArr));
-									return function.apply(arr);
-								}
-							};
-						}
-						else if (!functionParameters.isEmpty() && !functionParameters.peek().isEmpty() && exp != null)
+						if (!functionParameters.isEmpty() && !functionParameters.peek().isEmpty() && exp != null)
 						{
 							printParse("Function");
 							List<Expression> peek = functionParameters.peek();
@@ -353,6 +327,32 @@ public class ExpressionParser
 									typeArr[peek.size() - i] = eval.type;
 									printEval("Function param: " + eval);
 								}
+								if (!previousTypes.isEmpty())
+								{
+									Value eval = previousTypes.pop().eval(script);
+									Function function = eval.type.getFunction(name, typeArr);
+									if (function == null)
+										throw new RuntimeException("Unknown function '" + name + "' with types " + Arrays.toString(typeArr));
+									return function.apply(eval, arr);
+								} else
+								{
+									Constructor function = script.getFunction(name, typeArr);
+									if (function == null)
+										throw new RuntimeException("Unknown function '" + name + "' with types " + Arrays.toString(typeArr));
+									return function.apply(arr);
+								}
+							};
+						}
+						else if (exp != null && !functionParameters.isEmpty() &&functionParameters.peek().isEmpty())
+						{
+							printParse("One param function");
+							x = (script) ->
+							{
+								Type[] typeArr = new Type[1];
+								Value[] arr = new Value[1];
+								arr[0] = exp.eval(script);
+								typeArr[0] = arr[0].type;
+								printParse("Function param: " + arr[0]);
 								if (!previousTypes.isEmpty())
 								{
 									Value eval = previousTypes.pop().eval(script);
