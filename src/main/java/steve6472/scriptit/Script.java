@@ -1,7 +1,7 @@
 package steve6472.scriptit;
 
 import steve6472.scriptit.expression.*;
-import steve6472.scriptit.instructions.Delay;
+import steve6472.scriptit.instructions.WhileLoop;
 
 import java.util.*;
 import java.util.function.BiFunction;
@@ -72,29 +72,68 @@ public class Script
 		this.shouldAdvance = shouldAdvance;
 	}
 
-	private int delayIndex = 0;
+	private long delay = -1;
+
+	public void delay(long delay)
+	{
+		if (parent != null)
+		{
+			parent.delay(delay);
+		}
+		this.delay = delay;
+		this.delayStart = delayStartSupplier.get();
+	}
+
+	private int instructionIndex = 0;
 	private long delayStart = -1;
 
 	public Value run()
 	{
-		if (delayIndex >= instructions.size())
-			delayIndex = 0;
+		if (instructionIndex >= instructions.size())
+			instructionIndex = 0;
 
-		while (delayIndex < instructions.size())
+		while (instructionIndex < instructions.size())
 		{
-			Instruction c = instructions.get(delayIndex);
-			if (c instanceof Delay delay)
+			try
 			{
-				if (this.delayStart == -1)
-					this.delayStart = delayStartSupplier.get();
-				if (shouldAdvance.apply(this.delayStart, delay.delay))
+				Thread.sleep(10);
+			} catch (InterruptedException e)
+			{
+				e.printStackTrace();
+			}
+			Instruction c = instructions.get(instructionIndex);
+
+			if (delay != -1)
+			{
+				if (shouldAdvance.apply(this.delayStart, this.delay))
 				{
-					delayIndex++;
+					instructionIndex++;
 					this.delayStart = -1;
+					this.delay = -1;
+					System.out.println("");
 					continue;
 				} else
 				{
+					System.out.print(".");
 					return null;
+				}
+			}
+			System.out.println(this.hashCode() + " " + c.getClass().getCanonicalName() + " " + instructionIndex);
+
+			if (c instanceof WhileLoop loop)
+			{
+				if (loop.condition.eval(this).getBoolean())
+				{
+					System.out.println("While true");
+					Value execute = c.execute(this);
+					if (execute != null)
+						return execute;
+					continue;
+				} else
+				{
+					instructionIndex++;
+
+					continue;
 				}
 			}
 
@@ -102,22 +141,12 @@ public class Script
 			if (execute != null)
 				return execute;
 
-			delayIndex++;
-		}
+			if (delay != -1)
+			{
+				break;
+			}
 
-		return null;
-	}
-
-	public Value runDebug()
-	{
-		for (Instruction c : instructions)
-		{
-			System.out.println(c.toString());
-			Value execute = c.execute(this);
-			System.out.println("\nNamespace: ");
-			print();
-			if (execute != null)
-				return execute;
+			instructionIndex++;
 		}
 
 		return null;
@@ -244,10 +273,6 @@ public class Script
 			System.out.println("Looking for function with name '" + name + "' and types " + Arrays.toString(types));
 			printConstructors();
 		}
-
-		//		System.out.println("\n\n\n");
-		//		System.out.println("Looking for function with name '" + name + "' and types " + Arrays.toString(types));
-		//		System.out.println("\n\n\n");
 
 		Constructor c = findFunction(name, types);
 		if (c != null)

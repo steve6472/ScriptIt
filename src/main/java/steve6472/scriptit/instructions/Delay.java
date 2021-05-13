@@ -24,6 +24,7 @@ public class Delay extends Instruction
 	@Override
 	public Value execute(Script script)
 	{
+		script.delay(delay);
 		return null;
 	}
 }

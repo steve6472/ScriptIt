@@ -1,0 +1,19 @@
+// Imports
+import int;
+import double;
+import string;
+import bool;
+import char;
+import vec2;
+import array;
+
+function printHelloWorld()
+{
+    "Hello World!".printRaw();
+}
+
+"1".printRaw();
+
+printHelloWorld();
+
+"2".printRaw();

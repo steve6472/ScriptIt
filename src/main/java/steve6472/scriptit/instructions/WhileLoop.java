@@ -16,7 +16,7 @@ import steve6472.scriptit.expression.Value;
  ***********************/
 public class WhileLoop extends Instruction
 {
-	private final Expression condition;
+	public final Expression condition;
 	private final Script script;
 
 	public WhileLoop(Workspace workspace, Script parentScript, String line)
@@ -37,21 +37,7 @@ public class WhileLoop extends Instruction
 	@Override
 	public Value execute(Script script)
 	{
-		m: while (condition.eval(script).getBoolean())
-		{
-			for (Instruction c : this.script.instructions)
-			{
-				if (c instanceof Break)
-					break m;
-
-				if (c instanceof Continue)
-					continue m;
-
-				Value execute = c.execute(this.script);
-				if (execute != null)
-					return execute;
-			}
-		}
-		return null;
+		//while (condition.eval(script).getBoolean())
+		return this.script.run();
 	}
 }

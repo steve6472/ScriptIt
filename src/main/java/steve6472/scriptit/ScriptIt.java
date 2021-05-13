@@ -95,10 +95,11 @@ public class ScriptIt
 		BasicFunctions.addMathFunctions(workspace);
 		BasicFunctions.addPrintFunctions(workspace);
 
-		Script script = createScript(workspace, readFromFile(new File("scripts/while.scriptit")), true, mainCommandMap);
+		Script script = createScript(workspace, readFromFile(new File("scripts/delay.scriptit")), true, mainCommandMap);
+		System.out.println(script.hashCode() + "\n\n");
 
-		script.run();
-//		basicDelayedScriptLoop(script);
+//		script.run();
+		basicDelayedScriptLoop(script);
 	}
 
 	public static void basicDelayedScriptLoop(Script script)

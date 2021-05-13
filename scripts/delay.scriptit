@@ -1,0 +1,15 @@
+import int;
+
+int i = 4;
+
+while (i > 0)
+{
+    i = i - 1;
+    i.print();
+    ".".printRaw();
+    "delay 1000".printRaw();
+    delay 1000;
+    "-".printRaw();
+}
+
+"FINISH".printRaw();
