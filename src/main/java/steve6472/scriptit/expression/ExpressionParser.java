@@ -439,7 +439,8 @@ public class ExpressionParser
 		//		ImportableFunctions.definePi(script);
 //		ImportableFunctions.importMathFunctionsRad(script);
 
-		Expression exp = parser.parse("1.0 + vec2(2.0, 3.0).getX()");
+//		Expression exp = parser.parse("1.0 + vec2(2.0, 3.0).getX()");
+		Expression exp = parser.parse("vec2(2.0, 3.0)");
 
 //		Expression exp = parser.parse("int(7)");
 //		Expression exp = parser.parse("-(6*7)");

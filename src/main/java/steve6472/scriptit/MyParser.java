@@ -6,6 +6,8 @@ import steve6472.scriptit.expression.Stack;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.function.BiFunction;
+import java.util.function.Supplier;
 
 /**********************
  * Created by steve6472 (Mirek Jozefek)
@@ -41,6 +43,7 @@ public class MyParser
 	{
 		Expression[] arguments;
 		IFunction function;
+		double delayValue = Double.NaN;
 
 		public Function(Expression[] arguments, IFunction function)
 		{
@@ -51,14 +54,25 @@ public class MyParser
 		@Override
 		double apply(ExpressionExecutor executor)
 		{
-			executor.last = this;
-
 			double[] args = new double[arguments.length];
 			for (int i = 0; i < arguments.length; i++)
 			{
 				args[i] = arguments[i].apply(executor);
 			}
-			return function.apply(executor, args);
+
+			// If no delay -> get value from function
+			if (Double.isNaN(delayValue))
+			{
+				delayValue = function.apply(executor, args);
+				return Double.NaN;
+			}
+			// If delay -> assing the already calculated value
+			else
+			{
+				double temp = delayValue;
+				delayValue = Double.NaN;
+				return temp;
+			}
 		}
 
 		@Override
@@ -85,8 +99,6 @@ public class MyParser
 		@Override
 		double apply(ExpressionExecutor executor)
 		{
-			executor.last = this;
-
 			return constant;
 		}
 
@@ -95,12 +107,20 @@ public class MyParser
 		{
 			System.out.println(i + " Constant " + constant);
 		}
+
+		@Override
+		public String toString()
+		{
+			return "Constant{" + "constant=" + constant + '}';
+		}
 	}
 
 	static class BinaryOperator extends Expression
 	{
 		Operator operator;
 		Expression left, right;
+		double leftVal = Double.NaN;
+		double rightVal = Double.NaN;
 
 		public BinaryOperator(Operator operator, Expression left, Expression right)
 		{
@@ -109,17 +129,43 @@ public class MyParser
 			this.right = right;
 		}
 
-		double apply(ExpressionExecutor ex)
+		double apply(ExpressionExecutor executor)
 		{
-			ex.last = this;
+			double lv;
+			if (Double.isNaN(leftVal))
+			{
+				lv = left.apply(executor);
+			} else
+				lv = leftVal;
+			if (Double.isNaN(lv))
+			{
+				return Double.NaN;
+			} else
+			{
+				leftVal = lv;
+			}
+
+			double rv;
+			if (Double.isNaN(rightVal))
+			{
+				rv = right.apply(executor);
+			} else
+				rv = rightVal;
+			if (Double.isNaN(rv))
+			{
+				return Double.NaN;
+			} else
+			{
+				rightVal = rv;
+			}
 
 			return switch (operator)
 				{
-					case MUL -> left.apply(ex) * right.apply(ex);
-					case DIV -> left.apply(ex) / right.apply(ex);
-					case MOD -> left.apply(ex) % right.apply(ex);
-					case ADD -> left.apply(ex) + right.apply(ex);
-					case SUB -> left.apply(ex) - right.apply(ex);
+					case MUL -> lv * rv;
+					case DIV -> lv / rv;
+					case MOD -> lv % rv;
+					case ADD -> lv + rv;
+					case SUB -> lv - rv;
 					default -> throw new IllegalStateException("Unexpected value: " + operator);
 				};
 		}
@@ -130,6 +176,12 @@ public class MyParser
 			left.print(i + 1);
 			System.out.println(i + " Operator " + operator);
 			right.print(i + 1);
+		}
+
+		@Override
+		public String toString()
+		{
+			return "BinaryOperator{" + "operator=" + operator + '}';
 		}
 	}
 
@@ -146,8 +198,6 @@ public class MyParser
 
 		double apply(ExpressionExecutor executor)
 		{
-			executor.last = this;
-
 			return switch (operator)
 				{
 					case ADD -> +left.apply(executor);
@@ -161,6 +211,12 @@ public class MyParser
 		{
 			System.out.println(i + " Unary " + operator);
 			left.print(i + 1);
+		}
+
+		@Override
+		public String toString()
+		{
+			return "UnaryOperator{" + "operator=" + operator + '}';
 		}
 	}
 
@@ -188,18 +244,9 @@ public class MyParser
 
 	private Expression next(Memory memory, int i)
 	{
-		if (i == 0)
-		{
-			if (eat(','))
-			{
-				if (functionParameters.isEmpty())
-					throw new RuntimeException("Parameter separator found outside of function");
-
-				Expression a = next(memory, 0);
-				functionParameters.peek().add(a);
-				return next(memory, i + 1);
-			}
-		}
+		Expression ex = null;
+		if (i < BINARY_PRECENDENCE.length)
+			ex = next(memory, i + 1);
 
 		if (i == BINARY_PRECENDENCE.length)
 		{
@@ -222,9 +269,9 @@ public class MyParser
 					return null;
 				} else
 				{
-					Expression ex = next(memory, 0);
+					Expression e = next(memory, 0);
 					eat(')');
-					return ex;
+					return e;
 				}
 			} else if ((ch >= '0' && ch <= '9') || ch == '.')
 			{
@@ -239,15 +286,11 @@ public class MyParser
 				// Next is function
 				if (ch == '(')
 				{
-
 					String name = line.substring(startPos, this.pos);
 					functionParameters.push(new ArrayList<>());
 
-//					System.out.println("Found function " + name);
-
 					Expression firstParameter = next(memory, i);
 
-//					functionParameters.printStack();
 					List<Expression> parameterList = functionParameters.pop();
 					if (parameterList == null)
 						parameterList = new ArrayList<>();
@@ -271,10 +314,18 @@ public class MyParser
 			}
 		}
 
-		Expression ex = next(memory, i + 1);
-
-		for (; ;)
+		for (; ; )
 		{
+			if (i == 0)
+			{
+				if (eat(','))
+				{
+					Expression x = next(memory, 0);
+					functionParameters.peek().add(x);
+					return ex;
+				}
+			}
+
 			boolean found = false;
 
 			for (Operator op : BINARY_PRECENDENCE[BINARY_PRECENDENCE.length - 1 - i])
@@ -306,44 +357,41 @@ public class MyParser
 	static class ExpressionExecutor
 	{
 		Expression fullExpression;
-		Expression last;
 		Memory memory;
-		public int skipCount = 0;
+		public long delay, delayStart;
+
+		private Supplier<Long> delayStartSupplier = System::currentTimeMillis;
+		private BiFunction<Long, Long, Boolean> shouldAdvance = (start, delay) -> System.currentTimeMillis() - start >= delay;
+
+		public void setGetDelayStart(Supplier<Long> delayStartSupplier)
+		{
+			this.delayStartSupplier = delayStartSupplier;
+		}
+
+		public void setShouldAdvance(BiFunction<Long, Long, Boolean> shouldAdvance)
+		{
+			this.shouldAdvance = shouldAdvance;
+		}
 
 		ExpressionExecutor(Memory memory, Expression ex)
 		{
 			this.memory = memory;
 			this.fullExpression = ex;
-			this.last = fullExpression;
 		}
 
-		public void interrupt()
+		public void delay(long delay)
 		{
-			skipCount++;
-		}
-
-		public void next()
-		{
-
+			this.delay = delay;
+			delayStart = delayStartSupplier.get();
 		}
 
 		public double execute()
 		{
-			last.print(0);
-			if (skipCount > 0)
-				skipCount--;
-			return last.apply(this);
-		}
+			if (delayStart != -1 && !shouldAdvance.apply(delayStart, delay))
+				return Double.NaN;
 
-		public boolean canContinue()
-		{
-			if (skipCount > 0)
-			{
-				System.out.println("Skipping");
-				skipCount--;
-				return false;
-			}
-			return true;
+			delayStart = -1;
+			return fullExpression.apply(this);
 		}
 	}
 
@@ -384,27 +432,46 @@ public class MyParser
 		}
 	}
 
-	public static void main(String[] mainArgs)
+	public static void main(String[] mainArgs) throws InterruptedException
 	{
 		Memory memory = new Memory();
 		memory.addFunction("pi", 0, (exe, args) -> Math.PI);
-		memory.addFunction("interrupt", 1, (exe, args) ->
+		memory.addFunction("delay", 2, (exe, args) ->
 		{
-			System.out.println("Interrupted");
-			exe.interrupt();
-			return args[0];
+			System.out.println("Delay " + args[1]);
+			exe.delay((long) args[0]);
+			return args[1];
 		});
 		memory.addFunction("toDeg", 1, (exe, args) -> Math.toDegrees(args[0]));
 
 		MyParser myParser = new MyParser();
 //		myParser.line = "((4 - 2 % 3 + 1) * -(3*3+4*4)) / 2";
 //		myParser.line = "pi() + interrupt() + toDeg(pi())";
-		myParser.line = "1 - 2 * (3 * -4) + 2";
-		ExpressionExecutor parse = new ExpressionExecutor(memory, myParser.parse(memory));
-		System.out.println(parse.execute());
-//		System.out.println(parse.execute());
-//		System.out.println(parse.execute());
-//		System.out.println(parse.execute());
-//		System.out.println(parse.execute());
+		myParser.line = "1 - 2 * (delay(1000, 3) * -delay(1000, 4)) + 2";
+//		myParser.line = "delay(1000, 1) + delay(1000, 2)";
+//		myParser.line = "delay(1000, 3)";
+//		myParser.line = "toDeg(3.14159265358979323846)";
+		ExpressionExecutor exe = new ExpressionExecutor(memory, myParser.parse(memory));
+		double ret = Double.NaN;
+
+		while (Double.isNaN(ret))
+		{
+			ret = exe.execute();
+		}
+		System.out.println("Final val: " + ret);
+
+//		Constant ONE = new Constant(1);
+//		Constant TWO = new Constant(2);
+//		Constant THREE = new Constant(3);
+//		Constant FOUR = new Constant(4);
+//
+//		UnaryOperator UNARY_MINUS_FOUR = new UnaryOperator(Operator.SUB, FOUR); // -4
+//		BinaryOperator MUL_THREE_MIN_FOUR = new BinaryOperator(Operator.MUL, THREE, UNARY_MINUS_FOUR); // 3 * -4
+//		BinaryOperator TWO_MUL__MUL_THREE_MIN_FOUR = new BinaryOperator(Operator.MUL, TWO, MUL_THREE_MIN_FOUR); // 2 * (3 * -4)
+//		BinaryOperator ONE_SUB__TWO_MUL__MUL_THREE_MIN_FOUR = new BinaryOperator(Operator.SUB, ONE, TWO_MUL__MUL_THREE_MIN_FOUR); // 1 - 2 * (3 * -4)
+//		BinaryOperator ALL_PLUS_TWO = new BinaryOperator(Operator.ADD, ONE_SUB__TWO_MUL__MUL_THREE_MIN_FOUR, TWO); // 1 - 2 * (3 * -4) + 2
+//
+//		ALL_PLUS_TWO.print(0);
+//		System.out.println(ALL_PLUS_TWO.apply(exe));
 	}
 }
