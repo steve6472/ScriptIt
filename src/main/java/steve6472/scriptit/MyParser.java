@@ -6,6 +6,7 @@ import steve6472.scriptit.expression.Stack;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.function.BiFunction;
 import java.util.function.Supplier;
 
@@ -169,6 +170,34 @@ public class MyParser
 		}
 	}
 
+	static class Variable extends Expression
+	{
+		String name;
+
+		public Variable(String name)
+		{
+			this.name = name;
+		}
+
+		@Override
+		double apply(ExpressionExecutor executor)
+		{
+			return executor.memory.getVariable(name);
+		}
+
+		@Override
+		void print(int i)
+		{
+			System.out.println(i + " Variable " + name);
+		}
+
+		@Override
+		public String toString()
+		{
+			return "Variable{" + "name=" + name + '}';
+		}
+	}
+
 	static class BinaryOperator extends Expression
 	{
 		Operator operator;
@@ -312,10 +341,10 @@ public class MyParser
 				while ((ch >= 'A' && ch <= 'Z') || (ch >= 'a' && ch <= 'z') || (ch >= '0' && ch <= '9') || ch == '_')
 					nextChar();
 
+				String name = line.substring(startPos, this.pos);
 				// Next is function
 				if (ch == '(')
 				{
-					String name = line.substring(startPos, this.pos);
 					functionParameters.push(new ArrayList<>());
 
 					Expression firstParameter = next(memory, i);
@@ -331,11 +360,11 @@ public class MyParser
 					return new Function(parameterList.toArray(new Expression[0]), function);
 				} else
 				{
-					throw new IllegalStateException("Soon to be variable");
+					return new Variable(name);
+//					throw new IllegalStateException("Soon to be variable");
 				}
 			}
 
-			// TODO: variables
 			else
 			{
 				System.err.println(ch);
@@ -431,11 +460,26 @@ public class MyParser
 
 	static class Memory
 	{
-		HashMap<String, HashMap<Integer, IFunction>> functions;
+		Map<String, HashMap<Integer, IFunction>> functions;
+		Map<String, Double> variables;
 
 		public Memory()
 		{
 			this.functions = new HashMap<>();
+			this.variables = new HashMap<>();
+		}
+
+		public void addVariable(String name, double value)
+		{
+			variables.put(name, value);
+		}
+
+		public double getVariable(String name)
+		{
+			Double val = variables.get(name);
+			if (val == null)
+				throw new IllegalArgumentException("Variable with name '" + name + "' not found");
+			return val;
 		}
 
 		public void addFunction(String name, int argumentCount, IFunction function)
@@ -463,7 +507,8 @@ public class MyParser
 	public static void main(String[] mainArgs)
 	{
 		Memory memory = new Memory();
-		memory.addFunction("pi", 0, (exe, args) -> Math.PI);
+//		memory.addFunction("pi", 0, (exe, args) -> Math.PI);
+		memory.addVariable("pi", Math.PI);
 		memory.addFunction("delay", 2, (exe, args) ->
 		{
 			System.out.println("Delay " + args[0] + ", ret: " + args[1]);
@@ -476,10 +521,11 @@ public class MyParser
 //		myParser.line = "((4 - 2 % 3 + 1) * -(3*3+4*4)) / 2";
 //		myParser.line = "pi() + interrupt() + toDeg(pi())";
 //		myParser.line = "1 - 2 * (delay(1000, 3) * -delay(1000, 4)) + 2";
-		myParser.line = "1 + delay(delay(1000, 5000), 3)";
+//		myParser.line = "1 + delay(delay(1000, 1000 * 2), 3)";
 //		myParser.line = "delay(1000, 1) + delay(1000, 2)";
 //		myParser.line = "delay(1000, 3)";
 //		myParser.line = "toDeg(3.14159265358979323846)";
+		myParser.line = "toDeg(pi / 2)";
 		ExpressionExecutor exe = new ExpressionExecutor(memory, myParser.parse(memory));
 		double ret = Double.NaN;
 
