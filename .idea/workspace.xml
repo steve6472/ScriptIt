@@ -57,7 +57,12 @@
     <key name="CreateTestDialog.Recents.Supers">
       <recent name="groovy.util.GroovyTestCase" />
     </key>
+    <key name="MoveInnerDialog.RECENTS_KEY">
+      <recent name="steve6472.scriptit.exp" />
+      <recent name="steve6472.scriptit" />
+    </key>
     <key name="CreateTestDialog.RecentsKey">
+      <recent name="steve6472.scriptit.exp" />
       <recent name="steve6472.scriptit.math" />
     </key>
     <key name="CopyClassDialog.RECENTS_KEY">
@@ -77,7 +82,7 @@
       </method>
     </configuration>
     <configuration name="MyParser" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="steve6472.scriptit.MyParser" />
+      <option name="MAIN_CLASS_NAME" value="steve6472.scriptit.exp.MyParser" />
       <module name="ScriptIt" />
       <method v="2">
         <option name="Make" enabled="true" />

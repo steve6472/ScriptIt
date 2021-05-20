@@ -1,6 +1,7 @@
 package steve6472.scriptit.expression;
 
 import steve6472.scriptit.Script;
+import steve6472.scriptit.exp.Operator;
 
 import java.util.ArrayList;
 import java.util.Arrays;

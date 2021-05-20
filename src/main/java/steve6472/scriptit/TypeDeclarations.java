@@ -1,7 +1,7 @@
 package steve6472.scriptit;
 
 import steve6472.scriptit.expression.FunctionParameters;
-import steve6472.scriptit.expression.Operator;
+import steve6472.scriptit.exp.Operator;
 import steve6472.scriptit.expression.Type;
 import steve6472.scriptit.expression.Value;
 

@@ -1,6 +1,7 @@
 package steve6472.scriptit.expression;
 
 import steve6472.scriptit.Log;
+import steve6472.scriptit.exp.Operator;
 
 import java.util.Arrays;
 import java.util.HashMap;

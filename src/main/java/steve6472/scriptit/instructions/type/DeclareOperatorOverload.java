@@ -1,7 +1,7 @@
 package steve6472.scriptit.instructions.type;
 
 import steve6472.scriptit.Script;
-import steve6472.scriptit.expression.Operator;
+import steve6472.scriptit.exp.Operator;
 
 /**********************
  * Created by steve6472 (Mirek Jozefek)

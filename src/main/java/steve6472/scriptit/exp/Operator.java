@@ -1,4 +1,6 @@
-package steve6472.scriptit.expression;
+package steve6472.scriptit.exp;
+
+import steve6472.scriptit.expression.OperatorType;
 
 import static steve6472.scriptit.expression.OperatorType.*;
 
