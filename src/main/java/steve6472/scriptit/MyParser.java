@@ -32,6 +32,53 @@ public class MyParser
 			Operator.ADD, Operator.SUB
 		};
 
+	static class DelayValue
+	{
+		Expression expression;
+		double value;
+		boolean isSet;
+
+		DelayValue(Expression expression)
+		{
+			this.expression = expression;
+		}
+
+		double val()
+		{
+			return value;
+		}
+
+		void print(int i)
+		{
+			System.out.println("Value: " + value);
+			System.out.println("IsSet: " + isSet);
+			expression.print(i);
+		}
+
+		boolean apply(ExpressionExecutor executor)
+		{
+			double temp;
+			if (!isSet)
+			{
+				temp = expression.apply(executor);
+			} else
+			{
+				temp = value;
+			}
+
+			if (Double.isNaN(temp))
+			{
+				isSet = false;
+			} else
+			{
+				value = temp;
+				isSet = true;
+			}
+
+			return !isSet;
+		}
+	}
+
 	abstract static class Expression
 	{
 		abstract double apply(ExpressionExecutor executor);
@@ -41,23 +88,30 @@ public class MyParser
 
 	static class Function extends Expression
 	{
-		Expression[] arguments;
+		DelayValue[] arguments;
 		IFunction function;
 		double delayValue = Double.NaN;
+		double[] args;
 
 		public Function(Expression[] arguments, IFunction function)
 		{
-			this.arguments = arguments;
 			this.function = function;
+			this.arguments = new DelayValue[arguments.length];
+			for (int i = 0; i < arguments.length; i++)
+			{
+				this.arguments[i] = new DelayValue(arguments[i]);
+			}
+			args = new double[arguments.length];
 		}
 
 		@Override
 		double apply(ExpressionExecutor executor)
 		{
-			double[] args = new double[arguments.length];
 			for (int i = 0; i < arguments.length; i++)
 			{
-				args[i] = arguments[i].apply(executor);
+				if (arguments[i].apply(executor))
+					return Double.NaN;
+				args[i] = arguments[i].val();
 			}
 
 			// If no delay -> get value from function
@@ -79,7 +133,7 @@ public class MyParser
 		void print(int i)
 		{
 			System.out.println(i + " Function with " + arguments.length + " parameters:");
-			for (Expression ex : arguments)
+			for (DelayValue ex : arguments)
 			{
 				ex.print(i + 1);
 			}
@@ -118,54 +172,30 @@ public class MyParser
 	static class BinaryOperator extends Expression
 	{
 		Operator operator;
-		Expression left, right;
-		double leftVal = Double.NaN;
-		double rightVal = Double.NaN;
+		DelayValue left, right;
 
 		public BinaryOperator(Operator operator, Expression left, Expression right)
 		{
 			this.operator = operator;
-			this.left = left;
-			this.right = right;
+			this.left = new DelayValue(left);
+			this.right = new DelayValue(right);
 		}
 
 		double apply(ExpressionExecutor executor)
 		{
-			double lv;
-			if (Double.isNaN(leftVal))
-			{
-				lv = left.apply(executor);
-			} else
-				lv = leftVal;
-			if (Double.isNaN(lv))
-			{
+			if (left.apply(executor))
 				return Double.NaN;
-			} else
-			{
-				leftVal = lv;
-			}
 
-			double rv;
-			if (Double.isNaN(rightVal))
-			{
-				rv = right.apply(executor);
-			} else
-				rv = rightVal;
-			if (Double.isNaN(rv))
-			{
+			if (right.apply(executor))
 				return Double.NaN;
-			} else
-			{
-				rightVal = rv;
-			}
 
 			return switch (operator)
 				{
-					case MUL -> lv * rv;
-					case DIV -> lv / rv;
-					case MOD -> lv % rv;
-					case ADD -> lv + rv;
-					case SUB -> lv - rv;
+					case MUL -> left.val() * right.val();
+					case DIV -> left.val() / right.val();
+					case MOD -> left.val() % right.val();
+					case ADD -> left.val() + right.val();
+					case SUB -> left.val() - right.val();
 					default -> throw new IllegalStateException("Unexpected value: " + operator);
 				};
 		}
@@ -254,7 +284,6 @@ public class MyParser
 			{
 				if (eat(op.getOperator().charAt(0)))
 				{
-					System.out.println("found unary " + op);
 					Expression left = next(memory, i);
 					return new UnaryOperator(op, left);
 				}
@@ -333,7 +362,6 @@ public class MyParser
 				if (eat(op.getOperator().charAt(0)))
 				{
 					found = true;
-					System.out.println("found binary " + op);
 					Expression left = ex;
 					Expression right = next(memory, i + 1);
 					ex = new BinaryOperator(op, left, right);
@@ -432,13 +460,13 @@ public class MyParser
 		}
 	}
 
-	public static void main(String[] mainArgs) throws InterruptedException
+	public static void main(String[] mainArgs)
 	{
 		Memory memory = new Memory();
 		memory.addFunction("pi", 0, (exe, args) -> Math.PI);
 		memory.addFunction("delay", 2, (exe, args) ->
 		{
-			System.out.println("Delay " + args[1]);
+			System.out.println("Delay " + args[0] + ", ret: " + args[1]);
 			exe.delay((long) args[0]);
 			return args[1];
 		});
@@ -447,7 +475,8 @@ public class MyParser
 		MyParser myParser = new MyParser();
 //		myParser.line = "((4 - 2 % 3 + 1) * -(3*3+4*4)) / 2";
 //		myParser.line = "pi() + interrupt() + toDeg(pi())";
-		myParser.line = "1 - 2 * (delay(1000, 3) * -delay(1000, 4)) + 2";
+//		myParser.line = "1 - 2 * (delay(1000, 3) * -delay(1000, 4)) + 2";
+		myParser.line = "1 + delay(delay(1000, 5000), 3)";
 //		myParser.line = "delay(1000, 1) + delay(1000, 2)";
 //		myParser.line = "delay(1000, 3)";
 //		myParser.line = "toDeg(3.14159265358979323846)";
