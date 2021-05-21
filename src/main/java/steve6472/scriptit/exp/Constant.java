@@ -16,7 +16,7 @@ class Constant extends Expression
 	}
 
 	@Override
-	public Result apply(ExpressionExecutor executor)
+	public Result apply(Main.Script script)
 	{
 		return constant;
 	}
@@ -30,6 +30,6 @@ class Constant extends Expression
 	@Override
 	public String toString()
 	{
-		return "Constant{" + "constant=" + constant + '}';
+		return "Constant{" + "constant=" + constant.getValue() + '}';
 	}
 }

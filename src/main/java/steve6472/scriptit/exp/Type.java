@@ -6,7 +6,17 @@ package steve6472.scriptit.exp;
  * Project: ScriptIt
  *
  ***********************/
-public enum ResultStatus
+public class Type
 {
-	VALUE, DELAY, RETURN_VALUE, RETURN, PASS
+	private final String keyword;
+
+	public Type(String keyword)
+	{
+		this.keyword = keyword;
+	}
+
+	public String getKeyword()
+	{
+		return keyword;
+	}
 }

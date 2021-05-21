@@ -1,5 +1,8 @@
 package steve6472.scriptit.exp;
 
+import steve6472.scriptit.exp.functions.DelayFunction;
+import steve6472.scriptit.exp.functions.PrintFunction;
+
 /**********************
  * Created by steve6472 (Mirek Jozefek)
  * On date: 5/20/2021
@@ -19,6 +22,10 @@ public class MemoryStack extends Memory
 		{
 			this.memories[i] = new Memory();
 		}
+
+		// Force delay function
+		addFunction("delay", 1, new DelayFunction());
+		addFunction("print", 1, new PrintFunction());
 	}
 
 	public MemoryStack push()

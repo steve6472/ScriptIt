@@ -416,8 +416,8 @@ public class ExpressionParser
 //					Expression a = x;
 //					x = (script) ->
 //					{
-//						Value v = a.eval(script);
-//						Value eval = parseFactor().eval(script);
+//						AbstractValue v = a.eval(script);
+//						AbstractValue eval = parseFactor().eval(script);
 //						return v.type.powFunctions.get(eval.type).apply(v, eval);
 //					}; // exponentiation
 //				}

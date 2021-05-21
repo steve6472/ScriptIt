@@ -11,9 +11,9 @@ import java.util.function.Supplier;
  ***********************/
 public class ExpressionExecutor
 {
-	private Expression expression;
 	public final MemoryStack memory;
-	public long delay, delayStart;
+	private Expression expression;
+	public long delay, delayStart = -1;
 
 	private Supplier<Long> delayStartSupplier = System::currentTimeMillis;
 	private BiFunction<Long, Long, Boolean> shouldAdvance = (start, delay) -> System.currentTimeMillis() - start >= delay;
@@ -28,12 +28,6 @@ public class ExpressionExecutor
 		this.shouldAdvance = shouldAdvance;
 	}
 
-	ExpressionExecutor(MemoryStack memory, Expression ex)
-	{
-		this.memory = memory;
-		this.expression = ex;
-	}
-
 	ExpressionExecutor(MemoryStack memory)
 	{
 		this.memory = memory;
@@ -45,18 +39,34 @@ public class ExpressionExecutor
 		return this;
 	}
 
-	public void delay(long delay)
+	private void delay(long delay)
 	{
 		this.delay = delay;
 		delayStart = delayStartSupplier.get();
 	}
 
-	public Result execute()
+	public Result execute(Main.Script script)
 	{
-		if (delayStart != -1 && !shouldAdvance.apply(delayStart, delay))
-			return Result.delay();
+		if (delayStart != -1)
+		{
+			boolean advance = shouldAdvance.apply(delayStart, delay);
+			if (!advance)
+				return Result.delay();
+			delayStart = -1;
+			return Result.pass();
+		}
 
-		delayStart = -1;
-		return expression.apply(this);
+		Result result = expression.apply(script);
+
+		if (result.isDelay() && result.getValue() > 0)
+			delay((long) result.getValue());
+
+		return result;
+	}
+
+	@Override
+	public String toString()
+	{
+		return "ExpressionExecutor{" + "expression=" + expression + '}';
 	}
 }

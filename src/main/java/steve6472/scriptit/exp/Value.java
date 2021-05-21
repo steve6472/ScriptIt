@@ -1,6 +1,4 @@
-package steve6472.scriptit.expression;
-
-import steve6472.scriptit.TypeDeclarations;
+package steve6472.scriptit.exp;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -24,12 +22,14 @@ public class Value
 	 */
 	public static Value newValue(Type type)
 	{
-		return new Value(TypeDeclarations.isPrimitive(type), type);
+//		return new Value(TypeDeclarations.isPrimitive(type), type);
+		return new Value(true, type);
 	}
 
 	public static Value newValue(Type type, Object value)
 	{
-		return new Value(TypeDeclarations.isPrimitive(type), type, value);
+//		return new Value(TypeDeclarations.isPrimitive(type), type, value);
+		return new Value(true, type, value);
 	}
 
 	private Value(boolean isPrimitive, Type type)
@@ -137,7 +137,7 @@ public class Value
 	{
 		if (isPrimitive)
 			return "{" + type.getKeyword() + "=" + values.get(SINGLE_VALUE) + "}";
-		return "AbstractValue{" + "type=" + type.getKeyword() + ", values=" + values + '}';
+		return "Value{" + "type=" + type.getKeyword() + ", values=" + values + '}';
 	}
 
 	@Override

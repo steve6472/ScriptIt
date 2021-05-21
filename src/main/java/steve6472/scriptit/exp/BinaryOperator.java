@@ -19,12 +19,12 @@ class BinaryOperator extends Expression
 	}
 
 	@Override
-	public Result apply(ExpressionExecutor executor)
+	public Result apply(Main.Script script)
 	{
-		if (left.apply(executor))
+		if (left.apply(script))
 			return Result.delay();
 
-		if (right.apply(executor))
+		if (right.apply(script))
 			return Result.delay();
 
 		return switch (operator)

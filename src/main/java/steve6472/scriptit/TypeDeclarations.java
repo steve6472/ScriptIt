@@ -90,13 +90,13 @@ public class TypeDeclarations
 
 		BOOL.addBinaryOperator(BOOL, Operator.EQUAL, (left, right) -> left.getBoolean() == right.getBoolean() ? TRUE : FALSE);
 
-//		BOOL.addAddFunction(DOUBLE, (left, right) -> new Value(DOUBLE, d(left) + d(right)));
-//		BOOL.addSubFunction(DOUBLE, (left, right) -> new Value(DOUBLE, d(left) - d(right)));
-//		BOOL.addMulFunction(DOUBLE, (left, right) -> new Value(DOUBLE, d(left) * d(right)));
-//		BOOL.addDivFunction(DOUBLE, (left, right) -> new Value(DOUBLE, d(left) / d(right)));
-//		BOOL.addPowFunction(DOUBLE, (left, right) -> new Value(DOUBLE, Math.pow(d(left), d(right))));
-//		BOOL.unarySubFunctions.put(DOUBLE, (itself -> new Value(DOUBLE, -d(itself))));
-//		BOOL.unaryAddFunctions.put(DOUBLE, (itself -> new Value(DOUBLE, d(itself))));
+//		BOOL.addAddFunction(DOUBLE, (left, right) -> new AbstractValue(DOUBLE, d(left) + d(right)));
+//		BOOL.addSubFunction(DOUBLE, (left, right) -> new AbstractValue(DOUBLE, d(left) - d(right)));
+//		BOOL.addMulFunction(DOUBLE, (left, right) -> new AbstractValue(DOUBLE, d(left) * d(right)));
+//		BOOL.addDivFunction(DOUBLE, (left, right) -> new AbstractValue(DOUBLE, d(left) / d(right)));
+//		BOOL.addPowFunction(DOUBLE, (left, right) -> new AbstractValue(DOUBLE, Math.pow(d(left), d(right))));
+//		BOOL.unarySubFunctions.put(DOUBLE, (itself -> new AbstractValue(DOUBLE, -d(itself))));
+//		BOOL.unaryAddFunctions.put(DOUBLE, (itself -> new AbstractValue(DOUBLE, d(itself))));
 		BOOL.addUnaryOperator(Operator.NOT, (itself -> itself.setValue(itself.getBoolean())));
 		BOOL.addProcedure(FunctionParameters.function("print").build(), (itself, args) -> System.out.println("bool[val=" + b(itself) + "]"));
 
@@ -146,11 +146,11 @@ public class TypeDeclarations
 		STRING.addBinaryOperator(CHAR, Operator.ADD, (left, right) -> newValue(STRING, s(left) + c(right)));
 		STRING.addBinaryOperator(INT, Operator.SUB, (left, right) -> newValue(STRING, s(left).substring(0, s(left).length() - i(right)))); // remove n characters from back
 		STRING.addBinaryOperator(INT, Operator.MUL, (left, right) -> newValue(STRING, s(left).repeat(i(right)))); // repeat the string n times
-//		STRING.addDivFunction(DOUBLE, (left, right) -> new Value(DOUBLE, d(left) / d(right)));
-//		STRING.addPowFunction(DOUBLE, (left, right) -> new Value(DOUBLE, Math.pow(d(left), d(right))));
+//		STRING.addDivFunction(DOUBLE, (left, right) -> new AbstractValue(DOUBLE, d(left) / d(right)));
+//		STRING.addPowFunction(DOUBLE, (left, right) -> new AbstractValue(DOUBLE, Math.pow(d(left), d(right))));
 		STRING.addUnaryOperator(Operator.SUB, (itself -> itself.setValue(new StringBuilder(s(itself)).reverse().toString()))); // reverse the string
-//		STRING.unaryAddFunctions.put(DOUBLE, (itself -> new Value(DOUBLE, d(itself))));
-//		STRING.functions.put(FunctionParameters.function("length").build(), ((itself, args) -> new Value(DOUBLE, ((String) itself.value).length())));
+//		STRING.unaryAddFunctions.put(DOUBLE, (itself -> new AbstractValue(DOUBLE, d(itself))));
+//		STRING.functions.put(FunctionParameters.function("length").build(), ((itself, args) -> new AbstractValue(DOUBLE, ((String) itself.value).length())));
 		STRING.addFunction(FunctionParameters.function("len").build(), ((itself, args) -> newValue(INT, itself.getString().length())));
 		STRING.addProcedure(FunctionParameters.function("print").build(), ((itself, args) -> System.out.println("string[val=" + s(itself) + "]")));
 		STRING.addProcedure(FunctionParameters.function("printRaw").build(), ((itself, args) -> System.out.println(s(itself))));
@@ -161,14 +161,14 @@ public class TypeDeclarations
 		CHAR.addConstructor(FunctionParameters.constructor(CHAR).addType(CHAR).build(), par -> newValue(CHAR, par[0].getChar()));
 		CHAR.addConstructor(FunctionParameters.constructor(CHAR).build(), par -> newValue(CHAR, Character.MIN_VALUE));
 
-//		CHAR.addAddFunction(STRING, (left, right) -> new Value(STRING, s(left) + s(right)));
-		//		CHAR.addSubFunction(DOUBLE, (left, right) -> new Value(DOUBLE, d(left) - d(right))); // remove n characters from back
-		//		CHAR.addMulFunction(DOUBLE, (left, right) -> new Value(DOUBLE, d(left) * d(right))); // repeat the string n times
-		//		CHAR.addDivFunction(DOUBLE, (left, right) -> new Value(DOUBLE, d(left) / d(right)));
-		//		CHAR.addPowFunction(DOUBLE, (left, right) -> new Value(DOUBLE, Math.pow(d(left), d(right))));
-		//		CHAR.unarySubFunctions.put(DOUBLE, (itself -> new Value(DOUBLE, -d(itself)))); // reverse the string
-		//		CHAR.unaryAddFunctions.put(DOUBLE, (itself -> new Value(DOUBLE, d(itself))));
-		//		CHAR.functions.put(FunctionParameters.function("length").build(), ((itself, args) -> new Value(DOUBLE, ((String) itself.value).length())));
+//		CHAR.addAddFunction(STRING, (left, right) -> new AbstractValue(STRING, s(left) + s(right)));
+		//		CHAR.addSubFunction(DOUBLE, (left, right) -> new AbstractValue(DOUBLE, d(left) - d(right))); // remove n characters from back
+		//		CHAR.addMulFunction(DOUBLE, (left, right) -> new AbstractValue(DOUBLE, d(left) * d(right))); // repeat the string n times
+		//		CHAR.addDivFunction(DOUBLE, (left, right) -> new AbstractValue(DOUBLE, d(left) / d(right)));
+		//		CHAR.addPowFunction(DOUBLE, (left, right) -> new AbstractValue(DOUBLE, Math.pow(d(left), d(right))));
+		//		CHAR.unarySubFunctions.put(DOUBLE, (itself -> new AbstractValue(DOUBLE, -d(itself)))); // reverse the string
+		//		CHAR.unaryAddFunctions.put(DOUBLE, (itself -> new AbstractValue(DOUBLE, d(itself))));
+		//		CHAR.functions.put(FunctionParameters.function("length").build(), ((itself, args) -> new AbstractValue(DOUBLE, ((String) itself.value).length())));
 		CHAR.addProcedure(FunctionParameters.function("prnt").build(), (itself, args) -> System.out.println("char[val='" + c(itself) + "']"));
 
 		// TODO: upon importing new types add them to .push(type) function

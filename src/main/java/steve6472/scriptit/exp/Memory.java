@@ -11,7 +11,7 @@ import java.util.Map;
  ***********************/
 public class Memory
 {
-	Map<String, HashMap<Integer, IFunction>> functions;
+	Map<String, HashMap<Integer, Function>> functions;
 	Map<String, Double> variables;
 
 	public Memory()
@@ -33,20 +33,20 @@ public class Memory
 		return val;
 	}
 
-	public void addFunction(String name, int argumentCount, IFunction function)
+	public void addFunction(String name, int argumentCount, Function function)
 	{
-		HashMap<Integer, IFunction> funcs = functions.computeIfAbsent(name, k -> new HashMap<>());
+		HashMap<Integer, Function> funcs = functions.computeIfAbsent(name, k -> new HashMap<>());
 
 		funcs.put(argumentCount, function);
 	}
 
-	public IFunction getFunction(String name, int argumentCount)
+	public Function getFunction(String name, int argumentCount)
 	{
-		HashMap<Integer, IFunction> funcs = functions.get(name);
+		HashMap<Integer, Function> funcs = functions.get(name);
 		if (funcs == null)
 			throw new IllegalArgumentException("Function with name '" + name + "' not found");
 
-		IFunction iFunction = funcs.get(argumentCount);
+		Function iFunction = funcs.get(argumentCount);
 
 		if (iFunction == null)
 			throw new IllegalArgumentException("Function with name '" + name + "' and " + argumentCount + " arguments not found");
@@ -63,7 +63,7 @@ public class Memory
 		functions.clear();
 		variables.clear();
 		other.functions.forEach((k, m) -> {
-			HashMap<Integer, IFunction> functionMap = new HashMap<>();
+			HashMap<Integer, Function> functionMap = new HashMap<>();
 			m.forEach(functionMap::put);
 			functions.put(k, functionMap);
 		});

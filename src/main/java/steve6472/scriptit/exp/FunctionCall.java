@@ -9,11 +9,11 @@ package steve6472.scriptit.exp;
 class FunctionCall extends Expression
 {
 	DelayValue[] arguments;
-	IFunction function;
-	double delayValue = Double.NaN;
+	Function function;
 	double[] args;
+	int index = 0;
 
-	public FunctionCall(IFunction function, Expression... arguments)
+	public FunctionCall(Function function, Expression... arguments)
 	{
 		this.function = function;
 		this.arguments = new DelayValue[arguments.length];
@@ -25,28 +25,19 @@ class FunctionCall extends Expression
 	}
 
 	@Override
-	public Result apply(ExpressionExecutor executor)
+	public Result apply(Main.Script script)
 	{
-		for (int i = 0; i < arguments.length; i++)
+		for (int i = index; i < arguments.length; i++)
 		{
-			if (arguments[i].apply(executor))
+			if (arguments[i].apply(script))
 				return Result.delay();
 			args[i] = arguments[i].val();
 		}
 
-		// If no delay -> get value from function
-		if (Double.isNaN(delayValue))
-		{
-			delayValue = function.apply(executor, args);
-			return Result.delay();
-		}
-		// If delay -> assing the already calculated value
-		else
-		{
-			double temp = delayValue;
-			delayValue = Double.NaN;
-			return Result.value(temp);
-		}
+		Result r = function.execute(script, args);
+
+		index = 0;
+		return r;
 	}
 
 	@Override

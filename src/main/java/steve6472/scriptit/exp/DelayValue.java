@@ -9,7 +9,7 @@ package steve6472.scriptit.exp;
 public class DelayValue
 {
 	Expression expression;
-	Result result = Result.delay();
+	Result result = Result.delay(0);
 	double value;
 	boolean isSet;
 
@@ -25,17 +25,17 @@ public class DelayValue
 
 	public void print(int i)
 	{
-		System.out.println("Value: " + value);
+		System.out.println("AbstractValue: " + value);
 		System.out.println("IsSet: " + isSet);
 		expression.print(i);
 	}
 
-	public boolean apply(ExpressionExecutor executor)
+	public boolean apply(Main.Script script)
 	{
 		Result temp;
 		if (!isSet)
 		{
-			temp = expression.apply(executor);
+			temp = expression.apply(script);
 		} else
 		{
 			temp = result;
@@ -51,5 +51,11 @@ public class DelayValue
 		}
 
 		return !isSet;
+	}
+
+	@Override
+	public String toString()
+	{
+		return "DelayValue{" + "expression=" + expression + '}';
 	}
 }

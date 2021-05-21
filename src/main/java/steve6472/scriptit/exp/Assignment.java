@@ -18,12 +18,12 @@ class Assignment extends Expression
 	}
 
 	@Override
-	public Result apply(ExpressionExecutor executor)
+	public Result apply(Main.Script script)
 	{
-		if (val.apply(executor))
+		if (val.apply(script))
 			return Result.delay();
 
-		executor.memory.addVariable(varName, val.val());
+		script.memory.addVariable(varName, val.val());
 		return Result.pass();
 	}
 

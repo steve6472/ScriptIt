@@ -18,8 +18,8 @@
       <list>
         <option value="Interface" />
         <option value="Record" />
-        <option value="Class" />
         <option value="Enum" />
+        <option value="Class" />
       </list>
     </option>
   </component>
@@ -66,16 +66,23 @@
       <recent name="steve6472.scriptit.math" />
     </key>
     <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="steve6472.scriptit.exp.functions" />
       <recent name="steve6472.scriptit.instructions" />
       <recent name="steve6472.scriptit.instructions.type" />
       <recent name="steve6472.scriptit.expression" />
       <recent name="steve6472.scriptit.commands.type" />
-      <recent name="steve6472.scriptit.commands" />
     </key>
   </component>
-  <component name="RunManager" selected="Application.MyParser">
+  <component name="RunManager" selected="Application.Main">
     <configuration name="ExpressionParser" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="steve6472.scriptit.expression.ExpressionParser" />
+      <module name="ScriptIt" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="Main" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="steve6472.scriptit.exp.Main" />
       <module name="ScriptIt" />
       <method v="2">
         <option name="Make" enabled="true" />
@@ -104,6 +111,7 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Application.Main" />
         <item itemvalue="Application.MyParser" />
         <item itemvalue="Application.ExpressionParser" />
         <item itemvalue="Application.ScriptIt" />

@@ -16,9 +16,9 @@ class Variable extends Expression
 	}
 
 	@Override
-	public Result apply(ExpressionExecutor executor)
+	public Result apply(Main.Script script)
 	{
-		return Result.value(executor.memory.getVariable(name));
+		return Result.value(script.currentExecutor().memory.getVariable(name));
 	}
 
 	@Override

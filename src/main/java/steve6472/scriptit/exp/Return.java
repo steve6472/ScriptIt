@@ -16,9 +16,9 @@ public class Return extends Expression
 	}
 
 	@Override
-	public Result apply(ExpressionExecutor executor)
+	public Result apply(Main.Script script)
 	{
-		if (returnValue.apply(executor))
+		if (returnValue.apply(script))
 			return Result.delay();
 
 		return Result.returnValue(returnValue.val());
@@ -28,5 +28,11 @@ public class Return extends Expression
 	public void print(int i)
 	{
 
+	}
+
+	@Override
+	public String toString()
+	{
+		return "Return{" + "returnValue=" + returnValue + '}';
 	}
 }

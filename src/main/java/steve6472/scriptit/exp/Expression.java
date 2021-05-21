@@ -8,7 +8,7 @@ package steve6472.scriptit.exp;
  ***********************/
 public abstract class Expression
 {
-	public abstract Result apply(ExpressionExecutor executor);
+	public abstract Result apply(Main.Script script);
 
 	public abstract void print(int i);
 }

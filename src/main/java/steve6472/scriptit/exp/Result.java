@@ -8,8 +8,8 @@ package steve6472.scriptit.exp;
  ***********************/
 public class Result
 {
-	private static final Result DELAY = new Result(0, ResultStatus.DELAY);
 	private static final Result PASS = new Result(0, ResultStatus.PASS);
+	private static final Result DELAY = new Result(0, ResultStatus.DELAY);
 
 	private final double value;
 	private final ResultStatus status;
@@ -25,6 +25,11 @@ public class Result
 		return new Result(value, ResultStatus.VALUE);
 	}
 
+	public static Result delay(double delay)
+	{
+		return new Result(delay, ResultStatus.DELAY);
+	}
+
 	public static Result delay()
 	{
 		return DELAY;
@@ -37,7 +42,12 @@ public class Result
 
 	public static Result returnValue(double value)
 	{
-		return new Result(value, ResultStatus.RETURN);
+		return new Result(value, ResultStatus.RETURN_VALUE);
+	}
+
+	public static Result return_()
+	{
+		return new Result(0, ResultStatus.RETURN);
 	}
 
 	public double getValue()
@@ -55,9 +65,19 @@ public class Result
 		return getStatus() == ResultStatus.DELAY;
 	}
 
+	public boolean isReturnValue()
+	{
+		return getStatus() == ResultStatus.RETURN_VALUE;
+	}
+
 	public boolean isReturn()
 	{
 		return getStatus() == ResultStatus.RETURN;
 	}
 
+	@Override
+	public String toString()
+	{
+		return "Result{" + "value=" + value + ", status=" + status + '}';
+	}
 }
