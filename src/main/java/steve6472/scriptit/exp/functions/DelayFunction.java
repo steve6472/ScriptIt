@@ -21,6 +21,6 @@ public class DelayFunction extends Function
 	public Result apply(Main.Script script)
 	{
 		System.out.println("Delay " + arguments[0]);
-		return Result.delay(arguments[0]);
+		return Result.delay(arguments[0].getInt());
 	}
 }

@@ -8,26 +8,26 @@ package steve6472.scriptit.exp;
  ***********************/
 public class Result
 {
-	private static final Result PASS = new Result(0, ResultStatus.PASS);
-	private static final Result DELAY = new Result(0, ResultStatus.DELAY);
+	private static final Result PASS = new Result(Value.NULL, ResultStatus.PASS);
+	private static final Result DELAY = new Result(Value.NULL, ResultStatus.DELAY);
 
-	private final double value;
+	private final Value value;
 	private final ResultStatus status;
 
-	private Result(double value, ResultStatus status)
+	private Result(Value value, ResultStatus status)
 	{
 		this.value = value;
 		this.status = status;
 	}
 
-	public static Result value(double value)
+	public static Result value(Value value)
 	{
 		return new Result(value, ResultStatus.VALUE);
 	}
 
-	public static Result delay(double delay)
+	public static Result delay(int delay)
 	{
-		return new Result(delay, ResultStatus.DELAY);
+		return new Result(Value.newValue(PrimitiveTypes.INT, delay), ResultStatus.DELAY);
 	}
 
 	public static Result delay()
@@ -40,17 +40,17 @@ public class Result
 		return PASS;
 	}
 
-	public static Result returnValue(double value)
+	public static Result returnValue(Value value)
 	{
 		return new Result(value, ResultStatus.RETURN_VALUE);
 	}
 
 	public static Result return_()
 	{
-		return new Result(0, ResultStatus.RETURN);
+		return new Result(Value.NULL, ResultStatus.RETURN);
 	}
 
-	public double getValue()
+	public Value getValue()
 	{
 		return value;
 	}

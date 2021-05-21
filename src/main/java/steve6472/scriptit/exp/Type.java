@@ -42,4 +42,10 @@ public class Type
 	{
 		return keyword;
 	}
+
+	@Override
+	public String toString()
+	{
+		return "Type{" + "keyword='" + keyword + '\'' + '}';
+	}
 }

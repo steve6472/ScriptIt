@@ -9,29 +9,36 @@ package steve6472.scriptit.exp;
 public class PrimitiveTypes
 {
 	public static final Type DOUBLE = new Type("double");
+	public static final Type INT = new Type("int");
+	public static final Type NULL = new Type("null");
 
 	static
 	{
-		DOUBLE.addBinaryOperator(DOUBLE, Operator.ADD, new BinaryOperatorOverload((left, right) -> Result.value(left + right)));
-		DOUBLE.addBinaryOperator(DOUBLE, Operator.SUB, new BinaryOperatorOverload((left, right) -> Result.value(left - right)));
-		DOUBLE.addBinaryOperator(DOUBLE, Operator.MUL, new BinaryOperatorOverload((left, right) -> Result.value(left * right)));
-		DOUBLE.addBinaryOperator(DOUBLE, Operator.DIV, new BinaryOperatorOverload((left, right) -> Result.value(left / right)));
-		DOUBLE.addBinaryOperator(DOUBLE, Operator.MOD, new BinaryOperatorOverload((left, right) -> Result.value(left % right)));
+		DOUBLE.addBinaryOperator(DOUBLE, Operator.ADD, new BinaryOperatorOverload((left, right) -> Result.value(Value.newValue(DOUBLE, left.getDouble() + right.getDouble()))));
+		DOUBLE.addBinaryOperator(DOUBLE, Operator.SUB, new BinaryOperatorOverload((left, right) -> Result.value(Value.newValue(DOUBLE, left.getDouble() - right.getDouble()))));
+		DOUBLE.addBinaryOperator(DOUBLE, Operator.MUL, new BinaryOperatorOverload((left, right) -> Result.value(Value.newValue(DOUBLE, left.getDouble() * right.getDouble()))));
+		DOUBLE.addBinaryOperator(DOUBLE, Operator.DIV, new BinaryOperatorOverload((left, right) -> Result.value(Value.newValue(DOUBLE, left.getDouble() / right.getDouble()))));
+		DOUBLE.addBinaryOperator(DOUBLE, Operator.MOD, new BinaryOperatorOverload((left, right) -> Result.value(Value.newValue(DOUBLE, left.getDouble() % right.getDouble()))));
 
-		DOUBLE.addUnaryOperator(Operator.ADD, new UnaryOperatorOverload(left -> Result.value(+left)));
-		DOUBLE.addUnaryOperator(Operator.SUB, new UnaryOperatorOverload(left -> Result.value(-left)));
+		DOUBLE.addUnaryOperator(Operator.ADD, new UnaryOperatorOverload(left -> Result.value(Value.newValue(DOUBLE, +left.getDouble()))));
+		DOUBLE.addUnaryOperator(Operator.SUB, new UnaryOperatorOverload(left -> Result.value(Value.newValue(DOUBLE, -left.getDouble()))));
+	}
+
+	public static boolean isPrimitive(Type type)
+	{
+		return type == DOUBLE/* || type == INT || type == STRING || type == CHAR || type == BOOL || type == ARRAY*/;
 	}
 
 	@FunctionalInterface
 	private interface BinaryOperator
 	{
-		Result apply(double left, double right);
+		Result apply(Value left, Value right);
 	}
 
 	@FunctionalInterface
 	private interface UnaryOperator
 	{
-		Result apply(double left);
+		Result apply(Value left);
 	}
 
 	private static class BinaryOperatorOverload extends Function

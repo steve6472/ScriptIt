@@ -13,7 +13,7 @@ class BinaryOperator extends Expression
 	Result leftResult = Result.delay();
 	Result rightResult = Result.delay();
 	Function operatorFunction;
-	double leftValue, rightValue;
+	Value leftValue, rightValue;
 
 	public BinaryOperator(Operator operator, Expression left, Expression right)
 	{
@@ -42,7 +42,7 @@ class BinaryOperator extends Expression
 
 		rightValue = rightResult.getValue();
 
-		operatorFunction.setArguments(new double[] {leftValue, rightValue});
+		operatorFunction.setArguments(new Value[] {leftValue, rightValue});
 
 		Result result = operatorFunction.apply(script);
 		if (result.isDelay())

@@ -10,7 +10,7 @@ class FunctionCall extends Expression
 {
 	DelayValue[] arguments;
 	Function function;
-	double[] args;
+	Value[] args;
 	int index = 0;
 	boolean isDelayed;
 
@@ -22,7 +22,7 @@ class FunctionCall extends Expression
 		{
 			this.arguments[i] = new DelayValue(arguments[i]);
 		}
-		args = new double[arguments.length];
+		args = new Value[arguments.length];
 	}
 
 	@Override

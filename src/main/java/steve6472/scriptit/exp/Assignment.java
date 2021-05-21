@@ -9,21 +9,35 @@ package steve6472.scriptit.exp;
 class Assignment extends Expression
 {
 	private final String varName;
-	private final DelayValue val;
+	private final Expression expression;
+	Result res = Result.delay();
+	Value value;
 
 	Assignment(String varName, Expression expression)
 	{
 		this.varName = varName;
-		this.val = new DelayValue(expression);
+		this.expression = expression;
 	}
 
 	@Override
 	public Result apply(Main.Script script)
 	{
-		if (val.apply(script))
-			return Result.delay();
+		if (res.isDelay())
+			res = expression.apply(script);
 
-		script.memory.addVariable(varName, val.val());
+		if (res.isDelay())
+			return res;
+
+		value = res.getValue();
+
+		Result apply = expression.apply(script);
+
+		if (apply.isDelay())
+			return apply;
+
+		script.memory.addVariable(varName, res.getValue());
+
+		res = Result.delay();
 		return Result.pass();
 	}
 }

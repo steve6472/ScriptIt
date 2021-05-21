@@ -67,7 +67,7 @@ public class Main
 		// start, stop, t
 		String[] lerp =
 			{
-				"a = 1 - t",
+				"a = 1.0 - t",
 				"print(a)",
 				"m = a * start",
 				"print(m)",
@@ -80,9 +80,9 @@ public class Main
 
 		String[] expressions =
 			{
-				"x = 5",
+				"x = 5.0",
 				"delay(500)",
-				"x = x * 10",
+				"x = x * 10.0",
 				"return x"
 			};
 
@@ -93,7 +93,7 @@ public class Main
 
 		String[] lerpTest =
 			{
-				"l = lerp(3, 5, 0.5) * 2",
+				"l = lerp(3.0, 5.0, 0.5) * 2.0",
 				"print(-1)",
 				"print(-l)",
 				"delay(500)",
@@ -109,7 +109,7 @@ public class Main
 		Script script = new Script();
 
 		Function doubleMul = new Function("left", "right");
-//				doubleMul.setExpressions(script, "temp = left + right", "temp = temp * right", "return temp - left");
+//		doubleMul.setExpressions(script, "temp = left + right", "temp = temp * right", "return temp - left");
 		doubleMul.setExpressions(script, "return left * right");
 		PrimitiveTypes.DOUBLE.addBinaryOperator(PrimitiveTypes.DOUBLE, Operator.MUL, doubleMul);
 
@@ -118,10 +118,10 @@ public class Main
 		script.memory.addFunction("lerp", 3, lerpFunction);
 
 		Function del = new Function();
-		del.setExpressions(script, "delay(1000)", "print(8)", "return 3");
+		del.setExpressions(script, "delay(1000)", "print(8)", "return 3.0");
 		script.memory.addFunction("del", 0, del);
 
-		script.setExpressions("return del() * -del()");
+		script.setExpressions("return lerp(3.0, 5.0, 0.5) * lerp(0.0, 1.0, 0.5)");
 
 		runWithDelay(script);
 	}

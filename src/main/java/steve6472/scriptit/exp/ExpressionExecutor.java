@@ -58,8 +58,8 @@ public class ExpressionExecutor
 
 		Result result = expression.apply(script);
 
-		if (result.isDelay() && result.getValue() > 0)
-			delay((long) result.getValue());
+		if (result.isDelay() && !result.getValue().isNull() && result.getValue().getInt() > 0)
+			delay(result.getValue().getInt());
 
 		return result;
 	}

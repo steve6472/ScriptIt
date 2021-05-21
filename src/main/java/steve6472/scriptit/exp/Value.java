@@ -11,6 +11,8 @@ public class Value
 	 */
 	public static final String SINGLE_VALUE = "PRIMITIVE VALUE";
 
+	public static final Value NULL = new Value(true, PrimitiveTypes.NULL, null);
+
 	public final boolean isPrimitive;
 	public Type type;
 	public Map<String, Object> values;
@@ -22,14 +24,12 @@ public class Value
 	 */
 	public static Value newValue(Type type)
 	{
-//		return new Value(TypeDeclarations.isPrimitive(type), type);
-		return new Value(true, type);
+		return new Value(PrimitiveTypes.isPrimitive(type), type);
 	}
 
 	public static Value newValue(Type type, Object value)
 	{
-//		return new Value(TypeDeclarations.isPrimitive(type), type, value);
-		return new Value(true, type, value);
+		return new Value(PrimitiveTypes.isPrimitive(type), type, value);
 	}
 
 	private Value(boolean isPrimitive, Type type)
@@ -130,6 +130,11 @@ public class Value
 	public String getString()
 	{
 		return (String) values.get(SINGLE_VALUE);
+	}
+
+	public boolean isNull()
+	{
+		return type == PrimitiveTypes.NULL;
 	}
 
 	@Override

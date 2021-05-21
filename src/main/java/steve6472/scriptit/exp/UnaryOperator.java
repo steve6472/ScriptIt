@@ -12,7 +12,7 @@ class UnaryOperator extends Expression
 	Expression left;
 	Function operatorFunction;
 	Result leftResult = Result.delay();
-	double leftValue;
+	Value leftValue;
 
 	public UnaryOperator(Operator operator, Expression left)
 	{
@@ -32,14 +32,7 @@ class UnaryOperator extends Expression
 
 		leftValue = leftResult.getValue();
 
-//		return switch (operator)
-//			{
-//				case ADD -> Result.value(+left.apply(script).getValue());
-//				case SUB -> Result.value(-left.apply(script).getValue());
-//				default -> throw new IllegalStateException("Unexpected value: " + operator);
-//			};
-
-		operatorFunction.setArguments(new double[] {leftValue});
+		operatorFunction.setArguments(new Value[] {leftValue});
 		Result apply = operatorFunction.apply(script);
 
 		if (apply.isDelay())

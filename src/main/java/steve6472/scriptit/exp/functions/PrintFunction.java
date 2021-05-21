@@ -20,7 +20,7 @@ public class PrintFunction extends Function
 	@Override
 	public Result apply(Main.Script script)
 	{
-		System.out.println(arguments[0]);
+		System.out.println("Print: " + arguments[0]);
 		return Result.pass();
 	}
 }

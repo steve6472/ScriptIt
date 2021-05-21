@@ -6,24 +6,26 @@ package steve6472.scriptit.exp;
  * Project: ScriptIt
  *
  ***********************/
-class Constant extends Expression
+public class Constant extends Expression
 {
-	Result constant;
+	Object constant;
+	Type type;
 
-	public Constant(double constant)
+	public Constant(Type type, Object constant)
 	{
-		this.constant = Result.value(constant);
+		this.type = type;
+		this.constant = constant;
 	}
 
 	@Override
 	public Result apply(Main.Script script)
 	{
-		return constant;
+		return Result.value(Value.newValue(type, constant));
 	}
 
 	@Override
 	public String toString()
 	{
-		return "Constant{" + "constant=" + constant.getValue() + '}';
+		return "Constant{" + "constant=" + constant + ", type=" + type + '}';
 	}
 }

@@ -12,7 +12,7 @@ public class Function extends Expression
 	String[] argumentNames;
 	private int expressionIndex = 0;
 	private boolean isDelayed = false;
-	protected double[] arguments;
+	protected Value[] arguments;
 
 	public Function(String... argumentNames)
 	{
@@ -29,7 +29,7 @@ public class Function extends Expression
 		}
 	}
 
-	public void setArguments(double[] arguments)
+	public void setArguments(Value[] arguments)
 	{
 		this.arguments = arguments;
 	}

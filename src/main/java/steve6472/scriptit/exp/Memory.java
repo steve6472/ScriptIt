@@ -12,7 +12,7 @@ import java.util.Map;
 public class Memory
 {
 	Map<String, HashMap<Integer, Function>> functions;
-	Map<String, Double> variables;
+	Map<String, Value> variables;
 
 	public Memory()
 	{
@@ -20,14 +20,14 @@ public class Memory
 		this.variables = new HashMap<>();
 	}
 
-	public void addVariable(String name, double value)
+	public void addVariable(String name, Value value)
 	{
 		variables.put(name, value);
 	}
 
-	public double getVariable(String name)
+	public Value getVariable(String name)
 	{
-		Double val = variables.get(name);
+		Value val = variables.get(name);
 		if (val == null)
 			throw new IllegalArgumentException("Variable with name '" + name + "' not found");
 		return val;

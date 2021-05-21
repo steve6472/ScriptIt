@@ -10,7 +10,7 @@ public class DelayValue
 {
 	Expression expression;
 	Result result = Result.delay(0);
-	double value;
+	Value value;
 	boolean isSet;
 
 	public DelayValue(Expression expression)
@@ -18,7 +18,7 @@ public class DelayValue
 		this.expression = expression;
 	}
 
-	public double val()
+	public Value val()
 	{
 		return value;
 	}

@@ -110,9 +110,20 @@ public class MyParser
 				}
 			} else if ((ch >= '0' && ch <= '9') || ch == '.')
 			{
+				boolean foundDot = false;
 				while ((ch >= '0' && ch <= '9') || ch == '.')
+				{
+					if (ch == '.')
+						foundDot = true;
 					nextChar();
-				return new Constant(Double.parseDouble(line.substring(startPos, this.pos)));
+				}
+				if (foundDot)
+				{
+					return new Constant(PrimitiveTypes.DOUBLE, Double.parseDouble(line.substring(startPos, this.pos)));
+				} else
+				{
+					return new Constant(PrimitiveTypes.INT, Integer.parseInt(line.substring(startPos, this.pos)));
+				}
 			} else if ((ch >= 'A' && ch <= 'Z') || (ch >= 'a' && ch <= 'z') || ch == '_')
 			{
 				while ((ch >= 'A' && ch <= 'Z') || (ch >= 'a' && ch <= 'z') || (ch >= '0' && ch <= '9') || ch == '_')
@@ -202,49 +213,4 @@ public class MyParser
 		if (pos < line.length()) throw new RuntimeException("Unexpected: " + ch);
 		return ex;
 	}
-
-	public static void main(String[] mainArgs)
-	{
-		MemoryStack memory = new MemoryStack(64);
-		memory.addVariable("pi", Math.PI);
-//		memory.addFunction("delay", 2, (exe, args) ->
-//		{
-//			System.out.println("Delay " + args[0] + ", ret: " + args[1]);
-//			exe.delay((long) args[0]);
-//			return Result.value(args[1]);
-//		});
-//		memory.addFunction("toDeg", 1, (exe, args) -> Result.value(Math.toDegrees(args[0])));
-
-		MyParser myParser = new MyParser();
-//		myParser.setExpression("((4 - 2 % 3 + 1) * -(3*3+4*4)) / 2");
-//		myParser.setExpression("pi + interrupt() + toDeg(pi)");
-//		myParser.setExpression("1 - 2 * (delay(1000, 3) * -delay(1000, 4)) + 2");
-//		myParser.setExpression("1 + delay(delay(1000, 1000 * 2), 3)");
-//		myParser.setExpression("delay(1000, 1) + delay(1000, 2)");
-//		myParser.setExpression("delay(1000, 3)");
-//		myParser.setExpression("toDeg(3.14159265358979323846)");
-//		myParser.setExpression("toDeg(pi / 2)");
-//		myParser.setExpression("return pi - 6");
-		ExpressionExecutor exe = new ExpressionExecutor(memory);
-
-//		runWithDelay(exe.setExpression(myParser.setExpression("x = delay(1000, 5)").parse(memory)));
-//		runWithDelay(exe.setExpression(myParser.setExpression("x = x * 10").parse(memory)));
-//		runWithDelay(exe.setExpression(myParser.setExpression("return delay(750, x)").parse(memory)));
-
-		memory.dumpVariables();
-	}
-
-//	private static void runWithDelay(ExpressionExecutor executor)
-//	{
-//		Result ret = Result.delay();
-//
-//		while (ret.isDelay() && !ret.isReturnValue())
-//		{
-//			ret = executor.execute();
-//		}
-//		if (ret.isReturnValue())
-//			System.out.println("Returned: " + ret.getValue());
-//		else
-//			System.out.println("Last value: " + ret.getValue());
-//	}
 }
