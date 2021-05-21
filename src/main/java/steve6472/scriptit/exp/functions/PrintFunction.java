@@ -18,7 +18,7 @@ public class PrintFunction extends Function
 	}
 
 	@Override
-	public Result execute(Main.Script script, double[] arguments)
+	public Result apply(Main.Script script)
 	{
 		System.out.println(arguments[0]);
 		return Result.pass();

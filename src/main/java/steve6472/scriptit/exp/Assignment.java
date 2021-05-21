@@ -26,11 +26,4 @@ class Assignment extends Expression
 		script.memory.addVariable(varName, val.val());
 		return Result.pass();
 	}
-
-	@Override
-	public void print(int i)
-	{
-		System.out.println(i + " Assign to " + varName);
-		val.print(i + 1);
-	}
 }

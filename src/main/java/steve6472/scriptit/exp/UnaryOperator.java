@@ -29,13 +29,6 @@ class UnaryOperator extends Expression
 	}
 
 	@Override
-	public void print(int i)
-	{
-		System.out.println(i + " Unary " + operator);
-		left.print(i + 1);
-	}
-
-	@Override
 	public String toString()
 	{
 		return "UnaryOperator{" + "operator=" + operator + '}';

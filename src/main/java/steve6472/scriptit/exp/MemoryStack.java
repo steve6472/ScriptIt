@@ -23,7 +23,7 @@ public class MemoryStack extends Memory
 			this.memories[i] = new Memory();
 		}
 
-		// Force delay function
+		// Force delay and print functions
 		addFunction("delay", 1, new DelayFunction());
 		addFunction("print", 1, new PrintFunction());
 	}

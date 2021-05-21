@@ -25,12 +25,6 @@ public class Return extends Expression
 	}
 
 	@Override
-	public void print(int i)
-	{
-
-	}
-
-	@Override
 	public String toString()
 	{
 		return "Return{" + "returnValue=" + returnValue + '}';

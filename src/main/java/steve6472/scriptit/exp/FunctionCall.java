@@ -34,20 +34,10 @@ class FunctionCall extends Expression
 			args[i] = arguments[i].val();
 		}
 
-		Result r = function.execute(script, args);
+		function.setArguments(args);
+		Result r = function.apply(script);
 
 		index = 0;
 		return r;
-	}
-
-	@Override
-	public void print(int i)
-	{
-		System.out.println(i + " Function with " + arguments.length + " parameters:");
-		for (DelayValue ex : arguments)
-		{
-			ex.print(i + 1);
-		}
-		System.out.println();
 	}
 }

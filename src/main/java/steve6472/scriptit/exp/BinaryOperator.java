@@ -39,14 +39,6 @@ class BinaryOperator extends Expression
 	}
 
 	@Override
-	public void print(int i)
-	{
-		left.print(i + 1);
-		System.out.println(i + " Operator " + operator);
-		right.print(i + 1);
-	}
-
-	@Override
 	public String toString()
 	{
 		return "BinaryOperator{" + "operator=" + operator + '}';

@@ -27,7 +27,6 @@ public class DelayValue
 	{
 		System.out.println("AbstractValue: " + value);
 		System.out.println("IsSet: " + isSet);
-		expression.print(i);
 	}
 
 	public boolean apply(Main.Script script)

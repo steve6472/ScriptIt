@@ -22,12 +22,6 @@ class Constant extends Expression
 	}
 
 	@Override
-	public void print(int i)
-	{
-		System.out.println(i + " Constant " + constant);
-	}
-
-	@Override
 	public String toString()
 	{
 		return "Constant{" + "constant=" + constant.getValue() + '}';

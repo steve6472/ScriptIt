@@ -6,16 +6,17 @@ package steve6472.scriptit.exp;
  * Project: ScriptIt
  *
  ***********************/
-public class Function
+public class Function extends Expression
 {
 	ExpressionExecutor[] lines;
-	String[] arguments;
+	String[] argumentNames;
 	private int expressionIndex = 0;
 	private boolean isDelayed = false;
+	protected double[] arguments;
 
 	public Function(String... argumentNames)
 	{
-		this.arguments = argumentNames;
+		this.argumentNames = argumentNames;
 	}
 
 	public void setExpressions(Main.Script script, String... expressions)
@@ -28,14 +29,20 @@ public class Function
 		}
 	}
 
-	public Result execute(Main.Script script, double[] arguments)
+	public void setArguments(double[] arguments)
+	{
+		this.arguments = arguments;
+	}
+
+	@Override
+	public Result apply(Main.Script script)
 	{
 		if (!isDelayed)
 			script.getMemory().push();
 
 		for (int i = 0; i < arguments.length; i++)
 		{
-			script.getMemory().addVariable(this.arguments[i], arguments[i]);
+			script.getMemory().addVariable(this.argumentNames[i], arguments[i]);
 		}
 
 		for (int i = expressionIndex; i < lines.length; i++)

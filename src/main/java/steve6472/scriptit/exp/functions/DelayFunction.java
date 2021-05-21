@@ -18,7 +18,7 @@ public class DelayFunction extends Function
 	}
 
 	@Override
-	public Result execute(Main.Script script, double[] arguments)
+	public Result apply(Main.Script script)
 	{
 		System.out.println("Delay " + arguments[0]);
 		return Result.delay(arguments[0]);

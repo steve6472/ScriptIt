@@ -22,12 +22,6 @@ class Variable extends Expression
 	}
 
 	@Override
-	public void print(int i)
-	{
-		System.out.println(i + " Variable " + name);
-	}
-
-	@Override
 	public String toString()
 	{
 		return "Variable{" + "name=" + name + '}';

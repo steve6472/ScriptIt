@@ -71,7 +71,7 @@ public class Main
 				"print(a)",
 				"m = a * start",
 				"print(m)",
-				"delay(100)",
+				"delay(500)",
 				"m_ = t * stop",
 				"print(m_)",
 				"return m + m_"
@@ -95,6 +95,7 @@ public class Main
 				"l = lerp(3, 5, 0.5)",
 				"print(-1)",
 				"print(l)",
+				"delay(500)",
 				"return l"
 			};
 
