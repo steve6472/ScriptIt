@@ -11,8 +11,8 @@ import java.util.function.Supplier;
  ***********************/
 public class ExpressionExecutor
 {
-	Expression fullExpression;
-	Memory memory;
+	private Expression expression;
+	public final MemoryStack memory;
 	public long delay, delayStart;
 
 	private Supplier<Long> delayStartSupplier = System::currentTimeMillis;
@@ -28,10 +28,21 @@ public class ExpressionExecutor
 		this.shouldAdvance = shouldAdvance;
 	}
 
-	ExpressionExecutor(Memory memory, Expression ex)
+	ExpressionExecutor(MemoryStack memory, Expression ex)
 	{
 		this.memory = memory;
-		this.fullExpression = ex;
+		this.expression = ex;
+	}
+
+	ExpressionExecutor(MemoryStack memory)
+	{
+		this.memory = memory;
+	}
+
+	public ExpressionExecutor setExpression(Expression expression)
+	{
+		this.expression = expression;
+		return this;
 	}
 
 	public void delay(long delay)
@@ -46,6 +57,6 @@ public class ExpressionExecutor
 			return Double.NaN;
 
 		delayStart = -1;
-		return fullExpression.apply(this);
+		return expression.apply(this);
 	}
 }

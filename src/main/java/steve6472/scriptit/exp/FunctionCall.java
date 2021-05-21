@@ -6,14 +6,14 @@ package steve6472.scriptit.exp;
  * Project: ScriptIt
  *
  ***********************/
-class Function extends Expression
+class FunctionCall extends Expression
 {
 	DelayValue[] arguments;
 	IFunction function;
 	double delayValue = Double.NaN;
 	double[] args;
 
-	public Function(Expression[] arguments, IFunction function)
+	public FunctionCall(IFunction function, Expression... arguments)
 	{
 		this.function = function;
 		this.arguments = new DelayValue[arguments.length];
@@ -25,7 +25,7 @@ class Function extends Expression
 	}
 
 	@Override
-	double apply(ExpressionExecutor executor)
+	public double apply(ExpressionExecutor executor)
 	{
 		for (int i = 0; i < arguments.length; i++)
 		{
@@ -50,7 +50,7 @@ class Function extends Expression
 	}
 
 	@Override
-	void print(int i)
+	public void print(int i)
 	{
 		System.out.println(i + " Function with " + arguments.length + " parameters:");
 		for (DelayValue ex : arguments)

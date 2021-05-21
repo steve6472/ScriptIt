@@ -19,7 +19,7 @@ class BinaryOperator extends Expression
 	}
 
 	@Override
-	double apply(ExpressionExecutor executor)
+	public double apply(ExpressionExecutor executor)
 	{
 		if (left.apply(executor))
 			return Double.NaN;
@@ -39,7 +39,7 @@ class BinaryOperator extends Expression
 	}
 
 	@Override
-	void print(int i)
+	public void print(int i)
 	{
 		left.print(i + 1);
 		System.out.println(i + " Operator " + operator);

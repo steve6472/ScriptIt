@@ -6,9 +6,9 @@ package steve6472.scriptit.exp;
  * Project: ScriptIt
  *
  ***********************/
-abstract class Expression
+public abstract class Expression
 {
-	abstract double apply(ExpressionExecutor executor);
+	public abstract double apply(ExpressionExecutor executor);
 
-	abstract void print(int i);
+	public abstract void print(int i);
 }

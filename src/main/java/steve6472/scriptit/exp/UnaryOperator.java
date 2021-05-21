@@ -18,7 +18,7 @@ class UnaryOperator extends Expression
 	}
 
 	@Override
-	double apply(ExpressionExecutor executor)
+	public double apply(ExpressionExecutor executor)
 	{
 		return switch (operator)
 			{
@@ -29,7 +29,7 @@ class UnaryOperator extends Expression
 	}
 
 	@Override
-	void print(int i)
+	public void print(int i)
 	{
 		System.out.println(i + " Unary " + operator);
 		left.print(i + 1);

@@ -53,4 +53,42 @@ public class Memory
 
 		return iFunction;
 	}
+
+	/*
+	 * Stack
+	 */
+
+	public void set(Memory other)
+	{
+		functions.clear();
+		variables.clear();
+		other.functions.forEach((k, m) -> {
+			HashMap<Integer, IFunction> functionMap = new HashMap<>();
+			m.forEach(functionMap::put);
+			functions.put(k, functionMap);
+		});
+		other.variables.forEach((k, v) ->
+		{
+			variables.put(k, v);
+		});
+	}
+
+	/*
+	 * Debug
+	 */
+
+	public void dumpVariables()
+	{
+		variables.forEach((k, v) -> System.out.println(k + " = " + v));
+	}
+
+	public void dumpFunctions()
+	{
+		functions.forEach((k, m) -> {
+			System.out.println("k\n");
+			m.forEach((c, f) -> {
+				System.out.println("\t" + c);
+			});
+		});
+	}
 }

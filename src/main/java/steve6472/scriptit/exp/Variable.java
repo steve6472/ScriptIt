@@ -16,13 +16,13 @@ class Variable extends Expression
 	}
 
 	@Override
-	double apply(ExpressionExecutor executor)
+	public double apply(ExpressionExecutor executor)
 	{
 		return executor.memory.getVariable(name);
 	}
 
 	@Override
-	void print(int i)
+	public void print(int i)
 	{
 		System.out.println(i + " Variable " + name);
 	}

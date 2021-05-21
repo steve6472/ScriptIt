@@ -6,30 +6,27 @@ package steve6472.scriptit.exp;
  * Project: ScriptIt
  *
  ***********************/
-class Constant extends Expression
+public class Return extends Expression
 {
-	double constant;
+	DelayValue returnValue;
 
-	public Constant(double constant)
+	public Return(Expression expression)
 	{
-		this.constant = constant;
+		this.returnValue = new DelayValue(expression);
 	}
 
 	@Override
 	public double apply(ExpressionExecutor executor)
 	{
-		return constant;
+		if (returnValue.apply(executor))
+			return Double.NaN;
+
+		return returnValue.val();
 	}
 
 	@Override
 	public void print(int i)
 	{
-		System.out.println(i + " Constant " + constant);
-	}
 
-	@Override
-	public String toString()
-	{
-		return "Constant{" + "constant=" + constant + '}';
 	}
 }

@@ -6,30 +6,30 @@ package steve6472.scriptit.exp;
  * Project: ScriptIt
  *
  ***********************/
-class DelayValue
+public class DelayValue
 {
 	Expression expression;
 	double value;
 	boolean isSet;
 
-	DelayValue(Expression expression)
+	public DelayValue(Expression expression)
 	{
 		this.expression = expression;
 	}
 
-	double val()
+	public double val()
 	{
 		return value;
 	}
 
-	void print(int i)
+	public void print(int i)
 	{
 		System.out.println("Value: " + value);
 		System.out.println("IsSet: " + isSet);
 		expression.print(i);
 	}
 
-	boolean apply(ExpressionExecutor executor)
+	public boolean apply(ExpressionExecutor executor)
 	{
 		double temp;
 		if (!isSet)

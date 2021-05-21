@@ -4,6 +4,7 @@ import steve6472.scriptit.expression.Stack;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Pattern;
 
 /**********************
  * Created by steve6472 (Mirek Jozefek)
@@ -13,6 +14,8 @@ import java.util.List;
  ***********************/
 public class MyParser
 {
+	private static final Pattern VARIABLE_NAME = Pattern.compile("^[a-zA-Z_][a-zA-Z0-9_]*");
+
 	public static final Operator[][] BINARY_PRECENDENCE =
 		{
 			{
@@ -33,14 +36,24 @@ public class MyParser
 	private char ch;
 	private final Stack<List<Expression>> functionParameters = new Stack<>(64);
 
-	public void setExpression(String expression)
+	public MyParser setExpression(String expression)
 	{
+		pos = -1;
 		this.line = expression;
+		return this;
 	}
 
 	void nextChar()
 	{
 		ch = (char) ((++pos < line.length()) ? line.charAt(pos) : -1);
+	}
+
+	void nextChar(int l)
+	{
+		for (int i = 0; i < l; i++)
+		{
+			ch = (char) ((++pos < line.length()) ? line.charAt(pos) : -1);
+		}
 	}
 
 	boolean eat(char charToEat)
@@ -58,11 +71,19 @@ public class MyParser
 	private Expression next(Memory memory, int i)
 	{
 		Expression ex = null;
+
 		if (i < BINARY_PRECENDENCE.length)
 			ex = next(memory, i + 1);
 
 		if (i == BINARY_PRECENDENCE.length)
 		{
+			if (line.substring(pos).startsWith("return"))
+			{
+				nextChar(6);
+				Expression next = next(memory, 0);
+				return new Return(next);
+			}
+
 			for (Operator op : UNARY_OPERATORS)
 			{
 				if (eat(op.getOperator().charAt(0)))
@@ -111,7 +132,8 @@ public class MyParser
 					int argumentCount = parameterList.size();
 
 					IFunction function = memory.getFunction(name, argumentCount);
-					return new Function(parameterList.toArray(new Expression[0]), function);
+					return new FunctionCall(function, parameterList.toArray(new Expression[0]));
+
 				} else
 				{
 					return new Variable(name);
@@ -129,7 +151,19 @@ public class MyParser
 		{
 			if (i == 0)
 			{
-				if (eat(','))
+				int start = pos;
+
+				if (eat('='))
+				{
+					String varName = line.substring(0, start).trim();
+					if (!VARIABLE_NAME.matcher(varName).matches())
+					{
+						throw new IllegalArgumentException("Variable name '" + varName + "' is invalid");
+					}
+
+					return new Assignment(varName, next(memory, 0));
+				}
+				else if (eat(','))
 				{
 					Expression x = next(memory, 0);
 					functionParameters.peek().add(x);
@@ -166,7 +200,7 @@ public class MyParser
 
 	public static void main(String[] mainArgs)
 	{
-		Memory memory = new Memory();
+		MemoryStack memory = new MemoryStack(64);
 		memory.addVariable("pi", Math.PI);
 		memory.addFunction("delay", 2, (exe, args) ->
 		{
@@ -177,20 +211,31 @@ public class MyParser
 		memory.addFunction("toDeg", 1, (exe, args) -> Math.toDegrees(args[0]));
 
 		MyParser myParser = new MyParser();
-//		myParser.line = "((4 - 2 % 3 + 1) * -(3*3+4*4)) / 2";
-//		myParser.line = "pi() + interrupt() + toDeg(pi())";
-//		myParser.line = "1 - 2 * (delay(1000, 3) * -delay(1000, 4)) + 2";
-//		myParser.line = "1 + delay(delay(1000, 1000 * 2), 3)";
-//		myParser.line = "delay(1000, 1) + delay(1000, 2)";
-//		myParser.line = "delay(1000, 3)";
-//		myParser.line = "toDeg(3.14159265358979323846)";
-		myParser.line = "toDeg(pi / 2)";
-		ExpressionExecutor exe = new ExpressionExecutor(memory, myParser.parse(memory));
+//		myParser.setExpression("((4 - 2 % 3 + 1) * -(3*3+4*4)) / 2");
+//		myParser.setExpression("pi + interrupt() + toDeg(pi)");
+//		myParser.setExpression("1 - 2 * (delay(1000, 3) * -delay(1000, 4)) + 2");
+//		myParser.setExpression("1 + delay(delay(1000, 1000 * 2), 3)");
+//		myParser.setExpression("delay(1000, 1) + delay(1000, 2)");
+//		myParser.setExpression("delay(1000, 3)");
+//		myParser.setExpression("toDeg(3.14159265358979323846)");
+//		myParser.setExpression("toDeg(pi / 2)");
+//		myParser.setExpression("return pi - 6");
+		ExpressionExecutor exe = new ExpressionExecutor(memory);
+
+		runWithDelay(exe.setExpression(myParser.setExpression("x = delay(1000, 5)").parse(memory)));
+		runWithDelay(exe.setExpression(myParser.setExpression("x = x * 10").parse(memory)));
+		runWithDelay(exe.setExpression(myParser.setExpression("return delay(750, x)").parse(memory)));
+
+		memory.dumpVariables();
+	}
+
+	private static void runWithDelay(ExpressionExecutor executor)
+	{
 		double ret = Double.NaN;
 
 		while (Double.isNaN(ret))
 		{
-			ret = exe.execute();
+			ret = executor.execute();
 		}
 		System.out.println("Final val: " + ret);
 	}
