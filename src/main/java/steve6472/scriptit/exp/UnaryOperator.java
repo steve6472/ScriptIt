@@ -18,12 +18,12 @@ class UnaryOperator extends Expression
 	}
 
 	@Override
-	public double apply(ExpressionExecutor executor)
+	public Result apply(ExpressionExecutor executor)
 	{
 		return switch (operator)
 			{
-				case ADD -> +left.apply(executor);
-				case SUB -> -left.apply(executor);
+				case ADD -> Result.value(+left.apply(executor).getValue());
+				case SUB -> Result.value(-left.apply(executor).getValue());
 				default -> throw new IllegalStateException("Unexpected value: " + operator);
 			};
 	}

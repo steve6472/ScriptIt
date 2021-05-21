@@ -19,21 +19,21 @@ class BinaryOperator extends Expression
 	}
 
 	@Override
-	public double apply(ExpressionExecutor executor)
+	public Result apply(ExpressionExecutor executor)
 	{
 		if (left.apply(executor))
-			return Double.NaN;
+			return Result.delay();
 
 		if (right.apply(executor))
-			return Double.NaN;
+			return Result.delay();
 
 		return switch (operator)
 			{
-				case MUL -> left.val() * right.val();
-				case DIV -> left.val() / right.val();
-				case MOD -> left.val() % right.val();
-				case ADD -> left.val() + right.val();
-				case SUB -> left.val() - right.val();
+				case MUL -> Result.value(left.val() * right.val());
+				case DIV -> Result.value(left.val() / right.val());
+				case MOD -> Result.value(left.val() % right.val());
+				case ADD -> Result.value(left.val() + right.val());
+				case SUB -> Result.value(left.val() - right.val());
 				default -> throw new IllegalStateException("Unexpected value: " + operator);
 			};
 	}

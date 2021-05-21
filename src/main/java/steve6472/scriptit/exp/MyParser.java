@@ -231,12 +231,15 @@ public class MyParser
 
 	private static void runWithDelay(ExpressionExecutor executor)
 	{
-		double ret = Double.NaN;
+		Result ret = Result.delay();
 
-		while (Double.isNaN(ret))
+		while (ret.isDelay() && !ret.isReturn())
 		{
 			ret = executor.execute();
 		}
-		System.out.println("Final val: " + ret);
+		if (ret.isReturn())
+			System.out.println("Returned: " + ret.getValue());
+		else
+			System.out.println("Last value: " + ret.getValue());
 	}
 }

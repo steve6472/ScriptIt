@@ -18,13 +18,13 @@ class Assignment extends Expression
 	}
 
 	@Override
-	public double apply(ExpressionExecutor executor)
+	public Result apply(ExpressionExecutor executor)
 	{
 		if (val.apply(executor))
-			return Double.NaN;
+			return Result.delay();
 
 		executor.memory.addVariable(varName, val.val());
-		return Double.NEGATIVE_INFINITY;
+		return Result.pass();
 	}
 
 	@Override

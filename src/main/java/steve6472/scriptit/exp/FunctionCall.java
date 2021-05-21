@@ -25,12 +25,12 @@ class FunctionCall extends Expression
 	}
 
 	@Override
-	public double apply(ExpressionExecutor executor)
+	public Result apply(ExpressionExecutor executor)
 	{
 		for (int i = 0; i < arguments.length; i++)
 		{
 			if (arguments[i].apply(executor))
-				return Double.NaN;
+				return Result.delay();
 			args[i] = arguments[i].val();
 		}
 
@@ -38,14 +38,14 @@ class FunctionCall extends Expression
 		if (Double.isNaN(delayValue))
 		{
 			delayValue = function.apply(executor, args);
-			return Double.NaN;
+			return Result.delay();
 		}
 		// If delay -> assing the already calculated value
 		else
 		{
 			double temp = delayValue;
 			delayValue = Double.NaN;
-			return temp;
+			return Result.value(temp);
 		}
 	}
 

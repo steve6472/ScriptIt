@@ -16,12 +16,12 @@ public class Return extends Expression
 	}
 
 	@Override
-	public double apply(ExpressionExecutor executor)
+	public Result apply(ExpressionExecutor executor)
 	{
 		if (returnValue.apply(executor))
-			return Double.NaN;
+			return Result.delay();
 
-		return returnValue.val();
+		return Result.returnValue(returnValue.val());
 	}
 
 	@Override

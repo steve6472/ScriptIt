@@ -8,15 +8,15 @@ package steve6472.scriptit.exp;
  ***********************/
 class Constant extends Expression
 {
-	double constant;
+	Result constant;
 
 	public Constant(double constant)
 	{
-		this.constant = constant;
+		this.constant = Result.value(constant);
 	}
 
 	@Override
-	public double apply(ExpressionExecutor executor)
+	public Result apply(ExpressionExecutor executor)
 	{
 		return constant;
 	}

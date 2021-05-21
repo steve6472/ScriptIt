@@ -9,6 +9,7 @@ package steve6472.scriptit.exp;
 public class DelayValue
 {
 	Expression expression;
+	Result result = Result.delay();
 	double value;
 	boolean isSet;
 
@@ -31,21 +32,21 @@ public class DelayValue
 
 	public boolean apply(ExpressionExecutor executor)
 	{
-		double temp;
+		Result temp;
 		if (!isSet)
 		{
 			temp = expression.apply(executor);
 		} else
 		{
-			temp = value;
+			temp = result;
 		}
 
-		if (Double.isNaN(temp))
+		if (temp.isDelay())
 		{
 			isSet = false;
 		} else
 		{
-			value = temp;
+			value = temp.getValue();
 			isSet = true;
 		}
 

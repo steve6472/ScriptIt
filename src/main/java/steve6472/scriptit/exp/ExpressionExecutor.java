@@ -51,10 +51,10 @@ public class ExpressionExecutor
 		delayStart = delayStartSupplier.get();
 	}
 
-	public double execute()
+	public Result execute()
 	{
 		if (delayStart != -1 && !shouldAdvance.apply(delayStart, delay))
-			return Double.NaN;
+			return Result.delay();
 
 		delayStart = -1;
 		return expression.apply(this);
