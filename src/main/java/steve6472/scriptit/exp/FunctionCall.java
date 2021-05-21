@@ -12,6 +12,7 @@ class FunctionCall extends Expression
 	Function function;
 	double[] args;
 	int index = 0;
+	boolean isDelayed;
 
 	public FunctionCall(Function function, Expression... arguments)
 	{
@@ -27,17 +28,25 @@ class FunctionCall extends Expression
 	@Override
 	public Result apply(Main.Script script)
 	{
-		for (int i = index; i < arguments.length; i++)
+		if (!isDelayed)
 		{
-			if (arguments[i].apply(script))
-				return Result.delay();
-			args[i] = arguments[i].val();
+			for (int i = index; i < arguments.length; i++)
+			{
+				if (arguments[i].apply(script))
+					return Result.delay();
+				args[i] = arguments[i].val();
+			}
+			function.setArguments(args);
 		}
 
-		function.setArguments(args);
-		Result r = function.apply(script);
+		isDelayed = false;
 
-		index = 0;
+		Result r = function.apply(script);
+		if (r.isDelay())
+			isDelayed = true;
+
+		if (!isDelayed)
+			index = 0;
 		return r;
 	}
 }

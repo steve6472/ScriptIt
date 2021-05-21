@@ -100,15 +100,28 @@ public class Main
 				"return l"
 			};
 
+/*
+		String[] lerp =
+			{
+				"return (1 - t) * start + t * stop"
+			};*/
+
 		Script script = new Script();
+
+		Function doubleMul = new Function("left", "right");
+//				doubleMul.setExpressions(script, "temp = left + right", "temp = temp * right", "return temp - left");
+		doubleMul.setExpressions(script, "return left * right");
+		PrimitiveTypes.DOUBLE.addBinaryOperator(PrimitiveTypes.DOUBLE, Operator.MUL, doubleMul);
 
 		Function lerpFunction = new Function("start", "stop", "t");
 		lerpFunction.setExpressions(script, lerp);
 		script.memory.addFunction("lerp", 3, lerpFunction);
 
-//		Function doubleMul = new Function("");
+		Function del = new Function();
+		del.setExpressions(script, "delay(1000)", "print(8)", "return 3");
+		script.memory.addFunction("del", 0, del);
 
-		script.setExpressions(lerpTest);
+		script.setExpressions("return del() * -del()");
 
 		runWithDelay(script);
 	}

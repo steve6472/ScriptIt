@@ -53,7 +53,7 @@ public class Function extends Expression
 			if (result.isDelay())
 			{
 				isDelayed = true;
-				return result;
+				return Result.delay();
 			} else if (result.isReturnValue())
 			{
 				isDelayed = false;

@@ -8,20 +8,23 @@ package steve6472.scriptit.exp;
  ***********************/
 public class Return extends Expression
 {
-	DelayValue returnValue;
+	Expression returnValue;
 
 	public Return(Expression expression)
 	{
-		this.returnValue = new DelayValue(expression);
+		this.returnValue = expression;
 	}
 
 	@Override
 	public Result apply(Main.Script script)
 	{
-		if (returnValue.apply(script))
-			return Result.delay();
+		Result result = returnValue.apply(script);
+		if (result.isDelay())
+		{
+			return result;
+		}
 
-		return Result.returnValue(returnValue.val());
+		return Result.returnValue(result.getValue());
 	}
 
 	@Override

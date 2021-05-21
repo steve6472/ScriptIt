@@ -91,8 +91,7 @@ public class MyParser
 				{
 					Expression left = next(memory, i);
 
-					Function function = PrimitiveTypes.DOUBLE.unary.get(op);
-					return new FunctionCall(function, left);
+					return new UnaryOperator(op, left);
 				}
 			}
 
@@ -186,8 +185,7 @@ public class MyParser
 					Expression left = ex;
 					Expression right = next(memory, i + 1);
 
-					Function function = PrimitiveTypes.DOUBLE.binary.get(PrimitiveTypes.DOUBLE).get(op);
-					ex = new FunctionCall(function, left, right);
+					ex = new BinaryOperator(op, left, right);
 					break;
 				}
 			}
