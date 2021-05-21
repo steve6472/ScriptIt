@@ -11,7 +11,7 @@ import java.util.Map;
  ***********************/
 public class Memory
 {
-	Map<String, HashMap<Integer, Function>> functions;
+	Map<FunctionParameters, Function> functions;
 	Map<String, Value> variables;
 
 	public Memory()
@@ -33,25 +33,35 @@ public class Memory
 		return val;
 	}
 
-	public void addFunction(String name, int argumentCount, Function function)
+	public void addFunction(FunctionParameters parameters, Function function)
 	{
-		HashMap<Integer, Function> funcs = functions.computeIfAbsent(name, k -> new HashMap<>());
-
-		funcs.put(argumentCount, function);
+		functions.put(parameters, function);
 	}
 
-	public Function getFunction(String name, int argumentCount)
+	public Function getFunction(String name, Type[] types)
 	{
-		HashMap<Integer, Function> funcs = functions.get(name);
-		if (funcs == null)
-			throw new IllegalArgumentException("Function with name '" + name + "' not found");
+		Function func = null;
+		main: for (Map.Entry<FunctionParameters, Function> e : functions.entrySet())
+		{
+			FunctionParameters parameters = e.getKey();
+			Function function = e.getValue();
 
-		Function iFunction = funcs.get(argumentCount);
+			if (!parameters.getName().equals(name))
+				continue;
+			if (parameters.getTypes().length != types.length)
+				continue;
+			for (int i = 0; i < types.length; i++)
+			{
+				if (parameters.getTypes()[i] != types[i])
+				{
+					continue main;
+				}
+			}
+			func = function;
+			break;
+		}
 
-		if (iFunction == null)
-			throw new IllegalArgumentException("Function with name '" + name + "' and " + argumentCount + " arguments not found");
-
-		return iFunction;
+		return func;
 	}
 
 	/*
@@ -62,15 +72,8 @@ public class Memory
 	{
 		functions.clear();
 		variables.clear();
-		other.functions.forEach((k, m) -> {
-			HashMap<Integer, Function> functionMap = new HashMap<>();
-			m.forEach(functionMap::put);
-			functions.put(k, functionMap);
-		});
-		other.variables.forEach((k, v) ->
-		{
-			variables.put(k, v);
-		});
+		other.functions.forEach((k, m) -> functions.put(k, m));
+		other.variables.forEach((k, v) -> variables.put(k, v));
 	}
 
 	/*
@@ -84,11 +87,6 @@ public class Memory
 
 	public void dumpFunctions()
 	{
-		functions.forEach((k, m) -> {
-			System.out.println("k\n");
-			m.forEach((c, f) -> {
-				System.out.println("\t" + c);
-			});
-		});
+		functions.forEach((k, m) -> System.out.println(k + " " + m));
 	}
 }

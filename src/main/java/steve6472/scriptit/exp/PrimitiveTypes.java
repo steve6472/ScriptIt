@@ -26,7 +26,7 @@ public class PrimitiveTypes
 
 	public static boolean isPrimitive(Type type)
 	{
-		return type == DOUBLE/* || type == INT || type == STRING || type == CHAR || type == BOOL || type == ARRAY*/;
+		return type == NULL || type == DOUBLE|| type == INT /* || type == STRING || type == CHAR || type == BOOL || type == ARRAY*/;
 	}
 
 	@FunctionalInterface

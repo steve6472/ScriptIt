@@ -115,11 +115,11 @@ public class Main
 
 		Function lerpFunction = new Function("start", "stop", "t");
 		lerpFunction.setExpressions(script, lerp);
-		script.memory.addFunction("lerp", 3, lerpFunction);
+		script.memory.addFunction(FunctionParameters.function("lerp").addType(PrimitiveTypes.DOUBLE).addType(PrimitiveTypes.DOUBLE).addType(PrimitiveTypes.DOUBLE).build(), lerpFunction);
 
 		Function del = new Function();
 		del.setExpressions(script, "delay(1000)", "print(8)", "return 3.0");
-		script.memory.addFunction("del", 0, del);
+		script.memory.addFunction(FunctionParameters.function("del").build(), del);
 
 		script.setExpressions("return lerp(3.0, 5.0, 0.5) * lerp(0.0, 1.0, 0.5)");
 

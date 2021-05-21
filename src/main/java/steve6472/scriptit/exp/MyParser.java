@@ -142,12 +142,10 @@ public class MyParser
 						parameterList = new ArrayList<>();
 					if (firstParameter != null)
 						parameterList.add(firstParameter);
-					int argumentCount = parameterList.size();
 
 					Collections.reverse(parameterList);
 
-					Function function = memory.getFunction(name, argumentCount);
-					return new FunctionCall(function, parameterList.toArray(new Expression[0]));
+					return new FunctionCall(name, parameterList.toArray(new Expression[0]));
 
 				} else
 				{
