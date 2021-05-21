@@ -74,7 +74,8 @@ public class Main
 				"delay(500)",
 				"m_ = t * stop",
 				"print(m_)",
-				"return m + m_"
+				"return m + m_",
+				"print(69)"
 			};
 
 		String[] expressions =
@@ -92,9 +93,9 @@ public class Main
 
 		String[] lerpTest =
 			{
-				"l = lerp(3, 5, 0.5)",
+				"l = lerp(3, 5, 0.5) * 2",
 				"print(-1)",
-				"print(l)",
+				"print(-l)",
 				"delay(500)",
 				"return l"
 			};
@@ -104,6 +105,8 @@ public class Main
 		Function lerpFunction = new Function("start", "stop", "t");
 		lerpFunction.setExpressions(script, lerp);
 		script.memory.addFunction("lerp", 3, lerpFunction);
+
+//		Function doubleMul = new Function("");
 
 		script.setExpressions(lerpTest);
 
@@ -116,15 +119,7 @@ public class Main
 
 		while (ret.isDelay() && !ret.isReturnValue() && ! ret.isReturn())
 		{
-			try
-			{
-				Thread.sleep(10);
-			} catch (InterruptedException e)
-			{
-				e.printStackTrace();
-			}
 			ret = script.execute();
-//			System.out.println(ret);
 		}
 		if (ret.isReturnValue())
 			System.out.println("Returned: " + ret.getValue());

@@ -90,7 +90,9 @@ public class MyParser
 				if (eat(op.getOperator().charAt(0)))
 				{
 					Expression left = next(memory, i);
-					return new UnaryOperator(op, left);
+
+					Function function = PrimitiveTypes.DOUBLE.unary.get(op);
+					return new FunctionCall(function, left);
 				}
 			}
 
@@ -183,7 +185,9 @@ public class MyParser
 					found = true;
 					Expression left = ex;
 					Expression right = next(memory, i + 1);
-					ex = new BinaryOperator(op, left, right);
+
+					Function function = PrimitiveTypes.DOUBLE.binary.get(PrimitiveTypes.DOUBLE).get(op);
+					ex = new FunctionCall(function, left, right);
 					break;
 				}
 			}
