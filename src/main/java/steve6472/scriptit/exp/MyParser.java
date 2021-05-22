@@ -27,6 +27,12 @@ public class MyParser
 			},
 			{
 				Operator.ADD, Operator.SUB
+			},
+			{
+				Operator.LESS_THAN, Operator.GREATER_THAN
+			},
+			{
+				Operator.EQUAL, Operator.NOT_EQUAL
 			}
 		};
 
@@ -87,6 +93,30 @@ public class MyParser
 				nextChar(6);
 				Expression next = next(0);
 				return new Return(next);
+			}
+
+			if (line.substring(pos).startsWith("continue"))
+			{
+				nextChar(8);
+				return new LoopControl(Result.continueLoop());
+			}
+
+			if (line.substring(pos).startsWith("break"))
+			{
+				nextChar(5);
+				return new LoopControl(Result.breakLoop());
+			}
+
+			if (line.substring(pos).startsWith("true"))
+			{
+				nextChar(4);
+				return new ValueConstant(PrimitiveTypes.TRUE);
+			}
+
+			if (line.substring(pos).startsWith("false"))
+			{
+				nextChar(5);
+				return new ValueConstant(PrimitiveTypes.FALSE);
 			}
 
 			for (Operator op : UNARY_OPERATORS)

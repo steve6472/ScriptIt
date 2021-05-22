@@ -44,13 +44,22 @@ public class Main
 
 		public Result execute()
 		{
-			for (currentIndex = lastIndex; currentIndex < lines.length; currentIndex++)
+			currentIndex = lastIndex;
+			while (currentIndex < lines.length)
 			{
 				lastIndex = currentIndex;
 
 				Result result = lines[currentIndex].execute(this);
-				if (result.isDelay() || result.isReturnValue() || result.isReturn())
+				if (result.isReturnValue() || result.isReturn())
+				{
+					lastIndex = 0;
 					return result;
+				}
+				if (result.isDelay())
+					return result;
+				if (result.isLoop())
+					return result;
+				currentIndex++;
 			}
 
 			return Result.return_();
@@ -72,7 +81,7 @@ public class Main
 		}
 	}
 
-	public static void main(String[] args)
+	public static void main(String[] args) throws InterruptedException
 	{
 		// start, stop, t
 		String[] lerp =
@@ -85,7 +94,7 @@ public class Main
 				"m_ = t * stop",
 				"System.print(m_)",
 				"return m + m_",
-				"System.print(69)"
+				"System.print(69.0)"
 			};
 
 		String[] expressions =
@@ -139,6 +148,37 @@ public class Main
 		Function elseBody = new Function();
 		elseBody.setExpressions(script, "System.print(false)", "delay(2000)", "return 0");
 
+		Function whileBody = new Function();
+		whileBody.setExpressions(script, "System.print(var)", "delay(200)", "var = var + 1.0");
+
+		Function literallyJustBreak = new Function();
+		literallyJustBreak.setExpressions(script, "break");
+
+		Function printAndBreak = new Function();
+		printAndBreak.setExpressions(script, "System.print(888.888)", "break");
+
+		Function literallyJustContinue = new Function();
+		literallyJustContinue.setExpressions(script, "continue");
+
+		Function whileBody_ = new Function();
+		whileBody_.lines = new ExpressionExecutor[]
+			{
+				new ExpressionExecutor(script.memory).setExpression(script.parser.setExpression("System.print(var)").parse()),
+				new ExpressionExecutor(script.memory).setExpression(script.parser.setExpression("delay(200)").parse()),
+				new ExpressionExecutor(script.memory).setExpression(script.parser.setExpression("var = var + 1.0").parse()),
+				new ExpressionExecutor(script.memory).setExpression(new If(script.parser.setExpression("var > 4.0").parse(), literallyJustBreak))
+			};
+
+		Function whileBody__ = new Function();
+		whileBody__.lines = new ExpressionExecutor[]
+			{
+				new ExpressionExecutor(script.memory).setExpression(script.parser.setExpression("System.print(var)").parse()),
+				new ExpressionExecutor(script.memory).setExpression(script.parser.setExpression("delay(200)").parse()),
+				new ExpressionExecutor(script.memory).setExpression(script.parser.setExpression("var = var + 1.0").parse()),
+				new ExpressionExecutor(script.memory).setExpression(new IfElse(new If(script.parser.setExpression("var < 3.0").parse(), literallyJustContinue), printAndBreak)),
+				new ExpressionExecutor(script.memory).setExpression(script.parser.setExpression("System.print(666.666)").parse())
+			};
+
 		Function del = new Function();
 		del.setExpressions(script, "delay(1000)", "System.print(8)", "return 3.0");
 		script.memory.addFunction(FunctionParameters.function("del").build(), del);
@@ -148,22 +188,52 @@ public class Main
 //		script.setExpressions("v = vec2(3.02, 6.7)", "return v.normalize()");
 //		script.setExpressions("return Math.sqrt(2.0)");
 
+		// if / if-else
+/*
 		script.lines = new ExpressionExecutor[]
 			{
-				new ExpressionExecutor(script.memory).setExpression(new Assignment("var", new Constant(PrimitiveTypes.DOUBLE, 2.0))),
-//				new ExpressionExecutor(script.memory).setExpression(new If(new BinaryOperator(Operator.LESS_THAN, new Variable(VariableSource.memory("var")), new Constant(PrimitiveTypes.DOUBLE, 3.0)), ifBody))
-				new ExpressionExecutor(script.memory).setExpression(new IfElse(new If(new BinaryOperator(Operator.LESS_THAN, new Variable(VariableSource.memory("var")), new Constant(PrimitiveTypes.DOUBLE, 2.0)), ifBody), elseBody))
-			};
+				new ExpressionExecutor(script.memory).setExpression(script.parser.setExpression("var = 2.0").parse()),
+//				new ExpressionExecutor(script.memory).setExpression(new If(new BinaryOperator(Operator.LESS_THAN, new Variable(VariableSource.memory("var")), new Constant(PrimitiveTypes.DOUBLE, 3.0)), ifBody)) // return nothing if false
+				new ExpressionExecutor(script.memory).setExpression(new IfElse(new If(new BinaryOperator(Operator.LESS_THAN, new Variable(VariableSource.memory("var")), new Constant(PrimitiveTypes.DOUBLE, 3.0)), ifBody), elseBody))
+			};*/
 
+		// while loops
+/*
+		script.lines = new ExpressionExecutor[]
+			{
+				new ExpressionExecutor(script.memory).setExpression(new Assignment("var", new Constant(PrimitiveTypes.DOUBLE, 0.0))),
+				new ExpressionExecutor(script.memory).setExpression(new While(new If(script.parser.setExpression("var < 5.0").parse(), whileBody))),
+				new ExpressionExecutor(script.memory).setExpression(script.parser.setExpression("return true").parse())
+			};*/
+
+		/*
+		script.lines = new ExpressionExecutor[]
+			{
+				new ExpressionExecutor(script.memory).setExpression(new Assignment("var", new Constant(PrimitiveTypes.DOUBLE, 0.0))),
+				new ExpressionExecutor(script.memory).setExpression(new While(new If(script.parser.setExpression("true").parse(), whileBody_))),
+				new ExpressionExecutor(script.memory).setExpression(script.parser.setExpression("return true").parse())
+			};*/
+/*
+		script.lines = new ExpressionExecutor[]
+			{
+				new ExpressionExecutor(script.memory).setExpression(new Assignment("var", new Constant(PrimitiveTypes.DOUBLE, 0.0))),
+				new ExpressionExecutor(script.memory).setExpression(script.parser.setExpression("delay(500)").parse()),
+				new ExpressionExecutor(script.memory).setExpression(new While(new If(script.parser.setExpression("var < 7.0").parse(), whileBody__))),
+				new ExpressionExecutor(script.memory).setExpression(script.parser.setExpression("return true").parse())
+			};*/
+
+		runWithDelay(script);
+		System.out.println("-".repeat(64));
 		runWithDelay(script);
 	}
 
-	private static void runWithDelay(Script script)
+	private static void runWithDelay(Script script) throws InterruptedException
 	{
 		Result ret = Result.delay();
 
-		while (ret.isDelay() && !ret.isReturnValue() && ! ret.isReturn())
+		while ((ret.isDelay() || ret.isLoop()) && !ret.isReturnValue() && !ret.isReturn())
 		{
+//			Thread.sleep(100);
 			ret = script.execute();
 		}
 		if (ret.isReturnValue())

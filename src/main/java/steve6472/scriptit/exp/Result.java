@@ -11,6 +11,9 @@ public class Result
 	private static final Result PASS = new Result(Value.NULL, ResultStatus.PASS);
 	private static final Result DELAY = new Result(Value.NULL, ResultStatus.DELAY);
 	private static final Result PASS_IF_FALSE = new Result(Value.NULL, ResultStatus.PASS_IF_FALSE);
+	private static final Result BREAK = new Result(Value.NULL, ResultStatus.BREAK);
+	private static final Result CONTINUE = new Result(Value.NULL, ResultStatus.CONTINUE);
+	private static final Result LOOP = new Result(Value.NULL, ResultStatus.LOOP);
 
 	private final Value value;
 	private final ResultStatus status;
@@ -44,6 +47,21 @@ public class Result
 	public static Result passIfFalse()
 	{
 		return PASS_IF_FALSE;
+	}
+
+	public static Result breakLoop()
+	{
+		return BREAK;
+	}
+
+	public static Result continueLoop()
+	{
+		return CONTINUE;
+	}
+
+	public static Result loop()
+	{
+		return LOOP;
 	}
 
 	public static Result returnValue(Value value)
@@ -84,6 +102,26 @@ public class Result
 	public boolean isIfFalse()
 	{
 		return getStatus() == ResultStatus.PASS_IF_FALSE;
+	}
+
+	public boolean isLoop()
+	{
+		return getStatus() == ResultStatus.LOOP;
+	}
+
+	public boolean isBreak()
+	{
+		return getStatus() == ResultStatus.BREAK;
+	}
+
+	public boolean isContinue()
+	{
+		return getStatus() == ResultStatus.CONTINUE;
+	}
+
+	public boolean isPass()
+	{
+		return getStatus() == ResultStatus.PASS;
 	}
 
 	@Override

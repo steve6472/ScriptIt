@@ -51,15 +51,5 @@ class IfElse extends Expression
 			elseResult = Result.delay();
 			return leftResult;
 		}
-
-
-//		Result ifResult = ifFunction.apply(script);
-//		if (ifResult.isIfFalse())
-//		{
-//			return elseFunction.apply(script);
-//		} else
-//		{
-//			return ifResult;
-//		}
 	}
 }

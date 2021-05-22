@@ -67,10 +67,13 @@ public class Function extends Expression
 			typeFunction.type.functions.forEach((p, f) -> script.getMemory().addFunction(p, f));
 		}
 
-		for (int i = expressionIndex; i < lines.length; i++)
+		int i = expressionIndex;
+		while (i < lines.length)
 		{
 			expressionIndex = i;
 			Result result = lines[i].execute(script);
+
+//			System.out.println(script.memory.getCurr() + " " + i + " Func result: " + result);
 
 			if (result.isDelay())
 			{
@@ -88,11 +91,30 @@ public class Function extends Expression
 				expressionIndex = 0;
 				script.getMemory().pop();
 				return Result.pass();
+			} else if (result.isLoop())
+			{
+				System.out.println("I GOT CALLED! (Function:96)");
+				continue;
+			} else if (result.isBreak())
+			{
+				isDelayed = false;
+				expressionIndex = 0;
+				script.getMemory().pop();
+				return Result.breakLoop();
+			} else if (result.isContinue())
+			{
+				isDelayed = false;
+				expressionIndex = 0;
+				script.getMemory().pop();
+				return Result.continueLoop();
 			}
+
+			i++;
 		}
 
 		if (!isDelayed)
 			script.getMemory().pop();
+		expressionIndex = 0;
 		return Result.pass();
 	}
 }

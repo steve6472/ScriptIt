@@ -1,0 +1,19 @@
+v = 0
+delay(500)
+
+while (v < 7)
+{
+    print(v)
+    delay(200)
+    v = v + 1
+
+    if (v < 3)
+        continue
+    else
+        print(888.888)
+        break;
+
+    print(666.666)
+}
+
+return true

@@ -32,6 +32,7 @@ class If extends Expression
 				return condResult;
 
 			Value condValue = condResult.getValue();
+			condResult = Result.delay();
 
 			// Condition is false -> do not continue
 			if (!condValue.getBoolean())

@@ -39,7 +39,19 @@ public class Memory
 	{
 		if (name.equals("true") || name.equals("false"))
 			throw new RuntimeException("true or false can not be used as variable names");
-		variables.put(name, value);
+		if (variables.containsKey(name))
+		{
+			Value value1 = variables.get(name);
+			if (value == value1)
+				return;
+			if (value1.type != value.type)
+				throw new RuntimeException("Type mismatch, " + value.type + " != " + value1.type);
+			value1.values.clear();
+			value.values.forEach(value1::setValue);
+		} else
+		{
+			variables.put(name, value);
+		}
 	}
 
 	public Value getVariable(String name)
@@ -104,7 +116,11 @@ public class Memory
 
 	public void dumpVariables()
 	{
-		variables.forEach((k, v) -> System.out.println(k + " = " + v));
+		variables.forEach((k, v) ->
+		{
+			if (!k.equals("true") && !k.equals("false"))
+				System.out.println(k + " = " + v);
+		});
 	}
 
 	public void dumpFunctions()

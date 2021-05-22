@@ -8,5 +8,5 @@ package steve6472.scriptit.exp;
  ***********************/
 public enum ResultStatus
 {
-	VALUE, DELAY, RETURN_VALUE, RETURN, PASS, PASS_IF_FALSE
+	VALUE, DELAY, RETURN_VALUE, RETURN, PASS, PASS_IF_FALSE, BREAK, CONTINUE, LOOP
 }
