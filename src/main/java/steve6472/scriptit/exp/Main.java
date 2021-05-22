@@ -3,6 +3,7 @@ package steve6472.scriptit.exp;
 import steve6472.scriptit.exp.functions.NewVec2;
 import steve6472.scriptit.exp.libraries.Library;
 import steve6472.scriptit.exp.libraries.MathLibrary;
+import steve6472.scriptit.exp.libraries.SystemLibrary;
 
 /**********************
  * Created by steve6472 (Mirek Jozefek)
@@ -77,14 +78,14 @@ public class Main
 		String[] lerp =
 			{
 				"a = 1.0 - t",
-				"print(a)",
+				"System.print(a)",
 				"m = a * start",
-				"print(m)",
+				"System.print(m)",
 				"delay(500)",
 				"m_ = t * stop",
-				"print(m_)",
+				"System.print(m_)",
 				"return m + m_",
-				"print(69)"
+				"System.print(69)"
 			};
 
 		String[] expressions =
@@ -103,8 +104,8 @@ public class Main
 		String[] lerpTest =
 			{
 				"l = lerp(3.0, 5.0, 0.5) * 2.0",
-				"print(-1)",
-				"print(-l)",
+				"System.print(-1)",
+				"System.print(-l)",
 				"delay(500)",
 				"return l"
 			};
@@ -118,11 +119,12 @@ public class Main
 		Script script = new Script();
 		PrimitiveTypes.init(script);
 		script.addLibrary(new MathLibrary());
+		script.addLibrary(new SystemLibrary());
 
-		Function doubleMul = new Function("left", "right");
-//		doubleMul.setExpressions(script, "temp = left + right", "temp = temp * right", "return temp - left");
-		doubleMul.setExpressions(script, "return left * right");
-		PrimitiveTypes.DOUBLE.addBinaryOperator(PrimitiveTypes.DOUBLE, Operator.MUL, doubleMul);
+//		Function doubleMul = new Function("left", "right");
+////		doubleMul.setExpressions(script, "temp = left + right", "temp = temp * right", "return temp - left");
+//		doubleMul.setExpressions(script, "return left * right");
+//		PrimitiveTypes.DOUBLE.addBinaryOperator(PrimitiveTypes.DOUBLE, Operator.MUL, doubleMul);
 
 		// Constractor, TODO: move to PrimitiveTypes
 		Function newVec2 = new NewVec2();
@@ -133,11 +135,11 @@ public class Main
 		script.memory.addFunction(FunctionParameters.function("lerp").addType(PrimitiveTypes.DOUBLE).addType(PrimitiveTypes.DOUBLE).addType(PrimitiveTypes.DOUBLE).build(), lerpFunction);
 
 		Function del = new Function();
-		del.setExpressions(script, "delay(1000)", "print(8)", "return 3.0");
+		del.setExpressions(script, "delay(1000)", "System.print(8)", "return 3.0");
 		script.memory.addFunction(FunctionParameters.function("del").build(), del);
 
-//		script.setExpressions("return lerp(3.0, 5.0, 0.5) * lerp(0.0, 1.0, 0.5)");
-		script.setExpressions("v = vec2(3.02, 6.7)", "return v.normalize()");
+		script.setExpressions("return lerp(3.0, 5.0, 0.5) * lerp(0.0, 1.0, 0.5)");
+//		script.setExpressions("v = vec2(3.02, 6.7)", "return v.normalize()");
 //		script.setExpressions("return Math.sqrt(2.0)");
 
 		runWithDelay(script);

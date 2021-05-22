@@ -30,7 +30,7 @@ public class FunctionSource
 
 	public static FunctionSource staticFunction(String functionName, Library library)
 	{
-		return new FunctionSource(FunctionSourceType.FUNCTION, functionName, library, Value.NULL);
+		return new FunctionSource(FunctionSourceType.STATIC, functionName, library, Value.NULL);
 	}
 
 	public static FunctionSource dot(String functionName, Value value)

@@ -54,6 +54,10 @@ class FunctionCall extends Expression
 				{
 					function = source.value.type.getFunction(source.functionName, types);
 				}
+				else if (source.sourceType == FunctionSourceType.STATIC)
+				{
+					function = source.library.getFunction(source.functionName, types);
+				}
 				else
 				{
 					throw new IllegalArgumentException("SourceType " + source.sourceType + " not implemented!");

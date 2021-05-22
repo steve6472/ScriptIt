@@ -15,6 +15,7 @@ class DotOperator extends Expression
 	Result rightResult = Result.delay();
 	Value leftValue, rightValue;
 	boolean isLeftLibrary = false;
+	boolean libraryChecked = false;
 	Library library = null;
 
 	public DotOperator(Expression left, Expression right)
@@ -38,12 +39,25 @@ class DotOperator extends Expression
 	@Override
 	public Result apply(Main.Script script)
 	{
-		if (left instanceof Variable va)
+		if (!libraryChecked || !isLeftLibrary)
 		{
-			if (script.getMemory().isLibrary(va.source.variableName))
+			if (left instanceof Variable va)
 			{
-				isLeftLibrary = true;
-				library = script.getMemory().libraries.get(va.source.variableName);
+				if (script.getMemory().isLibrary(va.source.variableName))
+				{
+					libraryChecked = true;
+					isLeftLibrary = true;
+					library = script.getMemory().libraries.get(va.source.variableName);
+				} else
+				{
+					if (leftResult.isDelay())
+						leftResult = left.apply(script);
+
+					if (leftResult.isDelay())
+						return leftResult;
+
+					leftValue = leftResult.getValue();
+				}
 			} else
 			{
 				if (leftResult.isDelay())
@@ -54,15 +68,6 @@ class DotOperator extends Expression
 
 				leftValue = leftResult.getValue();
 			}
-		} else
-		{
-			if (leftResult.isDelay())
-				leftResult = left.apply(script);
-
-			if (leftResult.isDelay())
-				return leftResult;
-
-			leftValue = leftResult.getValue();
 		}
 
 		if (right instanceof FunctionCall fc)

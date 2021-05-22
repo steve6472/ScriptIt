@@ -1,8 +1,6 @@
 package steve6472.scriptit.exp;
 
 import steve6472.scriptit.exp.functions.DelayFunction;
-import steve6472.scriptit.exp.functions.PrintFunction;
-import steve6472.scriptit.exp.functions.SqrtFunction;
 
 /**********************
  * Created by steve6472 (Mirek Jozefek)
@@ -26,10 +24,6 @@ public class MemoryStack extends Memory
 
 		// Force delay and print functions
 		addFunction(FunctionParameters.function("delay").addType(PrimitiveTypes.INT).build(), new DelayFunction());
-		addFunction(FunctionParameters.function("print").addType(PrimitiveTypes.DOUBLE).build(), new PrintFunction());
-		addFunction(FunctionParameters.function("print").addType(PrimitiveTypes.INT).build(), new PrintFunction());
-		addFunction(FunctionParameters.function("print").addType(PrimitiveTypes.NULL).build(), new PrintFunction());
-		addFunction(FunctionParameters.function("sqrt").addType(PrimitiveTypes.DOUBLE).build(), new SqrtFunction());
 	}
 
 	public MemoryStack push()
