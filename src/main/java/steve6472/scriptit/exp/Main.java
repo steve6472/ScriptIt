@@ -135,9 +135,9 @@ public class Main
 		script.memory.addFunction(FunctionParameters.function("lerp").addType(PrimitiveTypes.DOUBLE).addType(PrimitiveTypes.DOUBLE).addType(PrimitiveTypes.DOUBLE).build(), lerpFunction);
 
 		Function ifBody = new Function();
-		ifBody.setExpressions(script, "System.print(true)", "return 1");
+		ifBody.setExpressions(script, "System.print(true)", "delay(1000)", "return 1");
 		Function elseBody = new Function();
-		elseBody.setExpressions(script, "System.print(false)", "return 0");
+		elseBody.setExpressions(script, "System.print(false)", "delay(2000)", "return 0");
 
 		Function del = new Function();
 		del.setExpressions(script, "delay(1000)", "System.print(8)", "return 3.0");
@@ -151,7 +151,8 @@ public class Main
 		script.lines = new ExpressionExecutor[]
 			{
 				new ExpressionExecutor(script.memory).setExpression(new Assignment("var", new Constant(PrimitiveTypes.DOUBLE, 2.0))),
-				new ExpressionExecutor(script.memory).setExpression(new If(new BinaryOperator(Operator.LESS_THAN, new Variable(VariableSource.memory("var")), new Constant(PrimitiveTypes.DOUBLE, 3.0)), ifBody))
+//				new ExpressionExecutor(script.memory).setExpression(new If(new BinaryOperator(Operator.LESS_THAN, new Variable(VariableSource.memory("var")), new Constant(PrimitiveTypes.DOUBLE, 3.0)), ifBody))
+				new ExpressionExecutor(script.memory).setExpression(new IfElse(new If(new BinaryOperator(Operator.LESS_THAN, new Variable(VariableSource.memory("var")), new Constant(PrimitiveTypes.DOUBLE, 2.0)), ifBody), elseBody))
 			};
 
 		runWithDelay(script);

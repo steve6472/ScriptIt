@@ -81,6 +81,11 @@ public class Result
 		return getStatus() == ResultStatus.RETURN;
 	}
 
+	public boolean isIfFalse()
+	{
+		return getStatus() == ResultStatus.PASS_IF_FALSE;
+	}
+
 	@Override
 	public String toString()
 	{
