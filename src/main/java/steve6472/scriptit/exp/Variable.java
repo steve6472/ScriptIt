@@ -8,22 +8,25 @@ package steve6472.scriptit.exp;
  ***********************/
 class Variable extends Expression
 {
-	String name;
+	public VariableSource source;
 
-	public Variable(String name)
+	public Variable(VariableSource source)
 	{
-		this.name = name;
+		this.source = source;
 	}
 
 	@Override
 	public Result apply(Main.Script script)
 	{
-		return Result.value(script.currentExecutor().memory.getVariable(name));
+		if (source.sourceType == VariableSourceType.MEMORY)
+			return Result.value(script.currentExecutor().memory.getVariable(source.variableName));
+		else
+			return Result.value(source.value.getValue(source.variableName));
 	}
 
 	@Override
 	public String toString()
 	{
-		return "Variable{" + "name=" + name + '}';
+		return "Variable{" + "source=" + source + '}';
 	}
 }

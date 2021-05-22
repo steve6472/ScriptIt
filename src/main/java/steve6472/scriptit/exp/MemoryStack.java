@@ -2,6 +2,7 @@ package steve6472.scriptit.exp;
 
 import steve6472.scriptit.exp.functions.DelayFunction;
 import steve6472.scriptit.exp.functions.PrintFunction;
+import steve6472.scriptit.exp.functions.SqrtFunction;
 
 /**********************
  * Created by steve6472 (Mirek Jozefek)
@@ -28,6 +29,7 @@ public class MemoryStack extends Memory
 		addFunction(FunctionParameters.function("print").addType(PrimitiveTypes.DOUBLE).build(), new PrintFunction());
 		addFunction(FunctionParameters.function("print").addType(PrimitiveTypes.INT).build(), new PrintFunction());
 		addFunction(FunctionParameters.function("print").addType(PrimitiveTypes.NULL).build(), new PrintFunction());
+		addFunction(FunctionParameters.function("sqrt").addType(PrimitiveTypes.DOUBLE).build(), new SqrtFunction());
 	}
 
 	public MemoryStack push()
@@ -40,5 +42,10 @@ public class MemoryStack extends Memory
 	{
 		set(memories[--curr]);
 		return this;
+	}
+
+	public int getCurr()
+	{
+		return curr;
 	}
 }

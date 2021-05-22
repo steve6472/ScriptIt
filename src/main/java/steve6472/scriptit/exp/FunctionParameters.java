@@ -46,6 +46,11 @@ public class FunctionParameters
 		return new FunctionParametersBuilder(name);
 	}
 
+	public static FunctionParameters create(String name, Type... types)
+	{
+		return new FunctionParameters(name, types);
+	}
+
 	@Override
 	public String toString()
 	{

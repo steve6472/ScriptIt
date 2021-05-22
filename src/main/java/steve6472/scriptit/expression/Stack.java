@@ -8,11 +8,13 @@ import java.util.List;
  */
 public class Stack<T>
 {
-	private final List<T> stack;
+	private final int size;
+	private  List<T> stack;
 
 	public Stack(int size)
 	{
-		stack = new ArrayList<>(size);
+		this.size = size;
+		this.stack = new ArrayList<>(size);
 	}
 
 	public void push(T exp)
@@ -41,6 +43,11 @@ public class Stack<T>
 	public boolean isEmpty()
 	{
 		return stack.isEmpty();
+	}
+
+	public void clear()
+	{
+		stack = new ArrayList<>(size);
 	}
 
 	public void printStack()

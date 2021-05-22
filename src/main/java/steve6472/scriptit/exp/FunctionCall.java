@@ -9,15 +9,15 @@ package steve6472.scriptit.exp;
 class FunctionCall extends Expression
 {
 	DelayValue[] arguments;
-	String functionName;
 	Function function = null;
 	Value[] args;
 	int index = 0;
 	boolean isDelayed;
+	FunctionSource source;
 
-	public FunctionCall(String functionName, Expression... arguments)
+	public FunctionCall(FunctionSource source, Expression... arguments)
 	{
-		this.functionName = functionName;
+		this.source = source;
 		this.arguments = new DelayValue[arguments.length];
 		for (int i = 0; i < arguments.length; i++)
 		{
@@ -46,9 +46,25 @@ class FunctionCall extends Expression
 					Value a = args[i];
 					types[i] = a.type;
 				}
-				function = script.getMemory().getFunction(functionName, types);
+				if (source.sourceType == FunctionSourceType.FUNCTION)
+				{
+					function = script.getMemory().getFunction(source.functionName, types);
+				}
+				else if (source.sourceType == FunctionSourceType.VALUE)
+				{
+					function = source.value.type.getFunction(source.functionName, types);
+				}
+				else
+				{
+					throw new IllegalArgumentException("SourceType " + source.sourceType + " not implemented!");
+				}
 			}
 			function.setArguments(args);
+		}
+
+		if (source.sourceType == FunctionSourceType.VALUE)
+		{
+			function.setTypeFunction(source.value);
 		}
 
 		isDelayed = false;

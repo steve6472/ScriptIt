@@ -13,6 +13,7 @@ public class Function extends Expression
 	private int expressionIndex = 0;
 	private boolean isDelayed = false;
 	protected Value[] arguments;
+	protected Value typeFunction = null;
 
 	public Function(String... argumentNames)
 	{
@@ -34,6 +35,11 @@ public class Function extends Expression
 		this.arguments = arguments;
 	}
 
+	public void setTypeFunction(Value typeFunction)
+	{
+		this.typeFunction = typeFunction;
+	}
+
 	@Override
 	public Result apply(Main.Script script)
 	{
@@ -43,6 +49,19 @@ public class Function extends Expression
 		for (int i = 0; i < arguments.length; i++)
 		{
 			script.getMemory().addVariable(this.argumentNames[i], arguments[i]);
+		}
+
+		if (!isDelayed && typeFunction != null)
+		{
+			typeFunction.values.forEach((k, v) ->
+			{
+				if (!typeFunction.isPrimitive())
+				{
+					script.getMemory().addVariable(k, (Value) v);
+				}
+			});
+
+			typeFunction.type.functions.forEach((p, f) -> script.getMemory().addFunction(p, f));
 		}
 
 		for (int i = expressionIndex; i < lines.length; i++)

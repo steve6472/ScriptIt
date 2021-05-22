@@ -1,5 +1,9 @@
 package steve6472.scriptit.exp;
 
+import steve6472.scriptit.exp.functions.NewVec2;
+import steve6472.scriptit.exp.libraries.Library;
+import steve6472.scriptit.exp.libraries.MathLibrary;
+
 /**********************
  * Created by steve6472 (Mirek Jozefek)
  * On date: 5/21/2021
@@ -20,6 +24,11 @@ public class Main
 		{
 			this.parser = new MyParser();
 			this.memory = new MemoryStack(64);
+		}
+
+		public void addLibrary(Library library)
+		{
+			memory.addLibrary(library);
 		}
 
 		public void setExpressions(String... expressions)
@@ -107,11 +116,17 @@ public class Main
 			};*/
 
 		Script script = new Script();
+		PrimitiveTypes.init(script);
+		script.addLibrary(new MathLibrary());
 
 		Function doubleMul = new Function("left", "right");
 //		doubleMul.setExpressions(script, "temp = left + right", "temp = temp * right", "return temp - left");
 		doubleMul.setExpressions(script, "return left * right");
 		PrimitiveTypes.DOUBLE.addBinaryOperator(PrimitiveTypes.DOUBLE, Operator.MUL, doubleMul);
+
+		// Constractor, TODO: move to PrimitiveTypes
+		Function newVec2 = new NewVec2();
+		script.memory.addFunction(FunctionParameters.constructor(PrimitiveTypes.VEC2).addType(PrimitiveTypes.DOUBLE).addType(PrimitiveTypes.DOUBLE).build(), newVec2);
 
 		Function lerpFunction = new Function("start", "stop", "t");
 		lerpFunction.setExpressions(script, lerp);
@@ -121,7 +136,9 @@ public class Main
 		del.setExpressions(script, "delay(1000)", "print(8)", "return 3.0");
 		script.memory.addFunction(FunctionParameters.function("del").build(), del);
 
-		script.setExpressions("return lerp(3.0, 5.0, 0.5) * lerp(0.0, 1.0, 0.5)");
+//		script.setExpressions("return lerp(3.0, 5.0, 0.5) * lerp(0.0, 1.0, 0.5)");
+		script.setExpressions("v = vec2(3.02, 6.7)", "return v.normalize()");
+//		script.setExpressions("return Math.sqrt(2.0)");
 
 		runWithDelay(script);
 	}

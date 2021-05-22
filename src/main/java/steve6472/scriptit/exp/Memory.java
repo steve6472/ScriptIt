@@ -1,5 +1,8 @@
 package steve6472.scriptit.exp;
 
+import steve6472.scriptit.exp.libraries.Library;
+
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -11,13 +14,25 @@ import java.util.Map;
  ***********************/
 public class Memory
 {
+	Map<String, Library> libraries;
 	Map<FunctionParameters, Function> functions;
 	Map<String, Value> variables;
 
 	public Memory()
 	{
+		this.libraries = new HashMap<>();
 		this.functions = new HashMap<>();
 		this.variables = new HashMap<>();
+	}
+
+	public boolean isLibrary(String name)
+	{
+		return libraries.containsKey(name);
+	}
+
+	public void addLibrary(Library library)
+	{
+		this.libraries.put(library.getLibraryName(), library);
 	}
 
 	public void addVariable(String name, Value value)
@@ -61,6 +76,9 @@ public class Memory
 			break;
 		}
 
+		if (func == null)
+			throw new RuntimeException("Function '" + name + "' with argument types " + Arrays.toString(types) + " not found!");
+
 		return func;
 	}
 
@@ -70,8 +88,10 @@ public class Memory
 
 	public void set(Memory other)
 	{
+		libraries.clear();
 		functions.clear();
 		variables.clear();
+		other.libraries.forEach((k, l) -> libraries.put(k, l));
 		other.functions.forEach((k, m) -> functions.put(k, m));
 		other.variables.forEach((k, v) -> variables.put(k, v));
 	}

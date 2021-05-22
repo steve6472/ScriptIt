@@ -20,6 +20,9 @@ public class MyParser
 	public static final Operator[][] BINARY_PRECENDENCE =
 		{
 			{
+				Operator.DOT
+			},
+			{
 				Operator.MUL, Operator.DIV, Operator.MOD
 			},
 			{
@@ -40,6 +43,7 @@ public class MyParser
 	public MyParser setExpression(String expression)
 	{
 		pos = -1;
+		functionParameters.clear();
 		this.line = expression;
 		return this;
 	}
@@ -89,9 +93,9 @@ public class MyParser
 			{
 				if (eat(op.getOperator().charAt(0)))
 				{
-					Expression left = next(memory, i);
+					Expression right = next(memory, i);
 
-					return new UnaryOperator(op, left);
+					return new UnaryOperator(op, right);
 				}
 			}
 
@@ -101,12 +105,12 @@ public class MyParser
 				if (ch == ')')
 				{
 					nextChar();
-					return null;
+					ex = null;
 				} else
 				{
 					Expression e = next(memory, 0);
 					eat(')');
-					return e;
+					ex = e;
 				}
 			} else if ((ch >= '0' && ch <= '9') || ch == '.')
 			{
@@ -119,10 +123,10 @@ public class MyParser
 				}
 				if (foundDot)
 				{
-					return new Constant(PrimitiveTypes.DOUBLE, Double.parseDouble(line.substring(startPos, this.pos)));
+					ex = new Constant(PrimitiveTypes.DOUBLE, Double.parseDouble(line.substring(startPos, this.pos)));
 				} else
 				{
-					return new Constant(PrimitiveTypes.INT, Integer.parseInt(line.substring(startPos, this.pos)));
+					ex = new Constant(PrimitiveTypes.INT, Integer.parseInt(line.substring(startPos, this.pos)));
 				}
 			} else if ((ch >= 'A' && ch <= 'Z') || (ch >= 'a' && ch <= 'z') || ch == '_')
 			{
@@ -145,19 +149,18 @@ public class MyParser
 
 					Collections.reverse(parameterList);
 
-					return new FunctionCall(name, parameterList.toArray(new Expression[0]));
-
+					ex = new FunctionCall(FunctionSource.function(name), parameterList.toArray(new Expression[0]));
 				} else
 				{
-					return new Variable(name);
+					ex = new Variable(VariableSource.memory(name));
 				}
-			}
-
-			else
+			} else
 			{
 				System.err.println(ch);
 				throw new IllegalStateException("Dafuq");
 			}
+
+			return ex;
 		}
 
 		for (; ; )
@@ -194,7 +197,13 @@ public class MyParser
 					Expression left = ex;
 					Expression right = next(memory, i + 1);
 
-					ex = new BinaryOperator(op, left, right);
+					if (op == Operator.DOT)
+					{
+						ex = new DotOperator(left, right);
+					} else
+					{
+						ex = new BinaryOperator(op, left, right);
+					}
 					break;
 				}
 			}
