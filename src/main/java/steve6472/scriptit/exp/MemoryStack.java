@@ -24,6 +24,8 @@ public class MemoryStack extends Memory
 
 		// Force delay and print functions
 		addFunction(FunctionParameters.function("delay").addType(PrimitiveTypes.INT).build(), new DelayFunction());
+		variables.put("true", PrimitiveTypes.TRUE);
+		variables.put("false", PrimitiveTypes.FALSE);
 	}
 
 	public MemoryStack push()

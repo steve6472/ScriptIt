@@ -18,7 +18,7 @@ public class Main
 		private final MyParser parser;
 		MemoryStack memory;
 		ExpressionExecutor[] lines;
-		private int expressionIndex = 0;
+		private int lastIndex = 0;
 		private int currentIndex = 0;
 
 		public Script()
@@ -38,15 +38,15 @@ public class Main
 			for (int i = 0; i < expressions.length; i++)
 			{
 				lines[i] = new ExpressionExecutor(memory);
-				lines[i].setExpression(parser.setExpression(expressions[i]).parse(memory));
+				lines[i].setExpression(parser.setExpression(expressions[i]).parse());
 			}
 		}
 
 		public Result execute()
 		{
-			for (currentIndex = expressionIndex; currentIndex < lines.length; currentIndex++)
+			for (currentIndex = lastIndex; currentIndex < lines.length; currentIndex++)
 			{
-				expressionIndex = currentIndex;
+				lastIndex = currentIndex;
 
 				Result result = lines[currentIndex].execute(this);
 				if (result.isDelay() || result.isReturnValue() || result.isReturn())
@@ -134,13 +134,25 @@ public class Main
 		lerpFunction.setExpressions(script, lerp);
 		script.memory.addFunction(FunctionParameters.function("lerp").addType(PrimitiveTypes.DOUBLE).addType(PrimitiveTypes.DOUBLE).addType(PrimitiveTypes.DOUBLE).build(), lerpFunction);
 
+		Function ifBody = new Function();
+		ifBody.setExpressions(script, "System.print(true)", "return 1");
+		Function elseBody = new Function();
+		elseBody.setExpressions(script, "System.print(false)", "return 0");
+
 		Function del = new Function();
 		del.setExpressions(script, "delay(1000)", "System.print(8)", "return 3.0");
 		script.memory.addFunction(FunctionParameters.function("del").build(), del);
 
-		script.setExpressions("return lerp(3.0, 5.0, 0.5) * lerp(0.0, 1.0, 0.5)");
+//		script.setExpressions("return lerp(3.0, 5.0, 0.5) * lerp(0.0, 1.0, 0.5)");
+//		script.setExpressions("return lerp(3.0, 5.0, lerp(0.0, 1.0, 0.5)) * lerp(-1.0, 2.0, 0.5)");
 //		script.setExpressions("v = vec2(3.02, 6.7)", "return v.normalize()");
 //		script.setExpressions("return Math.sqrt(2.0)");
+
+		script.lines = new ExpressionExecutor[]
+			{
+				new ExpressionExecutor(script.memory).setExpression(new Assignment("var", new Constant(PrimitiveTypes.DOUBLE, 2.0))),
+				new ExpressionExecutor(script.memory).setExpression(new If(new BinaryOperator(Operator.LESS_THAN, new Variable(VariableSource.memory("var")), new Constant(PrimitiveTypes.DOUBLE, 3.0)), ifBody))
+			};
 
 		runWithDelay(script);
 	}

@@ -37,6 +37,8 @@ public class Memory
 
 	public void addVariable(String name, Value value)
 	{
+		if (name.equals("true") || name.equals("false"))
+			throw new RuntimeException("true or false can not be used as variable names");
 		variables.put(name, value);
 	}
 

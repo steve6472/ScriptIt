@@ -10,6 +10,7 @@ public class Result
 {
 	private static final Result PASS = new Result(Value.NULL, ResultStatus.PASS);
 	private static final Result DELAY = new Result(Value.NULL, ResultStatus.DELAY);
+	private static final Result PASS_IF_FALSE = new Result(Value.NULL, ResultStatus.PASS_IF_FALSE);
 
 	private final Value value;
 	private final ResultStatus status;
@@ -38,6 +39,11 @@ public class Result
 	public static Result pass()
 	{
 		return PASS;
+	}
+
+	public static Result passIfFalse()
+	{
+		return PASS_IF_FALSE;
 	}
 
 	public static Result returnValue(Value value)

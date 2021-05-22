@@ -73,19 +73,19 @@ public class MyParser
 		return false;
 	}
 
-	private Expression next(Memory memory, int i)
+	private Expression next(int i)
 	{
 		Expression ex = null;
 
 		if (i < BINARY_PRECENDENCE.length)
-			ex = next(memory, i + 1);
+			ex = next(i + 1);
 
 		if (i == BINARY_PRECENDENCE.length)
 		{
 			if (line.substring(pos).startsWith("return"))
 			{
 				nextChar(6);
-				Expression next = next(memory, 0);
+				Expression next = next(0);
 				return new Return(next);
 			}
 
@@ -93,7 +93,7 @@ public class MyParser
 			{
 				if (eat(op.getOperator().charAt(0)))
 				{
-					Expression right = next(memory, i);
+					Expression right = next(i);
 
 					return new UnaryOperator(op, right);
 				}
@@ -108,7 +108,7 @@ public class MyParser
 					ex = null;
 				} else
 				{
-					Expression e = next(memory, 0);
+					Expression e = next(0);
 					eat(')');
 					ex = e;
 				}
@@ -139,7 +139,7 @@ public class MyParser
 				{
 					functionParameters.push(new ArrayList<>());
 
-					Expression firstParameter = next(memory, i);
+					Expression firstParameter = next(i);
 
 					List<Expression> parameterList = functionParameters.pop();
 					if (parameterList == null)
@@ -177,11 +177,11 @@ public class MyParser
 						throw new IllegalArgumentException("Variable name '" + varName + "' is invalid");
 					}
 
-					return new Assignment(varName, next(memory, 0));
+					return new Assignment(varName, next(0));
 				}
 				else if (eat(','))
 				{
-					Expression x = next(memory, 0);
+					Expression x = next(0);
 					functionParameters.peek().add(x);
 					return ex;
 				}
@@ -195,7 +195,7 @@ public class MyParser
 				{
 					found = true;
 					Expression left = ex;
-					Expression right = next(memory, i + 1);
+					Expression right = next(i + 1);
 
 					if (op == Operator.DOT)
 					{
@@ -213,10 +213,10 @@ public class MyParser
 		}
 	}
 
-	public Expression parse(Memory memory)
+	public Expression parse()
 	{
 		nextChar();
-		Expression ex = next(memory, 0);
+		Expression ex = next(0);
 		if (pos < line.length()) throw new RuntimeException("Unexpected: " + ch);
 		return ex;
 	}

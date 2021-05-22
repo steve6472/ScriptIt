@@ -56,7 +56,7 @@ public class Library
 		}
 
 		if (func == null)
-			throw new RuntimeException("Function '" + name + "' with argument types " + Arrays.toString(types) + " not found!");
+			throw new RuntimeException("Function '" + name + "' with argument types " + Arrays.toString(types) +" in library " + getLibraryName() + " not found!");
 
 		return func;
 	}

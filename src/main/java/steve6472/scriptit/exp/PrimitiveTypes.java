@@ -12,7 +12,11 @@ public class PrimitiveTypes
 {
 	public static final Type DOUBLE = new Type("double");
 	public static final Type INT = new Type("int");
+	public static final Type BOOL = new Type("bool");
 	public static final Type NULL = new Type("null");
+
+	public static final Value TRUE = newValue(BOOL, true);
+	public static final Value FALSE = newValue(BOOL, false);
 
 	public static final Type VEC2 = new Type("vec2");
 
@@ -24,9 +28,16 @@ public class PrimitiveTypes
 		DOUBLE.addBinaryOperator(DOUBLE, Operator.DIV, new BinaryOperatorOverload((left, right) -> Result.value(newValue(DOUBLE, left.getDouble() / right.getDouble()))));
 		DOUBLE.addBinaryOperator(DOUBLE, Operator.MOD, new BinaryOperatorOverload((left, right) -> Result.value(newValue(DOUBLE, left.getDouble() % right.getDouble()))));
 
+
+		DOUBLE.addBinaryOperator(DOUBLE, Operator.EQUAL, new BinaryOperatorOverload((left, right) -> Result.value(left.getDouble() == right.getDouble() ? TRUE : FALSE)));
+		DOUBLE.addBinaryOperator(DOUBLE, Operator.NOT_EQUAL, new BinaryOperatorOverload((left, right) -> Result.value(left.getDouble() != right.getDouble() ? TRUE : FALSE)));
+		DOUBLE.addBinaryOperator(DOUBLE, Operator.LESS_THAN, new BinaryOperatorOverload((left, right) -> Result.value(left.getDouble() < right.getDouble() ? TRUE : FALSE)));
+		DOUBLE.addBinaryOperator(DOUBLE, Operator.GREATER_THAN, new BinaryOperatorOverload((left, right) -> Result.value(left.getDouble() > right.getDouble() ? TRUE : FALSE)));
+		DOUBLE.addBinaryOperator(DOUBLE, Operator.LESS_THAN_EQUAL, new BinaryOperatorOverload((left, right) -> Result.value(left.getDouble() <= right.getDouble() ? TRUE : FALSE)));
+		DOUBLE.addBinaryOperator(DOUBLE, Operator.GREATER_THAN_EQUAL, new BinaryOperatorOverload((left, right) -> Result.value(left.getDouble() >= right.getDouble() ? TRUE : FALSE)));
+
 		DOUBLE.addUnaryOperator(Operator.ADD, new UnaryOperatorOverload(left -> Result.value(newValue(DOUBLE, +left.getDouble()))));
 		DOUBLE.addUnaryOperator(Operator.SUB, new UnaryOperatorOverload(left -> Result.value(newValue(DOUBLE, -left.getDouble()))));
-
 
 //		VEC2.addConstructor(FunctionParameters.constructor(VEC2).addType(DOUBLE).addType(DOUBLE).build(), par -> newValue(VEC2).setValue("x", newValue(DOUBLE, par[0].getDouble())).setValue("y", newValue(DOUBLE, par[1].getDouble())));
 //		VEC2.addConstructor(FunctionParameters.constructor(VEC2).addType(INT).addType(INT).build(), par -> newValue(VEC2).setValue("x", newValue(DOUBLE, (double) par[0].getInt())).setValue("y", newValue(DOUBLE, (double) par[1].getInt())));
@@ -48,7 +59,7 @@ public class PrimitiveTypes
 		VEC2.addUnaryOperator(Operator.ADD, new UnaryOperatorOverload(Result::value));
 
 		Function normalizeVec2 = new Function();
-		normalizeVec2.setExpressions(script, "len = 1.0 / len()", "return Math.vec2(x * len, y * len)");
+		normalizeVec2.setExpressions(script, "len = 1.0 / len()", "return vec2(x * len, y * len)");
 		VEC2.addFunction(FunctionParameters.function("normalize").build(), normalizeVec2);
 
 		Function lenVec2 = new Function();

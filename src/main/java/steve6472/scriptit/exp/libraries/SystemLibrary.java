@@ -18,6 +18,7 @@ public class SystemLibrary extends Library
 
 		addFunction(FunctionParameters.function("print").addType(PrimitiveTypes.DOUBLE).build(), new PrintFunction());
 		addFunction(FunctionParameters.function("print").addType(PrimitiveTypes.INT).build(), new PrintFunction());
+		addFunction(FunctionParameters.function("print").addType(PrimitiveTypes.BOOL).build(), new PrintFunction());
 		addFunction(FunctionParameters.function("print").addType(PrimitiveTypes.NULL).build(), new PrintFunction());
 	}
 }

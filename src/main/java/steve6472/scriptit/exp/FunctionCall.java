@@ -11,8 +11,8 @@ class FunctionCall extends Expression
 	DelayValue[] arguments;
 	Function function = null;
 	Value[] args;
-	int index = 0;
 	boolean isDelayed;
+	private int lastIndex = 0;
 	FunctionSource source;
 
 	public FunctionCall(FunctionSource source, Expression... arguments)
@@ -31,11 +31,13 @@ class FunctionCall extends Expression
 	{
 		if (!isDelayed)
 		{
-			for (int i = index; i < arguments.length; i++)
+			for (int currentIndex = lastIndex; currentIndex < arguments.length; currentIndex++)
 			{
-				if (arguments[i].apply(script))
+				lastIndex = currentIndex;
+
+				if (arguments[currentIndex].apply(script))
 					return Result.delay();
-				args[i] = arguments[i].val();
+				args[currentIndex] = arguments[currentIndex].val();
 			}
 
 			if (function == null)
@@ -64,11 +66,11 @@ class FunctionCall extends Expression
 				}
 			}
 			function.setArguments(args);
-		}
 
-		if (source.sourceType == FunctionSourceType.VALUE)
-		{
-			function.setTypeFunction(source.value);
+			if (source.sourceType == FunctionSourceType.VALUE)
+			{
+				function.setTypeFunction(source.value);
+			}
 		}
 
 		isDelayed = false;
@@ -78,7 +80,8 @@ class FunctionCall extends Expression
 			isDelayed = true;
 
 		if (!isDelayed)
-			index = 0;
+			lastIndex = 0;
+
 		return r;
 	}
 }
