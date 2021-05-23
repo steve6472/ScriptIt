@@ -8,16 +8,13 @@ import java.util.List;
  */
 public class Stack<T>
 {
-	private final List<T> stack;
+	private final int size;
+	private  List<T> stack;
 
 	public Stack(int size)
 	{
-		stack = new ArrayList<>(size);
-	}
-
-	public Stack()
-	{
-		stack = new ArrayList<>();
+		this.size = size;
+		this.stack = new ArrayList<>(size);
 	}
 
 	public void push(T exp)
@@ -38,9 +35,9 @@ public class Stack<T>
 		}
 	}
 
-	public T get(int index)
+	public T peek()
 	{
-		return stack.get(index);
+		return stack.get(0);
 	}
 
 	public boolean isEmpty()
@@ -48,9 +45,13 @@ public class Stack<T>
 		return stack.isEmpty();
 	}
 
-	@Override
-	public String toString()
+	public void clear()
 	{
-		return "Stack{" + "stack=" + stack + '}';
+		stack = new ArrayList<>(size);
+	}
+
+	public void printStack()
+	{
+		System.out.println(stack);
 	}
 }

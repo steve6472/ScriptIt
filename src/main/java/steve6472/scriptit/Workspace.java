@@ -1,67 +1,64 @@
 package steve6472.scriptit;
 
-import steve6472.scriptit.expression.ClassProcedure;
-import steve6472.scriptit.expression.Constructor;
-import steve6472.scriptit.expression.FunctionParameters;
-import steve6472.scriptit.expression.Type;
+import steve6472.scriptit.libraries.Library;
+import steve6472.scriptit.libraries.MathLibrary;
+import steve6472.scriptit.libraries.SystemLibrary;
+import steve6472.scriptit.types.PrimitiveTypes;
 
 import java.util.HashMap;
 import java.util.Map;
 
 /**********************
  * Created by steve6472 (Mirek Jozefek)
- * On date: 5/7/2021
+ * On date: 5/23/2021
  * Project: ScriptIt
  *
  ***********************/
 public class Workspace
 {
-	private final Map<String, Type> types;
-	private final Map<String, Map<FunctionParameters, Constructor>> functions;
+	private final Map<String, Library> libraries = new HashMap<>();
+	private final Map<String, Type> types = new HashMap<>();
 
 	public Workspace()
 	{
-		types = new HashMap<>();
-		functions = new HashMap<>();
+		addLibrary(new MathLibrary());
+		addLibrary(new SystemLibrary());
+
+		addType(PrimitiveTypes.DOUBLE);
+		addType(PrimitiveTypes.INT);
+		addType(PrimitiveTypes.BOOL);
+		addType(PrimitiveTypes.STRING);
+		addType(PrimitiveTypes.CHAR);
+		addType(PrimitiveTypes.NULL);
+	}
+
+	public void addLibrary(Library library)
+	{
+		this.libraries.put(library.getLibraryName(), library);
+	}
+
+	public void removeLibrary(String name)
+	{
+		this.libraries.remove(name);
+	}
+
+	public Library getLibrary(String name)
+	{
+		return libraries.get(name);
 	}
 
 	public void addType(Type type)
 	{
-		types.put(type.getKeyword(), type);
+		this.types.put(type.getKeyword(), type);
 	}
 
-	public Type getType(String keyword)
+	public void removeType(String name)
 	{
-		return types.get(keyword);
+		this.types.remove(name);
 	}
 
-	public void addProcedure(String libName, FunctionParameters parameters, ClassProcedure procedure)
+	public Type getType(String name)
 	{
-		Map<FunctionParameters, Constructor> map = functions.get(libName);
-		if (map == null)
-			map = new HashMap<>();
-
-		map.put(parameters, a ->
-		{
-			procedure.apply(a);
-			return null;
-		});
-		functions.put(libName, map);
-	}
-
-	public void addConstructor(String libName, FunctionParameters parameters, Constructor constructor)
-	{
-		Map<FunctionParameters, Constructor> map = functions.get(libName);
-		if (map == null)
-			map = new HashMap<>();
-
-		map.put(parameters, constructor);
-
-		functions.put(libName, map);
-	}
-
-	public Map<FunctionParameters, Constructor> getFunctions(String name)
-	{
-		return functions.get(name);
+		return this.types.get(name);
 	}
 }

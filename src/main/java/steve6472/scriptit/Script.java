@@ -1,316 +1,107 @@
 package steve6472.scriptit;
 
-import steve6472.scriptit.expression.*;
-import steve6472.scriptit.instructions.WhileLoop;
-
-import java.util.*;
-import java.util.function.BiFunction;
-import java.util.function.Supplier;
+import steve6472.scriptit.libraries.Library;
 
 /**********************
  * Created by steve6472 (Mirek Jozefek)
- * On date: 5/2/2021
+ * On date: 5/23/2021
  * Project: ScriptIt
  *
  ***********************/
 public class Script
 {
-	private final HashMap<String, Type> typeMap = new HashMap<>();
-	private final HashMap<String, Value> valueMap = new HashMap<>();
-	private final Map<FunctionParameters, Constructor> constructorMap = new HashMap<>();
+	private final Workspace workspace;
 
-	public List<Instruction> instructions;
+	private final MyParser parser;
+	MemoryStack memory;
+	ExpressionExecutor[] lines;
+	private int lastIndex = 0;
+	private int currentIndex = 0;
 
-	private Script parent;
-
-	public Script()
+	public Script(Workspace workspace)
 	{
-		instructions = new ArrayList<>();
-
-		// Force true and false booleans into namespace
-		addValue("true", TypeDeclarations.TRUE);
-		addValue("false", TypeDeclarations.FALSE);
+		this.workspace = workspace;
+		this.parser = new MyParser();
+		this.memory = new MemoryStack(64);
 	}
 
-	@SuppressWarnings("IncompleteCopyConstructor")
-	public Script(Script parent)
+	public void addLibrary(Library library)
 	{
-		instructions = new ArrayList<>();
-		this.parent = parent;
-
-		addValue("true", TypeDeclarations.TRUE);
-		addValue("false", TypeDeclarations.FALSE);
+		memory.addLibrary(library);
 	}
 
-	public void print()
+	public void setExpressions(String... expressions)
 	{
-		System.out.println(typeMap);
-		System.out.println(valueMap);
-		System.out.println(constructorMap);
-	}
-
-	public Map<FunctionParameters, Constructor> getConstructorMap()
-	{
-		return constructorMap;
-	}
-
-	public HashMap<String, Value> getValueMap()
-	{
-		return valueMap;
-	}
-
-	private Supplier<Long> delayStartSupplier = System::currentTimeMillis;
-	private BiFunction<Long, Long, Boolean> shouldAdvance = (start, delay) -> System.currentTimeMillis() - start >= delay;
-
-	public void setGetDelayStart(Supplier<Long> delayStartSupplier)
-	{
-		this.delayStartSupplier = delayStartSupplier;
-	}
-
-	public void setShouldAdvancet(BiFunction<Long, Long, Boolean> shouldAdvance)
-	{
-		this.shouldAdvance = shouldAdvance;
-	}
-
-	private long delay = -1;
-
-	public void delay(long delay)
-	{
-		if (parent != null)
+		lines = new ExpressionExecutor[expressions.length];
+		for (int i = 0; i < expressions.length; i++)
 		{
-			parent.delay(delay);
+			lines[i] = new ExpressionExecutor(memory);
+			lines[i].setExpression(parser.setExpression(expressions[i]).parse());
 		}
-		this.delay = delay;
-		this.delayStart = delayStartSupplier.get();
 	}
 
-	private int instructionIndex = 0;
-	private long delayStart = -1;
-
-	public Value run()
+	public void setExpressions(Expression... expressions)
 	{
-		if (instructionIndex >= instructions.size())
-			instructionIndex = 0;
-
-		while (instructionIndex < instructions.size())
+		lines = new ExpressionExecutor[expressions.length];
+		for (int i = 0; i < expressions.length; i++)
 		{
-			try
+			lines[i] = new ExpressionExecutor(memory);
+			lines[i].setExpression(expressions[i]);
+		}
+	}
+
+	public Result execute()
+	{
+		currentIndex = lastIndex;
+		while (currentIndex < lines.length)
+		{
+			lastIndex = currentIndex;
+
+			Result result = lines[currentIndex].execute(this);
+			if (result.isReturnValue() || result.isReturn())
 			{
-				Thread.sleep(10);
-			} catch (InterruptedException e)
-			{
-				e.printStackTrace();
+				lastIndex = 0;
+				return result;
 			}
-			Instruction c = instructions.get(instructionIndex);
-
-			if (delay != -1)
-			{
-				if (shouldAdvance.apply(this.delayStart, this.delay))
-				{
-					instructionIndex++;
-					this.delayStart = -1;
-					this.delay = -1;
-					System.out.println("");
-					continue;
-				} else
-				{
-					System.out.print(".");
-					return null;
-				}
-			}
-			System.out.println(this.hashCode() + " " + c.getClass().getCanonicalName() + " " + instructionIndex);
-
-			if (c instanceof WhileLoop loop)
-			{
-				if (loop.condition.eval(this).getBoolean())
-				{
-					System.out.println("While true");
-					Value execute = c.execute(this);
-					if (execute != null)
-						return execute;
-					continue;
-				} else
-				{
-					instructionIndex++;
-
-					continue;
-				}
-			}
-
-			Value execute = c.execute(this);
-			if (execute != null)
-				return execute;
-
-			if (delay != -1)
-			{
-				break;
-			}
-
-			instructionIndex++;
+			if (result.isDelay())
+				return result;
+			currentIndex++;
 		}
 
-		return null;
+		return Result.return_();
 	}
 
-	public void importTypesToScript(Script dest)
+	public Value runWithDelay()
 	{
-		typeMap.forEach((name, type) -> dest.importType(type));
-		if (parent != null)
-			parent.importTypesToScript(dest);
-	}
+		Result ret = Result.delay();
 
-	public List<Type> getImportedTypes()
-	{
-		List<Type> types = new ArrayList<>(typeMap.values());
-		if (parent != null)
-			types.addAll(parent.getImportedTypes());
-		return types;
-	}
-
-	public void printCode()
-	{
-		for (Instruction c : instructions)
+		while (ret.isDelay() && !ret.isReturnValue() && !ret.isReturn())
 		{
-			System.out.println(c.toString());
+			ret = execute();
 		}
+		if (ret.isReturnValue())
+			return ret.getValue();
+		else
+			return Value.NULL;
 	}
 
-	public void importType(Type type)
+	public ExpressionExecutor currentExecutor()
 	{
-		typeMap.put(type.getKeyword(), type);
+		return lines[currentIndex];
 	}
 
-	public Type getType(String name)
+	public MemoryStack getMemory()
 	{
-		Type type = typeMap.get(name);
-		if (type == null && parent != null)
-			return parent.getType(name);
-		return type;
+		return memory;
 	}
 
-	public void addValue(String name, Value value)
+	public MyParser getParser()
 	{
-		valueMap.put(name, value);
+		return parser;
 	}
 
-	public Value getValue(String name)
+	public Workspace getWorkspace()
 	{
-		Value value = valueMap.get(name);
-		if (value == null && parent != null)
-			return parent.getValue(name);
-		return value;
-	}
-
-	public void addConstructor(FunctionParameters parameters, Constructor constructor)
-	{
-		constructorMap.put(parameters, constructor);
-	}
-
-	public void addProcedure(FunctionParameters parameters, ClassProcedure procedure)
-	{
-		constructorMap.put(parameters, a -> {
-			procedure.apply(a);
-			return null;
-		});
-	}
-
-	public boolean hasValue(String name)
-	{
-		boolean b = valueMap.containsKey(name);
-		if (!b && parent != null)
-		{
-			return parent.hasValue(name);
-		}
-		return b;
-	}
-
-	public void printConstructors()
-	{
-		if (parent != null)
-			parent.printConstructors();
-		System.out.println("");
-
-		constructorMap.forEach((params, cons) ->
-		{
-			System.out.println(params);
-		});
-	}
-
-	private Constructor findFunction(String name, Type[] types)
-	{
-		Constructor con = null;
-		main: for (Map.Entry<FunctionParameters, Constructor> e : constructorMap.entrySet())
-		{
-			FunctionParameters parameters = e.getKey();
-			Constructor constructor = e.getValue();
-
-			if (!parameters.getName().equals(name))
-				continue;
-			if (parameters.getTypes().length != types.length)
-				continue;
-			for (int i = 0; i < types.length; i++)
-			{
-				if (parameters.getTypes()[i] != types[i])
-				{
-					continue main;
-				}
-			}
-			if (ExpressionParser.EVAL_DEBUG)
-				System.out.println("Found function " + parameters + " " + constructor);
-			con = constructor;
-			break;
-		}
-
-		if (con == null && parent != null)
-			return parent.findFunction(name, types);
-		return con;
-	}
-
-	public Constructor getFunction(String name, Type[] types)
-	{
-		if (ExpressionParser.EVAL_DEBUG)
-		{
-			System.out.println("Looking for function with name '" + name + "' and types " + Arrays.toString(types));
-			printConstructors();
-		}
-
-		Constructor c = findFunction(name, types);
-		if (c != null)
-			return c;
-
-		Type type = getType(name);
-
-		if (type == null)
-			throw new RuntimeException("Type with name '" + name + "' not found!");
-
-		if (ExpressionParser.EVAL_DEBUG)
-			System.out.println("Found type " + type);
-
-		main: for (Map.Entry<FunctionParameters, Constructor> entry : type.getConstructors().entrySet())
-		{
-			FunctionParameters k = entry.getKey();
-			Constructor v = entry.getValue();
-			if (!k.getName().equals(name))
-				continue;
-			if (k.getTypes().length != types.length)
-				continue;
-			for (int i = 0; i < types.length; i++)
-			{
-				if (k.getTypes()[i] != types[i])
-				{
-					continue main;
-				}
-			}
-			if (ExpressionParser.EVAL_DEBUG)
-				System.out.println("Found function " + k + " " + v);
-			return v;
-		}
-
-		if (parent != null)
-		{
-			return parent.getFunction(name, types);
-		}
-
-		throw new RuntimeException("Function with name " + name + " and types " + Arrays.toString(types) + " not found!");
+		return workspace;
 	}
 }

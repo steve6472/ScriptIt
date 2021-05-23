@@ -74,7 +74,7 @@
       <recent name="steve6472.scriptit.instructions.type" />
     </key>
   </component>
-  <component name="RunManager" selected="Application.ReaderMain">
+  <component name="RunManager" selected="Application.ReaderMain (1)">
     <configuration name="ExpressionParser" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="steve6472.scriptit.expression.ExpressionParser" />
       <module name="ScriptIt" />
@@ -83,28 +83,28 @@
       </method>
     </configuration>
     <configuration name="Main" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="steve6472.scriptit.exp.Main" />
+      <option name="MAIN_CLASS_NAME" value="steve6472.scriptit.Main" />
       <module name="ScriptIt" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
     <configuration name="MyParser" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="steve6472.scriptit.exp.MyParser" />
+      <option name="MAIN_CLASS_NAME" value="steve6472.scriptit.MyParser" />
       <module name="ScriptIt" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
     <configuration name="ReaderMain" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="steve6472.scriptit.exp.ReaderMain" />
+      <option name="MAIN_CLASS_NAME" value="steve6472.scriptit.ReaderMain" />
       <module name="ScriptIt" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="ScriptIt" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="steve6472.scriptit.ScriptIt" />
+    <configuration name="ReaderMain" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="steve6472.scriptit.ReaderMain" />
       <module name="ScriptIt" />
       <method v="2">
         <option name="Make" enabled="true" />
@@ -112,11 +112,11 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Application.ReaderMain (1)" />
         <item itemvalue="Application.ReaderMain" />
         <item itemvalue="Application.Main" />
         <item itemvalue="Application.MyParser" />
         <item itemvalue="Application.ExpressionParser" />
-        <item itemvalue="Application.ScriptIt" />
       </list>
     </recent_temporary>
   </component>
