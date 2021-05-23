@@ -37,7 +37,7 @@ class DotOperator extends Expression
 	}
 
 	@Override
-	public Result apply(Main.Script script)
+	public Result apply(Script script)
 	{
 		if (!libraryChecked || !isLeftLibrary)
 		{

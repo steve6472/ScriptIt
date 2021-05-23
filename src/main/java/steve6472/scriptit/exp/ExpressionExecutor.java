@@ -45,7 +45,7 @@ public class ExpressionExecutor
 		delayStart = delayStartSupplier.get();
 	}
 
-	public Result execute(Main.Script script)
+	public Result execute(Script script)
 	{
 		if (delayStart != -1)
 		{

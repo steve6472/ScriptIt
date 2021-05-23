@@ -35,6 +35,11 @@ public class Memory
 		this.libraries.put(library.getLibraryName(), library);
 	}
 
+	public void addType(Type type)
+	{
+		type.constructors.forEach((p, f) -> functions.put(p, f));
+	}
+
 	public void addVariable(String name, Value value)
 	{
 		if (name.equals("true") || name.equals("false"))

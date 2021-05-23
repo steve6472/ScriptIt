@@ -1,10 +1,5 @@
 package steve6472.scriptit.exp;
 
-import steve6472.scriptit.exp.functions.NewVec2;
-import steve6472.scriptit.exp.libraries.Library;
-import steve6472.scriptit.exp.libraries.MathLibrary;
-import steve6472.scriptit.exp.libraries.SystemLibrary;
-
 /**********************
  * Created by steve6472 (Mirek Jozefek)
  * On date: 5/21/2021
@@ -13,73 +8,6 @@ import steve6472.scriptit.exp.libraries.SystemLibrary;
  ***********************/
 public class Main
 {
-	public static class Script
-	{
-		private final MyParser parser;
-		MemoryStack memory;
-		ExpressionExecutor[] lines;
-		private int lastIndex = 0;
-		private int currentIndex = 0;
-
-		public Script()
-		{
-			this.parser = new MyParser();
-			this.memory = new MemoryStack(64);
-		}
-
-		public void addLibrary(Library library)
-		{
-			memory.addLibrary(library);
-		}
-
-		public void setExpressions(String... expressions)
-		{
-			lines = new ExpressionExecutor[expressions.length];
-			for (int i = 0; i < expressions.length; i++)
-			{
-				lines[i] = new ExpressionExecutor(memory);
-				lines[i].setExpression(parser.setExpression(expressions[i]).parse());
-			}
-		}
-
-		public Result execute()
-		{
-			currentIndex = lastIndex;
-			while (currentIndex < lines.length)
-			{
-				lastIndex = currentIndex;
-
-				Result result = lines[currentIndex].execute(this);
-				if (result.isReturnValue() || result.isReturn())
-				{
-					lastIndex = 0;
-					return result;
-				}
-				if (result.isDelay())
-					return result;
-				if (result.isLoop())
-					return result;
-				currentIndex++;
-			}
-
-			return Result.return_();
-		}
-
-		public ExpressionExecutor currentExecutor()
-		{
-			return lines[currentIndex];
-		}
-
-		public MemoryStack getMemory()
-		{
-			return memory;
-		}
-
-		public MyParser getParser()
-		{
-			return parser;
-		}
-	}
 
 	public static void main(String[] args) throws InterruptedException
 	{
@@ -125,19 +53,16 @@ public class Main
 				"return (1 - t) * start + t * stop"
 			};*/
 
-		Script script = new Script();
+		Workspace workspace = new Workspace();
+		workspace.addType(PrimitiveTypes.VEC2);
+
+		Script script = new Script(workspace);
 		PrimitiveTypes.init(script);
-		script.addLibrary(new MathLibrary());
-		script.addLibrary(new SystemLibrary());
 
 //		Function doubleMul = new Function("left", "right");
 ////		doubleMul.setExpressions(script, "temp = left + right", "temp = temp * right", "return temp - left");
 //		doubleMul.setExpressions(script, "return left * right");
 //		PrimitiveTypes.DOUBLE.addBinaryOperator(PrimitiveTypes.DOUBLE, Operator.MUL, doubleMul);
-
-		// Constractor, TODO: move to PrimitiveTypes
-		Function newVec2 = new NewVec2();
-		script.memory.addFunction(FunctionParameters.constructor(PrimitiveTypes.VEC2).addType(PrimitiveTypes.DOUBLE).addType(PrimitiveTypes.DOUBLE).build(), newVec2);
 
 		Function lerpFunction = new Function("start", "stop", "t");
 		lerpFunction.setExpressions(script, lerp);
@@ -163,26 +88,27 @@ public class Main
 		Function whileBody_ = new Function();
 		whileBody_.lines = new ExpressionExecutor[]
 			{
-				new ExpressionExecutor(script.memory).setExpression(script.parser.setExpression("System.print(var)").parse()),
-				new ExpressionExecutor(script.memory).setExpression(script.parser.setExpression("delay(200)").parse()),
-				new ExpressionExecutor(script.memory).setExpression(script.parser.setExpression("var = var + 1.0").parse()),
-				new ExpressionExecutor(script.memory).setExpression(new If(script.parser.setExpression("var > 4.0").parse(), literallyJustBreak))
+				new ExpressionExecutor(script.memory).setExpression(script.getParser().setExpression("System.print(var)").parse()),
+				new ExpressionExecutor(script.memory).setExpression(script.getParser().setExpression("delay(200)").parse()),
+				new ExpressionExecutor(script.memory).setExpression(script.getParser().setExpression("var = var + 1.0").parse()),
+				new ExpressionExecutor(script.memory).setExpression(new If(script.getParser().setExpression("var > 4.0").parse(), literallyJustBreak))
 			};
 
 		Function whileBody__ = new Function();
 		whileBody__.lines = new ExpressionExecutor[]
 			{
-				new ExpressionExecutor(script.memory).setExpression(script.parser.setExpression("System.print(var)").parse()),
-				new ExpressionExecutor(script.memory).setExpression(script.parser.setExpression("delay(200)").parse()),
-				new ExpressionExecutor(script.memory).setExpression(script.parser.setExpression("var = var + 1.0").parse()),
-				new ExpressionExecutor(script.memory).setExpression(new IfElse(new If(script.parser.setExpression("var < 3.0").parse(), literallyJustContinue), printAndBreak)),
-				new ExpressionExecutor(script.memory).setExpression(script.parser.setExpression("System.print(666.666)").parse())
+				new ExpressionExecutor(script.memory).setExpression(script.getParser().setExpression("System.print(var)").parse()),
+				new ExpressionExecutor(script.memory).setExpression(script.getParser().setExpression("delay(200)").parse()),
+				new ExpressionExecutor(script.memory).setExpression(script.getParser().setExpression("var = var + 1.0").parse()),
+				new ExpressionExecutor(script.memory).setExpression(new IfElse(new If(script.getParser().setExpression("var < 3.0").parse(), literallyJustContinue), printAndBreak)),
+				new ExpressionExecutor(script.memory).setExpression(script.getParser().setExpression("System.print(666.666)").parse())
 			};
 
 		Function del = new Function();
 		del.setExpressions(script, "delay(1000)", "System.print(8)", "return 3.0");
-		script.memory.addFunction(FunctionParameters.function("del").build(), del);
+		script.getMemory().addFunction(FunctionParameters.function("del").build(), del);
 
+		script.setExpressions("import type vec2", "import library Math", "return vec2(3.02, 6.7).normalize()");
 //		script.setExpressions("return lerp(3.0, 5.0, 0.5) * lerp(0.0, 1.0, 0.5)");
 //		script.setExpressions("return lerp(3.0, 5.0, lerp(0.0, 1.0, 0.5)) * lerp(-1.0, 2.0, 0.5)");
 //		script.setExpressions("v = vec2(3.02, 6.7)", "return v.normalize()");
@@ -202,7 +128,7 @@ public class Main
 		script.lines = new ExpressionExecutor[]
 			{
 				new ExpressionExecutor(script.memory).setExpression(new Assignment("var", new Constant(PrimitiveTypes.DOUBLE, 0.0))),
-				new ExpressionExecutor(script.memory).setExpression(new While(new If(script.parser.setExpression("var < 5.0").parse(), whileBody))),
+				new ExpressionExecutor(script.memory).setExpression(new While(new If(script.getParser().setExpression("var < 5.0").parse(), whileBody))),
 				new ExpressionExecutor(script.memory).setExpression(script.parser.setExpression("return true").parse())
 			};*/
 
@@ -217,14 +143,14 @@ public class Main
 		script.lines = new ExpressionExecutor[]
 			{
 				new ExpressionExecutor(script.memory).setExpression(new Assignment("var", new Constant(PrimitiveTypes.DOUBLE, 0.0))),
-				new ExpressionExecutor(script.memory).setExpression(script.parser.setExpression("delay(500)").parse()),
-				new ExpressionExecutor(script.memory).setExpression(new While(new If(script.parser.setExpression("var < 7.0").parse(), whileBody__))),
-				new ExpressionExecutor(script.memory).setExpression(script.parser.setExpression("return true").parse())
+				new ExpressionExecutor(script.memory).setExpression(script.getParser().setExpression("delay(500)").parse()),
+				new ExpressionExecutor(script.memory).setExpression(new While(new If(script.getParser().setExpression("var < 7.0").parse(), whileBody__))),
+				new ExpressionExecutor(script.memory).setExpression(script.getParser().setExpression("return true").parse())
 			};*/
 
 		runWithDelay(script);
-		System.out.println("-".repeat(64));
-		runWithDelay(script);
+//		System.out.println("-".repeat(64));
+//		runWithDelay(script);
 	}
 
 	private static void runWithDelay(Script script) throws InterruptedException

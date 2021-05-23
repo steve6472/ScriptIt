@@ -20,14 +20,13 @@ public class PrimitiveTypes
 
 	public static final Type VEC2 = new Type("vec2");
 
-	public static void init(Main.Script script)
+	public static void init(Script script)
 	{
 		DOUBLE.addBinaryOperator(DOUBLE, Operator.ADD, new BinaryOperatorOverload((left, right) -> Result.value(newValue(DOUBLE, left.getDouble() + right.getDouble()))));
 		DOUBLE.addBinaryOperator(DOUBLE, Operator.SUB, new BinaryOperatorOverload((left, right) -> Result.value(newValue(DOUBLE, left.getDouble() - right.getDouble()))));
 		DOUBLE.addBinaryOperator(DOUBLE, Operator.MUL, new BinaryOperatorOverload((left, right) -> Result.value(newValue(DOUBLE, left.getDouble() * right.getDouble()))));
 		DOUBLE.addBinaryOperator(DOUBLE, Operator.DIV, new BinaryOperatorOverload((left, right) -> Result.value(newValue(DOUBLE, left.getDouble() / right.getDouble()))));
 		DOUBLE.addBinaryOperator(DOUBLE, Operator.MOD, new BinaryOperatorOverload((left, right) -> Result.value(newValue(DOUBLE, left.getDouble() % right.getDouble()))));
-
 
 		DOUBLE.addBinaryOperator(DOUBLE, Operator.EQUAL, new BinaryOperatorOverload((left, right) -> Result.value(left.getDouble() == right.getDouble() ? TRUE : FALSE)));
 		DOUBLE.addBinaryOperator(DOUBLE, Operator.NOT_EQUAL, new BinaryOperatorOverload((left, right) -> Result.value(left.getDouble() != right.getDouble() ? TRUE : FALSE)));
@@ -39,11 +38,11 @@ public class PrimitiveTypes
 		DOUBLE.addUnaryOperator(Operator.ADD, new UnaryOperatorOverload(left -> Result.value(newValue(DOUBLE, +left.getDouble()))));
 		DOUBLE.addUnaryOperator(Operator.SUB, new UnaryOperatorOverload(left -> Result.value(newValue(DOUBLE, -left.getDouble()))));
 
-//		VEC2.addConstructor(FunctionParameters.constructor(VEC2).addType(DOUBLE).addType(DOUBLE).build(), par -> newValue(VEC2).setValue("x", newValue(DOUBLE, par[0].getDouble())).setValue("y", newValue(DOUBLE, par[1].getDouble())));
-//		VEC2.addConstructor(FunctionParameters.constructor(VEC2).addType(INT).addType(INT).build(), par -> newValue(VEC2).setValue("x", newValue(DOUBLE, (double) par[0].getInt())).setValue("y", newValue(DOUBLE, (double) par[1].getInt())));
-//		VEC2.addConstructor(FunctionParameters.constructor(VEC2).addType(DOUBLE).build(), par -> newValue(VEC2).setValue("x", newValue(DOUBLE, par[0].getDouble())).setValue("y", newValue(DOUBLE, par[0].getDouble())));
-//		VEC2.addConstructor(FunctionParameters.constructor(VEC2).addType(VEC2).build(), par -> newValue(VEC2).setValue("x", par[0].getValue("x").getDouble()).setValue("y", par[0].getValue("y").getDouble()));
-//		VEC2.addConstructor(FunctionParameters.constructor(VEC2).build(), par -> newValue(VEC2).setValue("x", newValue(DOUBLE, 0)).setValue("y", newValue(DOUBLE, 0)));
+		VEC2.addConstructor(FunctionParameters.constructor(VEC2).addType(DOUBLE).addType(DOUBLE).build(), new Constructor((args) -> newValue(VEC2).setValue("x", args[0]).setValue("y", args[1])));
+		VEC2.addConstructor(FunctionParameters.constructor(VEC2).addType(INT).addType(INT).build(), new Constructor((args) -> newValue(VEC2).setValue("x", newValue(DOUBLE, args[0].getDouble())).setValue("y", newValue(DOUBLE, args[1].getDouble()))));
+		VEC2.addConstructor(FunctionParameters.constructor(VEC2).addType(DOUBLE).build(), new Constructor((args) -> newValue(VEC2).setValue("x", newValue(DOUBLE, args[0].getDouble())).setValue("y", newValue(DOUBLE, args[0].getDouble()))));
+		VEC2.addConstructor(FunctionParameters.constructor(VEC2).addType(VEC2).build(), new Constructor((args) -> newValue(VEC2).setValue("x", newValue(DOUBLE, args[0].getValue("x").getDouble())).setValue("y", newValue(DOUBLE, args[0].getValue("y").getDouble()))));
+		VEC2.addConstructor(FunctionParameters.constructor(VEC2).build(), new Constructor((args) -> newValue(VEC2).setValue("x", newValue(DOUBLE, 0.0)).setValue("y", newValue(DOUBLE, 0.0))));
 
 		VEC2.addBinaryOperator(VEC2, Operator.ADD, new BinaryOperatorOverload((left, right) -> Result.value(newValue(VEC2).setValue("x", left.getValue("x").getDouble() + right.getValue("x").getDouble()).setValue("y", left.getValue("y").getDouble() + right.getValue("y").getDouble()))));
 		VEC2.addBinaryOperator(VEC2, Operator.SUB, new BinaryOperatorOverload((left, right) -> Result.value(newValue(VEC2).setValue("x", left.getValue("x").getDouble() - right.getValue("x").getDouble()).setValue("y", left.getValue("y").getDouble() - right.getValue("y").getDouble()))));
@@ -66,20 +65,6 @@ public class PrimitiveTypes
 		lenVec2.setExpressions(script, "return Math.sqrt(x * x + y * y)");
 		VEC2.addFunction(FunctionParameters.function("len").build(), lenVec2);
 
-//		VEC2.addFunction(FunctionParameters.function("normalize").build(), (itself, args) -> {
-//			double x = itself.getDouble("x");
-//			double y = itself.getDouble("y");
-//			double len = 1.0 / Math.sqrt(x * x + y * y);
-//
-//			return newValue(VEC2, new double[] {x * len, y * len});
-//		});
-//		VEC2.addFunction(FunctionParameters.function("len").build(), (itself, args) -> {
-//			double x = itself.getDouble("x");
-//			double y = itself.getDouble("y");
-//			double len = Math.sqrt(x * x + y * y);
-//
-//			return newValue(DOUBLE, len);
-//		});
 //		VEC2.addFunction(FunctionParameters.function("toString").build(), (itself, args) -> newValue(STRING, "[x=" + itself.getValue("x").getDouble() + ",y=" + itself.getValue("y").getDouble() + "]"));
 //		VEC2.addFunction(FunctionParameters.function("print").build(), (itself, args) -> System.out.println("vec2[x=" + itself.getValue("x").getDouble() + ",y=" + itself.getValue("y").getDouble() + "]"));
 
@@ -104,6 +89,12 @@ public class PrimitiveTypes
 		Result apply(Value left);
 	}
 
+	@FunctionalInterface
+	interface IConstructor
+	{
+		Value construct(Value[] args);
+	}
+
 	private static class BinaryOperatorOverload extends Function
 	{
 		private final BinaryOperator func;
@@ -115,7 +106,7 @@ public class PrimitiveTypes
 		}
 
 		@Override
-		public Result apply(Main.Script script)
+		public Result apply(Script script)
 		{
 			return func.apply(arguments[0], arguments[1]);
 		}
@@ -132,9 +123,25 @@ public class PrimitiveTypes
 		}
 
 		@Override
-		public Result apply(Main.Script script)
+		public Result apply(Script script)
 		{
 			return func.apply(arguments[0]);
+		}
+	}
+
+	private static class Constructor extends Function
+	{
+		private final IConstructor constructor;
+
+		Constructor(IConstructor constructor)
+		{
+			this.constructor = constructor;
+		}
+
+		@Override
+		public Result apply(Script script)
+		{
+			return Result.value(constructor.construct(arguments));
 		}
 	}
 }

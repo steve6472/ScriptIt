@@ -27,7 +27,7 @@ class FunctionCall extends Expression
 	}
 
 	@Override
-	public Result apply(Main.Script script)
+	public Result apply(Script script)
 	{
 		if (!isDelayed)
 		{

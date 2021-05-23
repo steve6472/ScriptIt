@@ -16,7 +16,7 @@ public class SqrtFunction extends Function
 	}
 
 	@Override
-	public Result apply(Main.Script script)
+	public Result apply(Script script)
 	{
 		return Result.returnValue(Value.newValue(PrimitiveTypes.DOUBLE, Math.sqrt(arguments[0].getDouble())));
 	}

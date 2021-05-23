@@ -16,7 +16,7 @@ public class ValueConstant extends Expression
 	}
 
 	@Override
-	public Result apply(Main.Script script)
+	public Result apply(Script script)
 	{
 		return Result.value(constant);
 	}

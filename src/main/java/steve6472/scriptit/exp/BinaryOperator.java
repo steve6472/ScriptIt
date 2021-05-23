@@ -24,7 +24,7 @@ class BinaryOperator extends Expression
 	}
 
 	@Override
-	public Result apply(Main.Script script)
+	public Result apply(Script script)
 	{
 		if (leftResult.isDelay())
 			leftResult = left.apply(script);

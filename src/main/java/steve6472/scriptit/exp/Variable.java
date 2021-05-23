@@ -16,7 +16,7 @@ class Variable extends Expression
 	}
 
 	@Override
-	public Result apply(Main.Script script)
+	public Result apply(Script script)
 	{
 		if (source.sourceType == VariableSourceType.MEMORY)
 			return Result.value(script.currentExecutor().memory.getVariable(source.variableName));

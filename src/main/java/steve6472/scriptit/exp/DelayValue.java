@@ -29,7 +29,7 @@ public class DelayValue
 		System.out.println("IsSet: " + isSet);
 	}
 
-	public boolean apply(Main.Script script)
+	public boolean apply(Script script)
 	{
 		Result temp;
 		if (!isSet)

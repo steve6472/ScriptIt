@@ -20,7 +20,7 @@ public class Function extends Expression
 		this.argumentNames = argumentNames;
 	}
 
-	public void setExpressions(Main.Script script, String... expressions)
+	public void setExpressions(Script script, String... expressions)
 	{
 		lines = new ExpressionExecutor[expressions.length];
 		for (int i = 0; i < expressions.length; i++)
@@ -41,7 +41,7 @@ public class Function extends Expression
 	}
 
 	@Override
-	public Result apply(Main.Script script)
+	public Result apply(Script script)
 	{
 		if (!isDelayed)
 			script.getMemory().push();

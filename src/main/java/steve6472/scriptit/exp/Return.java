@@ -16,7 +16,7 @@ public class Return extends Expression
 	}
 
 	@Override
-	public Result apply(Main.Script script)
+	public Result apply(Script script)
 	{
 		Result result = returnValue.apply(script);
 		if (result.isDelay())

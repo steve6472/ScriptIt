@@ -18,8 +18,8 @@
       <list>
         <option value="Interface" />
         <option value="Record" />
-        <option value="Enum" />
         <option value="Class" />
+        <option value="Enum" />
       </list>
     </option>
   </component>
@@ -154,10 +154,10 @@
     <option name="map">
       <map>
         <entry key="flags" value="2" />
-        <entry key="mode" value="1" />
-        <entry key="regex" value="^if\s*\(.*\).*\{.*" />
+        <entry key="mode" value="2" />
+        <entry key="regex" value="\s" />
         <entry key="replacement" value="" />
-        <entry key="text" value="if (a &gt; 0) {...sedf" />
+        <entry key="text" value="import type vec2" />
       </map>
     </option>
   </component>

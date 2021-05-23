@@ -1,8 +1,8 @@
 package steve6472.scriptit.exp.functions;
 
 import steve6472.scriptit.exp.Function;
-import steve6472.scriptit.exp.Main;
 import steve6472.scriptit.exp.Result;
+import steve6472.scriptit.exp.Script;
 
 /**********************
  * Created by steve6472 (Mirek Jozefek)
@@ -18,7 +18,7 @@ public class PrintFunction extends Function
 	}
 
 	@Override
-	public Result apply(Main.Script script)
+	public Result apply(Script script)
 	{
 		System.out.println("Print: " + arguments[0]);
 		return Result.pass();

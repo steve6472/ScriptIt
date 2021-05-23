@@ -18,6 +18,7 @@ public class Type
 	public HashMap<Operator, Function> unary;
 
 	public HashMap<FunctionParameters, Function> functions;
+	public HashMap<FunctionParameters, Function> constructors;
 
 	public Type(String keyword)
 	{
@@ -25,6 +26,7 @@ public class Type
 		this.binary = new HashMap<>();
 		this.unary = new HashMap<>();
 		this.functions = new HashMap<>();
+		this.constructors = new HashMap<>();
 	}
 
 	public void addBinaryOperator(Type rightOperandType, Operator operator, Function function)
@@ -46,6 +48,11 @@ public class Type
 	public void addFunction(FunctionParameters parameters, Function function)
 	{
 		this.functions.put(parameters, function);
+	}
+
+	public void addConstructor(FunctionParameters parameters, Function function)
+	{
+		this.constructors.put(parameters, function);
 	}
 
 	public Function getFunction(String name, Type[] types)

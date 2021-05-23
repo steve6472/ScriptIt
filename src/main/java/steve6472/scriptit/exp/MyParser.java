@@ -95,6 +95,18 @@ public class MyParser
 				return new Return(next);
 			}
 
+			if (line.substring(pos).startsWith("import"))
+			{
+				String[] split = line.split("\s");
+				pos = line.length();
+				if (split[1].equals("type"))
+					return new Import(ImportType.TYPE, split[2]);
+				else if (split[1].equals("library"))
+					return new Import(ImportType.LIBRARY, split[2]);
+				else
+					throw new RuntimeException("Unknown import type '" + split[1] + "' with param '" + split[2] + "'");
+			}
+
 			if (line.substring(pos).startsWith("continue"))
 			{
 				nextChar(8);

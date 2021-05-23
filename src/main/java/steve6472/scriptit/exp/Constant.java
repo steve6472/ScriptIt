@@ -18,7 +18,7 @@ public class Constant extends Expression
 	}
 
 	@Override
-	public Result apply(Main.Script script)
+	public Result apply(Script script)
 	{
 		return Result.value(Value.newValue(type, constant));
 	}

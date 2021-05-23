@@ -72,7 +72,7 @@ public class Library
 		}
 
 		@Override
-		public Result apply(Main.Script script)
+		public Result apply(Script script)
 		{
 			return Result.returnValue(func.apply(arguments));
 		}
