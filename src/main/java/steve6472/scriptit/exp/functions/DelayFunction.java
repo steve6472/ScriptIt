@@ -12,6 +12,8 @@ import steve6472.scriptit.exp.Script;
  ***********************/
 public class DelayFunction extends Function
 {
+	public static boolean DEBUG = false;
+
 	public DelayFunction()
 	{
 		super((String) null);
@@ -20,7 +22,8 @@ public class DelayFunction extends Function
 	@Override
 	public Result apply(Script script)
 	{
-		System.out.println("Delay " + arguments[0]);
+		if (DEBUG)
+			System.out.println("Delay " + arguments[0]);
 		return Result.delay(arguments[0].getInt());
 	}
 }

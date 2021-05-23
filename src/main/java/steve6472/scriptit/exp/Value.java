@@ -143,7 +143,7 @@ public class Value
 	public String toString()
 	{
 		if (isPrimitive)
-			return "{" + type.getKeyword() + "=" + values.get(SINGLE_VALUE) + "}";
+			return values.get(SINGLE_VALUE).toString();
 		return "Value{" + "type=" + type.getKeyword() + ", values=" + values + '}';
 	}
 

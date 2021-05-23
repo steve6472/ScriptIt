@@ -204,8 +204,7 @@ public class MyParser
 					return new Constant(PrimitiveTypes.STRING, s);
 				}
 			}
-			/*TODO: add CHAR
-			else if (eat('\''))
+			else if (eat("'"))
 			{
 				if (ch == '\'')
 				{
@@ -215,8 +214,8 @@ public class MyParser
 				nextChar();
 				nextChar();
 
-				x = (script) -> newValue(CHAR, c);
-			}*/
+				return new Constant(PrimitiveTypes.CHAR, c);
+			}
 			else if (eat("("))
 			{
 				if (ch == ')')
