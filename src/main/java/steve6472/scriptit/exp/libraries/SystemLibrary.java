@@ -1,7 +1,6 @@
 package steve6472.scriptit.exp.libraries;
 
-import steve6472.scriptit.exp.FunctionParameters;
-import steve6472.scriptit.exp.PrimitiveTypes;
+import steve6472.scriptit.exp.*;
 import steve6472.scriptit.exp.functions.PrintFunction;
 
 /**********************
@@ -20,5 +19,15 @@ public class SystemLibrary extends Library
 		addFunction(FunctionParameters.function("print").addType(PrimitiveTypes.INT).build(), new PrintFunction());
 		addFunction(FunctionParameters.function("print").addType(PrimitiveTypes.BOOL).build(), new PrintFunction());
 		addFunction(FunctionParameters.function("print").addType(PrimitiveTypes.NULL).build(), new PrintFunction());
+
+		addFunction(FunctionParameters.function("printDetail").addType(PrimitiveTypes.VEC2).build(), new Function()
+		{
+			@Override
+			public Result apply(Script script)
+			{
+				System.out.println(arguments[0] + ", hash: " + arguments[0].hashCode());
+				return Result.pass();
+			}
+		});
 	}
 }

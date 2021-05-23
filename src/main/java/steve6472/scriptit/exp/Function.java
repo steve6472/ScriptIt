@@ -103,6 +103,12 @@ public class Function extends Expression
 				expressionIndex = 0;
 				script.getMemory().pop();
 				return Result.continueLoop();
+			} else if (result.isReturnThis())
+			{
+				isDelayed = false;
+				expressionIndex = 0;
+				script.getMemory().pop();
+				return Result.value(typeFunction);
 			}
 
 			i++;

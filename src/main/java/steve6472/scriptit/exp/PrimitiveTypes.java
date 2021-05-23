@@ -65,6 +65,10 @@ public class PrimitiveTypes
 		lenVec2.setExpressions(script, "return Math.sqrt(x * x + y * y)");
 		VEC2.addFunction(FunctionParameters.function("len").build(), lenVec2);
 
+		Function returnThisTest = new Function();
+		returnThisTest.setExpressions(script, "x = 0.0", "y = 0.0", "return this");
+		VEC2.addFunction(FunctionParameters.function("makeZero").build(), returnThisTest);
+
 //		VEC2.addFunction(FunctionParameters.function("toString").build(), (itself, args) -> newValue(STRING, "[x=" + itself.getValue("x").getDouble() + ",y=" + itself.getValue("y").getDouble() + "]"));
 //		VEC2.addFunction(FunctionParameters.function("print").build(), (itself, args) -> System.out.println("vec2[x=" + itself.getValue("x").getDouble() + ",y=" + itself.getValue("y").getDouble() + "]"));
 

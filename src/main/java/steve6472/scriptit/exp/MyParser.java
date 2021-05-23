@@ -16,6 +16,7 @@ import java.util.regex.Pattern;
 public class MyParser
 {
 	private static final Pattern VARIABLE_NAME = Pattern.compile("^[a-zA-Z_][a-zA-Z0-9_]*");
+	private static final Pattern RETURN_THIS = Pattern.compile("^return\s+this");
 
 	public static final Operator[][] BINARY_PRECENDENCE =
 		{
@@ -90,9 +91,16 @@ public class MyParser
 		{
 			if (line.substring(pos).startsWith("return"))
 			{
-				nextChar(6);
-				Expression next = next(0);
-				return new Return(next);
+				if (RETURN_THIS.matcher(line).matches())
+				{
+					pos = line.length();
+					return new ReturnThis();
+				} else
+				{
+					nextChar(6);
+					Expression next = next(0);
+					return new Return(next);
+				}
 			}
 
 			if (line.substring(pos).startsWith("import"))

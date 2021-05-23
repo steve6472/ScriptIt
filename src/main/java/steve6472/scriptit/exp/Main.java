@@ -108,7 +108,17 @@ public class Main
 		del.setExpressions(script, "delay(1000)", "System.print(8)", "return 3.0");
 		script.getMemory().addFunction(FunctionParameters.function("del").build(), del);
 
-		script.setExpressions("import type vec2", "import library Math", "return vec2(3.02, 6.7).normalize()");
+		script.setExpressions(
+			"import type vec2",
+			"import library Math",
+			"import library System",
+			"temp = vec2(3.02, 6.7).normalize()",
+			"System.printDetail(temp)",
+			"var = temp.makeZero()",
+			"System.printDetail(temp)",
+			"System.printDetail(var)",
+			"return temp"
+		);
 //		script.setExpressions("return lerp(3.0, 5.0, 0.5) * lerp(0.0, 1.0, 0.5)");
 //		script.setExpressions("return lerp(3.0, 5.0, lerp(0.0, 1.0, 0.5)) * lerp(-1.0, 2.0, 0.5)");
 //		script.setExpressions("v = vec2(3.02, 6.7)", "return v.normalize()");

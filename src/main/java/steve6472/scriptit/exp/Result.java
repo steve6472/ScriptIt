@@ -13,6 +13,7 @@ public class Result
 	private static final Result PASS_IF_FALSE = new Result(Value.NULL, ResultStatus.PASS_IF_FALSE);
 	private static final Result BREAK = new Result(Value.NULL, ResultStatus.BREAK);
 	private static final Result CONTINUE = new Result(Value.NULL, ResultStatus.CONTINUE);
+	private static final Result RETURN_THIS = new Result(Value.NULL, ResultStatus.RETURN_THIS);
 
 	private final Value value;
 	private final ResultStatus status;
@@ -68,6 +69,11 @@ public class Result
 		return new Result(Value.NULL, ResultStatus.RETURN);
 	}
 
+	public static Result returnThis()
+	{
+		return RETURN_THIS;
+	}
+
 	public Value getValue()
 	{
 		return value;
@@ -111,6 +117,11 @@ public class Result
 	public boolean isPass()
 	{
 		return getStatus() == ResultStatus.PASS;
+	}
+
+	public boolean isReturnThis()
+	{
+		return getStatus() == ResultStatus.RETURN_THIS;
 	}
 
 	@Override
