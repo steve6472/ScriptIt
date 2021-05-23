@@ -1,12 +1,13 @@
 package steve6472.scriptit.libraries;
 
-import steve6472.scriptit.Function;
-import steve6472.scriptit.FunctionParameters;
-import steve6472.scriptit.Result;
-import steve6472.scriptit.Script;
+import steve6472.scriptit.*;
 import steve6472.scriptit.functions.PrintFunction;
 import steve6472.scriptit.types.CustomTypes;
 import steve6472.scriptit.types.PrimitiveTypes;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 
 /**********************
  * Created by steve6472 (Mirek Jozefek)
@@ -33,6 +34,29 @@ public class SystemLibrary extends Library
 			{
 				System.out.println(arguments[0] + ", hash: " + arguments[0].hashCode());
 				return Result.pass();
+			}
+		});
+
+		addFunction(FunctionParameters.function("input").build(), new Function()
+		{
+			@Override
+			public Result apply(Script script)
+			{
+				BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+
+				String value = null;
+				try
+				{
+					value = reader.readLine();
+				} catch (IOException e)
+				{
+					e.printStackTrace();
+				}
+
+				if (value != null)
+					return Result.value(Value.newValue(PrimitiveTypes.STRING, value));
+				else
+					return Result.value(Value.NULL);
 			}
 		});
 	}

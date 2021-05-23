@@ -1,0 +1,21 @@
+import library System;
+
+System.print("Name: ");
+name = System.input();
+
+System.print("Input: " + name);
+
+System.print("Select password: ");
+password = System.input();
+
+c = 0;
+
+temp = "";
+
+while (c < password.len())
+{
+    temp = temp + "#";
+    c = c + 1;
+}
+
+System.print("Your password is: " + temp);

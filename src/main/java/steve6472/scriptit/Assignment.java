@@ -30,11 +30,6 @@ class Assignment extends Expression
 
 		value = res.getValue();
 
-		Result apply = expression.apply(script);
-
-		if (apply.isDelay())
-			return apply;
-
 		script.memory.addVariable(varName, res.getValue());
 
 		res = Result.delay();

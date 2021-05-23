@@ -145,11 +145,6 @@
         <PinnedItemInfo parentTag="steve6472.scriptit.Script" memberName="commands" />
       </pinned-members>
     </pin-to-top-manager>
-    <watches-manager>
-      <inline-watch fileUrl="file://$PROJECT_DIR$/src/main/java/steve6472/scriptit/Script.java" line="15">
-        <watch expression="((Scope)((Script)this).scope).variables" language="JAVA" custom="steve6472.scriptit.Script,steve6472.scriptit.Scope" />
-      </inline-watch>
-    </watches-manager>
   </component>
   <component name="regexState">
     <option name="map">

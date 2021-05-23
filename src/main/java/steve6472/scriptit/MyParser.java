@@ -181,6 +181,7 @@ public class MyParser
 			{
 				if (ch == '"')
 				{
+					nextChar();
 					return new Constant(PrimitiveTypes.STRING, "");
 				} else
 				{
