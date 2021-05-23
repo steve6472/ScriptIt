@@ -1,19 +1,28 @@
-v = 0
-delay(500)
+import library System;
 
-while (v < 7)
+v = 0;
+delay(500);
+
+while ((v) < 7)
 {
-    print(v)
-    delay(200)
-    v = v + 1
+    System.print(v);
+    delay(200);
+    v = v + 1;
 
-    if (v < 3)
-        continue
+    if (v == 2)
+    {
+        System.print("TWO");
+    }
+
+    if (v < (3))
+    {
+        continue;
+    }
     else
-        print(888.888)
+    {
+        System.print(888.888);
         break;
+    }
 
-    print(666.666)
+    System.print(666.666);
 }
-
-return true

@@ -19,6 +19,7 @@
         <option value="Interface" />
         <option value="Record" />
         <option value="Enum" />
+        <option value="AnnotationType" />
         <option value="Class" />
       </list>
     </option>
@@ -73,7 +74,7 @@
       <recent name="steve6472.scriptit.instructions.type" />
     </key>
   </component>
-  <component name="RunManager" selected="Application.Main">
+  <component name="RunManager" selected="Application.ReaderMain">
     <configuration name="ExpressionParser" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="steve6472.scriptit.expression.ExpressionParser" />
       <module name="ScriptIt" />
@@ -95,6 +96,13 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <configuration name="ReaderMain" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="steve6472.scriptit.exp.ReaderMain" />
+      <module name="ScriptIt" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="ScriptIt" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="steve6472.scriptit.ScriptIt" />
       <module name="ScriptIt" />
@@ -102,20 +110,13 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="Scratch" type="Java Scratch" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="Scratch" />
-      <option name="SCRATCH_FILE_URL" value="file://$APPLICATION_CONFIG_DIR$/scratches/scratch.java" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Application.ReaderMain" />
         <item itemvalue="Application.Main" />
         <item itemvalue="Application.MyParser" />
         <item itemvalue="Application.ExpressionParser" />
         <item itemvalue="Application.ScriptIt" />
-        <item itemvalue="Java Scratch.Scratch" />
       </list>
     </recent_temporary>
   </component>
@@ -154,10 +155,10 @@
     <option name="map">
       <map>
         <entry key="flags" value="2" />
-        <entry key="mode" value="2" />
-        <entry key="regex" value="\s" />
+        <entry key="mode" value="0" />
+        <entry key="regex" value="^while\s*\(.*\)" />
         <entry key="replacement" value="" />
-        <entry key="text" value="import type vec2" />
+        <entry key="text" value="while (v &lt; 7){    print(v);    delay(200);    v = v + 1;    if (v &lt; 3)    {        continue;    }        print(666.666);}" />
       </map>
     </option>
   </component>

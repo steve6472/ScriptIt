@@ -37,6 +37,11 @@ public class Workspace
 		this.libraries.put(library.getLibraryName(), library);
 	}
 
+	public void removeLibrary(String name)
+	{
+		this.libraries.remove(name);
+	}
+
 	public Library getLibrary(String name)
 	{
 		return libraries.get(name);
@@ -45,6 +50,11 @@ public class Workspace
 	public void addType(Type type)
 	{
 		this.types.put(type.getKeyword(), type);
+	}
+
+	public void removeType(String name)
+	{
+		this.types.remove(name);
 	}
 
 	public Type getType(String name)

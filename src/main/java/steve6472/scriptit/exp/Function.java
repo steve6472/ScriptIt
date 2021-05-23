@@ -30,6 +30,16 @@ public class Function extends Expression
 		}
 	}
 
+	public void setExpressions(Script script, Expression... expressions)
+	{
+		lines = new ExpressionExecutor[expressions.length];
+		for (int i = 0; i < expressions.length; i++)
+		{
+			lines[i] = new ExpressionExecutor(script.getMemory());
+			lines[i].setExpression(expressions[i]);
+		}
+	}
+
 	public void setArguments(Value[] arguments)
 	{
 		this.arguments = arguments;

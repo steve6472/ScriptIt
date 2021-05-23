@@ -40,6 +40,16 @@ public class Script
 		}
 	}
 
+	public void setExpressions(Expression... expressions)
+	{
+		lines = new ExpressionExecutor[expressions.length];
+		for (int i = 0; i < expressions.length; i++)
+		{
+			lines[i] = new ExpressionExecutor(memory);
+			lines[i].setExpression(expressions[i]);
+		}
+	}
+
 	public Result execute()
 	{
 		currentIndex = lastIndex;
@@ -59,6 +69,20 @@ public class Script
 		}
 
 		return Result.return_();
+	}
+
+	public Value runWithDelay()
+	{
+		Result ret = Result.delay();
+
+		while (ret.isDelay() && !ret.isReturnValue() && !ret.isReturn())
+		{
+			ret = execute();
+		}
+		if (ret.isReturnValue())
+			return ret.getValue();
+		else
+			return Value.NULL;
 	}
 
 	public ExpressionExecutor currentExecutor()
