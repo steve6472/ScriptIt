@@ -15,6 +15,8 @@ import java.util.regex.Pattern;
  ***********************/
 public class MyParser
 {
+	public static boolean DEBUG = false;
+
 	private static final Pattern VARIABLE_NAME = Pattern.compile("^[a-zA-Z_][a-zA-Z0-9_]*");
 	private static final Pattern RETURN_THIS = Pattern.compile("^return\s+this");
 
@@ -94,17 +96,49 @@ public class MyParser
 		}
 	}
 
-	boolean eat(String s)
+	boolean eat(char charToEat)
 	{
 		while (Character.isWhitespace(ch))
 			nextChar();
-		if (line.substring(pos).startsWith(s))
+		if (ch == charToEat)
 		{
-			pos += s.length() - 1;
+			if (pos < line.length() - 1)
+			{
+				char next = line.charAt(pos + 1);
+				for (Character secondChar : Operator.secondChars)
+				{
+					if (secondChar.equals(next))
+						return false;
+				}
+			}
 			nextChar();
 			return true;
 		}
 		return false;
+	}
+
+	boolean eat(char charToEat1, char charToEat2)
+	{
+		while (ch == ' ' || ch == '\n')
+			nextChar();
+		if (ch == charToEat1 && pos < line.length() && line.charAt(pos + 1) == charToEat2)
+		{
+			nextChar();
+			nextChar();
+			return true;
+		}
+		return false;
+	}
+
+	boolean eat(String s)
+	{
+		if (s.length() == 1)
+		{
+			return eat(s.charAt(0));
+		} else
+		{
+			return eat(s.charAt(0), s.charAt(1));
+		}
 	}
 
 	private Expression next(int i)
@@ -295,8 +329,12 @@ public class MyParser
 
 			for (Operator op : BINARY_PRECENDENCE[BINARY_PRECENDENCE.length - 1 - i])
 			{
+				if (DEBUG)
+					System.out.println("Testing " + op);
 				if (eat(op.getOperator()))
 				{
+					if (DEBUG)
+						System.out.println("Found: " + op);
 					found = true;
 					Expression left = ex;
 					Expression right = next(i + 1);

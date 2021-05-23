@@ -16,6 +16,8 @@ import java.util.regex.Pattern;
  ***********************/
 public class ScriptReader
 {
+	public static boolean DEBUG = false;
+
 	public static Script readScript(File file, Workspace workspace)
 	{
 		Script script = new Script(workspace);
@@ -36,6 +38,13 @@ public class ScriptReader
 	{
 		if (Pattern.compile("while\s*\\(.*\\).*").matcher(line).matches())
 		{
+			if (DEBUG)
+			{
+				Log.red();
+				System.out.println("While ");
+				Log.reset();
+				System.out.println(line);
+			}
 			String[] split = line.split("\\{", 2);
 			String s = split[0].split("\\(", 2)[1].trim();
 			Expression condition = script.getParser().setExpression(s.substring(0, s.length() - 1).trim()).parse();
@@ -45,6 +54,13 @@ public class ScriptReader
 		}
 		else if (Pattern.compile("if\s*\\(.+\\).*\\{.*\\}\s*else\s*\\{.*\\}").matcher(line).matches())
 		{
+			if (DEBUG)
+			{
+				Log.green();
+				System.out.println("If Else ");
+				Log.reset();
+				System.out.println(line);
+			}
 			String[] split = line.split("\\}\s*else\s*\\{");
 
 			If anIf = (If) createExpression(script, split[0] + "}");
@@ -53,14 +69,33 @@ public class ScriptReader
 		}
 		else if (Pattern.compile("if\s*\\(.*\\).*").matcher(line).matches())
 		{
+			if (DEBUG)
+			{
+				Log.yellow();
+				System.out.println("If ");
+				Log.reset();
+				System.out.println(line);
+			}
 			String[] split = line.split("\\{", 2);
 			String s = split[0].split("\\(", 2)[1].trim();
-			Expression condition = script.getParser().setExpression(s.substring(0, s.length() - 1).trim()).parse();
+			String trim1 = s.substring(0, s.length() - 1).trim();
+			if (DEBUG)
+			{
+				System.out.println("Condition: " + trim1);
+			}
+			Expression condition = script.getParser().setExpression(trim1).parse();
 			String trim = split[1].trim();
 			return new If(condition, (Function) createExpression(script, trim));
 		}
 		else if (line.endsWith("}"))
 		{
+			if (DEBUG)
+			{
+				Log.blue();
+				System.out.println("Function ");
+				Log.reset();
+				System.out.println(line);
+			}
 			String substring = line.substring(0, line.length() - 1).trim();
 			List<String> split = split(substring);
 			List<Expression> exps = new ArrayList<>();
@@ -74,6 +109,14 @@ public class ScriptReader
 		}
 		else
 		{
+			line = line.replaceAll("\\\\n", "\n");
+			if (DEBUG)
+			{
+				Log.magenta();
+				System.out.println("Expression ");
+				Log.reset();
+				System.out.println(line);
+			}
 			return script.getParser().setExpression(line).parse();
 		}
 	}
@@ -148,7 +191,15 @@ public class ScriptReader
 
 			if (ch == '\\')
 			{
-				escaped = true;
+				if (script.charAt(i + 1) == 'n')
+				{
+					i++;
+					builder.append("\\n");
+					continue;
+				} else
+				{
+					escaped = true;
+				}
 			}
 
 			if (ch == '\n' && !escaped)

@@ -21,11 +21,17 @@ public class SystemLibrary extends Library
 	{
 		super("System");
 
-		addFunction(FunctionParameters.function("print").addType(PrimitiveTypes.DOUBLE).build(), new PrintFunction());
-		addFunction(FunctionParameters.function("print").addType(PrimitiveTypes.INT).build(), new PrintFunction());
-		addFunction(FunctionParameters.function("print").addType(PrimitiveTypes.BOOL).build(), new PrintFunction());
-		addFunction(FunctionParameters.function("print").addType(PrimitiveTypes.STRING).build(), new PrintFunction());
-		addFunction(FunctionParameters.function("print").addType(PrimitiveTypes.NULL).build(), new PrintFunction());
+		addFunction(FunctionParameters.function("print").addType(PrimitiveTypes.DOUBLE).build(), new PrintFunction(false));
+		addFunction(FunctionParameters.function("print").addType(PrimitiveTypes.INT).build(), new PrintFunction(false));
+		addFunction(FunctionParameters.function("print").addType(PrimitiveTypes.BOOL).build(), new PrintFunction(false));
+		addFunction(FunctionParameters.function("print").addType(PrimitiveTypes.STRING).build(), new PrintFunction(false));
+		addFunction(FunctionParameters.function("print").addType(PrimitiveTypes.NULL).build(), new PrintFunction(false));
+
+		addFunction(FunctionParameters.function("println").addType(PrimitiveTypes.DOUBLE).build(), new PrintFunction(true));
+		addFunction(FunctionParameters.function("println").addType(PrimitiveTypes.INT).build(), new PrintFunction(true));
+		addFunction(FunctionParameters.function("println").addType(PrimitiveTypes.BOOL).build(), new PrintFunction(true));
+		addFunction(FunctionParameters.function("println").addType(PrimitiveTypes.STRING).build(), new PrintFunction(true));
+		addFunction(FunctionParameters.function("println").addType(PrimitiveTypes.NULL).build(), new PrintFunction(true));
 
 		addFunction(FunctionParameters.function("printDetail").addType(CustomTypes.VEC2).build(), new Function()
 		{

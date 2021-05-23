@@ -1,5 +1,8 @@
 package steve6472.scriptit;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static steve6472.scriptit.OperatorType.*;
 
 /**********************
@@ -57,6 +60,19 @@ public enum Operator
 	public static Operator[] getTermOps()
 	{
 		return TERM_OPS;
+	}
+
+	public static final List<Character> secondChars = new ArrayList<>();
+
+	static
+	{
+		for (Operator op : values())
+		{
+			if (op.operator.length() > 1)
+			{
+				secondChars.add(op.operator.charAt(1));
+			}
+		}
 	}
 
 	private final String operator;

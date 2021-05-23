@@ -14,7 +14,7 @@ public class ReaderMain
 	{
 		Workspace workspace = new Workspace();
 
-		Script script = ScriptReader.readScript(new File("scripts/game.txt"), workspace);
+		Script script = ScriptReader.readScript(new File("scripts/password.txt"), workspace);
 		script.runWithDelay();
 	}
 }

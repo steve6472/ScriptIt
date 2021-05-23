@@ -12,15 +12,21 @@ import steve6472.scriptit.Script;
  ***********************/
 public class PrintFunction extends Function
 {
-	public PrintFunction()
+	boolean ln;
+
+	public PrintFunction(boolean ln)
 	{
 		super((String) null);
+		this.ln = ln;
 	}
 
 	@Override
 	public Result apply(Script script)
 	{
-		System.out.println(arguments[0]);
+		if (ln)
+			System.out.println(arguments[0]);
+		else
+			System.out.print(arguments[0]);
 		return Result.pass();
 	}
 }
