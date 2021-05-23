@@ -13,7 +13,6 @@ public class Result
 	private static final Result PASS_IF_FALSE = new Result(Value.NULL, ResultStatus.PASS_IF_FALSE);
 	private static final Result BREAK = new Result(Value.NULL, ResultStatus.BREAK);
 	private static final Result CONTINUE = new Result(Value.NULL, ResultStatus.CONTINUE);
-	private static final Result LOOP = new Result(Value.NULL, ResultStatus.LOOP);
 
 	private final Value value;
 	private final ResultStatus status;
@@ -59,11 +58,6 @@ public class Result
 		return CONTINUE;
 	}
 
-	public static Result loop()
-	{
-		return LOOP;
-	}
-
 	public static Result returnValue(Value value)
 	{
 		return new Result(value, ResultStatus.RETURN_VALUE);
@@ -102,11 +96,6 @@ public class Result
 	public boolean isIfFalse()
 	{
 		return getStatus() == ResultStatus.PASS_IF_FALSE;
-	}
-
-	public boolean isLoop()
-	{
-		return getStatus() == ResultStatus.LOOP;
 	}
 
 	public boolean isBreak()

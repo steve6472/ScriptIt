@@ -142,6 +142,7 @@ public class Main
 /*
 		script.lines = new ExpressionExecutor[]
 			{
+				new ExpressionExecutor(script.memory).setExpression(script.getParser().setExpression("import library System").parse()),
 				new ExpressionExecutor(script.memory).setExpression(new Assignment("var", new Constant(PrimitiveTypes.DOUBLE, 0.0))),
 				new ExpressionExecutor(script.memory).setExpression(script.getParser().setExpression("delay(500)").parse()),
 				new ExpressionExecutor(script.memory).setExpression(new While(new If(script.getParser().setExpression("var < 7.0").parse(), whileBody__))),
@@ -157,7 +158,7 @@ public class Main
 	{
 		Result ret = Result.delay();
 
-		while ((ret.isDelay() || ret.isLoop()) && !ret.isReturnValue() && !ret.isReturn())
+		while (ret.isDelay() && !ret.isReturnValue() && !ret.isReturn())
 		{
 //			Thread.sleep(100);
 			ret = script.execute();

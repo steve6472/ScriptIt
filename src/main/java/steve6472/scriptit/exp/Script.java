@@ -55,8 +55,6 @@ public class Script
 			}
 			if (result.isDelay())
 				return result;
-			if (result.isLoop())
-				return result;
 			currentIndex++;
 		}
 

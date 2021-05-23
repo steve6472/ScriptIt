@@ -91,10 +91,6 @@ public class Function extends Expression
 				expressionIndex = 0;
 				script.getMemory().pop();
 				return Result.pass();
-			} else if (result.isLoop())
-			{
-				System.out.println("I GOT CALLED! (Function:96)");
-				continue;
 			} else if (result.isBreak())
 			{
 				isDelayed = false;
