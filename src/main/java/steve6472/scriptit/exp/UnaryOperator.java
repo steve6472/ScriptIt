@@ -10,7 +10,7 @@ class UnaryOperator extends Expression
 {
 	Operator operator;
 	Expression left;
-	Function operatorFunction;
+	Function operatorFunction = null;
 	Result leftResult = Result.delay();
 	Value leftValue;
 
@@ -18,7 +18,6 @@ class UnaryOperator extends Expression
 	{
 		this.operator = operator;
 		this.left = left;
-		this.operatorFunction = PrimitiveTypes.DOUBLE.unary.get(operator);
 	}
 
 	@Override
@@ -31,6 +30,11 @@ class UnaryOperator extends Expression
 			return leftResult;
 
 		leftValue = leftResult.getValue();
+
+		if (operatorFunction == null)
+		{
+			operatorFunction = leftValue.type.unary.get(operator);
+		}
 
 		operatorFunction.setArguments(new Value[] {leftValue});
 		Result apply = operatorFunction.apply(script);

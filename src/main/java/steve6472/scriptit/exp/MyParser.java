@@ -1,5 +1,6 @@
 package steve6472.scriptit.exp;
 
+import steve6472.scriptit.exp.types.PrimitiveTypes;
 import steve6472.scriptit.expression.Stack;
 
 import java.util.ArrayList;
@@ -18,6 +19,9 @@ public class MyParser
 	private static final Pattern VARIABLE_NAME = Pattern.compile("^[a-zA-Z_][a-zA-Z0-9_]*");
 	private static final Pattern RETURN_THIS = Pattern.compile("^return\s+this");
 
+	/**
+	 * https://en.cppreference.com/w/cpp/language/operator_precedence
+	 */
 	public static final Operator[][] BINARY_PRECENDENCE =
 		{
 			{
@@ -30,28 +34,51 @@ public class MyParser
 				Operator.ADD, Operator.SUB
 			},
 			{
-				Operator.LESS_THAN, Operator.GREATER_THAN
+				Operator.LSH, Operator.RSH
+			},
+			{
+				Operator.LESS_THAN, Operator.GREATER_THAN, Operator.LESS_THAN_EQUAL, Operator.GREATER_THAN_EQUAL
 			},
 			{
 				Operator.EQUAL, Operator.NOT_EQUAL
+			},
+			{
+				Operator.BIT_AND
+			},
+			{
+				Operator.BIT_XOR
+			},
+			{
+				Operator.BIT_OR
+			},
+			{
+				Operator.AND
+			},
+			{
+				Operator.OR
+			},
+			{
+				Operator.ASSIGN
 			}
 		};
 
 	public static final Operator[] UNARY_OPERATORS =
 		{
-			Operator.ADD, Operator.SUB
+			Operator.ADD, Operator.SUB, Operator.NOT, Operator.NEG
 		};
 
 	private String line;
 	private int pos = -1;
 	private char ch;
 	private final Stack<List<Expression>> functionParameters = new Stack<>(64);
+	private boolean createdAssignment = false;
 
 	public MyParser setExpression(String expression)
 	{
 		pos = -1;
 		functionParameters.clear();
 		this.line = expression;
+		this.createdAssignment = false;
 		return this;
 	}
 
@@ -68,12 +95,13 @@ public class MyParser
 		}
 	}
 
-	boolean eat(char charToEat)
+	boolean eat(String s)
 	{
-		while (ch == ' ' || ch == '\n')
+		while (Character.isWhitespace(ch))
 			nextChar();
-		if (ch == charToEat)
+		if (line.substring(pos).startsWith(s))
 		{
+			pos += s.length() - 1;
 			nextChar();
 			return true;
 		}
@@ -141,7 +169,7 @@ public class MyParser
 
 			for (Operator op : UNARY_OPERATORS)
 			{
-				if (eat(op.getOperator().charAt(0)))
+				if (eat(op.getOperator()))
 				{
 					Expression right = next(i);
 
@@ -150,7 +178,46 @@ public class MyParser
 			}
 
 			int startPos = pos;
-			if (eat('('))
+			if (eat("\""))
+			{
+				if (ch == '"')
+				{
+					return new Constant(PrimitiveTypes.STRING, "");
+				} else
+				{
+					boolean escape = false;
+					StringBuilder bobTheBuilder = new StringBuilder();
+					while (ch != '"' || escape)
+					{
+						if (ch == '\\')
+						{
+							escape = true;
+							nextChar();
+							continue;
+						}
+						bobTheBuilder.append(ch);
+						nextChar();
+						escape = false;
+					}
+					nextChar();
+					String s = bobTheBuilder.toString();
+					return new Constant(PrimitiveTypes.STRING, s);
+				}
+			}
+			/*TODO: add CHAR
+			else if (eat('\''))
+			{
+				if (ch == '\'')
+				{
+					throw new IllegalArgumentException("Character has no char assigned!");
+				}
+				char c = ch;
+				nextChar();
+				nextChar();
+
+				x = (script) -> newValue(CHAR, c);
+			}*/
+			else if (eat("("))
 			{
 				if (ch == ')')
 				{
@@ -159,7 +226,7 @@ public class MyParser
 				} else
 				{
 					Expression e = next(0);
-					eat(')');
+					eat(")");
 					ex = e;
 				}
 			} else if ((ch >= '0' && ch <= '9') || ch == '.')
@@ -217,19 +284,7 @@ public class MyParser
 		{
 			if (i == 0)
 			{
-				int start = pos;
-
-				if (eat('='))
-				{
-					String varName = line.substring(0, start).trim();
-					if (!VARIABLE_NAME.matcher(varName).matches())
-					{
-						throw new IllegalArgumentException("Variable name '" + varName + "' is invalid");
-					}
-
-					return new Assignment(varName, next(0));
-				}
-				else if (eat(','))
+				if (eat(","))
 				{
 					Expression x = next(0);
 					functionParameters.peek().add(x);
@@ -241,13 +296,23 @@ public class MyParser
 
 			for (Operator op : BINARY_PRECENDENCE[BINARY_PRECENDENCE.length - 1 - i])
 			{
-				if (eat(op.getOperator().charAt(0)))
+				if (eat(op.getOperator()))
 				{
 					found = true;
 					Expression left = ex;
 					Expression right = next(i + 1);
 
-					if (op == Operator.DOT)
+					if (op == Operator.ASSIGN)
+					{
+						if (!(left instanceof Variable va))
+						{
+							throw new RuntimeException("Assignment requires variable at left");
+						} else
+						{
+							ex = new Assignment(va.source.variableName, right);
+						}
+					}
+					else if (op == Operator.DOT)
 					{
 						ex = new DotOperator(left, right);
 					} else

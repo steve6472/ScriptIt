@@ -38,48 +38,13 @@ public enum Operator
 	PRE_INC("++", UNARY),
 	PRE_DEC("--", UNARY),
 
+	COMMA(",", BINARY),
+	ASSIGN("=", BINARY),
 	DOT(".", BINARY);
 
 	private static final Operator[] MAIN_OPS = {ADD, SUB, BIT_OR};
 	private static final Operator[] UNARY_OPS = {ADD, SUB, NEG, NOT, PRE_INC, PRE_DEC};
 	private static final Operator[] TERM_OPS = {MUL, DIV, MOD, AND, OR, BIT_AND, BIT_XOR, EQUAL, NOT_EQUAL, LSH, RSH, LESS_THAN_EQUAL, GREATER_THAN_EQUAL, LESS_THAN, GREATER_THAN};
-
-	public static final Operator[][] PRECENDENCE =
-		{
-			{
-				NOT, NEG
-			},
-			{
-				MUL, DIV, MOD
-			},
-			{
-				ADD, SUB
-			},
-			{
-				LSH, RSH
-			},
-			{
-				LESS_THAN, LESS_THAN_EQUAL, GREATER_THAN, GREATER_THAN_EQUAL
-			},
-			{
-				EQUAL, NOT_EQUAL
-			},
-			{
-				BIT_AND
-			},
-			{
-				BIT_XOR
-			},
-			{
-				BIT_OR
-			},
-			{
-				AND
-			},
-			{
-				OR
-			}
-	};
 
 	public static Operator[] getMainOps()
 	{

@@ -2,6 +2,8 @@ package steve6472.scriptit.exp.libraries;
 
 import steve6472.scriptit.exp.*;
 import steve6472.scriptit.exp.functions.PrintFunction;
+import steve6472.scriptit.exp.types.CustomTypes;
+import steve6472.scriptit.exp.types.PrimitiveTypes;
 
 /**********************
  * Created by steve6472 (Mirek Jozefek)
@@ -18,9 +20,10 @@ public class SystemLibrary extends Library
 		addFunction(FunctionParameters.function("print").addType(PrimitiveTypes.DOUBLE).build(), new PrintFunction());
 		addFunction(FunctionParameters.function("print").addType(PrimitiveTypes.INT).build(), new PrintFunction());
 		addFunction(FunctionParameters.function("print").addType(PrimitiveTypes.BOOL).build(), new PrintFunction());
+		addFunction(FunctionParameters.function("print").addType(PrimitiveTypes.STRING).build(), new PrintFunction());
 		addFunction(FunctionParameters.function("print").addType(PrimitiveTypes.NULL).build(), new PrintFunction());
 
-		addFunction(FunctionParameters.function("printDetail").addType(PrimitiveTypes.VEC2).build(), new Function()
+		addFunction(FunctionParameters.function("printDetail").addType(CustomTypes.VEC2).build(), new Function()
 		{
 			@Override
 			public Result apply(Script script)

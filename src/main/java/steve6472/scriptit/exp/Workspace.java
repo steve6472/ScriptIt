@@ -3,6 +3,7 @@ package steve6472.scriptit.exp;
 import steve6472.scriptit.exp.libraries.Library;
 import steve6472.scriptit.exp.libraries.MathLibrary;
 import steve6472.scriptit.exp.libraries.SystemLibrary;
+import steve6472.scriptit.exp.types.PrimitiveTypes;
 
 import java.util.HashMap;
 import java.util.Map;

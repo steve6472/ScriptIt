@@ -1,5 +1,7 @@
 package steve6472.scriptit.exp;
 
+import steve6472.scriptit.exp.types.CustomTypes;
+
 /**********************
  * Created by steve6472 (Mirek Jozefek)
  * On date: 5/21/2021
@@ -54,16 +56,16 @@ public class Main
 			};*/
 
 		Workspace workspace = new Workspace();
-		workspace.addType(PrimitiveTypes.VEC2);
+		workspace.addType(CustomTypes.VEC2);
 
 		Script script = new Script(workspace);
-		PrimitiveTypes.init(script);
+		CustomTypes.init(script);
 
 //		Function doubleMul = new Function("left", "right");
 ////		doubleMul.setExpressions(script, "temp = left + right", "temp = temp * right", "return temp - left");
 //		doubleMul.setExpressions(script, "return left * right");
 //		PrimitiveTypes.DOUBLE.addBinaryOperator(PrimitiveTypes.DOUBLE, Operator.MUL, doubleMul);
-
+/*
 		Function lerpFunction = new Function("start", "stop", "t");
 		lerpFunction.setExpressions(script, lerp);
 		script.memory.addFunction(FunctionParameters.function("lerp").addType(PrimitiveTypes.DOUBLE).addType(PrimitiveTypes.DOUBLE).addType(PrimitiveTypes.DOUBLE).build(), lerpFunction);
@@ -106,17 +108,25 @@ public class Main
 
 		Function del = new Function();
 		del.setExpressions(script, "delay(1000)", "System.print(8)", "return 3.0");
-		script.getMemory().addFunction(FunctionParameters.function("del").build(), del);
+		script.getMemory().addFunction(FunctionParameters.function("del").build(), del);*/
 
 		script.setExpressions(
 			"import type vec2",
+			"import type double",
+			"import type int",
+
 			"import library Math",
 			"import library System",
-			"temp = vec2(3.02, 6.7).normalize()",
+
+			"temp = vec2(3.02, double(6.7)).normalize()",
 			"System.printDetail(temp)",
 			"var = temp.makeZero()",
 			"System.printDetail(temp)",
 			"System.printDetail(var)",
+			"System.print(false == true)", // false
+			"System.print(\"Hello world\")",
+			"System.print(5 & 3)", // 1
+			"System.print(1 << 3)", // 8
 			"return temp"
 		);
 //		script.setExpressions("return lerp(3.0, 5.0, 0.5) * lerp(0.0, 1.0, 0.5)");

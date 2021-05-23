@@ -51,6 +51,11 @@ public class FunctionParameters
 		return new FunctionParameters(name, types);
 	}
 
+	public static FunctionParameters create(Type type, Type... types)
+	{
+		return new FunctionParameters(type.getKeyword(), types);
+	}
+
 	@Override
 	public String toString()
 	{

@@ -12,7 +12,7 @@ class BinaryOperator extends Expression
 	Expression left, right;
 	Result leftResult = Result.delay();
 	Result rightResult = Result.delay();
-	Function operatorFunction;
+	Function operatorFunction = null;
 	Value leftValue, rightValue;
 
 	public BinaryOperator(Operator operator, Expression left, Expression right)
@@ -20,7 +20,6 @@ class BinaryOperator extends Expression
 		this.operator = operator;
 		this.left = left;
 		this.right = right;
-		this.operatorFunction = PrimitiveTypes.DOUBLE.binary.get(PrimitiveTypes.DOUBLE).get(operator);
 	}
 
 	@Override
@@ -41,6 +40,11 @@ class BinaryOperator extends Expression
 			return rightResult;
 
 		rightValue = rightResult.getValue();
+
+		if (operatorFunction == null)
+		{
+			operatorFunction = leftValue.type.binary.get(rightValue.type).get(operator);
+		}
 
 		operatorFunction.setArguments(new Value[] {leftValue, rightValue});
 

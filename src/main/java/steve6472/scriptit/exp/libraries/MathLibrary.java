@@ -1,6 +1,6 @@
 package steve6472.scriptit.exp.libraries;
 
-import steve6472.scriptit.exp.PrimitiveTypes;
+import steve6472.scriptit.exp.types.PrimitiveTypes;
 import steve6472.scriptit.exp.Value;
 
 /**********************

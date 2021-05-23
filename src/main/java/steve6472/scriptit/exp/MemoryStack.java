@@ -1,6 +1,7 @@
 package steve6472.scriptit.exp;
 
 import steve6472.scriptit.exp.functions.DelayFunction;
+import steve6472.scriptit.exp.types.PrimitiveTypes;
 
 /**********************
  * Created by steve6472 (Mirek Jozefek)
