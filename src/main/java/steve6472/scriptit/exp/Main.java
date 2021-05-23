@@ -1,6 +1,7 @@
 package steve6472.scriptit.exp;
 
 import steve6472.scriptit.exp.types.CustomTypes;
+import steve6472.scriptit.exp.types.PrimitiveTypes;
 
 /**********************
  * Created by steve6472 (Mirek Jozefek)
@@ -65,7 +66,7 @@ public class Main
 ////		doubleMul.setExpressions(script, "temp = left + right", "temp = temp * right", "return temp - left");
 //		doubleMul.setExpressions(script, "return left * right");
 //		PrimitiveTypes.DOUBLE.addBinaryOperator(PrimitiveTypes.DOUBLE, Operator.MUL, doubleMul);
-/*
+
 		Function lerpFunction = new Function("start", "stop", "t");
 		lerpFunction.setExpressions(script, lerp);
 		script.memory.addFunction(FunctionParameters.function("lerp").addType(PrimitiveTypes.DOUBLE).addType(PrimitiveTypes.DOUBLE).addType(PrimitiveTypes.DOUBLE).build(), lerpFunction);
@@ -108,7 +109,7 @@ public class Main
 
 		Function del = new Function();
 		del.setExpressions(script, "delay(1000)", "System.print(8)", "return 3.0");
-		script.getMemory().addFunction(FunctionParameters.function("del").build(), del);*/
+		script.getMemory().addFunction(FunctionParameters.function("del").build(), del);
 
 		script.setExpressions(
 			"import type vec2",
@@ -124,7 +125,9 @@ public class Main
 			"System.printDetail(temp)",
 			"System.printDetail(var)",
 			"System.print(false == true)", // false
-			"System.print(\"Hello world\")",
+			"helloWorld = \"Hello World!\"",
+			"System.print(helloWorld)",
+			"System.print(helloWorld.len())", // 11
 			"System.print(5 & 3)", // 1
 			"System.print(1 << 3)", // 8
 			"return temp"
@@ -138,26 +141,29 @@ public class Main
 /*
 		script.lines = new ExpressionExecutor[]
 			{
-				new ExpressionExecutor(script.memory).setExpression(script.parser.setExpression("var = 2.0").parse()),
+				new ExpressionExecutor(script.memory).setExpression(script.getParser().setExpression("import library System").parse()),
+				new ExpressionExecutor(script.memory).setExpression(script.getParser().setExpression("var = 2.0").parse()),
 //				new ExpressionExecutor(script.memory).setExpression(new If(new BinaryOperator(Operator.LESS_THAN, new Variable(VariableSource.memory("var")), new Constant(PrimitiveTypes.DOUBLE, 3.0)), ifBody)) // return nothing if false
-				new ExpressionExecutor(script.memory).setExpression(new IfElse(new If(new BinaryOperator(Operator.LESS_THAN, new Variable(VariableSource.memory("var")), new Constant(PrimitiveTypes.DOUBLE, 3.0)), ifBody), elseBody))
+				new ExpressionExecutor(script.memory).setExpression(new IfElse(new If(new BinaryOperator(Operator.LESS_THAN, new Variable(VariableSource.memory("var")), new Constant(PrimitiveTypes.DOUBLE, 2.0)), ifBody), elseBody))
 			};*/
 
 		// while loops
 /*
 		script.lines = new ExpressionExecutor[]
 			{
+				new ExpressionExecutor(script.memory).setExpression(script.getParser().setExpression("import library System").parse()),
 				new ExpressionExecutor(script.memory).setExpression(new Assignment("var", new Constant(PrimitiveTypes.DOUBLE, 0.0))),
 				new ExpressionExecutor(script.memory).setExpression(new While(new If(script.getParser().setExpression("var < 5.0").parse(), whileBody))),
-				new ExpressionExecutor(script.memory).setExpression(script.parser.setExpression("return true").parse())
+				new ExpressionExecutor(script.memory).setExpression(script.getParser().setExpression("return true").parse())
 			};*/
 
-		/*
+/*
 		script.lines = new ExpressionExecutor[]
 			{
+				new ExpressionExecutor(script.memory).setExpression(script.getParser().setExpression("import library System").parse()),
 				new ExpressionExecutor(script.memory).setExpression(new Assignment("var", new Constant(PrimitiveTypes.DOUBLE, 0.0))),
-				new ExpressionExecutor(script.memory).setExpression(new While(new If(script.parser.setExpression("true").parse(), whileBody_))),
-				new ExpressionExecutor(script.memory).setExpression(script.parser.setExpression("return true").parse())
+				new ExpressionExecutor(script.memory).setExpression(new While(new If(script.getParser().setExpression("true").parse(), whileBody_))),
+				new ExpressionExecutor(script.memory).setExpression(script.getParser().setExpression("return true").parse())
 			};*/
 /*
 		script.lines = new ExpressionExecutor[]

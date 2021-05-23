@@ -27,6 +27,8 @@ public class Workspace
 		addType(PrimitiveTypes.DOUBLE);
 		addType(PrimitiveTypes.INT);
 		addType(PrimitiveTypes.BOOL);
+		addType(PrimitiveTypes.STRING);
+		addType(PrimitiveTypes.CHAR);
 		addType(PrimitiveTypes.NULL);
 	}
 
