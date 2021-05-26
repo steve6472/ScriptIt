@@ -144,9 +144,9 @@ public class Library
 		Value apply(Value... params);
 	}
 
-	public void addFunction(String name, NoParamFunction function, Type... types)
+	public void addFunction(String name, NoParamFunction function)
 	{
-		addFunction(FunctionParameters.create(name, types), new Func(args -> function.apply()));
+		addFunction(FunctionParameters.create(name), new Func(args -> function.apply()));
 	}
 
 	public void addFunction(String name, OneParamFunction function, Type... types)

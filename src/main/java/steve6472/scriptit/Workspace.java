@@ -2,6 +2,7 @@ package steve6472.scriptit;
 
 import steve6472.scriptit.libraries.Library;
 import steve6472.scriptit.libraries.MathLibrary;
+import steve6472.scriptit.libraries.RandomLibrary;
 import steve6472.scriptit.libraries.SystemLibrary;
 import steve6472.scriptit.types.PrimitiveTypes;
 
@@ -23,6 +24,7 @@ public class Workspace
 	{
 		addLibrary(new MathLibrary());
 		addLibrary(new SystemLibrary());
+		addLibrary(new RandomLibrary());
 
 		addType(PrimitiveTypes.DOUBLE);
 		addType(PrimitiveTypes.INT);

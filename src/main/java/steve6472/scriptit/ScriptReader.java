@@ -16,7 +16,7 @@ import java.util.regex.Pattern;
  ***********************/
 public class ScriptReader
 {
-	public static boolean DEBUG = true;
+	public static boolean DEBUG = false;
 
 	public static String COLOR_WHILE = Log.RED;
 	public static String COLOR_IF_ELSE = Log.GREEN;

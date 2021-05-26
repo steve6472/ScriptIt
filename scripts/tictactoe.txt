@@ -19,10 +19,11 @@ playerTwoName = System.input();
 System.println("Welcome " + playerTwoName + " (O)!\n");
 
 gameWon = false;
-playerTurn = 0;
+playerTurn = 'X';
 
 while (!gameWon)
 {
+    System.println("\n\n\n\n");
     // print current board
     System.println("     │     │      ");
     System.println("  " + row1.charAt(0) + "  │  " + row1.charAt(1) + "  │  " + row1.charAt(2) + "  ");
@@ -34,61 +35,58 @@ while (!gameWon)
     System.println("  " + row3.charAt(0) + "  │  " + row3.charAt(1) + "  │  " + row3.charAt(2) + "  ");
     System.println("     │     │      ");
 
-    if (playerTurn == 0)
+    System.print("Input X coordinate: ");
+    x = int(System.input());
+    System.print("Input Y coordinate: ");
+    y = int(System.input());
+
+    if (x < 0 || x >= 3)
     {
-        playerTurn = 1;
+        System.println("Invalid X value, exitting");
+        return;
+    }
 
-        System.print("Input X coordinate: ");
-        x = int(System.input());
-        System.print("Input Y coordinate: ");
-        y = int(System.input());
+    if (y < 0 || y >= 3)
+    {
+        System.println("Invalid Y value, exitting");
+        return;
+    }
 
-        if (x < 0 || x >= 3)
+
+    if (y == 0)
+    {
+        if (row1.charAt(x) != ' ')
         {
-            System.println("Invalid X value exitting");
-            return;
-        }
-
-        if (y < 0 || y >= 3)
-        {
-            System.println("Invalid Y value exitting");
-            return;
-        }
-
-
-        if (y == 0)
-        {
-            if (row1.charAt(x) != ' ')
-            {
-                System.println("Place already taken!");
-            } else
-            {
-                row1 = row1.setChar(x, 'X');
-            }
+            System.println("Place already taken!");
         } else
         {
-            if (y == 1)
+            row1 = row1.setChar(x, 'X');
+        }
+    } else
+    {
+        if (y == 1)
+        {
+
+        } else
+        {
+            if (y == 2)
             {
 
             } else
             {
-                if (y == 2)
-                {
-
-                } else
-                {
-                    System.println("Invalid Y value, exitting");
-                    return;
-                }
+                System.println("Invalid Y value, exitting");
+                return;
             }
         }
+    }
 
+    // swap players
+    if (playerTurn == 'X')
+    {
+        playerTurn = 'O';
     } else
     {
-        playerTurn = 0;
-
-
-
+        playerTurn = 'X';
     }
 
 }

@@ -1,0 +1,116 @@
+import library Random;
+import library System;
+
+// Print welcoming message
+System.println("\n" + "*-" * 16 + "*" + "\n*      Welcome to JanKenPon     *\n" + "*-" * 16 + "*\n");
+
+// Constants
+ROCK = "rock";
+PAPER = "paper";
+SCISSORS = "scissors";
+DEBUG = false;
+
+// Score
+scoreComputer = 0;
+scorePlayer = 0;
+
+// Main game loop
+while (true)
+{
+    computer = "";
+    rng = Random.randomInt(0, 2);
+
+    if (rng == 0)
+    {
+        computer = ROCK;
+    } else
+    {
+        if (rng == 1)
+        {
+            computer = PAPER;
+        } else
+        {
+            computer = SCISSORS;
+        }
+    }
+
+    if (DEBUG)
+    {
+        System.println("Computer selected: " + computer);
+    }
+
+    System.println("Select:\nr/rock\np/paper\ns/scissors");
+
+    player = System.input();
+
+    if (player == "r")
+    {
+        player = ROCK;
+    } else
+    {
+        if (player == "p")
+        {
+            player = PAPER;
+        } else
+        {
+            player = SCISSORS;
+        }
+    }
+
+    if (player == computer)
+    {
+        System.println("Player and Computer chose the same thing!\n\n");
+        continue;
+    }
+
+    // Rock vs Paper
+
+    if (player == ROCK && computer == PAPER)
+    {
+        scoreComputer = scoreComputer + 1;
+        System.println("Computer won this round!");
+        System.println("Current Score\n  Player: " + scorePlayer + "\n  Computer: " + scoreComputer + "\n\n");
+        continue;
+    }
+
+    if (player == PAPER && computer == ROCK)
+    {
+        scorePlayer = scorePlayer + 1;
+        System.println("Player won this round!");
+        System.println("Current Score\n  Player: " + scorePlayer + "\n  Computer: " + scoreComputer + "\n\n");
+    }
+
+    // Rock vs Scissors
+
+    if (player == ROCK && computer == SCISSORS)
+    {
+        scorePlayer = scorePlayer + 1;
+        System.println("Player won this round!");
+        System.println("Current Score\n  Player: " + scorePlayer + "\n  Computer: " + scoreComputer + "\n\n");
+    }
+
+    if (player == SCISSORS && computer == ROCK)
+    {
+        scoreComputer = scoreComputer + 1;
+        System.println("Computer won this round!");
+        System.println("Current Score\n  Player: " + scorePlayer + "\n  Computer: " + scoreComputer + "\n\n");
+        continue;
+    }
+
+    // Paper vs Scissors
+
+    if (player == SCISSORS && computer == PAPER)
+    {
+        scorePlayer = scorePlayer + 1;
+        System.println("Player won this round!");
+        System.println("Current Score\n  Player: " + scorePlayer + "\n  Computer: " + scoreComputer + "\n\n");
+    }
+
+    if (player == PAPER && computer == SCISSORS)
+    {
+        scoreComputer = scoreComputer + 1;
+        System.println("Computer won this round!");
+        System.println("Current Score\n  Player: " + scorePlayer + "\n  Computer: " + scoreComputer + "\n\n");
+        continue;
+    }
+}
