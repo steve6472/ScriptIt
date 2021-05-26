@@ -9,12 +9,12 @@ package steve6472.scriptit;
 class If extends Expression
 {
 	Expression condition;
-	Function body;
+	Expression body;
 	Result condResult = Result.delay();
 	boolean isBodyDelayed;
 	Value insideValue;
 
-	public If(Expression condition, Function body)
+	public If(Expression condition, Expression body)
 	{
 		this.condition = condition;
 		this.body = body;
@@ -38,9 +38,9 @@ class If extends Expression
 			if (!condValue.getBoolean())
 				return Result.passIfFalse();
 
-			if (insideValue != Value.NULL)
+			if (insideValue != Value.NULL && body instanceof Function f)
 			{
-				body.setTypeFunction(insideValue);
+				f.setTypeFunction(insideValue);
 			}
 		}
 

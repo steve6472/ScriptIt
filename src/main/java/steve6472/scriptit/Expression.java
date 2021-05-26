@@ -9,4 +9,6 @@ package steve6472.scriptit;
 public abstract class Expression
 {
 	public abstract Result apply(Script script);
+
+	//TODO: add this from Function: protected Value typeFunction = null;
 }

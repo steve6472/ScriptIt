@@ -1,0 +1,44 @@
+import library System;
+
+a = 1;
+b = 1;
+
+if (a == b)
+{
+    if (a > 5)
+    {
+        System.println("A");
+    } else
+    {
+        System.println("B");
+    }
+}
+
+/*
+if (a == 2 || b == 2)
+{
+    System.println("Either a or b is 2");
+} else
+{
+    if (a == 3 && b == 3)
+    {
+        System.println("Both a and b is 3");
+        if (a != 5 && b != 6)
+        {
+            System.println("Somethjing");
+        } else
+        {
+            System.println("Something else");
+        }
+    } else
+    {
+        System.println("Neither a nor b is 2");
+        if (a != 5 && b != 6)
+        {
+            System.println("Somethjing");
+        } else
+        {
+            System.println("Something else");
+        }
+    }
+}*/

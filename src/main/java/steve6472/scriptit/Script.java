@@ -2,6 +2,11 @@ package steve6472.scriptit;
 
 import steve6472.scriptit.libraries.Library;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+
 /**********************
  * Created by steve6472 (Mirek Jozefek)
  * On date: 5/23/2021
@@ -50,7 +55,7 @@ public class Script
 		}
 	}
 
-	public Result execute()
+	private Result execute_()
 	{
 		currentIndex = lastIndex;
 		while (currentIndex < lines.length)
@@ -69,6 +74,78 @@ public class Script
 		}
 
 		return Result.return_();
+	}
+
+	public Result execute()
+	{
+		try
+		{
+			return execute_();
+		} catch (Exception ex)
+		{
+			List<StackTraceElement> stackTraceElements = new ArrayList<>(Arrays.asList(ex.getStackTrace()));
+			Collections.reverse(stackTraceElements);
+
+			boolean inWhile = false;
+			boolean isBody = false;
+			boolean wasInScript = false;
+
+			for (int i = 0; i < stackTraceElements.size(); i++)
+			{
+				StackTraceElement e = stackTraceElements.get(i);
+				String errorLine = e.toString();
+				String expression = errorLine.replace("steve6472.scriptit.", "");
+				if (expression.startsWith("Script.") || expression.startsWith("ExpressionExecutor.execute"))
+				{
+					wasInScript = true;
+					continue;
+				}
+
+				if (!wasInScript)
+					continue;
+
+				if (expression.startsWith("While.apply"))
+				{
+					System.out.print(ScriptReader.COLOR_WHILE + "While" + Log.RESET + " -> ");
+					inWhile = true;
+					isBody = true;
+				} else if (expression.startsWith("If.apply"))
+				{
+					if (inWhile)
+					{
+						System.out.print(ScriptReader.COLOR_IF + "Condition" + Log.RESET + " -> ");
+						inWhile = false;
+					} else
+					{
+						System.out.print(ScriptReader.COLOR_IF + "If" + Log.RESET + " -> ");
+					}
+					isBody = true;
+				} else if (expression.startsWith("Function.apply"))
+				{
+					if (isBody)
+					{
+						System.out.print(ScriptReader.COLOR_FUNCTION + "Body" + Log.RESET + " -> ");
+						isBody = false;
+					} else
+					{
+						System.out.print(ScriptReader.COLOR_FUNCTION + "Function" + Log.RESET + " -> ");
+					}
+					isBody = false;
+				} else if (expression.startsWith("IfElse.apply"))
+				{
+					System.out.print(ScriptReader.COLOR_IF_ELSE + "IfElse" + Log.RESET + " -> ");
+					isBody = true;
+				} else
+				{
+					System.out.print(expression + " -> ");
+				}
+			}
+			System.out.println("\n");
+			ex.printStackTrace();
+
+			System.exit(1);
+			return null;
+		}
 	}
 
 	public Value runWithDelay()

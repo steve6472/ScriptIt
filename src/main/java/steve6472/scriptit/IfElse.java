@@ -9,11 +9,11 @@ package steve6472.scriptit;
 class IfElse extends Expression
 {
 	If ifFunction;
-	Function elseFunction;
+	Expression elseFunction;
 	Result ifResult = Result.delay();
 	Result elseResult = Result.delay();
 
-	public IfElse(If ifFunction, Function elseFunction)
+	public IfElse(If ifFunction, Expression elseFunction)
 	{
 		this.ifFunction = ifFunction;
 		this.elseFunction = elseFunction;

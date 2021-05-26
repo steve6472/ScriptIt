@@ -14,7 +14,7 @@ public class ReaderMain
 	{
 		Workspace workspace = new Workspace();
 
-		Script script = ScriptReader.readScript(new File("scripts/password.txt"), workspace);
+		Script script = ScriptReader.readScript(new File("scripts/tictactoe.txt"), workspace);
 		script.runWithDelay();
 	}
 }

@@ -17,7 +17,6 @@ public class MyParser
 {
 	public static boolean DEBUG = false;
 
-	private static final Pattern VARIABLE_NAME = Pattern.compile("^[a-zA-Z_][a-zA-Z0-9_]*");
 	private static final Pattern RETURN_THIS = Pattern.compile("^return\s+this");
 
 	/**
@@ -72,14 +71,12 @@ public class MyParser
 	private int pos = -1;
 	private char ch;
 	private final Stack<List<Expression>> functionParameters = new Stack<>(64);
-	private boolean createdAssignment = false;
 
 	public MyParser setExpression(String expression)
 	{
 		pos = -1;
 		functionParameters.clear();
 		this.line = expression;
-		this.createdAssignment = false;
 		return this;
 	}
 
@@ -159,8 +156,21 @@ public class MyParser
 				} else
 				{
 					nextChar(6);
-					Expression next = next(0);
-					return new Return(next);
+					if (line.substring(pos).isBlank())
+					{
+						return new Return(new Expression()
+						{
+							@Override
+							public Result apply(Script script)
+							{
+								return Result.return_();
+							}
+						});
+					} else
+					{
+						Expression next = next(0);
+						return new Return(next);
+					}
 				}
 			}
 
@@ -213,9 +223,13 @@ public class MyParser
 			int startPos = pos;
 			if (eat("\""))
 			{
+				if (DEBUG)
+					System.out.println("Inside String");
 				if (ch == '"')
 				{
 					nextChar();
+					if (DEBUG)
+						System.out.println("Empty String");
 					return new Constant(PrimitiveTypes.STRING, "");
 				} else
 				{
@@ -235,6 +249,8 @@ public class MyParser
 					}
 					nextChar();
 					String s = bobTheBuilder.toString();
+					if (DEBUG)
+						System.out.println("Finished String " + s);
 					return new Constant(PrimitiveTypes.STRING, s);
 				}
 			}
@@ -337,7 +353,6 @@ public class MyParser
 						System.out.println("Found: " + op);
 					found = true;
 					Expression left = ex;
-					Expression right = next(i + 1);
 
 					if (op == Operator.ASSIGN)
 					{
@@ -346,15 +361,15 @@ public class MyParser
 							throw new RuntimeException("Assignment requires variable at left");
 						} else
 						{
-							ex = new Assignment(va.source.variableName, right);
+							ex = new Assignment(va.source.variableName, next(0));
 						}
 					}
 					else if (op == Operator.DOT)
 					{
-						ex = new DotOperator(left, right);
+						ex = new DotOperator(left, next(i + 1));
 					} else
 					{
-						ex = new BinaryOperator(op, left, right);
+						ex = new BinaryOperator(op, left, next(i + 1));
 					}
 					break;
 				}

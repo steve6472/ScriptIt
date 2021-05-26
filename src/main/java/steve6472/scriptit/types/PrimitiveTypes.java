@@ -65,6 +65,7 @@ public class PrimitiveTypes extends TypesInit
 		 */
 
 		INT.addConstructor(FunctionParameters.create(INT, DOUBLE), new Constructor(args -> newValue(INT, (int) args[0].getDouble())));
+		INT.addConstructor(FunctionParameters.create(INT, STRING), new Constructor(args -> newValue(INT, Integer.parseInt(args[0].getString()))));
 		INT.addConstructor(FunctionParameters.create(INT, INT), new Constructor(args -> newValue(INT, args[0].getInt())));
 		INT.addConstructor(FunctionParameters.create(INT), new Constructor(args -> newValue(INT, 0)));
 
@@ -114,6 +115,8 @@ public class PrimitiveTypes extends TypesInit
 
 		BOOL.addBinaryOperator(BOOL, Operator.EQUAL, new BinaryOperatorOverload((left, right) -> left.getBoolean() == right.getBoolean() ? TRUE : FALSE));
 		BOOL.addBinaryOperator(BOOL, Operator.NOT_EQUAL, new BinaryOperatorOverload((left, right) -> left.getBoolean() != right.getBoolean() ? TRUE : FALSE));
+		BOOL.addBinaryOperator(BOOL, Operator.OR, new BinaryOperatorOverload((left, right) -> left.getBoolean() || right.getBoolean() ? TRUE : FALSE));
+		BOOL.addBinaryOperator(BOOL, Operator.AND, new BinaryOperatorOverload((left, right) -> left.getBoolean() && right.getBoolean() ? TRUE : FALSE));
 
 		BOOL.addUnaryOperator(Operator.NOT, new UnaryOperatorOverload(right -> right.getBoolean() ? FALSE : TRUE));
 
@@ -123,6 +126,10 @@ public class PrimitiveTypes extends TypesInit
 
 		CHAR.addConstructor(FunctionParameters.create(CHAR, CHAR), new Constructor(args -> newValue(CHAR, args[0].getChar())));
 		CHAR.addConstructor(FunctionParameters.create(CHAR), new Constructor(args -> newValue(CHAR, Character.MIN_VALUE)));
+
+		CHAR.addBinaryOperator(CHAR, Operator.EQUAL, new BinaryOperatorOverload((left, right) -> left.getChar() == right.getChar() ? TRUE : FALSE));
+		CHAR.addBinaryOperator(CHAR, Operator.NOT_EQUAL, new BinaryOperatorOverload((left, right) -> left.getChar() != right.getChar() ? TRUE : FALSE));
+		CHAR.addBinaryOperator(CHAR, Operator.ADD, new BinaryOperatorOverload((left, right) -> newValue(STRING, left.getChar() + "" + right.getChar())));
 
 		/*
 		 * String
@@ -149,6 +156,40 @@ public class PrimitiveTypes extends TypesInit
 			public Result apply(Script script)
 			{
 				return Result.value(newValue(INT, typeFunction.getString().length()));
+			}
+		});
+		STRING.addFunction(FunctionParameters.create("charAt", INT), new Function()
+		{
+			@Override
+			public Result apply(Script script)
+			{
+				return Result.value(newValue(CHAR, typeFunction.getString().charAt(arguments[0].getInt())));
+			}
+		});
+		STRING.addFunction(FunctionParameters.create("setChar", INT, CHAR), new Function()
+		{
+			@Override
+			public Result apply(Script script)
+			{
+				StringBuilder builder = new StringBuilder(typeFunction.getString());
+				builder.setCharAt(arguments[0].getInt(), arguments[1].getChar());
+				return Result.value(newValue(STRING, builder.toString()));
+			}
+		});
+		STRING.addFunction(FunctionParameters.create("substring", INT), new Function()
+		{
+			@Override
+			public Result apply(Script script)
+			{
+				return Result.value(newValue(STRING, typeFunction.getString().substring(arguments[0].getInt())));
+			}
+		});
+		STRING.addFunction(FunctionParameters.create("substring", INT, INT), new Function()
+		{
+			@Override
+			public Result apply(Script script)
+			{
+				return Result.value(newValue(STRING, typeFunction.getString().substring(arguments[0].getInt(), arguments[1].getInt())));
 			}
 		});
 	}

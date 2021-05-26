@@ -44,6 +44,11 @@ class BinaryOperator extends Expression
 		if (operatorFunction == null)
 		{
 			operatorFunction = leftValue.type.binary.get(rightValue.type).get(operator);
+
+			if (operatorFunction == null)
+			{
+				throw new RuntimeException("No operator found for type '" + leftValue.type.getKeyword() + "' with right type '" + rightValue.type.getKeyword() + "', operator: " + operator + " (" + operator.getOperator() + ")");
+			}
 		}
 
 		operatorFunction.setArguments(new Value[] {leftValue, rightValue});

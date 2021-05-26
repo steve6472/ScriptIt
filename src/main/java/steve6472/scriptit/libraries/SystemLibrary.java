@@ -65,5 +65,14 @@ public class SystemLibrary extends Library
 					return Result.value(Value.NULL);
 			}
 		});
+
+		addFunction(FunctionParameters.create("createChar", PrimitiveTypes.INT), new Function()
+		{
+			@Override
+			public Result apply(Script script)
+			{
+				return Result.value(Value.newValue(PrimitiveTypes.CHAR, (char) arguments[0].getInt()));
+			}
+		});
 	}
 }

@@ -16,10 +16,24 @@ import java.util.regex.Pattern;
  ***********************/
 public class ScriptReader
 {
-	public static boolean DEBUG = false;
+	public static boolean DEBUG = true;
+
+	public static String COLOR_WHILE = Log.RED;
+	public static String COLOR_IF_ELSE = Log.GREEN;
+	public static String COLOR_IF = Log.YELLOW;
+	public static String COLOR_FUNCTION = Log.BLUE;
+	public static String COLOR_EXPRESSION = Log.MAGENTA;
+
+	private static int depth = 0;
+
+	private static String tree()
+	{
+		return "    ".repeat(depth - 1);
+	}
 
 	public static Script readScript(File file, Workspace workspace)
 	{
+		depth = 0;
 		Script script = new Script(workspace);
 
 		List<String> split = split(readFromFile(file));
@@ -38,41 +52,74 @@ public class ScriptReader
 	{
 		if (Pattern.compile("while\s*\\(.*\\).*").matcher(line).matches())
 		{
+			depth++;
 			if (DEBUG)
 			{
-				Log.red();
-				System.out.println("While ");
+				System.out.print(COLOR_WHILE);
+				System.out.print(tree() + "While: ");
 				Log.reset();
 				System.out.println(line);
 			}
 			String[] split = line.split("\\{", 2);
 			String s = split[0].split("\\(", 2)[1].trim();
-			Expression condition = script.getParser().setExpression(s.substring(0, s.length() - 1).trim()).parse();
-			String trim = split[1].trim();
-			If anIf = new If(condition, (Function) createExpression(script, trim));
-			return new While(anIf);
-		}
-		else if (Pattern.compile("if\s*\\(.+\\).*\\{.*\\}\s*else\s*\\{.*\\}").matcher(line).matches())
-		{
+
+			String cond = s.substring(0, s.length() - 1).trim();
 			if (DEBUG)
 			{
-				Log.green();
-				System.out.println("If Else ");
+				Log.brightRed();
+				System.out.print(tree() + "Condition: ");
+				Log.reset();
+				System.out.println(cond);
+			}
+			Expression condition = script.getParser().setExpression(cond).parse();
+			String trim = split[1].trim();
+			If anIf = new If(condition, (Function) createExpression(script, trim));
+			depth--;
+			return new While(anIf);
+		}
+		else if (Pattern.compile("if\s*\\(.+\\).*\\{.*\\}\s*else\s*\\{.*\\}").matcher(line).matches() && !isIf(line))
+		{
+			depth++;
+			if (DEBUG)
+			{
+				System.out.print(COLOR_IF_ELSE);
+				System.out.print(tree() + "If Else: ");
 				Log.reset();
 				System.out.println(line);
 			}
-			String[] split = line.split("\\}\s*else\s*\\{");
 
-			If anIf = (If) createExpression(script, split[0] + "}");
+			// FIXME: Wrong split, ignores nested else
+//			String[] split = line.split("\\}\s*else\s*\\{");
+			String[] split = splitElse(line);
+			split[0] = split[0].trim();
+			split[1] = split[1].trim();
+			split[1] = split[1].substring(split[1].indexOf('{') + 1).trim();
 
-			return new IfElse(anIf, (Function) createExpression(script, split[1]));
-		}
-		else if (Pattern.compile("if\s*\\(.*\\).*").matcher(line).matches())
-		{
+			If anIf = (If) createExpression(script, split[0]);
+
 			if (DEBUG)
 			{
-				Log.yellow();
-				System.out.println("If ");
+				Log.brightGreen();
+				System.out.println(tree() + "Else");
+				Log.reset();
+			}
+
+			if (Pattern.compile("if\s*\\(.+\\).*\\{.*\\}\s*else\s*\\{.*\\}").matcher(split[1]).matches())
+			{
+				split[1] = split[1].substring(0, split[1].length() - 1).trim();
+			}
+
+			Expression expression = createExpression(script, split[1]);
+			depth--;
+			return new IfElse(anIf, expression);
+		}
+		else if (Pattern.compile("if\s*\\(.*\\).*").matcher(line).matches() && isIf(line))
+		{
+			depth++;
+			if (DEBUG)
+			{
+				System.out.print(COLOR_IF);
+				System.out.print(tree() + "If: ");
 				Log.reset();
 				System.out.println(line);
 			}
@@ -81,18 +128,24 @@ public class ScriptReader
 			String trim1 = s.substring(0, s.length() - 1).trim();
 			if (DEBUG)
 			{
-				System.out.println("Condition: " + trim1);
+				Log.brightYellow();
+				System.out.print(tree() + "Condition: ");
+				Log.reset();
+				System.out.println(trim1);
 			}
 			Expression condition = script.getParser().setExpression(trim1).parse();
 			String trim = split[1].trim();
-			return new If(condition, (Function) createExpression(script, trim));
+			Expression expression = createExpression(script, trim);
+			depth--;
+			return new If(condition, expression);
 		}
 		else if (line.endsWith("}"))
 		{
+			depth++;
 			if (DEBUG)
 			{
-				Log.blue();
-				System.out.println("Function ");
+				System.out.print(COLOR_FUNCTION);
+				System.out.print(tree() + "Function: ");
 				Log.reset();
 				System.out.println(line);
 			}
@@ -101,24 +154,209 @@ public class ScriptReader
 			List<Expression> exps = new ArrayList<>();
 			for (String s : split)
 			{
-				exps.add(createExpression(script, s));
+				exps.add(createExpression(script, s.trim()));
 			}
 			Function func = new Function();
 			func.setExpressions(script, exps.toArray(new Expression[0]));
+			depth--;
 			return func;
 		}
 		else
 		{
+			depth++;
 			line = line.replaceAll("\\\\n", "\n");
 			if (DEBUG)
 			{
-				Log.magenta();
-				System.out.println("Expression ");
+				System.out.print(COLOR_EXPRESSION);
+				System.out.print(tree() + "Expression: ");
 				Log.reset();
 				System.out.println(line);
 			}
+			depth--;
 			return script.getParser().setExpression(line).parse();
 		}
+	}
+
+	private static boolean isIf(String s)
+	{
+		boolean inString = false;
+		boolean escaped = false;
+
+		int bCounter = 0;
+		int i;
+
+		for (i = 0; i < s.length(); i++)
+		{
+			char ch = s.charAt(i);
+
+			if (!inString && ch == '/' && s.charAt(i + 1) == '/')
+			{
+				while (ch != '\n')
+				{
+					i++;
+					ch = s.charAt(i);
+				}
+			}
+
+			if (!inString && ch == '/' && s.charAt(i + 1) == '*')
+			{
+				i += 2;
+				ch = s.charAt(i);
+				while (ch != '*' || s.charAt(i + 1) != '/')
+				{
+					i++;
+					ch = s.charAt(i);
+				}
+				i += 2;
+				ch = s.charAt(i);
+			}
+
+			if (ch == '{')
+			{
+				bCounter++;
+			}
+
+			if (ch == '}')
+			{
+				bCounter--;
+				if (bCounter == 0)
+				{
+					if (!s.substring(i + 1).trim().startsWith("else"))
+					{
+						return true;
+					} else
+					{
+						return false;
+					}
+				}
+			}
+
+			if (ch == ';' && !inString && bCounter == 0)
+			{
+				continue;
+			}
+
+			if (ch == '\\')
+			{
+				if (s.charAt(i + 1) == 'n')
+				{
+					i++;
+					continue;
+				} else
+				{
+					escaped = true;
+				}
+			}
+
+			if (ch == '\n' && !escaped)
+			{
+				continue;
+			}
+
+			if (ch == '"' && !escaped)
+			{
+				inString = !inString;
+			}
+
+			if (ch == '"' && escaped)
+			{
+				escaped = false;
+			}
+
+		}
+
+		throw new RuntimeException("Should not get here! missing '}' ?");
+	}
+
+	private static String[] splitElse(String s)
+	{
+		boolean inString = false;
+		boolean escaped = false;
+
+		int bCounter = 0;
+		int i;
+
+		for (i = 0; i < s.length(); i++)
+		{
+			char ch = s.charAt(i);
+
+			if (!inString && ch == '/' && s.charAt(i + 1) == '/')
+			{
+				while (ch != '\n')
+				{
+					i++;
+					ch = s.charAt(i);
+				}
+			}
+
+			if (!inString && ch == '/' && s.charAt(i + 1) == '*')
+			{
+				i += 2;
+				ch = s.charAt(i);
+				while (ch != '*' || s.charAt(i + 1) != '/')
+				{
+					i++;
+					ch = s.charAt(i);
+				}
+				i += 2;
+				ch = s.charAt(i);
+			}
+
+			if (ch == '{')
+			{
+				bCounter++;
+			}
+
+			if (ch == '}')
+			{
+				bCounter--;
+				if (bCounter == 0)
+				{
+					if (s.substring(i + 1).trim().startsWith("else"))
+					{
+						return new String[] {s.substring(0, i + 1).trim(), s.substring(i + 1)};
+					} else
+					{
+						throw new RuntimeException("No 'else' in ifElse ??");
+					}
+				}
+			}
+
+			if (ch == ';' && !inString && bCounter == 0)
+			{
+				continue;
+			}
+
+			if (ch == '\\')
+			{
+				if (s.charAt(i + 1) == 'n')
+				{
+					i++;
+					continue;
+				} else
+				{
+					escaped = true;
+				}
+			}
+
+			if (ch == '\n' && !escaped)
+			{
+				continue;
+			}
+
+			if (ch == '"' && !escaped)
+			{
+				inString = !inString;
+			}
+
+			if (ch == '"' && escaped)
+			{
+				escaped = false;
+			}
+
+		}
+
+		throw new RuntimeException("No 'else' in ifElse ?");
 	}
 
 	public static List<String> split(String script)
