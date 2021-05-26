@@ -73,7 +73,7 @@ public class ScriptReader
 			}
 			Expression condition = script.getParser().setExpression(cond).parse();
 			String trim = split[1].trim();
-			If anIf = new If(condition, (Function) createExpression(script, trim));
+			If anIf = new If(condition, createExpression(script, trim));
 			depth--;
 			return new While(anIf);
 		}
@@ -88,8 +88,6 @@ public class ScriptReader
 				System.out.println(line);
 			}
 
-			// FIXME: Wrong split, ignores nested else
-//			String[] split = line.split("\\}\s*else\s*\\{");
 			String[] split = splitElse(line);
 			split[0] = split[0].trim();
 			split[1] = split[1].trim();
@@ -221,13 +219,7 @@ public class ScriptReader
 				bCounter--;
 				if (bCounter == 0)
 				{
-					if (!s.substring(i + 1).trim().startsWith("else"))
-					{
-						return true;
-					} else
-					{
-						return false;
-					}
+					return !s.substring(i + 1).trim().startsWith("else");
 				}
 			}
 
@@ -457,11 +449,6 @@ public class ScriptReader
 
 			builder.append(ch);
 		}
-
-//		if (bCounter == 1 && i == script.length())
-//		{
-//			lines.set(lines.size() - 1, lines.get(lines.size() - 1) + "}");
-//		}
 
 		return lines;
 	}
