@@ -16,6 +16,8 @@ public class MathLibrary extends Library
 		super("Math");
 
 		addFunction("sqrt", d -> Value.newValue(PrimitiveTypes.DOUBLE, Math.sqrt(d.getDouble())), PrimitiveTypes.DOUBLE);
+		addFunction("sin", d -> Value.newValue(PrimitiveTypes.DOUBLE, Math.sin(d.getDouble())), PrimitiveTypes.DOUBLE);
+		addFunction("cos", d -> Value.newValue(PrimitiveTypes.DOUBLE, Math.cos(d.getDouble())), PrimitiveTypes.DOUBLE);
 
 		addFunction("clamp", (number, min, max) -> Value.newValue(PrimitiveTypes.DOUBLE, Math.min(Math.max(number.getDouble(), min.getDouble()), max.getDouble())), PrimitiveTypes.DOUBLE, PrimitiveTypes.DOUBLE, PrimitiveTypes.DOUBLE);
 		addFunction("clamp", (number, min, max) -> Value.newValue(PrimitiveTypes.INT, Math.min(Math.max(number.getInt(), min.getInt()), max.getInt())), PrimitiveTypes.INT, PrimitiveTypes.INT, PrimitiveTypes.INT);

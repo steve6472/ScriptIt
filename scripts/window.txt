@@ -1,0 +1,60 @@
+import type Window;
+import type Color;
+
+import library System;
+import library Math;
+
+WHITE = Color(255, 255, 255);
+BLACK = Color(0, 0, 0);
+RED = Color(255, 0, 0);
+GREEN = Color(0, 255, 0);
+BLUE = Color(0, 0, 255);
+PURPLE = Color(255, 0, 255);
+
+window = Window("Test window", 16 * 30, 9 * 30);
+window.center();
+
+canvas = window.getCanvas();
+
+i = 0;
+lastX = 0;
+lastY = 0;
+
+while (i < 20)
+{
+    canvas.drawString("Hello World", 10, 16 + i);
+    canvas.repaint();
+    delay(50);
+    i = i + 1;
+}
+
+delay(200);
+
+canvas.setColor(WHITE);
+canvas.fillRect(0, 0, 16 * 30, 9 * 30);
+canvas.setColor(PURPLE);
+canvas.drawLine(0, 0, 16 * 30, 9 * 30);
+canvas.setColor(BLUE);
+canvas.drawRect(10, 10, 16 * 30 - 20, 9 * 30 - 20);
+canvas.repaint();
+
+while (true)
+{
+    if (window.isMouseInWindow())
+    {
+        x = window.getMouseX();
+        y = window.getMouseY();
+
+        if (x != lastX || y != lastY)
+        {
+            canvas.setColor(WHITE);
+            canvas.fillRect(lastX - 5, lastY - 5, 10, 10);
+            canvas.setColor(BLACK);
+            canvas.fillRect(x - 5, y - 5, 10, 10);
+            canvas.repaint();
+            lastX = x;
+            lastY = y;
+        }
+    }
+    delay(1);
+}

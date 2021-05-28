@@ -26,6 +26,7 @@
   </component>
   <component name="HighlightingSettingsPerFile">
     <setting file="jar://$PROJECT_DIR$/../Java/16/lib/src.zip!/java.base/java/lang/String.java" root0="SKIP_INSPECTION" />
+    <setting file="jar://$PROJECT_DIR$/../Java/16/lib/src.zip!/java.desktop/javax/swing/JFrame.java" root0="SKIP_INSPECTION" />
   </component>
   <component name="MavenImportPreferences">
     <option name="generalSettings">
@@ -75,7 +76,7 @@
       <recent name="steve6472.scriptit.instructions" />
     </key>
   </component>
-  <component name="RunManager" selected="Application.ReaderMain">
+  <component name="RunManager" selected="Application.Swing">
     <configuration name="ExpressionParser" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="steve6472.scriptit.expression.ExpressionParser" />
       <module name="ScriptIt" />
@@ -111,8 +112,16 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <configuration name="Swing" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="steve6472.scriptit.test.Swing" />
+      <module name="ScriptIt" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Application.Swing" />
         <item itemvalue="Application.ReaderMain" />
         <item itemvalue="Application.ExpressionParser" />
         <item itemvalue="Application.Main" />

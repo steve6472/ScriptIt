@@ -15,6 +15,7 @@ import static steve6472.scriptit.types.PrimitiveTypes.INT;
 public class CustomTypes extends TypesInit
 {
 	public static final Type VEC2 = new Type("vec2");
+	public static final Type COLOR = new Type("Color");
 
 	public static void init(Script script)
 	{
@@ -50,5 +51,18 @@ public class CustomTypes extends TypesInit
 		Function returnThisTest = new Function();
 		returnThisTest.setExpressions(script, "x = 0.0", "y = 0.0", "return this");
 		VEC2.addFunction(FunctionParameters.function("makeZero").build(), returnThisTest);
+
+
+
+		COLOR.addConstructor(FunctionParameters.create(COLOR), new Constructor((args) -> newValue(COLOR).setValue("r", newValue(INT, 0)).setValue("g", newValue(INT, 0)).setValue("b", newValue(INT, 0))));
+		COLOR.addConstructor(FunctionParameters.create(COLOR, INT, INT, INT), new Constructor((args) -> newValue(COLOR).setValue("r", newValue(INT, args[0].getInt())).setValue("g", newValue(INT, args[1].getInt())).setValue("b", newValue(INT, args[2].getInt()))));
+
+		addFunction(COLOR, "getRed", itself -> newValue(INT, itself.getIntValue("r")));
+		addFunction(COLOR, "getGreen", itself -> newValue(INT, itself.getIntValue("g")));
+		addFunction(COLOR, "getBlue", itself -> newValue(INT, itself.getIntValue("b")));
+
+		addFunction(COLOR, "r", itself -> newValue(INT, itself.getIntValue("r")));
+		addFunction(COLOR, "g", itself -> newValue(INT, itself.getIntValue("g")));
+		addFunction(COLOR, "b", itself -> newValue(INT, itself.getIntValue("b")));
 	}
 }
