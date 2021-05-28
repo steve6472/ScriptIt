@@ -1,0 +1,20 @@
+import library System;
+import type int;
+
+// Print welcoming message
+System.println("\n" + "*-" * 16 + "*" + "\n*       Welcome to If Test      *\n" + "*-" * 16 + "*\n");
+
+System.print("Input first number: ");
+a = int(System.input());
+
+System.print("Input second number: ");
+b = int(System.input());
+
+if (a > b)
+{
+    System.println("A is greater then B");
+} else
+{
+    i = 0;
+    System.println("A is smaller or equal to B");
+}

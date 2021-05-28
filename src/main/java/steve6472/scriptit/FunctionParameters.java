@@ -3,6 +3,7 @@ package steve6472.scriptit;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 /**********************
  * Created by steve6472 (Mirek Jozefek)
@@ -60,6 +61,25 @@ public class FunctionParameters
 	public String toString()
 	{
 		return "FunctionParameters{" + "name='" + name + '\'' + ", types=" + Arrays.toString(types) + '}';
+	}
+
+	@Override
+	public boolean equals(Object o)
+	{
+		if (this == o)
+			return true;
+		if (o == null || getClass() != o.getClass())
+			return false;
+		FunctionParameters that = (FunctionParameters) o;
+		return Objects.equals(name, that.name) && Arrays.equals(types, that.types);
+	}
+
+	@Override
+	public int hashCode()
+	{
+		int result = Objects.hash(name);
+		result = 31 * result + Arrays.hashCode(types);
+		return result;
 	}
 
 	public static class FunctionParametersBuilder

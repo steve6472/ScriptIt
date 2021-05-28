@@ -3,6 +3,7 @@ package steve6472.scriptit;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 /**********************
  * Created by steve6472 (Mirek Jozefek)
@@ -93,5 +94,22 @@ public class Type
 	public String toString()
 	{
 		return "Type{" + "keyword='" + keyword + '\'' + '}';
+	}
+
+	@Override
+	public boolean equals(Object o)
+	{
+		if (this == o)
+			return true;
+		if (o == null || getClass() != o.getClass())
+			return false;
+		Type type = (Type) o;
+		return Objects.equals(keyword, type.keyword);
+	}
+
+	@Override
+	public int hashCode()
+	{
+		return Objects.hash(keyword);
 	}
 }

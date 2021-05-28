@@ -1,0 +1,19 @@
+import library System;
+import type int;
+
+function printXTimes(string text, int repeatCount)
+{
+    while (repeatCount > 0)
+    {
+        System.println(text);
+        repeatCount = repeatCount - 1;
+    }
+}
+
+System.print("Select repeat count: ");
+repeatCount = int(System.input());
+
+System.print("Select text to be repeated " + repeatCount + " times: ");
+text = System.input();
+
+printXTimes(text, repeatCount);

@@ -23,6 +23,7 @@ public class ScriptReader
 	public static String COLOR_IF = Log.YELLOW;
 	public static String COLOR_FUNCTION = Log.BLUE;
 	public static String COLOR_EXPRESSION = Log.MAGENTA;
+	public static String COLOR_FUNCTION_DECLARATION = Log.CYAN;
 
 	private static int depth = 0;
 
@@ -41,7 +42,9 @@ public class ScriptReader
 
 		for (String s : split)
 		{
-			expressions.add(createExpression(script, s));
+			Expression expression = createExpression(script, s);
+			if (expression != null)
+				expressions.add(expression);
 		}
 		script.setExpressions(expressions.toArray(new Expression[0]));
 
@@ -50,7 +53,44 @@ public class ScriptReader
 
 	private static Expression createExpression(Script script, String line)
 	{
-		if (Pattern.compile("while\s*\\(.*\\).*").matcher(line).matches())
+		if (line.startsWith("function"))
+		{
+			depth++;
+			if (DEBUG)
+			{
+				System.out.print(COLOR_FUNCTION_DECLARATION);
+				System.out.print(tree() + "Function Declaration: ");
+				Log.reset();
+				System.out.println(line);
+			}
+			line = line.substring(8).trim();
+			String name = line.substring(0, line.indexOf('('));
+			String arguments = line.substring(name.length() + 1, line.indexOf(')'));
+			String function = line.substring(line.indexOf('{'), line.lastIndexOf('}')).trim();
+
+			String[] args = arguments.split(",");
+			Type[] types = new Type[args.length];
+			String[] names = new String[args.length];
+
+			for (int i = 0; i < args.length; i++)
+			{
+				String[] arg = args[i].trim().split("\s+");
+				types[i] = script.getWorkspace().getType(arg[0]);
+				names[i] = arg[1];
+			}
+
+			if (DEBUG)
+			{
+				System.out.println(tree() + Log.BRIGHT_CYAN + "Line: " + Log.RESET + line);
+				System.out.println(tree() + Log.BRIGHT_CYAN + "Name: " + Log.RESET + name);
+				System.out.println(tree() + Log.BRIGHT_CYAN + "Arguments: " + Log.RESET + (arguments.isEmpty() ? "NONE" : arguments));
+			}
+
+			Function body = (Function) createExpression(script, function);
+			depth--;
+			return new DeclareFunction(name, body, names, types);
+		}
+		else if (Pattern.compile("while\s*\\(.*\\).*").matcher(line).matches())
 		{
 			depth++;
 			if (DEBUG)
@@ -72,7 +112,8 @@ public class ScriptReader
 				System.out.println(cond);
 			}
 			Expression condition = script.getParser().setExpression(cond).parse();
-			String trim = split[1].trim();
+			String trim = '{' + split[1].trim();
+			trim = trim.substring(0, trim.length() - 1);
 			If anIf = new If(condition, createExpression(script, trim));
 			depth--;
 			return new While(anIf);
@@ -91,21 +132,23 @@ public class ScriptReader
 			String[] split = splitElse(line);
 			split[0] = split[0].trim();
 			split[1] = split[1].trim();
-			split[1] = split[1].substring(split[1].indexOf('{') + 1).trim();
+			split[1] = split[1].substring(split[1].indexOf('{'), split[1].lastIndexOf('}')).trim();
 
 			If anIf = (If) createExpression(script, split[0]);
 
 			if (DEBUG)
 			{
 				Log.brightGreen();
-				System.out.println(tree() + "Else");
+				System.out.print(tree() + "Else: ");
 				Log.reset();
 			}
 
 			if (Pattern.compile("if\s*\\(.+\\).*\\{.*\\}\s*else\s*\\{.*\\}").matcher(split[1]).matches())
 			{
-				split[1] = split[1].substring(0, split[1].length() - 1).trim();
+				split[1] = split[1].substring(1, split[1].length() - 1).trim();
 			}
+
+			System.out.println(split[1]);
 
 			Expression expression = createExpression(script, split[1]);
 			depth--;
@@ -132,12 +175,20 @@ public class ScriptReader
 				System.out.println(trim1);
 			}
 			Expression condition = script.getParser().setExpression(trim1).parse();
-			String trim = split[1].trim();
-			Expression expression = createExpression(script, trim);
+			String body = '{' + split[1].trim();
+			body = body.substring(0, body.length() - 1);
+			if (DEBUG)
+			{
+				Log.brightYellow();
+				System.out.print(tree() + "Body: ");
+				Log.reset();
+				System.out.println(body);
+			}
+			Expression expression = createExpression(script, body);
 			depth--;
 			return new If(condition, expression);
 		}
-		else if (line.endsWith("}"))
+		else if (line.startsWith("{"))
 		{
 			depth++;
 			if (DEBUG)
@@ -147,7 +198,7 @@ public class ScriptReader
 				Log.reset();
 				System.out.println(line);
 			}
-			String substring = line.substring(0, line.length() - 1).trim();
+			String substring = line.substring(1).trim();
 			List<String> split = split(substring);
 			List<Expression> exps = new ArrayList<>();
 			for (String s : split)
@@ -162,7 +213,6 @@ public class ScriptReader
 		else
 		{
 			depth++;
-			line = line.replaceAll("\\\\n", "\n");
 			if (DEBUG)
 			{
 				System.out.print(COLOR_EXPRESSION);
@@ -170,11 +220,17 @@ public class ScriptReader
 				Log.reset();
 				System.out.println(line);
 			}
+			line = line.replaceAll("\\\\n", "\n");
 			depth--;
 			return script.getParser().setExpression(line).parse();
 		}
 	}
 
+	/**
+	 * Additional check for pure if
+	 * @param s line
+	 * @return true if no else exists at the end of if body
+	 */
 	private static boolean isIf(String s)
 	{
 		boolean inString = false;
@@ -470,6 +526,7 @@ public class ScriptReader
 			{
 				bobTheBuilder.append(s).append("\n");
 			}
+			reader.close();
 
 		} catch (IOException e)
 		{
