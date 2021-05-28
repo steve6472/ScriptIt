@@ -93,13 +93,13 @@ public class MyParser
 		}
 	}
 
-	boolean eat(char charToEat)
+	boolean eat(char charToEat, boolean insideString)
 	{
 		while (Character.isWhitespace(ch))
 			nextChar();
 		if (ch == charToEat)
 		{
-			if (pos < line.length() - 1)
+			if (!insideString && pos < line.length() - 1)
 			{
 				char next = line.charAt(pos + 1);
 				for (Character secondChar : Operator.secondChars)
@@ -127,28 +127,40 @@ public class MyParser
 		return false;
 	}
 
-	boolean eat(String s)
+	boolean eat(String s, boolean insideString)
 	{
 		if (s.length() == 1)
 		{
-			return eat(s.charAt(0));
+			return eat(s.charAt(0), insideString);
 		} else
 		{
 			return eat(s.charAt(0), s.charAt(1));
 		}
 	}
 
+	boolean eat(String s)
+	{
+		return eat(s, false);
+	}
+
 	private Expression next(int i)
 	{
 		Expression ex = null;
+
+		if (DEBUG)
+			System.out.println("Current: " + i);
 
 		if (i < BINARY_PRECENDENCE.length)
 			ex = next(i + 1);
 
 		if (i == BINARY_PRECENDENCE.length)
 		{
+			if (DEBUG)
+				System.out.println("Max precendence");
 			if (line.substring(pos).startsWith("return"))
 			{
+				if (DEBUG)
+					System.out.println("return");
 				if (RETURN_THIS.matcher(line).matches())
 				{
 					pos = line.length();
@@ -176,6 +188,8 @@ public class MyParser
 
 			if (line.substring(pos).startsWith("import"))
 			{
+				if (DEBUG)
+					System.out.println("import");
 				String[] split = line.split("\s");
 				pos = line.length();
 				if (split[1].equals("type"))
@@ -188,43 +202,60 @@ public class MyParser
 
 			if (line.substring(pos).startsWith("continue"))
 			{
+				if (DEBUG)
+					System.out.println("continue");
 				nextChar(8);
 				return new LoopControl(Result.continueLoop());
 			}
 
 			if (line.substring(pos).startsWith("break"))
 			{
+				if (DEBUG)
+					System.out.println("break");
 				nextChar(5);
 				return new LoopControl(Result.breakLoop());
 			}
 
 			if (line.substring(pos).startsWith("true"))
 			{
+				if (DEBUG)
+					System.out.println("true");
 				nextChar(4);
 				return new ValueConstant(PrimitiveTypes.TRUE);
 			}
 
 			if (line.substring(pos).startsWith("false"))
 			{
+				if (DEBUG)
+					System.out.println("false");
 				nextChar(5);
 				return new ValueConstant(PrimitiveTypes.FALSE);
 			}
+
+			if (DEBUG)
+				System.out.println("Trying unary");
 
 			for (Operator op : UNARY_OPERATORS)
 			{
 				if (eat(op.getOperator()))
 				{
+					if (DEBUG)
+						System.out.println("Unary " + op);
+
 					Expression right = next(i);
 
 					return new UnaryOperator(op, right);
 				}
 			}
 
+			if (DEBUG)
+				System.out.println("Trying other");
+
 			int startPos = pos;
-			if (eat("\""))
+			if (eat("\"", true))
 			{
 				if (DEBUG)
-					System.out.println("Inside String");
+					System.out.println("Inside String, next: '" + ch + "'");
 				if (ch == '"')
 				{
 					nextChar();
@@ -323,7 +354,7 @@ public class MyParser
 			} else
 			{
 				System.err.println(ch);
-				throw new IllegalStateException("Dafuq");
+				throw new IllegalStateException("Dafuq " + i);
 			}
 
 			return ex;
@@ -335,6 +366,8 @@ public class MyParser
 			{
 				if (eat(","))
 				{
+					if (DEBUG)
+						System.out.println("comma");
 					Expression x = next(0);
 					functionParameters.peek().add(x);
 					return ex;
