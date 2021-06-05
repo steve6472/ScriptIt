@@ -112,5 +112,14 @@ public class SystemLibrary extends Library
 				return Result.pass();
 			}
 		});
+
+		addFunction(FunctionParameters.create("waitForEvents"), new Function()
+		{
+			@Override
+			public Result apply(Script script)
+			{
+				return Result.waitForEvents();
+			}
+		});
 	}
 }

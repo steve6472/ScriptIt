@@ -15,6 +15,7 @@ import java.util.List;
  ***********************/
 public class Script
 {
+
 	record QueuedFunctionCall<A, B>(A executor, B mustExist) {}
 
 	private final Workspace workspace;
@@ -26,7 +27,8 @@ public class Script
 	private int currentIndex = 0;
 
 	private List<QueuedFunctionCall<ExpressionExecutor, Boolean>> queuedFunctionCalls;
-	private QueuedFunctionCall<ExpressionExecutor, Boolean> currentFunction = null;
+	QueuedFunctionCall<ExpressionExecutor, Boolean> currentFunction = null;
+	private boolean waitingForQueuedFunction = false;
 
 	public Script(Workspace workspace)
 	{
@@ -95,8 +97,19 @@ public class Script
 
 	private Result execute_()
 	{
+		if (waitingForQueuedFunction)
+		{
+			runQueuedFunctions();
+			if (currentFunction == null)
+				return Result.delay(1);
+		}
+
 		if (currentFunction != null)
 		{
+			if (waitingForQueuedFunction)
+			{
+				waitingForQueuedFunction = false;
+			}
 			if (!currentFunction.mustExist())
 			{
 				FunctionCall functionCall = (FunctionCall) currentFunction.executor().getExpression();
@@ -137,6 +150,12 @@ public class Script
 			}
 			if (result.isDelay())
 				return result;
+			if (result.isWaitForEvents())
+			{
+				waitingForQueuedFunction = true;
+				return Result.delay();
+			}
+
 			currentIndex++;
 		}
 

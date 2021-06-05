@@ -16,6 +16,7 @@ public class Result
 	private static final Result BREAK = new Result(Value.NULL, ResultStatus.BREAK);
 	private static final Result CONTINUE = new Result(Value.NULL, ResultStatus.CONTINUE);
 	private static final Result RETURN_THIS = new Result(Value.NULL, ResultStatus.RETURN_THIS);
+	private static final Result WAIT_FOR_EVENT = new Result(Value.NULL, ResultStatus.WAIT_FOR_EVENTS);
 
 	private final Value value;
 	private final ResultStatus status;
@@ -76,6 +77,11 @@ public class Result
 		return RETURN_THIS;
 	}
 
+	public static Result waitForEvents()
+	{
+		return WAIT_FOR_EVENT;
+	}
+
 	public Value getValue()
 	{
 		return value;
@@ -124,6 +130,11 @@ public class Result
 	public boolean isReturnThis()
 	{
 		return getStatus() == ResultStatus.RETURN_THIS;
+	}
+
+	public boolean isWaitForEvents()
+	{
+		return getStatus() == ResultStatus.WAIT_FOR_EVENTS;
 	}
 
 	@Override

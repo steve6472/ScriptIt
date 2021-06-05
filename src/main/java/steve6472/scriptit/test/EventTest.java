@@ -36,7 +36,7 @@ public class EventTest
 
 		workspace.addLibrary(new GeometryLibrary());
 
-		script = ScriptReader.readScript(new File("scripts/tic_tac_toe.txt"), workspace);
+		script = ScriptReader.readScript(new File("scripts/event_test_2.txt"), workspace);
 		CustomTypes.init(script);
 		createWindow("TicTacToe", 64 * 3 + 8, 64 * 3 + 8); // 3 times 64 pixel cell, 4 pixels border
 

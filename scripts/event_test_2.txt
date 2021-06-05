@@ -1,0 +1,55 @@
+import library System;
+import library Math;
+import library Geometry;
+import library Random;
+
+import type Window;
+import type Color;
+import type List;
+import type int;
+import type double;
+import type string;
+
+/*
+ * Constants
+ */
+
+BACKGROUND = Color(60, 60, 60);
+WHITE = Color(255, 255, 255);
+
+window.center();
+canvas = window.getCanvas();
+
+pointsX = List();
+pointsY = List();
+
+function mouseClicked(int button, int x, int y)
+{
+    System.println("Clicked " + button + " x: " + x + ", y: " + y);
+
+    pointsX.add(int(x));
+    pointsY.add(int(y));
+
+    canvas.setColor(BACKGROUND);
+    canvas.fillRect(0, 0, 256, 256);
+    canvas.setColor(WHITE);
+
+    i = 0;
+    while (i < pointsX.size() - 1)
+    {
+        X = pointsX.get(i);
+        Y = pointsY.get(i);
+
+        X_ = pointsX.get(i + 1);
+        Y_ = pointsY.get(i + 1);
+
+        canvas.drawLine(X, Y, X_, Y_);
+
+        i = i + 1;
+    }
+
+    canvas.fillRect(x - 3, y - 3, 6, 6);
+    canvas.repaint();
+}
+
+System.waitForEvents();

@@ -79,5 +79,6 @@ public class CustomTypes extends TypesInit
 		addProcedure(LIST, "set", (itself, index, value) -> ((List<Value>) itself.get()).set(index.getInt(), value), INT, NULL);
 		addFunction(LIST, "get", (itself, index) -> ((List<Value>) itself.get()).get(index.getInt()), INT);
 		addFunction(LIST, "remove", (itself, index) -> ((List<Value>) itself.get()).remove(index.getInt()), INT);
+		addFunction(LIST, "size", itself -> newValue(INT, ((List<Value>) itself.get()).size()));
 	}
 }
