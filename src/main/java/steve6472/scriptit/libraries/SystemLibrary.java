@@ -1,8 +1,6 @@
 package steve6472.scriptit.libraries;
 
 import steve6472.scriptit.*;
-import steve6472.scriptit.functions.PrintFunction;
-import steve6472.scriptit.types.CustomTypes;
 import steve6472.scriptit.types.PrimitiveTypes;
 
 import java.io.BufferedReader;
@@ -21,19 +19,27 @@ public class SystemLibrary extends Library
 	{
 		super("System");
 
-		addFunction(FunctionParameters.function("print").addType(PrimitiveTypes.DOUBLE).build(), new PrintFunction(false));
-		addFunction(FunctionParameters.function("print").addType(PrimitiveTypes.INT).build(), new PrintFunction(false));
-		addFunction(FunctionParameters.function("print").addType(PrimitiveTypes.BOOL).build(), new PrintFunction(false));
-		addFunction(FunctionParameters.function("print").addType(PrimitiveTypes.STRING).build(), new PrintFunction(false));
-		addFunction(FunctionParameters.function("print").addType(PrimitiveTypes.NULL).build(), new PrintFunction(false));
+		addFunction(FunctionParameters.create("print", PrimitiveTypes.NULL), new Function()
+		{
+			@Override
+			public Result apply(Script script)
+			{
+				System.out.print(arguments[0]);
+				return Result.pass();
+			}
+		});
 
-		addFunction(FunctionParameters.function("println").addType(PrimitiveTypes.DOUBLE).build(), new PrintFunction(true));
-		addFunction(FunctionParameters.function("println").addType(PrimitiveTypes.INT).build(), new PrintFunction(true));
-		addFunction(FunctionParameters.function("println").addType(PrimitiveTypes.BOOL).build(), new PrintFunction(true));
-		addFunction(FunctionParameters.function("println").addType(PrimitiveTypes.STRING).build(), new PrintFunction(true));
-		addFunction(FunctionParameters.function("println").addType(PrimitiveTypes.NULL).build(), new PrintFunction(true));
+		addFunction(FunctionParameters.create("println", PrimitiveTypes.NULL), new Function()
+		{
+			@Override
+			public Result apply(Script script)
+			{
+				System.out.println(arguments[0]);
+				return Result.pass();
+			}
+		});
 
-		addFunction(FunctionParameters.function("printDetail").addType(CustomTypes.VEC2).build(), new Function()
+		addFunction(FunctionParameters.function("printDetail").addType(PrimitiveTypes.NULL).build(), new Function()
 		{
 			@Override
 			public Result apply(Script script)

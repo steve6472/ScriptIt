@@ -3,9 +3,14 @@ package steve6472.scriptit.types;
 import steve6472.scriptit.FunctionParameters;
 import steve6472.scriptit.Script;
 import steve6472.scriptit.Type;
+import steve6472.scriptit.Value;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static steve6472.scriptit.Value.newValue;
 import static steve6472.scriptit.types.PrimitiveTypes.INT;
+import static steve6472.scriptit.types.PrimitiveTypes.NULL;
 
 /**********************
  * Created by steve6472 (Mirek Jozefek)
@@ -17,6 +22,7 @@ public class CustomTypes extends TypesInit
 {
 	public static final Type VEC2 = new Type("vec2");
 	public static final Type COLOR = new Type("Color");
+	public static final Type LIST = new Type("List");
 
 	public static void init(Script script)
 	{
@@ -65,5 +71,13 @@ public class CustomTypes extends TypesInit
 		addFunction(COLOR, "r", itself -> newValue(INT, itself.getIntValue("r")));
 		addFunction(COLOR, "g", itself -> newValue(INT, itself.getIntValue("g")));
 		addFunction(COLOR, "b", itself -> newValue(INT, itself.getIntValue("b")));
+
+		LIST.addConstructor(FunctionParameters.create(LIST), new Constructor((args) -> newValue(LIST, new ArrayList<Value>())));
+		LIST.addConstructor(FunctionParameters.create(LIST, INT), new Constructor((args) -> newValue(LIST, new ArrayList<Value>(args[0].getInt()))));
+
+		addProcedure(LIST, "add", (itself, value) -> ((List<Value>) itself.get()).add(value), NULL);
+		addProcedure(LIST, "set", (itself, index, value) -> ((List<Value>) itself.get()).set(index.getInt(), value), INT, NULL);
+		addFunction(LIST, "get", (itself, index) -> ((List<Value>) itself.get()).get(index.getInt()), INT);
+		addFunction(LIST, "remove", (itself, index) -> ((List<Value>) itself.get()).remove(index.getInt()), INT);
 	}
 }

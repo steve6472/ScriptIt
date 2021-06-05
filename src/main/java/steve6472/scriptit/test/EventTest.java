@@ -32,12 +32,13 @@ public class EventTest
 		Workspace workspace = new Workspace();
 		workspace.addType(SwingTypes.WINDOW);
 		workspace.addType(CustomTypes.COLOR);
+		workspace.addType(CustomTypes.LIST);
 
 		workspace.addLibrary(new GeometryLibrary());
 
-		script = ScriptReader.readScript(new File("scripts/event_test.txt"), workspace);
+		script = ScriptReader.readScript(new File("scripts/tic_tac_toe.txt"), workspace);
 		CustomTypes.init(script);
-		createWindow("Event Test", 256, 256);
+		createWindow("TicTacToe", 64 * 3 + 8, 64 * 3 + 8); // 3 times 64 pixel cell, 4 pixels border
 
 		script.runWithDelay();
 	}
@@ -73,15 +74,6 @@ public class EventTest
 				Value.newValue(PrimitiveTypes.INT, e.getButton()),
 				Value.newValue(PrimitiveTypes.INT, point.x - 8),
 				Value.newValue(PrimitiveTypes.INT, point.y - 31));
-		}
-
-		@Override
-		public void mousePressed(MouseEvent e)
-		{
-			script.queueFunctionCall(false, "mousePressed",
-				Value.newValue(PrimitiveTypes.INT, e.getButton()),
-				Value.newValue(PrimitiveTypes.INT, e.getX() - 8),
-				Value.newValue(PrimitiveTypes.INT, e.getY() - 31));
 		}
 	}
 }

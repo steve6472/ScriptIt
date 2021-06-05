@@ -1,0 +1,107 @@
+import library System;
+import library Math;
+import library Geometry;
+
+import type Window;
+import type Color;
+import type List;
+import type int;
+import type double;
+import type string;
+
+/*
+ * Constants
+ */
+
+WHITE = Color(255, 255, 255);
+BACKGROUND = Color(60, 60, 60);
+BORDER = Color(200, 200, 200);
+RED = Color(250, 30, 30);
+BLUE = Color(30, 30, 250);
+
+window.center();
+canvas = window.getCanvas();
+
+board = List(9);
+
+i = 0;
+
+while (i < 9)
+{
+    board.add(-1);
+    i = i + 1;
+}
+
+// 0 - red (cross)
+// 1 - blue (circle)
+turn = 0;
+
+function mouseClicked(int button, int x, int y)
+{
+    System.println("Clicked " + button + " x: " + x + ", y: " + y);
+    if (x < 0 || y < 0 || x > 64 * 3 + 8 || y > 64 * 3 + 8)
+    {
+        System.println("Out of bounds!");
+        return;
+    }
+
+    cellX = x / 68;
+    cellY = y / 68;
+    System.println("CellX: " + cellX + ", CellY: " + cellY);
+
+    board.set(cellY * 3 + cellX, int(turn));
+
+    if (turn == 0)
+    {
+        turn = 1;
+    } else
+    {
+        turn = 0;
+    }
+}
+
+while (true)
+{
+    System.acceptEvents();
+
+    canvas.setColor(BACKGROUND);
+    canvas.fillRect(0, 0, 200, 200);
+
+    canvas.setColor(BORDER);
+    canvas.fillRect(0, 64, 200, 8);
+    canvas.fillRect(0, 132, 200, 8);
+    canvas.fillRect(64, 0, 8, 200);
+    canvas.fillRect(132, 0, 8, 200);
+
+    i = 0;
+
+    while (i < 9)
+    {
+        x = i % 3;
+        y = i / 3;
+
+        if (board.get(i) == 0)
+        {
+            canvas.setColor(RED);
+        }
+
+        if (board.get(i) == 1)
+        {
+            canvas.setColor(BLUE);
+        }
+
+        if (board.get(i) == -1)
+        {
+            i = i + 1;
+            continue;
+        }
+
+        canvas.drawRect(x * 68 + 12, y * 68 + 12, 40, 40);
+
+        i = i + 1;
+    }
+
+    canvas.repaint();
+
+    delay(16);
+}

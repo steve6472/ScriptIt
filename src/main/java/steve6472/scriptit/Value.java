@@ -107,6 +107,10 @@ public class Value
 
 
 
+	public Object get()
+	{
+		return values.get(SINGLE_VALUE);
+	}
 
 	public boolean getBoolean()
 	{

@@ -1,6 +1,7 @@
 package steve6472.scriptit;
 
 import steve6472.scriptit.libraries.Library;
+import steve6472.scriptit.types.PrimitiveTypes;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -104,7 +105,7 @@ public class Memory
 				continue;
 			for (int i = 0; i < types.length; i++)
 			{
-				if (parameters.getTypes()[i] != types[i])
+				if (parameters.getTypes()[i] != PrimitiveTypes.NULL && parameters.getTypes()[i] != types[i])
 				{
 					continue main;
 				}
@@ -133,7 +134,7 @@ public class Memory
 				continue;
 			for (int i = 0; i < types.length; i++)
 			{
-				if (parameters.getTypes()[i] != types[i])
+				if (parameters.getTypes()[i] != PrimitiveTypes.NULL && parameters.getTypes()[i] != types[i])
 				{
 					continue main;
 				}
