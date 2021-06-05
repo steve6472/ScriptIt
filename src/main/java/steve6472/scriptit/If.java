@@ -38,8 +38,10 @@ class If extends Expression
 			if (!condValue.getBoolean())
 				return Result.passIfFalse();
 
-			if (insideValue != Value.NULL && body instanceof Function f)
+			if (insideValue != Value.NULL && body instanceof Function)
 			{
+				Function f = (Function) body;
+
 				f.setTypeFunction(insideValue);
 			}
 		}

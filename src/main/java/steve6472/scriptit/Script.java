@@ -15,8 +15,27 @@ import java.util.List;
  ***********************/
 public class Script
 {
+	private static class QueuedFunctionCall<A, B>
+	{
+		private final A executor;
+		private final B mustExist;
 
-	record QueuedFunctionCall<A, B>(A executor, B mustExist) {}
+		QueuedFunctionCall(A executor, B mustExist)
+		{
+			this.executor = executor;
+			this.mustExist = mustExist;
+		}
+
+		public A executor()
+		{
+			return executor;
+		}
+
+		public B mustExist()
+		{
+			return mustExist;
+		}
+	}
 
 	private final Workspace workspace;
 

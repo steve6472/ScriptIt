@@ -22,12 +22,26 @@ public class MyParser
 
 	private static int depth = 0;
 
-	private static String tree()
+	public static String repeat(String s, int count)
 	{
-		return "\t".repeat(ScriptReader.depth) + " ".repeat(depth - 1);
+		StringBuilder builder = new StringBuilder();
+		for (int i = 0; i < count; i++)
+		{
+			builder.append(s);
+		}
+		return builder.toString();
 	}
 
-	private static final Pattern RETURN_THIS = Pattern.compile("^return\s+this");
+	private static String tree()
+	{
+		return repeat("\t", ScriptReader.depth) + repeat(" ", depth - 1);
+		// TODO: Java 11+
+//		return "\t".repeat(ScriptReader.depth) + " ".repeat(depth - 1);
+	}
+
+	//Java 11+
+//	private static final Pattern RETURN_THIS = Pattern.compile("^return\s+this");
+	private static final Pattern RETURN_THIS = Pattern.compile("^return\\s+this");
 
 	/**
 	 * https://en.cppreference.com/w/cpp/language/operator_precedence
@@ -175,7 +189,9 @@ public class MyParser
 				} else
 				{
 					nextChar(6);
-					if (line.substring(pos).isBlank())
+					//TODO: Java 11+
+//					if (line.substring(pos).isBlank())
+					if (line.substring(pos).trim().isEmpty())
 					{
 						return new Return(new Expression()
 						{
@@ -199,7 +215,9 @@ public class MyParser
 				depth++;
 				if (DEBUG)
 					System.out.println(tree() + COLOR_NAME + "import" + Log.RESET);
-				String[] split = line.split("\s");
+				//TODO: Java 11+
+//				String[] split = line.split("\s");
+				String[] split = line.split("\\s");
 				pos = line.length();
 				depth--;
 				if (split[1].equals("type"))
@@ -436,11 +454,13 @@ public class MyParser
 
 					if (op == Operator.ASSIGN)
 					{
-						if (!(left instanceof Variable va))
+						if (!(left instanceof Variable))
 						{
 							throw new RuntimeException("Assignment requires variable at left");
 						} else
 						{
+							Variable va = (Variable) left;
+
 							depth--;
 							ex = new Assignment(va.source.variableName, next(0));
 						}

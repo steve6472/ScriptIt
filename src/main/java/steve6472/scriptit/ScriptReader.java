@@ -29,7 +29,9 @@ public class ScriptReader
 
 	private static String tree()
 	{
-		return "    ".repeat(depth - 1);
+		//TODO: Java 11+
+//		return "    ".repeat(depth - 1);
+		return MyParser.repeat("\t", depth - 1);
 	}
 
 	public static Script readScript(File file, Workspace workspace)
@@ -69,15 +71,21 @@ public class ScriptReader
 			String function = line.substring(line.indexOf('{'), line.lastIndexOf('}')).trim();
 
 			String[] args = arguments.split(",");
-			int i1 = arguments.isBlank() ? 0 : args.length;
+			//TODO: Java 11+
+//			int i1 = arguments.isBlank() ? 0 : args.length;
+			int i1 = arguments.trim().isEmpty() ? 0 : args.length;
 			Type[] types = new Type[i1];
 			String[] names = new String[i1];
 
-			if (!arguments.isBlank())
+			//TODO: Java 11+
+//			if (!arguments.isBlank())
+			if (!arguments.trim().isEmpty())
 			{
 				for (int i = 0; i < args.length; i++)
 				{
-					String[] arg = args[i].trim().split("\s+");
+					//TODO: Java 11+
+//					String[] arg = args[i].trim().split("\s+");
+					String[] arg = args[i].trim().split("\\s+");
 					types[i] = script.getWorkspace().getType(arg[0]);
 					names[i] = arg[1];
 				}
@@ -94,7 +102,9 @@ public class ScriptReader
 			depth--;
 			return new DeclareFunction(name, body, names, types);
 		}
-		else if (Pattern.compile("while\s*\\(.*\\).*").matcher(line).matches())
+		//TODO: Java 11+
+//		else if (Pattern.compile("while\s*\\(.*\\).*").matcher(line).matches())
+		else if (Pattern.compile("while\\s*\\(.*\\).*").matcher(line).matches())
 		{
 			depth++;
 			if (DEBUG)
@@ -122,7 +132,9 @@ public class ScriptReader
 			depth--;
 			return new While(anIf);
 		}
-		else if (Pattern.compile("if\s*\\(.+\\).*\\{.*\\}\s*else\s*\\{.*\\}").matcher(line).matches() && !isIf(line))
+		//TODO: Java 11+
+//		else if (Pattern.compile("if\s*\\(.+\\).*\\{.*\\}\s*else\s*\\{.*\\}").matcher(line).matches() && !isIf(line))
+		else if (Pattern.compile("if\\s*\\(.+\\).*\\{.*\\}\\s*else\\s*\\{.*\\}").matcher(line).matches() && !isIf(line))
 		{
 			depth++;
 			if (DEBUG)
@@ -147,7 +159,9 @@ public class ScriptReader
 				Log.reset();
 			}
 
-			if (Pattern.compile("if\s*\\(.+\\).*\\{.*\\}\s*else\s*\\{.*\\}").matcher(split[1]).matches())
+			//TODO: Java 11+
+//			if (Pattern.compile("if\s*\\(.+\\).*\\{.*\\}\s*else\s*\\{.*\\}").matcher(split[1]).matches())
+			if (Pattern.compile("if\\s*\\(.+\\).*\\{.*\\}\\s*else\\s*\\{.*\\}").matcher(split[1]).matches())
 			{
 				split[1] = split[1].substring(1, split[1].length() - 1).trim();
 			}
@@ -156,7 +170,9 @@ public class ScriptReader
 			depth--;
 			return new IfElse(anIf, expression);
 		}
-		else if (Pattern.compile("if\s*\\(.*\\).*").matcher(line).matches() && isIf(line))
+		//TODO: Java 11+
+//		else if (Pattern.compile("if\s*\\(.*\\).*").matcher(line).matches() && isIf(line))
+		else if (Pattern.compile("if\\s*\\(.*\\).*").matcher(line).matches() && isIf(line))
 		{
 			depth++;
 			if (DEBUG)
