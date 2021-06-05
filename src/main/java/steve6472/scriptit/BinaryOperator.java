@@ -1,5 +1,7 @@
 package steve6472.scriptit;
 
+import java.util.HashMap;
+
 /**********************
  * Created by steve6472 (Mirek Jozefek)
  * On date: 5/20/2021
@@ -43,7 +45,12 @@ class BinaryOperator extends Expression
 
 		if (operatorFunction == null)
 		{
-			operatorFunction = leftValue.type.binary.get(rightValue.type).get(operator);
+			HashMap<Operator, Function> operatorFunctionHashMap = leftValue.type.binary.get(rightValue.type);
+			if (operatorFunctionHashMap == null)
+			{
+				throw new RuntimeException("Type '" + leftValue.type.getKeyword() + "' does not have binary operation with type '" + rightValue.type.getKeyword() + "'");
+			}
+			operatorFunction = operatorFunctionHashMap.get(operator);
 
 			if (operatorFunction == null)
 			{

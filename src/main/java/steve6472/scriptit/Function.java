@@ -119,6 +119,9 @@ public class Function extends Expression
 				expressionIndex = 0;
 				script.getMemory().pop();
 				return Result.value(typeFunction);
+			} else
+			{
+				isDelayed = false;
 			}
 
 			i++;

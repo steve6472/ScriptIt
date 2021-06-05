@@ -1,9 +1,10 @@
 package steve6472.scriptit.types;
 
-import steve6472.scriptit.*;
+import steve6472.scriptit.FunctionParameters;
+import steve6472.scriptit.Script;
+import steve6472.scriptit.Type;
 
 import static steve6472.scriptit.Value.newValue;
-import static steve6472.scriptit.types.PrimitiveTypes.DOUBLE;
 import static steve6472.scriptit.types.PrimitiveTypes.INT;
 
 /**********************
@@ -19,7 +20,7 @@ public class CustomTypes extends TypesInit
 
 	public static void init(Script script)
 	{
-		VEC2.addConstructor(FunctionParameters
+		/*VEC2.addConstructor(FunctionParameters
 			.constructor(VEC2).addType(DOUBLE).addType(DOUBLE).build(), new TypesInit.Constructor((args) -> newValue(VEC2).setValue("x", args[0]).setValue("y", args[1])));
 		VEC2.addConstructor(FunctionParameters.constructor(VEC2).addType(INT).addType(INT).build(), new TypesInit.Constructor((args) -> newValue(VEC2).setValue("x", newValue(DOUBLE, (double) args[0].getInt())).setValue("y", newValue(DOUBLE, (double) args[1].getInt()))));
 		VEC2.addConstructor(FunctionParameters.constructor(VEC2).addType(DOUBLE).build(), new TypesInit.Constructor((args) -> newValue(VEC2).setValue("x", newValue(DOUBLE, args[0].getDouble())).setValue("y", newValue(DOUBLE, args[0].getDouble()))));
@@ -51,7 +52,7 @@ public class CustomTypes extends TypesInit
 		Function returnThisTest = new Function();
 		returnThisTest.setExpressions(script, "x = 0.0", "y = 0.0", "return this");
 		VEC2.addFunction(FunctionParameters.function("makeZero").build(), returnThisTest);
-
+*/
 
 
 		COLOR.addConstructor(FunctionParameters.create(COLOR), new Constructor((args) -> newValue(COLOR).setValue("r", newValue(INT, 0)).setValue("g", newValue(INT, 0)).setValue("b", newValue(INT, 0))));

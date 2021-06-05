@@ -1,4 +1,8 @@
-package steve6472.scriptit;
+package steve6472.scriptit.test;
+
+import steve6472.scriptit.Script;
+import steve6472.scriptit.ScriptReader;
+import steve6472.scriptit.Workspace;
 
 import java.io.File;
 
@@ -14,7 +18,7 @@ public class ReaderMain
 	{
 		Workspace workspace = new Workspace();
 
-		Script script = ScriptReader.readScript(new File("scripts/jan_ken_pon.txt"), workspace);
+		Script script = ScriptReader.readScript(new File("scripts/random.txt"), workspace);
 		script.runWithDelay();
 	}
 }

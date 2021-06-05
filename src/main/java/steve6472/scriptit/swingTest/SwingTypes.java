@@ -1,13 +1,18 @@
 package steve6472.scriptit.swingTest;
 
-import steve6472.scriptit.*;
+import steve6472.scriptit.FunctionParameters;
+import steve6472.scriptit.Type;
 import steve6472.scriptit.types.CustomTypes;
 import steve6472.scriptit.types.TypesInit;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.awt.event.WindowEvent;
 import java.awt.image.BufferedImage;
+import java.util.HashSet;
+import java.util.Set;
 
 import static steve6472.scriptit.Value.newValue;
 import static steve6472.scriptit.types.PrimitiveTypes.*;
@@ -39,8 +44,10 @@ public class SwingTypes extends TypesInit
 			frame.add(canvas);
 
 			frame.repaint();
+			FrameKeyListener keyListener = new FrameKeyListener();
+			frame.addKeyListener(keyListener);
 
-			return newValue(WINDOW).setValue("frame", frame).setValue("canvas", canvas);
+			return newValue(WINDOW).setValue("frame", frame).setValue("canvas", canvas).setValue("keyListener", keyListener);
 		}));
 
 		addProcedure(WINDOW, "close", (itself) -> {
@@ -83,7 +90,18 @@ public class SwingTypes extends TypesInit
 		addFunction(WINDOW, "isMouseInWindow", itself ->
 		{
 			Point point = ((Canvas) itself.get("canvas")).getMousePosition();
-			return point == null ? FALSE : TRUE;
+			return point == null ? FALSE() : TRUE();
+		});
+		addFunction(WINDOW, "isKeyPressed", (itself, key) ->
+		{
+			FrameKeyListener keyListener = (FrameKeyListener) itself.get("keyListener");
+			//			System.out.println(keyListener.pressed);
+			return keyListener.pressed.contains(key.getChar()) ? TRUE() : FALSE();
+		}, CHAR);
+		addProcedure(WINDOW, "printPressedKeys", itself ->
+		{
+			FrameKeyListener keyListener = (FrameKeyListener) itself.get("keyListener");
+			System.out.println("Pressed keys: " + keyListener.pressed);
 		});
 
 		addProcedure(CANVAS, "repaint", itself -> ((Canvas) itself.get("canvas")).repaint());
@@ -118,6 +136,25 @@ public class SwingTypes extends TypesInit
 			super.paintComponent(g);
 
 			g.drawImage(image, 0, 0, null);
+		}
+	}
+
+	private static class FrameKeyListener extends KeyAdapter
+	{
+		public final Set<Character> pressed = new HashSet<>();
+
+		@Override
+		public void keyPressed(KeyEvent e)
+		{
+			super.keyPressed(e);
+			pressed.add(e.getKeyChar());
+		}
+
+		@Override
+		public void keyReleased(KeyEvent e)
+		{
+			super.keyReleased(e);
+			pressed.remove(e.getKeyChar());
 		}
 	}
 }

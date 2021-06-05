@@ -99,7 +99,7 @@
       </method>
     </configuration>
     <configuration name="ReaderMain" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="steve6472.scriptit.ReaderMain" />
+      <option name="MAIN_CLASS_NAME" value="steve6472.scriptit.test.ReaderMain" />
       <module name="ScriptIt" />
       <method v="2">
         <option name="Make" enabled="true" />

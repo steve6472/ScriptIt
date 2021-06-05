@@ -25,7 +25,7 @@ public class ScriptReader
 	public static String COLOR_EXPRESSION = Log.MAGENTA;
 	public static String COLOR_FUNCTION_DECLARATION = Log.CYAN;
 
-	private static int depth = 0;
+	public static int depth = 0;
 
 	private static String tree()
 	{
@@ -69,14 +69,18 @@ public class ScriptReader
 			String function = line.substring(line.indexOf('{'), line.lastIndexOf('}')).trim();
 
 			String[] args = arguments.split(",");
-			Type[] types = new Type[args.length];
-			String[] names = new String[args.length];
+			int i1 = arguments.isBlank() ? 0 : args.length;
+			Type[] types = new Type[i1];
+			String[] names = new String[i1];
 
-			for (int i = 0; i < args.length; i++)
+			if (!arguments.isBlank())
 			{
-				String[] arg = args[i].trim().split("\s+");
-				types[i] = script.getWorkspace().getType(arg[0]);
-				names[i] = arg[1];
+				for (int i = 0; i < args.length; i++)
+				{
+					String[] arg = args[i].trim().split("\s+");
+					types[i] = script.getWorkspace().getType(arg[0]);
+					names[i] = arg[1];
+				}
 			}
 
 			if (DEBUG)
@@ -147,8 +151,6 @@ public class ScriptReader
 			{
 				split[1] = split[1].substring(1, split[1].length() - 1).trim();
 			}
-
-			System.out.println(split[1]);
 
 			Expression expression = createExpression(script, split[1]);
 			depth--;

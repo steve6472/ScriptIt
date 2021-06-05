@@ -1,0 +1,30 @@
+import library System;
+
+a = false;
+
+function addToA()
+{
+    a = !a;
+}
+
+function A()
+{
+     System.print("A: " + a);
+     addToA();
+     System.print(", A: " + a + "\n");
+}
+
+function loop()
+{
+    System.println("loop");
+    while (true)
+    {
+        time = System.timeMs();
+        if (time % 200 < 2)
+        {
+            A();
+        }
+    }
+}
+
+loop();

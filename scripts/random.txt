@@ -1,0 +1,6 @@
+import library Random;
+import library System;
+
+a = Random.randomDouble(-1.0, 2.0);
+
+System.println(a);

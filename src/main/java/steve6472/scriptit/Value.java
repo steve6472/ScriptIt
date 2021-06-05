@@ -34,24 +34,24 @@ public class Value
 		return new Value(PrimitiveTypes.isPrimitive(type), type, value);
 	}
 
-	private Value(boolean isPrimitive, Type type)
+	protected Value(boolean isPrimitive, Type type)
 	{
 		this.isPrimitive = isPrimitive;
 		this.type = type;
 		this.values = new HashMap<>();
 	}
 
-	private Value(boolean isPrimitive, Type type, Object value)
+	protected Value(boolean isPrimitive, Type type, Object value)
 	{
 		this(isPrimitive, type, SINGLE_VALUE, value);
 	}
 
-	private Value(boolean isPrimitive, Type type, String valueName, Object value)
+	protected Value(boolean isPrimitive, Type type, String valueName, Object value)
 	{
 		this.isPrimitive = isPrimitive;
 		this.type = type;
 		this.values = new HashMap<>();
-		setValue(valueName, value);
+		this.values.put(valueName, value);
 	}
 
 	public boolean isPrimitive()
@@ -67,8 +67,7 @@ public class Value
 
 	public Value setValue(Object value)
 	{
-		values.put(SINGLE_VALUE, value);
-		return this;
+		return setValue(SINGLE_VALUE, value);
 	}
 
 	public Value getValue(String name)
@@ -143,7 +142,12 @@ public class Value
 	public String toString()
 	{
 		if (isPrimitive)
-			return values.get(SINGLE_VALUE).toString();
+		{
+			Object o = values.get(SINGLE_VALUE);
+			if (o == null)
+				return "NULL";
+			return o.toString();
+		}
 		return "Value{" + "type=" + type.getKeyword() + ", values=" + values + '}';
 	}
 

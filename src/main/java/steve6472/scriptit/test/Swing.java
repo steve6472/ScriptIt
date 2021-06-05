@@ -3,6 +3,7 @@ package steve6472.scriptit.test;
 import steve6472.scriptit.Script;
 import steve6472.scriptit.ScriptReader;
 import steve6472.scriptit.Workspace;
+import steve6472.scriptit.libraries.GeometryLibrary;
 import steve6472.scriptit.swingTest.SwingTypes;
 import steve6472.scriptit.types.CustomTypes;
 
@@ -22,10 +23,11 @@ public class Swing
 
 		Workspace workspace = new Workspace();
 		workspace.addType(SwingTypes.WINDOW);
-		workspace.addType(SwingTypes.CANVAS);
 		workspace.addType(CustomTypes.COLOR);
 
-		Script script = ScriptReader.readScript(new File("scripts/window.txt"), workspace);
+		workspace.addLibrary(new GeometryLibrary());
+
+		Script script = ScriptReader.readScript(new File("scripts/pong.txt"), workspace);
 		CustomTypes.init(script);
 
 		script.runWithDelay();

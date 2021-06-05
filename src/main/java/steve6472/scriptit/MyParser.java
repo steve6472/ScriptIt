@@ -17,6 +17,16 @@ public class MyParser
 {
 	public static boolean DEBUG = false;
 
+	private static final String COLOR_NAME = "\u001b[38;5;61m";
+	private static final String COLOR_VARIABLE = Log.WHITE;
+
+	private static int depth = 0;
+
+	private static String tree()
+	{
+		return "\t".repeat(ScriptReader.depth) + " ".repeat(depth - 1);
+	}
+
 	private static final Pattern RETURN_THIS = Pattern.compile("^return\s+this");
 
 	/**
@@ -147,23 +157,20 @@ public class MyParser
 	{
 		Expression ex = null;
 
-		if (DEBUG)
-			System.out.println("Current: " + i);
+//		if (DEBUG)
+//			System.out.println(tree() + Log.WHITE + "Current: " + i + Log.RESET);
 
-		if (i < BINARY_PRECENDENCE.length)
-			ex = next(i + 1);
-
-		if (i == BINARY_PRECENDENCE.length)
+		if (i == 0)
 		{
-			if (DEBUG)
-				System.out.println("Max precendence");
 			if (line.substring(pos).startsWith("return"))
 			{
+				depth++;
 				if (DEBUG)
-					System.out.println("return");
+					System.out.println(tree() + COLOR_NAME + "return" + Log.RESET);
 				if (RETURN_THIS.matcher(line).matches())
 				{
 					pos = line.length();
+					depth--;
 					return new ReturnThis();
 				} else
 				{
@@ -181,6 +188,7 @@ public class MyParser
 					} else
 					{
 						Expression next = next(0);
+						depth--;
 						return new Return(next);
 					}
 				}
@@ -188,10 +196,12 @@ public class MyParser
 
 			if (line.substring(pos).startsWith("import"))
 			{
+				depth++;
 				if (DEBUG)
-					System.out.println("import");
+					System.out.println(tree() + COLOR_NAME + "import" + Log.RESET);
 				String[] split = line.split("\s");
 				pos = line.length();
+				depth--;
 				if (split[1].equals("type"))
 					return new Import(ImportType.TYPE, split[2]);
 				else if (split[1].equals("library"))
@@ -202,65 +212,85 @@ public class MyParser
 
 			if (line.substring(pos).startsWith("continue"))
 			{
+				depth++;
 				if (DEBUG)
-					System.out.println("continue");
+					System.out.println(tree() + COLOR_NAME + "continue" + Log.RESET);
 				nextChar(8);
+				depth--;
 				return new LoopControl(Result.continueLoop());
 			}
 
 			if (line.substring(pos).startsWith("break"))
 			{
+				depth++;
 				if (DEBUG)
-					System.out.println("break");
+					System.out.println(tree() + COLOR_NAME + "break" + Log.RESET);
 				nextChar(5);
+				depth--;
 				return new LoopControl(Result.breakLoop());
 			}
 
-			if (line.substring(pos).startsWith("true"))
+			if (line.substring(pos).trim().startsWith("true"))
 			{
+				depth++;
 				if (DEBUG)
-					System.out.println("true");
-				nextChar(4);
-				return new ValueConstant(PrimitiveTypes.TRUE);
+					System.out.println(tree() + COLOR_VARIABLE + "true" + Log.RESET);
+				nextChar('e');
+				nextChar();
+				depth--;
+				return new ValueConstant(PrimitiveTypes.TRUE());
 			}
 
-			if (line.substring(pos).startsWith("false"))
+			if (line.substring(pos).trim().startsWith("false"))
 			{
+				depth++;
 				if (DEBUG)
-					System.out.println("false");
-				nextChar(5);
-				return new ValueConstant(PrimitiveTypes.FALSE);
+					System.out.println(tree() + COLOR_VARIABLE + "false" + Log.RESET);
+				nextChar('e');
+				nextChar();
+				depth--;
+				return new ValueConstant(PrimitiveTypes.FALSE());
 			}
+		}
 
-			if (DEBUG)
-				System.out.println("Trying unary");
+		if (i < BINARY_PRECENDENCE.length)
+			ex = next(i + 1);
+
+		if (i == BINARY_PRECENDENCE.length)
+		{
+//			if (DEBUG)
+//				System.out.println("Trying unary");
 
 			for (Operator op : UNARY_OPERATORS)
 			{
 				if (eat(op.getOperator()))
 				{
+					depth++;
 					if (DEBUG)
-						System.out.println("Unary " + op);
+						System.out.println(tree() + COLOR_NAME + "Unary: " + COLOR_VARIABLE + op);
 
 					Expression right = next(i);
 
+					depth--;
 					return new UnaryOperator(op, right);
 				}
 			}
 
-			if (DEBUG)
-				System.out.println("Trying other");
+//			if (DEBUG)
+//				System.out.println("Trying other");
 
 			int startPos = pos;
+			depth++;
 			if (eat("\"", true))
 			{
 				if (DEBUG)
-					System.out.println("Inside String, next: '" + ch + "'");
+					System.out.println(tree() + COLOR_NAME + "Inside String, next: '" + COLOR_VARIABLE + (ch == '\n' ? "\\n" : ch) + COLOR_NAME + "'" + Log.RESET);
 				if (ch == '"')
 				{
 					nextChar();
 					if (DEBUG)
-						System.out.println("Empty String");
+						System.out.println(tree() + COLOR_NAME + "Empty String" + Log.RESET);
+					depth--;
 					return new Constant(PrimitiveTypes.STRING, "");
 				} else
 				{
@@ -281,7 +311,8 @@ public class MyParser
 					nextChar();
 					String s = bobTheBuilder.toString();
 					if (DEBUG)
-						System.out.println("Finished String " + s);
+						System.out.println(tree() + COLOR_NAME + "Finished String \"" + COLOR_VARIABLE + s.replaceAll("\n", "\\\\n") + COLOR_NAME + "\"" + Log.RESET);
+					depth--;
 					return new Constant(PrimitiveTypes.STRING, s);
 				}
 			}
@@ -295,6 +326,10 @@ public class MyParser
 				nextChar();
 				nextChar();
 
+				if (DEBUG)
+					System.out.println(tree() + COLOR_NAME + "Char: '" + COLOR_VARIABLE + c + COLOR_NAME + "'" + Log.RESET);
+
+				depth--;
 				return new Constant(PrimitiveTypes.CHAR, c);
 			}
 			else if (eat("("))
@@ -318,6 +353,10 @@ public class MyParser
 						foundDot = true;
 					nextChar();
 				}
+
+				if (DEBUG)
+					System.out.println(tree() + COLOR_NAME + "Number: " + COLOR_VARIABLE + line.substring(startPos, this.pos) + Log.RESET);
+
 				if (foundDot)
 				{
 					ex = new Constant(PrimitiveTypes.DOUBLE, Double.parseDouble(line.substring(startPos, this.pos)));
@@ -334,6 +373,9 @@ public class MyParser
 				// Next is function
 				if (ch == '(')
 				{
+					if (DEBUG)
+						System.out.println(tree() + COLOR_NAME + "Function: " + COLOR_VARIABLE + name + Log.RESET);
+
 					functionParameters.push(new ArrayList<>());
 
 					Expression firstParameter = next(i);
@@ -349,6 +391,9 @@ public class MyParser
 					ex = new FunctionCall(FunctionSource.function(name), parameterList.toArray(new Expression[0]));
 				} else
 				{
+					if (DEBUG)
+						System.out.println(tree() + COLOR_NAME + "Variable: " + COLOR_VARIABLE + name + Log.RESET);
+
 					ex = new Variable(VariableSource.memory(name));
 				}
 			} else
@@ -357,6 +402,7 @@ public class MyParser
 				throw new IllegalStateException("Dafuq " + i);
 			}
 
+			depth--;
 			return ex;
 		}
 
@@ -366,10 +412,12 @@ public class MyParser
 			{
 				if (eat(","))
 				{
+					depth++;
 					if (DEBUG)
-						System.out.println("comma");
+						System.out.println(tree() + COLOR_NAME + "comma" + Log.RESET);
 					Expression x = next(0);
 					functionParameters.peek().add(x);
+					depth--;
 					return ex;
 				}
 			}
@@ -378,12 +426,11 @@ public class MyParser
 
 			for (Operator op : BINARY_PRECENDENCE[BINARY_PRECENDENCE.length - 1 - i])
 			{
-				if (DEBUG)
-					System.out.println("Testing " + op);
 				if (eat(op.getOperator()))
 				{
+					depth++;
 					if (DEBUG)
-						System.out.println("Found: " + op);
+						System.out.println(tree() + COLOR_NAME + "Found: " + COLOR_VARIABLE + op + Log.RESET);
 					found = true;
 					Expression left = ex;
 
@@ -394,14 +441,17 @@ public class MyParser
 							throw new RuntimeException("Assignment requires variable at left");
 						} else
 						{
+							depth--;
 							ex = new Assignment(va.source.variableName, next(0));
 						}
 					}
 					else if (op == Operator.DOT)
 					{
+						depth--;
 						ex = new DotOperator(left, next(i + 1));
 					} else
 					{
+						depth--;
 						ex = new BinaryOperator(op, left, next(i + 1));
 					}
 					break;
@@ -409,7 +459,9 @@ public class MyParser
 			}
 
 			if (!found)
+			{
 				return ex;
+			}
 		}
 	}
 

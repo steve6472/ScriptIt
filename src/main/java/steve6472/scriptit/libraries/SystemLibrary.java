@@ -74,5 +74,28 @@ public class SystemLibrary extends Library
 				return Result.value(Value.newValue(PrimitiveTypes.CHAR, (char) arguments[0].getInt()));
 			}
 		});
+
+		addFunction(FunctionParameters.create("dumpVariables"), new Function()
+		{
+			@Override
+			public Result apply(Script script)
+			{
+				script.getMemory().dumpVariables();
+				return Result.pass();
+			}
+		});
+
+		addFunction(FunctionParameters.create("dumpFunctions"), new Function()
+		{
+			@Override
+			public Result apply(Script script)
+			{
+				script.getMemory().dumpFunctions();
+				return Result.pass();
+			}
+		});
+
+		addFunction("timeMs", () -> Value.newValue(PrimitiveTypes.INT, (int) System.currentTimeMillis()));
+
 	}
 }

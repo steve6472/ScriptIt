@@ -34,6 +34,11 @@ class UnaryOperator extends Expression
 		if (operatorFunction == null)
 		{
 			operatorFunction = leftValue.type.unary.get(operator);
+
+			if (operatorFunction == null)
+			{
+				throw new RuntimeException("No operator found for type '" + leftValue.type.getKeyword() + "' with operator: " + operator + " (" + operator.getOperator() + ")");
+			}
 		}
 
 		operatorFunction.setArguments(new Value[] {leftValue});

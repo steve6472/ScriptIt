@@ -44,6 +44,24 @@ public class Memory
 	{
 		if (name.equals("true") || name.equals("false"))
 			throw new RuntimeException("true or false can not be used as variable names");
+
+		/*
+		 * Fixes a problem in this code:
+		 *
+		 * a = 0;
+		 *
+		 * function changeA()
+		 * {
+		 *     a = 1;
+		 * }
+		 * changeA();
+		 * System.println(a); // prints 0
+		 *
+		 * Printing 0 is incorrect, value of 'a' was changed only in the function.
+		 * That is because the 'a' in function is assigned new Value, after the memory pops the value is deleted
+		 * For this code to work as expected the Value must stay the same, only it's fields can be changed.
+		 * That is what this code does.
+		 */
 		if (variables.containsKey(name))
 		{
 			Value value1 = variables.get(name);

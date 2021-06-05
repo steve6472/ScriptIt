@@ -1,0 +1,230 @@
+import type Window;
+import type Color;
+import type int;
+import type double;
+import type string;
+
+import library System;
+import library Math;
+import library Geometry;
+import library Random;
+
+/*
+ * Constants
+ */
+WIDTH = 16 * 30;
+HEIGHT = 9 * 30;
+
+PLAYER_WIDTH = 10;
+PLAYER_HEIGHT = 80;
+PLAYER_MOVE_SPEED = 3.0;
+AI_MOVE_SPEED = 0.0; // calculated in moveAi()
+BALL_RADIUS = 3;
+BALL_SPEED = 2.0;
+
+BALL_COLOR = Color(255, 255, 255);
+BACKGROUND = Color(60, 60, 60);
+PLAYER_COLOR = Color(127, 255, 127);
+AI_COLOR = Color(127, 127, 255);
+
+TEST_01 = Color(255, 0, 255);
+
+window = Window("Pong", WIDTH, HEIGHT);
+window.center();
+
+canvas = window.getCanvas();
+
+aiY = 0.0;
+playerY = 0.0;
+
+ballX = WIDTH / 2.0;
+ballY = 0.0;
+ballMotionRad = Math.PI() / 4.0;
+
+aiScore = 0;
+playerScore = 0;
+
+gamePaused = true;
+textTop = "Welcome to the game of Pong!";
+textBottom = "Press SPACE to start game";
+
+function endGame()
+{
+    gamePaused = true;
+    BALL_SPEED = 0.0;
+    ballX = WIDTH / 2.0;
+    ballY = 0.0;
+    playerY = 0.0;
+    aiY = 0.0;
+}
+
+function startGame()
+{
+    gamePaused = false;
+    textTop = "";
+    textBottom = "";
+    BALL_SPEED = 2.0;
+    ballX = WIDTH / 2.0;
+    ballY = 0.0;
+    playerY = 0.0;
+    aiY = 0.0;
+    ballMotionRad = Math.PI() / 4.0;
+}
+
+function lose()
+{
+    endGame();
+    aiScore = aiScore + 1;
+    textTop = "You lost!";
+    textBottom = "Press SPACE to start game";
+}
+
+function win()
+{
+    endGame();
+    System.println(gamePaused);
+    playerScore = playerScore + 1;
+    textTop = "You won!";
+    textBottom = "Press SPACE to start game";
+}
+
+function movePlayer()
+{
+    if (window.isKeyPressed('w'))
+    {
+        playerY = playerY - PLAYER_MOVE_SPEED;
+    }
+    if (window.isKeyPressed('s'))
+    {
+        playerY = playerY + PLAYER_MOVE_SPEED;
+    }
+
+    // Limit position
+    playerY = double(Math.clamp(int(playerY), -HEIGHT / 2 + PLAYER_HEIGHT / 2, HEIGHT / 2 - PLAYER_HEIGHT / 2));
+}
+
+function moveAi()
+{
+    AI_MOVE_SPEED = Math.clamp(BALL_SPEED * 0.8, 0.0, 3.2);
+
+    if (ballY > aiY)
+    {
+        aiY = aiY + AI_MOVE_SPEED;
+    }
+
+    if (ballY < aiY)
+    {
+        aiY = aiY - AI_MOVE_SPEED;
+    }
+
+    aiY = double(Math.clamp(int(aiY), -HEIGHT / 2 + PLAYER_HEIGHT / 2, HEIGHT / 2 - PLAYER_HEIGHT / 2));
+}
+
+function moveBall()
+{
+    ballX = ballX + Math.cos(ballMotionRad) * BALL_SPEED;
+    ballY = ballY - Math.sin(ballMotionRad) * BALL_SPEED;
+
+    if (ballY - BALL_RADIUS <= -HEIGHT / 2)
+    {
+        ballMotionRad = ballMotionRad + Math.PI() / 2.0;
+    }
+
+    if (ballY - BALL_RADIUS >= HEIGHT / 2)
+    {
+        ballMotionRad = ballMotionRad - Math.PI() / 2.0;
+    }
+
+    if (Geometry.isPointInsideRectangle(WIDTH - 20, int(aiY) - PLAYER_HEIGHT / 2, PLAYER_WIDTH, PLAYER_HEIGHT, int(ballX), int(ballY)))
+    {
+        ballMotionRad = Math.PI() - ballMotionRad;
+        ballMotionRad = ballMotionRad + Random.randomDouble(-0.1, 0.1);
+        BALL_SPEED = BALL_SPEED * 1.05;
+    }
+
+    if (Geometry.isPointInsideRectangle(10, int(playerY) - PLAYER_HEIGHT / 2, PLAYER_WIDTH, PLAYER_HEIGHT, int(ballX), int(ballY)))
+    {
+        ballMotionRad = Math.PI() - ballMotionRad;
+        ballMotionRad = ballMotionRad + Random.randomDouble(-0.1, 0.1);
+        BALL_SPEED = BALL_SPEED * 1.05;
+    }
+
+    if (ballX <= 0)
+    {
+        lose();
+    }
+
+    if (ballX >= WIDTH)
+    {
+        win();
+    }
+}
+
+function drawGame()
+{
+    canvas.setColor(BALL_COLOR);
+    canvas.drawString("Score: " + playerScore, 10, 15);
+    canvas.drawString("Ball speed: " + BALL_SPEED, 10, 27);
+
+    // Draw players and ball
+    canvas.setColor(PLAYER_COLOR);
+    canvas.fillRect(10, int(playerY) - PLAYER_HEIGHT / 2 + HEIGHT / 2, PLAYER_WIDTH, PLAYER_HEIGHT);
+
+    canvas.setColor(AI_COLOR);
+    canvas.fillRect(WIDTH - 20, int(aiY) - PLAYER_HEIGHT / 2 + HEIGHT / 2, 10, PLAYER_HEIGHT);
+
+    canvas.setColor(BALL_COLOR);
+    canvas.fillRect(int(ballX) - BALL_RADIUS, int(ballY) - BALL_RADIUS + HEIGHT / 2, BALL_RADIUS * 2, BALL_RADIUS * 2);
+}
+
+function playGame()
+{
+    // Movement
+    movePlayer();
+    moveBall();
+    moveAi();
+}
+
+function paused()
+{
+    canvas.setColor(255, 255, 255);
+    canvas.drawString(textTop, WIDTH / 2 - 50, HEIGHT / 2 - 2);
+    canvas.drawString(textBottom, WIDTH / 2 - 80, HEIGHT / 2 + 13);
+
+    if (window.isKeyPressed(' '))
+    {
+        startGame();
+    }
+}
+
+/*
+ * Main game loop
+ */
+function loop()
+{
+    System.println("Game loop started");
+    while (true)
+    {
+        canvas.setColor(BACKGROUND);
+        canvas.fillRect(0, 0, WIDTH, HEIGHT);
+
+        drawGame();
+
+        if (gamePaused)
+        {
+            paused();
+        } else
+        {
+            playGame();
+        }
+
+        //System.print("\n\n");
+        //System.dumpVariables();
+
+        canvas.repaint();
+        // ~60 fps (62.5)
+        delay(16);
+    }
+}
+
+loop();
