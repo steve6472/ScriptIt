@@ -1,5 +1,7 @@
 package steve6472.scriptit;
 
+import java.util.Arrays;
+
 /**********************
  * Created by steve6472 (Mirek Jozefek)
  * On date: 5/20/2021
@@ -83,5 +85,11 @@ class FunctionCall extends Expression
 			lastIndex = 0;
 
 		return r;
+	}
+
+	@Override
+	public String toString()
+	{
+		return "FunctionCall{" + "arguments=" + Arrays.toString(arguments) + ", args=" + Arrays.toString(args) + ", isDelayed=" + isDelayed + ", lastIndex=" + lastIndex + ", source=" + source + '}';
 	}
 }

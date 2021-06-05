@@ -6,9 +6,9 @@ package steve6472.scriptit;
  * Project: ScriptIt
  *
  ***********************/
-public class DelayValue
+class DelayValue
 {
-	Expression expression;
+	public Expression expression;
 	Result result = Result.delay(0);
 	Value value;
 	boolean isSet;

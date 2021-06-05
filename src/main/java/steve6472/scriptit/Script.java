@@ -15,6 +15,8 @@ import java.util.List;
  ***********************/
 public class Script
 {
+	record QueuedFunctionCall<A, B>(A executor, B mustExist) {}
+
 	private final Workspace workspace;
 
 	private final MyParser parser;
@@ -23,11 +25,42 @@ public class Script
 	private int lastIndex = 0;
 	private int currentIndex = 0;
 
+	private List<QueuedFunctionCall<ExpressionExecutor, Boolean>> queuedFunctionCalls;
+	private QueuedFunctionCall<ExpressionExecutor, Boolean> currentFunction = null;
+
 	public Script(Workspace workspace)
 	{
 		this.workspace = workspace;
 		this.parser = new MyParser();
 		this.memory = new MemoryStack(64);
+		this.queuedFunctionCalls = new ArrayList<>();
+	}
+
+	/**
+	 * Calls function inside script
+	 * If the script is currently delayed it waits for the delay to end and calls the function immediately
+	 *
+	 * @param mustExist if true and function does not exist in script throwns an error
+	 * @param name name of function
+	 * @param types parameters
+	 */
+	public void queueFunctionCall(boolean mustExist, String name, Value... types)
+	{
+		ExpressionExecutor exe = new ExpressionExecutor(getMemory());
+
+		Expression[] expressions = new Expression[types.length];
+		for (int i = 0; i < types.length; i++)
+		{
+			expressions[i] = new ValueConstant(types[i]);
+		}
+
+		exe.setExpression(new FunctionCall(FunctionSource.function(name), expressions));
+		queuedFunctionCalls.add(new QueuedFunctionCall<>(exe, mustExist));
+	}
+
+	public void addVariable(String name, Value value)
+	{
+		memory.addVariable(name, value);
 	}
 
 	public void addLibrary(Library library)
@@ -55,8 +88,42 @@ public class Script
 		}
 	}
 
+	public void runQueuedFunctions()
+	{
+		currentFunction = queuedFunctionCalls.isEmpty() ? null : queuedFunctionCalls.remove(0);
+	}
+
 	private Result execute_()
 	{
+		if (currentFunction != null)
+		{
+			if (!currentFunction.mustExist())
+			{
+				FunctionCall functionCall = (FunctionCall) currentFunction.executor().getExpression();
+				DelayValue[] args = functionCall.arguments;
+				Type[] types = new Type[args.length];
+				for (int i = 0; i < args.length; i++)
+				{
+					Value a = ((ValueConstant) args[i].expression).constant;
+					types[i] = a.type;
+				}
+
+				if (getMemory().hasFunction(functionCall.source.functionName, types))
+				{
+					Result result = currentFunction.executor().execute(this);
+					if (result.isDelay())
+						return result;
+					runQueuedFunctions();
+				}
+			} else
+			{
+				Result result = currentFunction.executor().execute(this);
+				if (result.isDelay())
+					return result;
+				runQueuedFunctions();
+			}
+		}
+
 		currentIndex = lastIndex;
 		while (currentIndex < lines.length)
 		{

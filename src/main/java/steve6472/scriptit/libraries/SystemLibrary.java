@@ -97,5 +97,14 @@ public class SystemLibrary extends Library
 
 		addFunction("timeMs", () -> Value.newValue(PrimitiveTypes.INT, (int) System.currentTimeMillis()));
 
+		addFunction(FunctionParameters.create("acceptEvents"), new Function()
+		{
+			@Override
+			public Result apply(Script script)
+			{
+				script.runQueuedFunctions();
+				return Result.pass();
+			}
+		});
 	}
 }

@@ -17,9 +17,9 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="Interface" />
-        <option value="Record" />
         <option value="Enum" />
         <option value="AnnotationType" />
+        <option value="Record" />
         <option value="Class" />
       </list>
     </option>
@@ -69,14 +69,21 @@
       <recent name="steve6472.scriptit.math" />
     </key>
     <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="steve6472.scriptit.test" />
       <recent name="steve6472.scriptit.libraries" />
       <recent name="steve6472.scriptit.exp" />
       <recent name="steve6472.scriptit.exp.functions" />
       <recent name="steve6472.scriptit.exp.constants" />
-      <recent name="steve6472.scriptit.instructions" />
     </key>
   </component>
-  <component name="RunManager" selected="Application.Swing">
+  <component name="RunManager" selected="Application.EventTest">
+    <configuration name="EventTest" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="steve6472.scriptit.test.EventTest" />
+      <module name="ScriptIt" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="ExpressionParser" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="steve6472.scriptit.expression.ExpressionParser" />
       <module name="ScriptIt" />
@@ -86,13 +93,6 @@
     </configuration>
     <configuration name="Main" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="steve6472.scriptit.Main" />
-      <module name="ScriptIt" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="MyParser" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="steve6472.scriptit.MyParser" />
       <module name="ScriptIt" />
       <method v="2">
         <option name="Make" enabled="true" />
@@ -121,11 +121,11 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Application.EventTest" />
         <item itemvalue="Application.Swing" />
         <item itemvalue="Application.ReaderMain" />
         <item itemvalue="Application.ExpressionParser" />
         <item itemvalue="Application.Main" />
-        <item itemvalue="Application.MyParser" />
       </list>
     </recent_temporary>
   </component>

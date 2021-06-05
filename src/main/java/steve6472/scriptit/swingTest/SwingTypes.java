@@ -120,7 +120,7 @@ public class SwingTypes extends TypesInit
 		addProcedure(CANVAS, "drawPoint", (itself, x, y) -> ((Canvas) itself.get("canvas")).graphics2D.drawLine(x.getInt(), y.getInt(), x.getInt(), y.getInt()), INT, INT);
 	}
 
-	private static class Canvas extends JComponent
+	public static class Canvas extends JComponent
 	{
 		private final BufferedImage image;
 		private final Graphics2D graphics2D;
@@ -139,7 +139,7 @@ public class SwingTypes extends TypesInit
 		}
 	}
 
-	private static class FrameKeyListener extends KeyAdapter
+	public static class FrameKeyListener extends KeyAdapter
 	{
 		public final Set<Character> pressed = new HashSet<>();
 

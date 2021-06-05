@@ -119,6 +119,32 @@ public class Memory
 		return func;
 	}
 
+	public boolean hasFunction(String name, Type[] types)
+	{
+		Function func = null;
+		main: for (Map.Entry<FunctionParameters, Function> e : functions.entrySet())
+		{
+			FunctionParameters parameters = e.getKey();
+			Function function = e.getValue();
+
+			if (!parameters.getName().equals(name))
+				continue;
+			if (parameters.getTypes().length != types.length)
+				continue;
+			for (int i = 0; i < types.length; i++)
+			{
+				if (parameters.getTypes()[i] != types[i])
+				{
+					continue main;
+				}
+			}
+			func = function;
+			break;
+		}
+
+		return func != null;
+	}
+
 	/*
 	 * Stack
 	 */

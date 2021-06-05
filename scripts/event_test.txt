@@ -1,0 +1,47 @@
+import library System;
+import library Math;
+import library Geometry;
+import library Random;
+
+import type Window;
+import type Color;
+import type int;
+import type double;
+import type string;
+
+/*
+ * Constants
+ */
+
+BACKGROUND = Color(60, 60, 60);
+WHITE = Color(255, 255, 255);
+
+window.center();
+
+canvas = window.getCanvas();
+lastX = -4;
+lastY = -4;
+
+function mouseClicked(int button, int x, int y)
+{
+    lastX = x;
+    lastY = y;
+    System.println("Clicked " + button + " x: " + x + ", y: " + y);
+}
+
+while (true)
+{
+    System.acceptEvents();
+
+    canvas.setColor(BACKGROUND);
+    canvas.fillRect(0, 0, 256, 256);
+
+    canvas.setColor(WHITE);
+    canvas.fillRect(lastX - 3, lastY - 3, 6, 6);
+
+    canvas.setColor(WHITE);
+
+    canvas.repaint();
+
+    delay(16);
+}

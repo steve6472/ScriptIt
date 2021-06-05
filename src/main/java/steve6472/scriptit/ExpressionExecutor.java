@@ -45,15 +45,25 @@ public class ExpressionExecutor
 		delayStart = delayStartSupplier.get();
 	}
 
-	public Result execute(Script script)
+	public boolean canAdvance()
 	{
 		if (delayStart != -1)
 		{
 			boolean advance = shouldAdvance.apply(delayStart, delay);
 			if (!advance)
-				return Result.delay();
+				return false;
 			delayStart = -1;
-			return Result.pass();
+			return true;
+		}
+
+		return true;
+	}
+
+	public Result execute(Script script)
+	{
+		if (delayStart != -1)
+		{
+			return canAdvance() ? Result.pass() : Result.delay();
 		}
 
 		Result result = expression.apply(script);
@@ -62,6 +72,11 @@ public class ExpressionExecutor
 			delay(result.getValue().getInt());
 
 		return result;
+	}
+
+	Expression getExpression()
+	{
+		return expression;
 	}
 
 	@Override

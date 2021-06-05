@@ -6,9 +6,9 @@ package steve6472.scriptit;
  * Project: ScriptIt
  *
  ***********************/
-public class ValueConstant extends Expression
+class ValueConstant extends Expression
 {
-	Value constant;
+	public Value constant;
 
 	public ValueConstant(Value constant)
 	{
