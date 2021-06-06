@@ -34,6 +34,25 @@ public class ScriptReader
 		return MyParser.repeat("\t", depth - 1);
 	}
 
+	public static Script readScript(String lines, Workspace workspace)
+	{
+		depth = 0;
+		Script script = new Script(workspace);
+
+		List<String> split = split(lines);
+		List<Expression> expressions = new ArrayList<>();
+
+		for (String s : split)
+		{
+			Expression expression = createExpression(script, s);
+			if (expression != null)
+				expressions.add(expression);
+		}
+		script.setExpressions(expressions.toArray(new Expression[0]));
+
+		return script;
+	}
+
 	public static Script readScript(File file, Workspace workspace)
 	{
 		depth = 0;
@@ -249,7 +268,7 @@ public class ScriptReader
 	 * @param s line
 	 * @return true if no else exists at the end of if body
 	 */
-	private static boolean isIf(String s)
+	public static boolean isIf(String s)
 	{
 		boolean inString = false;
 		boolean escaped = false;
@@ -334,7 +353,7 @@ public class ScriptReader
 		throw new RuntimeException("Should not get here! missing '}' ?");
 	}
 
-	private static String[] splitElse(String s)
+	public static String[] splitElse(String s)
 	{
 		boolean inString = false;
 		boolean escaped = false;

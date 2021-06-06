@@ -1,8 +1,5 @@
 package steve6472.scriptit;
 
-import java.util.function.BiFunction;
-import java.util.function.Supplier;
-
 /**********************
  * Created by steve6472 (Mirek Jozefek)
  * On date: 5/20/2021
@@ -15,19 +12,6 @@ public class ExpressionExecutor
 	private Expression expression;
 	public long delay, delayStart = -1;
 
-	private Supplier<Long> delayStartSupplier = System::currentTimeMillis;
-	private BiFunction<Long, Long, Boolean> shouldAdvance = (start, delay) -> System.currentTimeMillis() - start >= delay;
-
-	public void setGetDelayStart(Supplier<Long> delayStartSupplier)
-	{
-		this.delayStartSupplier = delayStartSupplier;
-	}
-
-	public void setShouldAdvance(BiFunction<Long, Long, Boolean> shouldAdvance)
-	{
-		this.shouldAdvance = shouldAdvance;
-	}
-
 	ExpressionExecutor(MemoryStack memory)
 	{
 		this.memory = memory;
@@ -39,17 +23,17 @@ public class ExpressionExecutor
 		return this;
 	}
 
-	private void delay(long delay)
+	private void delay(Script script, long delay)
 	{
 		this.delay = delay;
-		delayStart = delayStartSupplier.get();
+		delayStart = script.delayStartSupplier.get();
 	}
 
-	public boolean canAdvance()
+	public boolean canAdvance(Script script)
 	{
 		if (delayStart != -1)
 		{
-			boolean advance = shouldAdvance.apply(delayStart, delay);
+			boolean advance = script.shouldAdvance.apply(delayStart, delay);
 			if (!advance)
 				return false;
 			delayStart = -1;
@@ -63,13 +47,13 @@ public class ExpressionExecutor
 	{
 		if (delayStart != -1)
 		{
-			return canAdvance() ? Result.pass() : Result.delay();
+			return canAdvance(script) ? Result.pass() : Result.delay();
 		}
 
 		Result result = expression.apply(script);
 
 		if (result.isDelay() && !result.getValue().isNull() && result.getValue().getInt() > 0)
-			delay(result.getValue().getInt());
+			delay(script, result.getValue().getInt());
 
 		return result;
 	}

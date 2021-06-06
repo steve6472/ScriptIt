@@ -6,6 +6,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.function.BiFunction;
+import java.util.function.Supplier;
 
 /**********************
  * Created by steve6472 (Mirek Jozefek)
@@ -44,10 +46,24 @@ public class Script
 	ExpressionExecutor[] lines;
 	private int lastIndex = 0;
 	private int currentIndex = 0;
+	boolean exitOnError = false;
 
 	private List<QueuedFunctionCall<ExpressionExecutor, Boolean>> queuedFunctionCalls;
 	QueuedFunctionCall<ExpressionExecutor, Boolean> currentFunction = null;
 	private boolean waitingForQueuedFunction = false;
+
+	Supplier<Long> delayStartSupplier = System::currentTimeMillis;
+	BiFunction<Long, Long, Boolean> shouldAdvance = (start, delay) -> System.currentTimeMillis() - start >= delay;
+
+	public void setGetDelayStart(Supplier<Long> delayStartSupplier)
+	{
+		this.delayStartSupplier = delayStartSupplier;
+	}
+
+	public void setShouldAdvance(BiFunction<Long, Long, Boolean> shouldAdvance)
+	{
+		this.shouldAdvance = shouldAdvance;
+	}
 
 	public Script(Workspace workspace)
 	{
@@ -248,7 +264,8 @@ public class Script
 			System.out.println("\n");
 			ex.printStackTrace();
 
-			System.exit(1);
+			if (exitOnError)
+				System.exit(1);
 			return null;
 		}
 	}

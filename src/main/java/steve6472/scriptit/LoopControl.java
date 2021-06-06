@@ -6,7 +6,7 @@ package steve6472.scriptit;
  * Project: ScriptIt
  *
  ***********************/
-public class LoopControl extends Expression
+class LoopControl extends Expression
 {
 	Result result;
 

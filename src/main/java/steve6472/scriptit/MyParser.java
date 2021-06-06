@@ -221,10 +221,16 @@ public class MyParser
 				pos = line.length();
 				depth--;
 				if (split[1].equals("type"))
+				{
+					if (DEBUG)
+						System.out.println(tree() + COLOR_NAME + "type " + COLOR_VARIABLE + split[2] + Log.RESET);
 					return new Import(ImportType.TYPE, split[2]);
-				else if (split[1].equals("library"))
+				} else if (split[1].equals("library"))
+				{
+					if (DEBUG)
+						System.out.println(tree() + COLOR_NAME + "library " + COLOR_VARIABLE + split[2] + Log.RESET);
 					return new Import(ImportType.LIBRARY, split[2]);
-				else
+				} else
 					throw new RuntimeException("Unknown import type '" + split[1] + "' with param '" + split[2] + "'");
 			}
 
