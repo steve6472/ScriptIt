@@ -157,9 +157,7 @@ public class PrimitiveTypes extends TypesInit
 		STRING.addBinaryOperator(BOOL, Operator.ADD, new BinaryOperatorOverload((left, right) -> newValue(STRING, left.getString() + right.getBoolean())));
 		STRING.addBinaryOperator(INT, Operator.ADD, new BinaryOperatorOverload((left, right) -> newValue(STRING, left.getString() + right.getInt())));
 		STRING.addBinaryOperator(INT, Operator.SUB, new BinaryOperatorOverload((left, right) -> newValue(STRING, left.getString().substring(0, left.getString().length() - right.getInt())))); // remove n characters from back
-		// TODO: Java 11+
-//		STRING.addBinaryOperator(INT, Operator.MUL, new BinaryOperatorOverload((left, right) -> newValue(STRING, left.getString().repeat(right.getInt())))); // repeat the string n times
-		STRING.addBinaryOperator(INT, Operator.MUL, new BinaryOperatorOverload((left, right) -> newValue(STRING, MyParser.repeat(left.getString(), right.getInt())))); // repeat the string n times
+		STRING.addBinaryOperator(INT, Operator.MUL, new BinaryOperatorOverload((left, right) -> newValue(STRING, left.getString().repeat(right.getInt())))); // repeat the string n times
 		STRING.addUnaryOperator(Operator.SUB, new UnaryOperatorOverload(right -> right.setValue(new StringBuilder(right.getString()).reverse().toString()))); // reverse the string
 		STRING.addFunction(FunctionParameters.function("len").build(), new Function()
 		{

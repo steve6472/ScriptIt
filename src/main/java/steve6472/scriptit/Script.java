@@ -17,26 +17,10 @@ import java.util.function.Supplier;
  ***********************/
 public class Script
 {
-	private static class QueuedFunctionCall<A, B>
+	private record QueuedFunctionCall<A, B>(A executor, B mustExist)
 	{
-		private final A executor;
-		private final B mustExist;
 
-		QueuedFunctionCall(A executor, B mustExist)
-		{
-			this.executor = executor;
-			this.mustExist = mustExist;
-		}
 
-		public A executor()
-		{
-			return executor;
-		}
-
-		public B mustExist()
-		{
-			return mustExist;
-		}
 	}
 
 	private final Workspace workspace;
@@ -211,9 +195,8 @@ public class Script
 			boolean isBody = false;
 			boolean wasInScript = false;
 
-			for (int i = 0; i < stackTraceElements.size(); i++)
+			for (StackTraceElement e : stackTraceElements)
 			{
-				StackTraceElement e = stackTraceElements.get(i);
 				String errorLine = e.toString();
 				String expression = errorLine.replace("steve6472.scriptit.", "");
 				if (expression.startsWith("Script.") || expression.startsWith("ExpressionExecutor.execute"))
@@ -302,5 +285,10 @@ public class Script
 	public Workspace getWorkspace()
 	{
 		return workspace;
+	}
+
+	public ExpressionExecutor[] getLines()
+	{
+		return lines;
 	}
 }
