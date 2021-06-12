@@ -481,7 +481,6 @@ public class ScriptReader
 						builder.append(ch);
 						continue;
 					}
-					i++;
 					builder.append(ch);
 					lines.add(builder.toString().trim());
 					builder.setLength(0);

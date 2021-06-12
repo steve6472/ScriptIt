@@ -16,6 +16,8 @@ public class ReaderMain
 {
 	public static void main(String[] args)
 	{
+//		MyParser.DEBUG = true;
+		ScriptReader.DEBUG = true;
 		Workspace workspace = new Workspace();
 
 		Script script = ScriptReader.readScript(new File("scripts/random.txt"), workspace);

@@ -1,5 +1,6 @@
 package steve6472.scriptit.test;
 
+import steve6472.scriptit.MyParser;
 import steve6472.scriptit.Script;
 import steve6472.scriptit.ScriptReader;
 import steve6472.scriptit.Workspace;
@@ -19,6 +20,9 @@ public class Swing
 {
 	public static void main(String[] args)
 	{
+		MyParser.DEBUG = true;
+		ScriptReader.DEBUG = true;
+
 		SwingTypes.init();
 
 		Workspace workspace = new Workspace();

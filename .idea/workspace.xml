@@ -76,7 +76,7 @@
       <recent name="steve6472.scriptit.exp.constants" />
     </key>
   </component>
-  <component name="RunManager" selected="Application.Swing">
+  <component name="RunManager" selected="Application.ReaderMain">
     <configuration name="EventTest" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="steve6472.scriptit.test.EventTest" />
       <module name="ScriptIt" />
@@ -121,10 +121,10 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Application.ReaderMain" />
         <item itemvalue="Application.Swing" />
         <item itemvalue="Application.MCTEST" />
         <item itemvalue="Application.EventTest" />
-        <item itemvalue="Application.ReaderMain" />
         <item itemvalue="Application.ExpressionParser" />
       </list>
     </recent_temporary>
