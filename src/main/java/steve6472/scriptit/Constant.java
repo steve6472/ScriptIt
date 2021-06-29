@@ -1,5 +1,7 @@
 package steve6472.scriptit;
 
+import steve6472.scriptit.types.PrimitiveTypes;
+
 /**********************
  * Created by steve6472 (Mirek Jozefek)
  * On date: 5/20/2021
@@ -21,6 +23,20 @@ public class Constant extends Expression
 	public Result apply(Script script)
 	{
 		return Result.value(Value.newValue(type, constant));
+	}
+
+	@Override
+	public String showCode(int a)
+	{
+		if (type == PrimitiveTypes.STRING)
+			return Highlighter.CONST_STR + '"' + constant.toString().replace("\n", "\\n") + '"' + Highlighter.RESET;
+		else if (type == PrimitiveTypes.CHAR)
+			return Highlighter.CONST_CHAR + "'" + constant.toString() + "'" + Highlighter.RESET;
+		else if (type == PrimitiveTypes.INT || type == PrimitiveTypes.DOUBLE)
+			return Highlighter.CONST_NUM + constant.toString() + Highlighter.RESET;
+		else if (type == PrimitiveTypes.BOOL)
+			return Highlighter.CONST_BOOL + constant.toString() + Highlighter.RESET;
+		return constant.toString();
 	}
 
 	@Override

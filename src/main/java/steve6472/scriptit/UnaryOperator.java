@@ -57,4 +57,10 @@ class UnaryOperator extends Expression
 	{
 		return "UnaryOperator{" + "operator=" + operator + '}';
 	}
+
+	@Override
+	public String showCode(int a)
+	{
+		return operator.getOperator() + left.showCode(0);
+	}
 }

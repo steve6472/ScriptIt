@@ -52,4 +52,10 @@ class IfElse extends Expression
 			return leftResult;
 		}
 	}
+
+	@Override
+	public String showCode(int a)
+	{
+		return ifFunction.showCode(a) + Highlighter.ELSE + " else \n" + depth(a - 1) + Highlighter.BRACET + "{" + Highlighter.RESET + "\n" + elseFunction.showCode(a) + Highlighter.BRACET + depth(a - 1) + "}" + Highlighter.RESET;
+	}
 }

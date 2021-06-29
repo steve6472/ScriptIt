@@ -10,5 +10,12 @@ public abstract class Expression
 {
 	public abstract Result apply(Script script);
 
+	public abstract String showCode(int a);
+
+	protected String depth(int a)
+	{
+		return "\t".repeat(Math.max(0, a));
+	}
+
 	//TODO: add this from Function: protected Value typeFunction = null;
 }

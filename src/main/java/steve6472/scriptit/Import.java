@@ -27,4 +27,10 @@ class Import extends Expression
 
 		return Result.pass();
 	}
+
+	@Override
+	public String showCode(int a)
+	{
+		return Highlighter.IMPORT + "import " + Highlighter.IMPORT_TYPE + type.name().toLowerCase() + " " + Highlighter.IMPORT_NAME + name + Highlighter.RESET;
+	}
 }

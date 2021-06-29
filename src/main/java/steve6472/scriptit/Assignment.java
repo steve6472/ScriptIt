@@ -35,4 +35,10 @@ class Assignment extends Expression
 		res = Result.delay();
 		return Result.pass();
 	}
+
+	@Override
+	public String showCode(int a)
+	{
+		return Highlighter.VAR + varName + Highlighter.SYMBOL + " = " + expression.showCode(0) + Highlighter.RESET;
+	}
 }

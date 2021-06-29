@@ -2,31 +2,28 @@ package steve6472.scriptit;
 
 /**********************
  * Created by steve6472 (Mirek Jozefek)
- * On date: 5/20/2021
+ * On date: 6/20/2021
  * Project: ScriptIt
  *
  ***********************/
-public class ReturnThis extends Expression
+class Comment extends Expression
 {
-	public ReturnThis()
+	private final String comment;
+
+	public Comment(String comment)
 	{
+		this.comment = comment;
 	}
 
 	@Override
 	public Result apply(Script script)
 	{
-		return Result.returnThis();
+		return Result.pass();
 	}
 
 	@Override
 	public String showCode(int a)
 	{
-		return "return this";
-	}
-
-	@Override
-	public String toString()
-	{
-		return "ReturnThis{}";
+		return comment;
 	}
 }

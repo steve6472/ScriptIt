@@ -35,4 +35,14 @@ public class While extends Expression
 				return Result.pass();
 		}
 	}
+
+	@Override
+	public String showCode(int a)
+	{
+		return Highlighter.WHILE + "while " + Highlighter.BRACET + "(" + Highlighter.RESET + anIf.condition.showCode(0) + Highlighter.BRACET + ")" + Highlighter.RESET + "\n" + Highlighter.BRACET + depth(a) + "{" + Highlighter.RESET + "\n" + anIf.body.showCode(a + 1) + depth(a) + Highlighter.BRACET + "}" + Highlighter.RESET;
+	}
 }
+
+
+
+

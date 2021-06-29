@@ -56,4 +56,10 @@ class If extends Expression
 
 		return r;
 	}
+
+	@Override
+	public String showCode(int a)
+	{
+		return Highlighter.IF + "if " + Highlighter.BRACET + "(" + condition.showCode(0) + Highlighter.BRACET + ")\n" + Highlighter.BRACET + depth(a - 1) + "{" + Highlighter.RESET + "\n" + body.showCode(a) + Highlighter.BRACET + depth(a - 1) + "}" + Highlighter.RESET;
+	}
 }

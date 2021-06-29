@@ -88,6 +88,34 @@ class FunctionCall extends Expression
 	}
 
 	@Override
+	public String showCode(int a)
+	{
+		StringBuilder s = new StringBuilder();
+		s.append(Highlighter.FUNCTION_NAME);
+		if (source.sourceType == FunctionSourceType.FUNCTION)
+		{
+			s.append(source.functionName);
+		} else if (source.sourceType == FunctionSourceType.VALUE)
+		{
+			s.append(source.value.toString()).append(".").append(source.functionName);
+		} else if (source.sourceType == FunctionSourceType.STATIC)
+		{
+			s.append(source.functionName);
+		}
+		s.append(Highlighter.BRACET);
+		s.append("(");
+		for (int i = 0; i < args.length; i++)
+		{
+			s.append(arguments[i].expression.showCode(0));
+			if (i < args.length - 1)
+				s.append(Highlighter.SYMBOL).append(", ");
+		}
+		s.append(Highlighter.BRACET);
+		s.append(")").append(Highlighter.RESET);
+		return s.toString();
+	}
+
+	@Override
 	public String toString()
 	{
 		return "FunctionCall{" + "arguments=" + Arrays.toString(arguments) + ", args=" + Arrays.toString(args) + ", isDelayed=" + isDelayed + ", lastIndex=" + lastIndex + ", source=" + source + '}';

@@ -4,6 +4,7 @@ package steve6472.scriptit;
  * Created by steve6472 (Mirek Jozefek)
  * On date: 17.04.2020
  * Project: NoiseGenerator
+ * https://en.wikipedia.org/wiki/ANSI_escape_code#Escape_sequences
  *
  ***********************/
 public class Log

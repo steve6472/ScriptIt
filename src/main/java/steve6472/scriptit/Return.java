@@ -28,6 +28,12 @@ public class Return extends Expression
 	}
 
 	@Override
+	public String showCode(int a)
+	{
+		return "return";
+	}
+
+	@Override
 	public String toString()
 	{
 		return "Return{" + "returnValue=" + returnValue + '}';

@@ -29,4 +29,10 @@ class Variable extends Expression
 	{
 		return "Variable{" + "source=" + source + '}';
 	}
+
+	@Override
+	public String showCode(int a)
+	{
+		return Highlighter.VAR + source.variableName + Highlighter.RESET;
+	}
 }

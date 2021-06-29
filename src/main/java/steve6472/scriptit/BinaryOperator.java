@@ -75,4 +75,10 @@ class BinaryOperator extends Expression
 	{
 		return "BinaryOperator{" + "operator=" + operator + '}';
 	}
+
+	@Override
+	public String showCode(int a)
+	{
+		return left.showCode(0) + " " + operator.getOperator() + " " + right.showCode(0);
+	}
 }

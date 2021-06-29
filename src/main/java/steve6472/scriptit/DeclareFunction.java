@@ -25,4 +25,22 @@ public class DeclareFunction extends Expression
 
 		return Result.pass();
 	}
+
+	@Override
+	public String showCode(int a)
+	{
+		StringBuilder s = new StringBuilder("function " + params.getName() + "(");
+		String[] argumentNames = function.argumentNames;
+		for (int i = 0; i < argumentNames.length; i++)
+		{
+			String argumentName = argumentNames[i];
+			s.append(params.getTypes()[i].getKeyword()).append(" ").append(argumentName);
+			if (i < argumentNames.length - 1)
+				s.append(", ");
+		}
+		s.append(")\n{");
+		s.append(function.showCode(a));
+		s.append("}");
+		return s.toString();
+	}
 }

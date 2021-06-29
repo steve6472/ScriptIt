@@ -17,6 +17,10 @@ import java.util.regex.Pattern;
 public class ScriptReader
 {
 	public static boolean DEBUG = false;
+	public static final String EMPTY_LINE = "%EMPTY_LINE%";
+	public static final String NEW_LINE = "%NEW_LINE%";
+	public static final String COMMENT_START = "%COMMENT_START%";
+	public static final String COMMENT_END = "%COMMENT_END%";
 
 	public static String COLOR_WHILE = Log.RED;
 	public static String COLOR_IF_ELSE = Log.GREEN;
@@ -34,6 +38,11 @@ public class ScriptReader
 
 	public static Script readScript(String lines, Workspace workspace)
 	{
+		return readScript(lines, workspace, false);
+	}
+
+	public static Script readScript(String lines, Workspace workspace, boolean includeEmptyLines)
+	{
 		depth = 0;
 		Script script = new Script(workspace);
 
@@ -42,7 +51,7 @@ public class ScriptReader
 
 		for (String s : split)
 		{
-			Expression expression = createExpression(script, s);
+			Expression expression = createExpression(script, s, includeEmptyLines);
 			if (expression != null)
 				expressions.add(expression);
 		}
@@ -53,6 +62,11 @@ public class ScriptReader
 
 	public static Script readScript(File file, Workspace workspace)
 	{
+		return readScript(file, workspace, false);
+	}
+
+	public static Script readScript(File file, Workspace workspace, boolean includeEmptyLines)
+	{
 		depth = 0;
 		Script script = new Script(workspace);
 
@@ -61,7 +75,7 @@ public class ScriptReader
 
 		for (String s : split)
 		{
-			Expression expression = createExpression(script, s);
+			Expression expression = createExpression(script, s, includeEmptyLines);
 			if (expression != null)
 				expressions.add(expression);
 		}
@@ -70,9 +84,48 @@ public class ScriptReader
 		return script;
 	}
 
-	private static Expression createExpression(Script script, String line)
+	private static Expression createExpression(Script script, String line, boolean includeEmptyLines)
 	{
-		if (line.startsWith("function"))
+		if (line.startsWith("/*"))
+		{
+			depth++;
+			if (DEBUG)
+			{
+				System.out.println(tree() + "Multiline Comment " + line.replace("\n", "\\n") + Log.RESET);
+			}
+			depth--;
+			if (includeEmptyLines)
+				return new Comment(Highlighter.COMMENT + line + Highlighter.RESET);
+			else
+				return null;
+		}
+		else if (line.startsWith("//"))
+		{
+			depth++;
+			if (DEBUG)
+			{
+				System.out.println(tree() + "Comment " + line + Log.RESET);
+			}
+			depth--;
+			if (includeEmptyLines)
+				return new Comment(Highlighter.COMMENT + line + Highlighter.RESET);
+			else
+				return null;
+		}
+		else if (line.equals(EMPTY_LINE))
+		{
+			depth++;
+			if (DEBUG)
+			{
+				System.out.println(tree() + "Empty Line" + Log.RESET);
+			}
+			depth--;
+			if (includeEmptyLines)
+				return new Comment(Highlighter.EMPTY_LINE);
+			else
+				return null;
+		}
+		else if (line.startsWith("function"))
 		{
 			depth++;
 			if (DEBUG)
@@ -109,7 +162,7 @@ public class ScriptReader
 				System.out.println(tree() + Log.BRIGHT_CYAN + "Arguments: " + Log.RESET + (arguments.isEmpty() ? "NONE" : arguments));
 			}
 
-			Function body = (Function) createExpression(script, function);
+			Function body = (Function) createExpression(script, function, includeEmptyLines);
 			depth--;
 			return new DeclareFunction(name, body, names, types);
 		}
@@ -126,7 +179,7 @@ public class ScriptReader
 			String[] split = line.split("\\{", 2);
 			String s = split[0].split("\\(", 2)[1].trim();
 
-			String cond = s.substring(0, s.length() - 1).trim();
+			String cond = s.substring(0, s.lastIndexOf(')')).trim();
 			if (DEBUG)
 			{
 				Log.brightRed();
@@ -137,11 +190,11 @@ public class ScriptReader
 			Expression condition = script.getParser().setExpression(cond).parse();
 			String trim = '{' + split[1].trim();
 			trim = trim.substring(0, trim.length() - 1);
-			If anIf = new If(condition, createExpression(script, trim));
+			If anIf = new If(condition, createExpression(script, trim, includeEmptyLines));
 			depth--;
 			return new While(anIf);
 		}
-		else if (Pattern.compile("if\s*\\(.+\\).*\\{.*\\}\s*else\s*\\{.*\\}").matcher(line).matches() && !isIf(line))
+		else if (Pattern.compile("if\s*\\(.+\\).*\\{.*\\}\s*(%NEW_LINE%)?\s*else\s*(%NEW_LINE%)?\s*\\{.*\\}").matcher(line).matches() && !isIf(line))
 		{
 			depth++;
 			if (DEBUG)
@@ -157,7 +210,7 @@ public class ScriptReader
 			split[1] = split[1].trim();
 			split[1] = split[1].substring(split[1].indexOf('{'), split[1].lastIndexOf('}')).trim();
 
-			If anIf = (If) createExpression(script, split[0]);
+			If anIf = (If) createExpression(script, split[0], includeEmptyLines);
 
 			if (DEBUG)
 			{
@@ -171,7 +224,7 @@ public class ScriptReader
 				split[1] = split[1].substring(1, split[1].length() - 1).trim();
 			}
 
-			Expression expression = createExpression(script, split[1]);
+			Expression expression = createExpression(script, split[1], includeEmptyLines);
 			depth--;
 			return new IfElse(anIf, expression);
 		}
@@ -187,7 +240,7 @@ public class ScriptReader
 			}
 			String[] split = line.split("\\{", 2);
 			String s = split[0].split("\\(", 2)[1].trim();
-			String trim1 = s.substring(0, s.length() - 1).trim();
+			String trim1 = s.substring(0, s.lastIndexOf(')')).trim();
 			if (DEBUG)
 			{
 				Log.brightYellow();
@@ -205,7 +258,7 @@ public class ScriptReader
 				Log.reset();
 				System.out.println(body);
 			}
-			Expression expression = createExpression(script, body);
+			Expression expression = createExpression(script, body, includeEmptyLines);
 			depth--;
 			return new If(condition, expression);
 		}
@@ -220,11 +273,17 @@ public class ScriptReader
 				System.out.println(line);
 			}
 			String substring = line.substring(1).trim();
+			substring = substring.replace(COMMENT_START, "").replace(COMMENT_END, "");
+			substring = substring.replace(NEW_LINE, "\n").replace(EMPTY_LINE, "\n");
+			if (substring.startsWith("\n"))
+				substring = substring.substring(1);
 			List<String> split = split(substring);
 			List<Expression> exps = new ArrayList<>();
 			for (String s : split)
 			{
-				exps.add(createExpression(script, s.trim()));
+				Expression expression = createExpression(script, s.trim(), includeEmptyLines);
+				if (expression != null)
+					exps.add(expression);
 			}
 			Function func = new Function();
 			func.setExpressions(script, exps.toArray(new Expression[0]));
@@ -264,26 +323,13 @@ public class ScriptReader
 		{
 			char ch = s.charAt(i);
 
-			if (!inString && ch == '/' && s.charAt(i + 1) == '/')
+			if (!inString && s.substring(i).startsWith(COMMENT_START))
 			{
-				while (ch != '\n')
+				while (!s.substring(i).startsWith(COMMENT_END))
 				{
 					i++;
-					ch = s.charAt(i);
 				}
-			}
-
-			if (!inString && ch == '/' && s.charAt(i + 1) == '*')
-			{
-				i += 2;
-				ch = s.charAt(i);
-				while (ch != '*' || s.charAt(i + 1) != '/')
-				{
-					i++;
-					ch = s.charAt(i);
-				}
-				i += 2;
-				ch = s.charAt(i);
+				i += COMMENT_END.length();
 			}
 
 			if (ch == '{')
@@ -349,26 +395,13 @@ public class ScriptReader
 		{
 			char ch = s.charAt(i);
 
-			if (!inString && ch == '/' && s.charAt(i + 1) == '/')
+			if (!inString && s.substring(i).startsWith(COMMENT_START))
 			{
-				while (ch != '\n')
+				while (!s.substring(i).startsWith(COMMENT_END))
 				{
 					i++;
-					ch = s.charAt(i);
 				}
-			}
-
-			if (!inString && ch == '/' && s.charAt(i + 1) == '*')
-			{
-				i += 2;
-				ch = s.charAt(i);
-				while (ch != '*' || s.charAt(i + 1) != '/')
-				{
-					i++;
-					ch = s.charAt(i);
-				}
-				i += 2;
-				ch = s.charAt(i);
+				i += COMMENT_END.length();
 			}
 
 			if (ch == '{')
@@ -443,17 +476,58 @@ public class ScriptReader
 		{
 			char ch = script.charAt(i);
 
+			if (ch == '\n' && i == 0 && !escaped && !inString)
+			{
+				//				System.out.println("Adding empty first line");
+				if (bCounter == 0)
+				{
+					lines.add(EMPTY_LINE);
+					builder.setLength(0);
+				} else
+				{
+					builder.append(EMPTY_LINE);
+				}
+			}
+			if (ch == '\n' && !escaped && !inString && i + 1 < script.length() && script.charAt(i + 1) == '\n')
+			{
+				//				System.out.println("Adding empty line");
+				if (bCounter == 0)
+				{
+					lines.add(EMPTY_LINE);
+					builder.setLength(0);
+				} else
+				{
+					builder.append(NEW_LINE);
+					builder.append(EMPTY_LINE);
+				}
+				i++;
+				continue;
+			}
+
+			// Handle comments
 			if (!inString && ch == '/' && script.charAt(i + 1) == '/')
 			{
+				int start = i;
 				while (ch != '\n')
 				{
 					i++;
 					ch = script.charAt(i);
 				}
+				if (bCounter == 0)
+				{
+					lines.add(script.substring(start, i));
+				} else
+				{
+					builder.append(COMMENT_START).append(script, start, i).append(COMMENT_END);
+				}
 			}
 
+			/*
+			 * Handle multiline comments
+			 */
 			if (!inString && ch == '/' && script.charAt(i + 1) == '*')
 			{
+				int start = i;
 				i += 2;
 				ch = script.charAt(i);
 				while (ch != '*' || script.charAt(i + 1) != '/')
@@ -463,6 +537,14 @@ public class ScriptReader
 				}
 				i += 2;
 				ch = script.charAt(i);
+
+				if (bCounter == 0)
+				{
+					lines.add(script.substring(start, i));
+				} else
+				{
+					builder.append(COMMENT_START).append(script, start, i).append(COMMENT_END);
+				}
 			}
 
 			if (ch == '{')
@@ -495,6 +577,7 @@ public class ScriptReader
 				continue;
 			}
 
+			// Escaped characters (new line)
 			if (ch == '\\')
 			{
 				if (script.charAt(i + 1) == 'n')
@@ -508,11 +591,6 @@ public class ScriptReader
 				}
 			}
 
-			if (ch == '\n' && !escaped)
-			{
-				continue;
-			}
-
 			if (ch == '"' && !escaped)
 			{
 				inString = !inString;
@@ -524,6 +602,17 @@ public class ScriptReader
 			}
 
 			builder.append(ch);
+		}
+
+		for (int j = 0; j < lines.size(); j++)
+		{
+			String line = lines.get(j);
+			if (line.startsWith("/*") || line.startsWith("//"))
+			{
+				continue;
+			}
+			line = line.replace("\n", NEW_LINE);
+			lines.set(j, line);
 		}
 
 		return lines;

@@ -125,4 +125,10 @@ class DotOperator extends Expression
 	{
 		return "DotOperator{}";
 	}
+
+	@Override
+	public String showCode(int a)
+	{
+		return left.showCode(0) + "." + right.showCode(0);
+	}
 }

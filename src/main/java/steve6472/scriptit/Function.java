@@ -132,4 +132,21 @@ public class Function extends Expression
 		expressionIndex = 0;
 		return Result.pass();
 	}
+
+	@Override
+	public String showCode(int a)
+	{
+		StringBuilder s = new StringBuilder();
+		for (int i = 0; i < lines.length; i++)
+		{
+			ExpressionExecutor line = lines[i];
+			s.append(depth(a));
+			s.append(line.getExpression().showCode(a + 1));
+			if (!(line.getExpression() instanceof If || line.getExpression() instanceof While || line.getExpression() instanceof IfElse || line.getExpression() instanceof Comment))
+				s.append(Highlighter.END);
+			if (i < lines.length + 1)
+				s.append("\n");
+		}
+		return s.toString();
+	}
 }

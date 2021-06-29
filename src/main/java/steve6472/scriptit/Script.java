@@ -19,8 +19,6 @@ public class Script
 {
 	private record QueuedFunctionCall<A, B>(A executor, B mustExist)
 	{
-
-
 	}
 
 	private final Workspace workspace;
@@ -290,5 +288,20 @@ public class Script
 	public ExpressionExecutor[] getLines()
 	{
 		return lines;
+	}
+
+	public String showCode()
+	{
+		StringBuilder s = new StringBuilder();
+		for (int i = 0; i < lines.length; i++)
+		{
+			ExpressionExecutor line = lines[i];
+			s.append(line.getExpression().showCode(0));
+			if (!(line.getExpression() instanceof If || line.getExpression() instanceof While || line.getExpression() instanceof IfElse || line.getExpression() instanceof Comment))
+				s.append(Highlighter.END);
+			if (i < lines.length - 1)
+				s.append("\n");
+		}
+		return s.toString();
 	}
 }

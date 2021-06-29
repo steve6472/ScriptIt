@@ -22,6 +22,12 @@ class ValueConstant extends Expression
 	}
 
 	@Override
+	public String showCode(int a)
+	{
+		return constant.toString();
+	}
+
+	@Override
 	public String toString()
 	{
 		return "ValueConstant{" + "constant=" + constant + '}';
