@@ -82,6 +82,7 @@ public enum Operator
 	FUNCTION("function"),
 	ELSE("else"),
 	WHILE("while"),
+	RETURN_IF("returnif"),
 
 	// Other special
 	NUMBER_INT(""),

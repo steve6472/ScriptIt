@@ -1,0 +1,6 @@
+import library System;
+import type int;
+
+int a = 5;
+
+return if (a == 5) return true; else return false;

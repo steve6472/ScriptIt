@@ -1,0 +1,9 @@
+import library System;
+import type int;
+
+int a = 5;
+
+returnif (a >= 5);
+
+System.println("This should not be printed and nothing should be returned!");
+return true;

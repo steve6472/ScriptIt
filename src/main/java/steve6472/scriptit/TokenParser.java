@@ -43,6 +43,9 @@ public class TokenParser
 		prefixParslets.put(Operator.RETURN, new ReturnParslet());
 		prefixParslets.put(Operator.FUNCTION, new FunctionParslet());
 		prefixParslets.put(Operator.WHILE, new WhileParslet());
+		prefixParslets.put(Operator.RETURN_IF, new ReturnIfParslet());
+
+
 
 		infixParslets.put(Operator.NAME, new ChainedNameParslet());
 		infixParslets.put(Operator.ASSIGN, new AssignParslet());

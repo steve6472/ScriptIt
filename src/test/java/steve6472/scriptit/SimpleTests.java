@@ -137,4 +137,26 @@ public class SimpleTests
 		Value value = script.runWithDelay();
 		Assertions.assertFalse(value.getBoolean());
 	}
+
+	@Test
+	@DisplayName(value = "return if")
+	public void returnIf()
+	{
+		Script script = testScript("return_if");
+		Value value = script.runWithDelay();
+		Assertions.assertTrue(value.getBoolean());
+	}
+
+	@Test
+	@DisplayName(value = "returnif")
+	public void returnif()
+	{
+		Script script = testScript("returnif_true");
+		Value value = script.runWithDelay();
+		Assertions.assertEquals(value, Value.NULL);
+
+		script = testScript("returnif_false");
+		value = script.runWithDelay();
+		Assertions.assertFalse(value.getBoolean());
+	}
 }

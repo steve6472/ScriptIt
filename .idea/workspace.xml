@@ -14,7 +14,7 @@
     <option name="optimizeImportsOnTheFly" value="true" />
   </component>
   <component name="DarkyenusTimeTracker">
-    <option name="totalTimeSeconds" value="63142" />
+    <option name="totalTimeSeconds" value="64513" />
     <option name="gitIntegration" value="true" />
     <option name="naggedAbout" value="1" />
   </component>
@@ -78,11 +78,11 @@
       <recent name="steve6472.scriptit.math" />
     </key>
     <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="steve6472.scriptit.tokenizer.parslet" />
       <recent name="steve6472.scriptit.tokenizer.parselet" />
       <recent name="steve6472.scriptit.tokenizer" />
       <recent name="steve6472" />
       <recent name="steve6472.scriptit.libraries" />
-      <recent name="steve6472.scriptit.test" />
     </key>
   </component>
   <component name="RunManager" selected="JUnit.SimpleTests">
@@ -130,14 +130,26 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <configuration name="SimpleTests.returnIf" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="ScriptIt" />
+      <option name="PACKAGE_NAME" value="steve6472.scriptit" />
+      <option name="MAIN_CLASS_NAME" value="steve6472.scriptit.SimpleTests" />
+      <option name="METHOD_NAME" value="returnIf" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <list>
       <item itemvalue="Application.TokenizerTest" />
       <item itemvalue="JUnit.SimpleTests" />
       <item itemvalue="JUnit.SimpleTests.ifNoBody" />
       <item itemvalue="JUnit.SimpleTests.ifElseNoBody" />
+      <item itemvalue="JUnit.SimpleTests.returnIf" />
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="JUnit.SimpleTests.returnIf" />
         <item itemvalue="JUnit.SimpleTests.ifElseNoBody" />
         <item itemvalue="JUnit.SimpleTests.ifNoBody" />
         <item itemvalue="Application.TokenizerTest" />
