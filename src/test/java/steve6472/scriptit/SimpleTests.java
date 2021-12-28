@@ -40,6 +40,7 @@ public class SimpleTests
 	{
 		Script script = testScript("math");
 		Value value = script.runWithDelay();
+		Assertions.assertEquals(-24, value.getInt());
 	}
 
 	@Test
@@ -119,5 +120,21 @@ public class SimpleTests
 		Script script = testScript("assign_plus");
 		Value value = script.runWithDelay();
 		Assertions.assertEquals(3, value.getInt());
+	}
+
+	@Test
+	public void ifNoBody()
+	{
+		Script script = testScript("if_no_body");
+		Value value = script.runWithDelay();
+		Assertions.assertTrue(value.getBoolean());
+	}
+
+	@Test
+	public void ifElseNoBody()
+	{
+		Script script = testScript("if_else_no_body");
+		Value value = script.runWithDelay();
+		Assertions.assertFalse(value.getBoolean());
 	}
 }

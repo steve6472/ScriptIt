@@ -201,6 +201,11 @@ public class Script
 		return Result.return_();
 	}
 
+	public static String COLOR_WHILE = Log.RED;
+	public static String COLOR_IF_ELSE = Log.GREEN;
+	public static String COLOR_IF = Log.YELLOW;
+	public static String COLOR_FUNCTION = Log.BLUE;
+
 	public Result execute()
 	{
 		try
@@ -230,34 +235,34 @@ public class Script
 
 				if (expression.startsWith("While.apply"))
 				{
-					System.out.print(ScriptReader.COLOR_WHILE + "While" + Log.RESET + " -> ");
+					System.out.print(COLOR_WHILE + "While" + Log.RESET + " -> ");
 					inWhile = true;
 					isBody = true;
 				} else if (expression.startsWith("If.apply"))
 				{
 					if (inWhile)
 					{
-						System.out.print(ScriptReader.COLOR_IF + "Condition" + Log.RESET + " -> ");
+						System.out.print(COLOR_IF + "Condition" + Log.RESET + " -> ");
 						inWhile = false;
 					} else
 					{
-						System.out.print(ScriptReader.COLOR_IF + "If" + Log.RESET + " -> ");
+						System.out.print(COLOR_IF + "If" + Log.RESET + " -> ");
 					}
 					isBody = true;
 				} else if (expression.startsWith("Function.apply"))
 				{
 					if (isBody)
 					{
-						System.out.print(ScriptReader.COLOR_FUNCTION + "Body" + Log.RESET + " -> ");
+						System.out.print(COLOR_FUNCTION + "Body" + Log.RESET + " -> ");
 						isBody = false;
 					} else
 					{
-						System.out.print(ScriptReader.COLOR_FUNCTION + "Function" + Log.RESET + " -> ");
+						System.out.print(COLOR_FUNCTION + "Function" + Log.RESET + " -> ");
 					}
 					isBody = false;
 				} else if (expression.startsWith("IfElse.apply"))
 				{
-					System.out.print(ScriptReader.COLOR_IF_ELSE + "IfElse" + Log.RESET + " -> ");
+					System.out.print(COLOR_IF_ELSE + "IfElse" + Log.RESET + " -> ");
 					isBody = true;
 				} else
 				{

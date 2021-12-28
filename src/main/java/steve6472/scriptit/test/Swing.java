@@ -1,6 +1,5 @@
 package steve6472.scriptit.test;
 
-import steve6472.scriptit.ScriptReader;
 import steve6472.scriptit.Workspace;
 import steve6472.scriptit.libraries.GeometryLibrary;
 import steve6472.scriptit.swingTest.SwingTypes;
@@ -16,8 +15,6 @@ public class Swing
 {
 	public static void main(String[] args)
 	{
-		ScriptReader.DEBUG = true;
-
 		SwingTypes.init();
 
 		Workspace workspace = new Workspace();

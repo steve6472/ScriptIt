@@ -20,6 +20,14 @@ public class IfParslet implements PrefixParselet
 		Expression condition = parser.parse(Precedence.ANYTHING);
 		parser.tokenizer.consumeToken(Operator.BRACKET_RIGHT);
 		Expression parse = parser.parse(Precedence.ANYTHING);
+
+		if (parser.tokenizer.peekToken().type() == Operator.SEMICOLON && parser.tokenizer.peekToken(2).type() == Operator.ELSE)
+		{
+			parser.tokenizer.consumeToken(Operator.SEMICOLON);
+			parser.tokenizer.consumeToken(Operator.ELSE);
+			return new IfElse(new If(condition, parse), parser.parse(Precedence.ANYTHING));
+		}
+
 		if (parser.tokenizer.matchToken(Operator.ELSE, true))
 		{
 			return new IfElse(new If(condition, parse), parser.parse(Precedence.ANYTHING));

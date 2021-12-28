@@ -1,0 +1,12 @@
+import library System;
+import type int;
+import type bool;
+
+int a = 5;
+bool r = false;
+
+if (a >= 0)
+    r = true;
+
+System.println(r);
+return r;
