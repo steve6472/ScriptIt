@@ -1,0 +1,13 @@
+import library System;
+import type int;
+
+function f()
+{
+    int a = 1;
+    System.println("A: " + a);
+    return a;
+};
+
+f();
+
+return a;

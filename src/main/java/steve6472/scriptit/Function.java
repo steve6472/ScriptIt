@@ -1,5 +1,9 @@
 package steve6472.scriptit;
 
+import steve6472.scriptit.tokenizer.Precedence;
+
+import java.util.Arrays;
+
 /**********************
  * Created by steve6472 (Mirek Jozefek)
  * On date: 5/21/2021
@@ -26,7 +30,7 @@ public class Function extends Expression
 		for (int i = 0; i < expressions.length; i++)
 		{
 			lines[i] = new ExpressionExecutor(script.getMemory());
-			lines[i].setExpression(script.getParser().setExpression(expressions[i]).parse());
+			lines[i].setExpression(script.getParser().setExpression(script, expressions[i]).parse(Precedence.ANYTHING));
 		}
 	}
 
@@ -82,7 +86,6 @@ public class Function extends Expression
 		{
 			expressionIndex = i;
 			Result result = lines[i].execute(script);
-
 //			System.out.println(script.memory.getCurr() + " " + i + " Func result: " + result);
 
 			if (result.isDelay())
@@ -148,5 +151,12 @@ public class Function extends Expression
 				s.append("\n");
 		}
 		return s.toString();
+	}
+
+	@Override
+	public String toString()
+	{
+		return "Function{" + "lines=" + Arrays.toString(lines) + ", argumentNames=" + Arrays.toString(argumentNames) + ", expressionIndex=" + expressionIndex + ", isDelayed=" + isDelayed + ", arguments=" + Arrays
+			.toString(arguments) + ", typeFunction=" + typeFunction + '}';
 	}
 }

@@ -1,12 +1,14 @@
 package steve6472.scriptit;
 
+import steve6472.scriptit.tokenizer.Operator;
+
 /**********************
  * Created by steve6472 (Mirek Jozefek)
  * On date: 5/20/2021
  * Project: ScriptIt
  *
  ***********************/
-class UnaryOperator extends Expression
+public class UnaryOperator extends Expression
 {
 	Operator operator;
 	Expression left;
@@ -37,7 +39,7 @@ class UnaryOperator extends Expression
 
 			if (operatorFunction == null)
 			{
-				throw new RuntimeException("No operator found for type '" + leftValue.type.getKeyword() + "' with operator: " + operator + " (" + operator.getOperator() + ")");
+				throw new RuntimeException("No operator found for type '" + leftValue.type.getKeyword() + "' with operator: " + operator + " (" + operator.getSymbol() + ")");
 			}
 		}
 
@@ -61,6 +63,6 @@ class UnaryOperator extends Expression
 	@Override
 	public String showCode(int a)
 	{
-		return operator.getOperator() + left.showCode(0);
+		return operator.getSymbol() + left.showCode(0);
 	}
 }

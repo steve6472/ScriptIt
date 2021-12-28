@@ -1,7 +1,12 @@
 package steve6472.scriptit;
 
 import steve6472.scriptit.libraries.Library;
+import steve6472.scriptit.tokenizer.Precedence;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -23,7 +28,7 @@ public class Script
 
 	private final Workspace workspace;
 
-	private final MyParser parser;
+	public TokenParser parser;
 	MemoryStack memory;
 	ExpressionExecutor[] lines;
 	private int lastIndex = 0;
@@ -47,10 +52,27 @@ public class Script
 		this.shouldAdvance = shouldAdvance;
 	}
 
-	public Script(Workspace workspace)
+	public static Script create(Workspace workspace, File source)
+	{
+		String code = readFromFile(source);
+
+		Script script = new Script(workspace);
+		script.parser = new TokenParser();
+
+		script.parser.setExpression(script, code);
+		List<Expression> parse = script.parser.parseAll();
+		script.setExpressions(parse.toArray(Expression[]::new));
+		return script;
+	}
+
+	public static Script createEmpty(Workspace workspace)
+	{
+		return new Script(workspace);
+	}
+
+	private Script(Workspace workspace)
 	{
 		this.workspace = workspace;
-		this.parser = new MyParser();
 		this.memory = new MemoryStack(64);
 		this.queuedFunctionCalls = new ArrayList<>();
 	}
@@ -93,7 +115,7 @@ public class Script
 		for (int i = 0; i < expressions.length; i++)
 		{
 			lines[i] = new ExpressionExecutor(memory);
-			lines[i].setExpression(parser.setExpression(expressions[i]).parse());
+			lines[i].setExpression(parser.parse(Precedence.ANYTHING));
 		}
 	}
 
@@ -247,7 +269,7 @@ public class Script
 
 			if (exitOnError)
 				System.exit(1);
-			return null;
+			throw ex;
 		}
 	}
 
@@ -275,11 +297,6 @@ public class Script
 		return memory;
 	}
 
-	public MyParser getParser()
-	{
-		return parser;
-	}
-
 	public Workspace getWorkspace()
 	{
 		return workspace;
@@ -288,6 +305,11 @@ public class Script
 	public ExpressionExecutor[] getLines()
 	{
 		return lines;
+	}
+
+	public TokenParser getParser()
+	{
+		return parser;
 	}
 
 	public String showCode()
@@ -303,5 +325,32 @@ public class Script
 				s.append("\n");
 		}
 		return s.toString();
+	}
+
+	private static String readFromFile(File file)
+	{
+		if (!file.exists())
+			throw new IllegalArgumentException("File not found");
+		if (file.isDirectory())
+			throw new IllegalArgumentException("File is a directory");
+
+		StringBuilder bobTheBuilder = new StringBuilder();
+
+		try
+		{
+			BufferedReader reader = new BufferedReader(new FileReader(file));
+			String s;
+			while ((s = reader.readLine()) != null)
+			{
+				bobTheBuilder.append(s).append("\n");
+			}
+			reader.close();
+
+		} catch (IOException e)
+		{
+			e.printStackTrace();
+		}
+
+		return bobTheBuilder.toString();
 	}
 }

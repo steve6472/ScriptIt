@@ -1,6 +1,7 @@
 package steve6472.scriptit.types;
 
 import steve6472.scriptit.*;
+import steve6472.scriptit.tokenizer.Operator;
 
 import static steve6472.scriptit.Value.newValue;
 
@@ -165,6 +166,15 @@ public class PrimitiveTypes extends TypesInit
 			public Result apply(Script script)
 			{
 				return Result.value(newValue(INT, typeFunction.getString().length()));
+			}
+		});
+		STRING.addFunction(FunctionParameters.function("print").build(), new Function()
+		{
+			@Override
+			public Result apply(Script script)
+			{
+				System.out.println(typeFunction.getString());
+				return Result.value(typeFunction);
 			}
 		});
 		STRING.addFunction(FunctionParameters.create("charAt", INT), new Function()

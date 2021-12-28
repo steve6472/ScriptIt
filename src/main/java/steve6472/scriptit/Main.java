@@ -59,7 +59,7 @@ public class Main
 		Workspace workspace = new Workspace();
 		workspace.addType(CustomTypes.VEC2);
 
-		Script script = new Script(workspace);
+		Script script = Script.createEmpty(workspace);
 		CustomTypes.init(script);
 
 //		Function doubleMul = new Function("left", "right");
@@ -88,24 +88,24 @@ public class Main
 		Function literallyJustContinue = new Function();
 		literallyJustContinue.setExpressions(script, "continue");
 
-		Function whileBody_ = new Function();
-		whileBody_.lines = new ExpressionExecutor[]
-			{
-				new ExpressionExecutor(script.memory).setExpression(script.getParser().setExpression("System.print(var)").parse()),
-				new ExpressionExecutor(script.memory).setExpression(script.getParser().setExpression("delay(200)").parse()),
-				new ExpressionExecutor(script.memory).setExpression(script.getParser().setExpression("var = var + 1.0").parse()),
-				new ExpressionExecutor(script.memory).setExpression(new If(script.getParser().setExpression("var > 4.0").parse(), literallyJustBreak))
-			};
-
-		Function whileBody__ = new Function();
-		whileBody__.lines = new ExpressionExecutor[]
-			{
-				new ExpressionExecutor(script.memory).setExpression(script.getParser().setExpression("System.print(var)").parse()),
-				new ExpressionExecutor(script.memory).setExpression(script.getParser().setExpression("delay(200)").parse()),
-				new ExpressionExecutor(script.memory).setExpression(script.getParser().setExpression("var = var + 1.0").parse()),
-				new ExpressionExecutor(script.memory).setExpression(new IfElse(new If(script.getParser().setExpression("var < 3.0").parse(), literallyJustContinue), printAndBreak)),
-				new ExpressionExecutor(script.memory).setExpression(script.getParser().setExpression("System.print(666.666)").parse())
-			};
+//		Function whileBody_ = new Function();
+//		whileBody_.lines = new ExpressionExecutor[]
+//			{
+//				new ExpressionExecutor(script.memory).setExpression(script.getParser().setExpression("System.print(var)").parse()),
+//				new ExpressionExecutor(script.memory).setExpression(script.getParser().setExpression("delay(200)").parse()),
+//				new ExpressionExecutor(script.memory).setExpression(script.getParser().setExpression("var = var + 1.0").parse()),
+//				new ExpressionExecutor(script.memory).setExpression(new If(script.getParser().setExpression("var > 4.0").parse(), literallyJustBreak))
+//			};
+//
+//		Function whileBody__ = new Function();
+//		whileBody__.lines = new ExpressionExecutor[]
+//			{
+//				new ExpressionExecutor(script.memory).setExpression(script.getParser().setExpression("System.print(var)").parse()),
+//				new ExpressionExecutor(script.memory).setExpression(script.getParser().setExpression("delay(200)").parse()),
+//				new ExpressionExecutor(script.memory).setExpression(script.getParser().setExpression("var = var + 1.0").parse()),
+//				new ExpressionExecutor(script.memory).setExpression(new IfElse(new If(script.getParser().setExpression("var < 3.0").parse(), literallyJustContinue), printAndBreak)),
+//				new ExpressionExecutor(script.memory).setExpression(script.getParser().setExpression("System.print(666.666)").parse())
+//			};
 
 		Function del = new Function();
 		del.setExpressions(script, "delay(1000)", "System.print(8)", "return 3.0");

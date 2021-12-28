@@ -8,7 +8,7 @@ import java.util.Arrays;
  * Project: ScriptIt
  *
  ***********************/
-class FunctionCall extends Expression
+public class FunctionCall extends Expression
 {
 	DelayValue[] arguments;
 	Function function = null;
@@ -26,6 +26,16 @@ class FunctionCall extends Expression
 			this.arguments[i] = new DelayValue(arguments[i]);
 		}
 		args = new Value[arguments.length];
+	}
+
+	public DelayValue[] getArguments()
+	{
+		return arguments;
+	}
+
+	public FunctionSource getSource()
+	{
+		return source;
 	}
 
 	@Override
@@ -91,16 +101,15 @@ class FunctionCall extends Expression
 	public String showCode(int a)
 	{
 		StringBuilder s = new StringBuilder();
-		s.append(Highlighter.FUNCTION_NAME);
 		if (source.sourceType == FunctionSourceType.FUNCTION)
 		{
-			s.append(source.functionName);
+			s.append(Highlighter.FUNCTION_NAME).append(source.functionName);
 		} else if (source.sourceType == FunctionSourceType.VALUE)
 		{
-			s.append(source.value.toString()).append(".").append(source.functionName);
+			s.append(Highlighter.IMPORT_NAME).append(source.value.toString()).append(Highlighter.RESET).append(".").append(Highlighter.FUNCTION_NAME).append(source.functionName);
 		} else if (source.sourceType == FunctionSourceType.STATIC)
 		{
-			s.append(source.functionName);
+			s.append(Highlighter.IMPORT_NAME).append(source.library.getLibraryName()).append(Highlighter.RESET).append('.').append(Highlighter.FUNCTION_NAME).append(source.functionName);
 		}
 		s.append(Highlighter.BRACET);
 		s.append("(");
@@ -118,6 +127,6 @@ class FunctionCall extends Expression
 	@Override
 	public String toString()
 	{
-		return "FunctionCall{" + "arguments=" + Arrays.toString(arguments) + ", args=" + Arrays.toString(args) + ", isDelayed=" + isDelayed + ", lastIndex=" + lastIndex + ", source=" + source + '}';
+		return "FunctionCall{" + "arguments=" + Arrays.toString(arguments) + ", isDelayed=" + isDelayed + ", lastIndex=" + lastIndex + ", source=" + source + '}';
 	}
 }

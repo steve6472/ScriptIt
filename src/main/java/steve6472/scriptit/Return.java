@@ -30,7 +30,7 @@ public class Return extends Expression
 	@Override
 	public String showCode(int a)
 	{
-		return "return";
+		return Highlighter.RETURN + "return " + Highlighter.RESET + returnValue.showCode(a);
 	}
 
 	@Override

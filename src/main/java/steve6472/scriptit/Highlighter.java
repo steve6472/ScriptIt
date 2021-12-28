@@ -27,6 +27,7 @@ public class Highlighter
 	public static String END = ";";
 	public static String EMPTY_LINE = "";
 	public static String COMMENT = "%COMMENT%";
+	public static String RETURN = "%RETURN%";
 
 	public static void reset()
 	{
@@ -49,6 +50,7 @@ public class Highlighter
 		END = ";";
 		EMPTY_LINE = "";
 		COMMENT = "%COMMENT%";
+		RETURN = "%RETURN%";
 	}
 
 	public static void basicHighlight()
@@ -69,5 +71,6 @@ public class Highlighter
 		WHILE = "\u001b[38;5;166m";
 		LOOP_CONTROL = "\u001b[38;5;166m";
 		COMMENT = "\u001b[38;5;243m";
+		RETURN = "\u001b[38;5;166m";
 	}
 }

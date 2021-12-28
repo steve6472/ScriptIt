@@ -43,4 +43,10 @@ public class DeclareFunction extends Expression
 		s.append("}");
 		return s.toString();
 	}
+
+	@Override
+	public String toString()
+	{
+		return "DeclareFunction{" + "function=" + function + ", params=" + params + '}';
+	}
 }

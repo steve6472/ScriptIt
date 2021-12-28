@@ -1,8 +1,8 @@
 package steve6472.scriptit.test;
 
-import steve6472.scriptit.*;
-
-import java.io.File;
+import steve6472.scriptit.Highlighter;
+import steve6472.scriptit.Log;
+import steve6472.scriptit.Workspace;
 
 /**********************
  * Created by steve6472 (Mirek Jozefek)
@@ -35,9 +35,9 @@ public class ReaderMain
 		Highlighter.LOOP_CONTROL = "\u001b[38;5;166m";
 		Highlighter.COMMENT = "\u001b[38;5;243m";
 
-		Script script = ScriptReader.readScript(new File("scripts/password.txt"), workspace, true);
-
-		System.out.println(script.showCode());
+//		Script script = ScriptReader.readScript(new File("scripts/password.txt"), workspace, true);
+//
+//		System.out.println(script.showCode());
 
 //		script.runWithDelay();
 	}

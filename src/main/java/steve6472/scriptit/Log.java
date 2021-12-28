@@ -1,7 +1,7 @@
 package steve6472.scriptit;
 
 /**********************
- * Created by steve6472 (Mirek Jozefek)
+ * Created by steve6472
  * On date: 17.04.2020
  * Project: NoiseGenerator
  * https://en.wikipedia.org/wiki/ANSI_escape_code#Escape_sequences
@@ -32,24 +32,24 @@ public class Log
 	public static final String BRIGHT_CYAN = "\u001b[36;1m";
 	public static final String BRIGHT_WHITE = "\u001b[37;1m";
 
-	public static void black() { System.out.print(BLACK); }
-	public static void red() { System.out.print(RED); }
-	public static void green() { System.out.print(GREEN); }
-	public static void yellow() { System.out.print(YELLOW); }
-	public static void blue() { System.out.print(BLUE); }
-	public static void magenta() { System.out.print(MAGENTA); }
-	public static void cyan() { System.out.print(CYAN); }
-	public static void white() { System.out.print(WHITE); }
-	public static void reset() { System.out.print(RESET); }
+	public static String black() { System.out.print(BLACK); return ""; }
+	public static String red() { System.out.print(RED); return ""; }
+	public static String green() { System.out.print(GREEN); return ""; }
+	public static String yellow() { System.out.print(YELLOW); return ""; }
+	public static String blue() { System.out.print(BLUE); return ""; }
+	public static String magenta() { System.out.print(MAGENTA); return ""; }
+	public static String cyan() { System.out.print(CYAN); return ""; }
+	public static String white() { System.out.print(WHITE); return ""; }
+	public static String reset() { System.out.print(RESET); return ""; }
 
-	public static void brightBlack() { System.out.print(BRIGHT_BLACK); }
-	public static void brightRed() { System.out.print(BRIGHT_RED); }
-	public static void brightGreen() { System.out.print(BRIGHT_GREEN); }
-	public static void brightYellow() { System.out.print(BRIGHT_YELLOW); }
-	public static void brightBlue() { System.out.print(BRIGHT_BLUE); }
-	public static void brightMagenta() { System.out.print(BRIGHT_MAGENTA); }
-	public static void brightCyan() { System.out.print(BRIGHT_CYAN); }
-	public static void brightWhite() { System.out.print(BRIGHT_WHITE); }
+	public static String brightBlack() { System.out.print(BRIGHT_BLACK); return ""; }
+	public static String brightRed() { System.out.print(BRIGHT_RED); return ""; }
+	public static String brightGreen() { System.out.print(BRIGHT_GREEN); return ""; }
+	public static String brightYellow() { System.out.print(BRIGHT_YELLOW); return ""; }
+	public static String brightBlue() { System.out.print(BRIGHT_BLUE); return ""; }
+	public static String brightMagenta() { System.out.print(BRIGHT_MAGENTA); return ""; }
+	public static String brightCyan() { System.out.print(BRIGHT_CYAN); return ""; }
+	public static String brightWhite() { System.out.print(BRIGHT_WHITE); return ""; }
 
 	public static void info(String text)
 	{

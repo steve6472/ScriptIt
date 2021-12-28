@@ -6,7 +6,7 @@ package steve6472.scriptit;
  * Project: ScriptIt
  *
  ***********************/
-class Import extends Expression
+public class Import extends Expression
 {
 	private final ImportType type;
 	private final String name;
@@ -26,6 +26,12 @@ class Import extends Expression
 			script.getMemory().addLibrary(script.getWorkspace().getLibrary(name));
 
 		return Result.pass();
+	}
+
+	@Override
+	public String toString()
+	{
+		return "Import{" + "type=" + type + ", name='" + name + '\'' + '}';
 	}
 
 	@Override

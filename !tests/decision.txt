@@ -1,0 +1,13 @@
+import library System;
+
+§num = PASSED_FROM_CODE;
+
+if (num == 0)
+{
+    System.println("RNG gave zero");
+    return "ZERO";
+} else
+{
+    System.println("RNG gave " + num);
+    return "ONE";
+};

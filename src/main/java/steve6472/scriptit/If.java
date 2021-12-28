@@ -6,7 +6,7 @@ package steve6472.scriptit;
  * Project: ScriptIt
  *
  ***********************/
-class If extends Expression
+public class If extends Expression
 {
 	Expression condition;
 	Expression body;

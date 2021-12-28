@@ -33,4 +33,10 @@ public class VariableSource
 	{
 		this.value = value;
 	}
+
+	@Override
+	public String toString()
+	{
+		return "VariableSource{" + "sourceType=" + sourceType + ", variableName='" + variableName + '\'' + ", value=" + value + '}';
+	}
 }

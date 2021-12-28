@@ -199,4 +199,10 @@ public class Library
 	{
 		addFunction(FunctionParameters.create(name, types), new Func(function));
 	}
+
+	@Override
+	public String toString()
+	{
+		return "Library{" + "libraryName='" + libraryName + '\'' + '}';
+	}
 }

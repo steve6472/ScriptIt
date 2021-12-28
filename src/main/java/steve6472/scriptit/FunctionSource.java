@@ -42,4 +42,10 @@ public class FunctionSource
 	{
 		this.value = value;
 	}
+
+	@Override
+	public String toString()
+	{
+		return "FunctionSource{" + "sourceType=" + sourceType + ", functionName='" + functionName + '\'' + ", library=" + library + ", value=" + value + '}';
+	}
 }

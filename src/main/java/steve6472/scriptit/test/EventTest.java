@@ -1,6 +1,8 @@
 package steve6472.scriptit.test;
 
-import steve6472.scriptit.*;
+import steve6472.scriptit.Script;
+import steve6472.scriptit.Value;
+import steve6472.scriptit.Workspace;
 import steve6472.scriptit.libraries.GeometryLibrary;
 import steve6472.scriptit.swingTest.SwingTypes;
 import steve6472.scriptit.types.CustomTypes;
@@ -11,7 +13,6 @@ import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
-import java.io.File;
 
 import static steve6472.scriptit.Value.newValue;
 
@@ -36,11 +37,11 @@ public class EventTest
 
 		workspace.addLibrary(new GeometryLibrary());
 
-		script = ScriptReader.readScript(new File("scripts/event_test_2.txt"), workspace);
-		CustomTypes.init(script);
-		createWindow("TicTacToe", 64 * 3 + 8, 64 * 3 + 8); // 3 times 64 pixel cell, 4 pixels border
-
-		script.runWithDelay();
+//		script = ScriptReader.readScript(new File("scripts/event_test_2.txt"), workspace);
+//		CustomTypes.init(script);
+//		createWindow("TicTacToe", 64 * 3 + 8, 64 * 3 + 8); // 3 times 64 pixel cell, 4 pixels border
+//
+//		script.runWithDelay();
 	}
 
 	private static void createWindow(String name, int width, int height)

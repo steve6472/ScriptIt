@@ -1,0 +1,8 @@
+import library System;
+import type int;
+
+int a = 1;
+a += 2;
+System.println(a);
+
+return a;

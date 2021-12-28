@@ -1,0 +1,14 @@
+import library System;
+
+§n = PASSED_FROM_CODE;
+
+function fibonacci(int num)
+{
+    if (num == 0) { return 0; };
+    if (num == 1) { return 1; };
+    num = num - 1;
+    a = fibonacci(num);
+    return a;
+};
+
+return fibonacci(3);

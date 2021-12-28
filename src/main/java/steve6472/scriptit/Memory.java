@@ -1,5 +1,6 @@
 package steve6472.scriptit;
 
+import steve6472.scriptit.exceptions.ValueNotFoundException;
 import steve6472.scriptit.libraries.Library;
 import steve6472.scriptit.types.PrimitiveTypes;
 
@@ -18,12 +19,14 @@ public class Memory
 	Map<String, Library> libraries;
 	Map<FunctionParameters, Function> functions;
 	Map<String, Value> variables;
+	Map<String, Type> types;
 
 	public Memory()
 	{
 		this.libraries = new HashMap<>();
 		this.functions = new HashMap<>();
 		this.variables = new HashMap<>();
+		this.types = new HashMap<>();
 	}
 
 	public boolean isLibrary(String name)
@@ -39,6 +42,7 @@ public class Memory
 	public void addType(Type type)
 	{
 		type.constructors.forEach((p, f) -> functions.put(p, f));
+		types.put(type.getKeyword(), type);
 	}
 
 	public void addVariable(String name, Value value)
@@ -82,8 +86,13 @@ public class Memory
 	{
 		Value val = variables.get(name);
 		if (val == null)
-			throw new IllegalArgumentException("Variable with name '" + name + "' not found");
+			throw new ValueNotFoundException("Variable with name '" + name + "' not found");
 		return val;
+	}
+
+	public Type getType(String name)
+	{
+		return types.get(name);
 	}
 
 	public void addFunction(FunctionParameters parameters, Function function)

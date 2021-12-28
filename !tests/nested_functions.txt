@@ -1,0 +1,15 @@
+import type int;
+
+function stuff(int varA, int varB)
+{
+	function prnt()
+	{
+		"inside function thingie".print();
+		return 3;
+	};
+	int temp = varA * varB;
+	temp = temp + prnt();
+	return temp + varA;
+};
+
+return stuff(2, 5);

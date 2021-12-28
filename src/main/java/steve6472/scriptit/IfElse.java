@@ -6,7 +6,7 @@ package steve6472.scriptit;
  * Project: ScriptIt
  *
  ***********************/
-class IfElse extends Expression
+public class IfElse extends Expression
 {
 	If ifFunction;
 	Expression elseFunction;

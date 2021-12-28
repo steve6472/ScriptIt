@@ -1,5 +1,6 @@
 package steve6472.scriptit;
 
+import steve6472.scriptit.tokenizer.Operator;
 import steve6472.scriptit.types.PrimitiveTypes;
 
 import java.util.Arrays;

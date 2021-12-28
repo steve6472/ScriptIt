@@ -1,0 +1,10 @@
+import library System;
+import type int;
+
+int a = 6;
+int b = 9;
+
+int c = 6 * (a - b) + -a;
+
+System.println("C: " + c);
+return c;

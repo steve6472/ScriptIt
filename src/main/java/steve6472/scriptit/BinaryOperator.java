@@ -1,5 +1,7 @@
 package steve6472.scriptit;
 
+import steve6472.scriptit.tokenizer.Operator;
+
 import java.util.HashMap;
 
 /**********************
@@ -8,7 +10,7 @@ import java.util.HashMap;
  * Project: ScriptIt
  *
  ***********************/
-class BinaryOperator extends Expression
+public class BinaryOperator extends Expression
 {
 	Operator operator;
 	Expression left, right;
@@ -54,7 +56,7 @@ class BinaryOperator extends Expression
 
 			if (operatorFunction == null)
 			{
-				throw new RuntimeException("No operator found for type '" + leftValue.type.getKeyword() + "' with right type '" + rightValue.type.getKeyword() + "', operator: " + operator + " (" + operator.getOperator() + ")");
+				throw new RuntimeException("No operator found for type '" + leftValue.type.getKeyword() + "' with right type '" + rightValue.type.getKeyword() + "', operator: " + operator + " (" + operator.getSymbol() + ")");
 			}
 		}
 
@@ -73,12 +75,12 @@ class BinaryOperator extends Expression
 	@Override
 	public String toString()
 	{
-		return "BinaryOperator{" + "operator=" + operator + '}';
+		return "BinaryOperator{" + "operator=" + operator + ", left=" + left + ", right=" + right + '}';
 	}
 
 	@Override
 	public String showCode(int a)
 	{
-		return left.showCode(0) + " " + operator.getOperator() + " " + right.showCode(0);
+		return '(' + left.showCode(0) + " " + operator.getSymbol() + " " + right.showCode(0) + ')';
 	}
 }

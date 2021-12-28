@@ -6,7 +6,7 @@ package steve6472.scriptit;
  * Project: ScriptIt
  *
  ***********************/
-class DelayValue
+public class DelayValue
 {
 	public Expression expression;
 	Result result = Result.delay(0);

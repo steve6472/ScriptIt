@@ -6,7 +6,7 @@ package steve6472.scriptit;
  * Project: ScriptIt
  *
  ***********************/
-class Variable extends Expression
+public class Variable extends Expression
 {
 	public VariableSource source;
 
