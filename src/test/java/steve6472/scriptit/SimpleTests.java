@@ -19,7 +19,7 @@ public class SimpleTests
 {
 	private Script testScript(String name)
 	{
-//		TokenParser.DEBUG = true;
+		TokenParser.DEBUG = !Boolean.parseBoolean(System.getenv("disable_debug"));
 		Workspace workspace = new Workspace();
 		workspace.addLibrary(new TestLibrary());
 		Script script = Script.create(workspace, new File("!tests/" + name + ".txt"));
@@ -158,5 +158,13 @@ public class SimpleTests
 		script = testScript("returnif_false");
 		value = script.runWithDelay();
 		Assertions.assertFalse(value.getBoolean());
+	}
+
+	@Test
+	public void dots()
+	{
+		Script script = testScript("dots");
+		Value value = script.runWithDelay();
+		Assertions.assertEquals('W', value.getChar());
 	}
 }

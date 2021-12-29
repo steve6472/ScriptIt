@@ -63,10 +63,10 @@ public class TokenParser
 		infixParslets.put(Operator.RSH, new BinaryParslet(Precedence.BIT_SHIFT));
 		infixParslets.put(Operator.EQUAL, new BinaryParslet(Precedence.EQUALITY));
 		infixParslets.put(Operator.NOT_EQUAL, new BinaryParslet(Precedence.EQUALITY));
-		infixParslets.put(Operator.LESS_THAN_EQUAL, new BinaryParslet(Precedence.EQUALITY));
-		infixParslets.put(Operator.GREATER_THAN_EQUAL, new BinaryParslet(Precedence.EQUALITY));
-		infixParslets.put(Operator.LESS_THAN, new BinaryParslet(Precedence.EQUALITY));
-		infixParslets.put(Operator.GREATER_THAN, new BinaryParslet(Precedence.EQUALITY));
+		infixParslets.put(Operator.LESS_THAN_EQUAL, new BinaryParslet(Precedence.RELATION));
+		infixParslets.put(Operator.GREATER_THAN_EQUAL, new BinaryParslet(Precedence.RELATION));
+		infixParslets.put(Operator.LESS_THAN, new BinaryParslet(Precedence.RELATION));
+		infixParslets.put(Operator.GREATER_THAN, new BinaryParslet(Precedence.RELATION));
 		infixParslets.put(Operator.AND, new BinaryParslet(Precedence.AND));
 		infixParslets.put(Operator.OR, new BinaryParslet(Precedence.OR));
 

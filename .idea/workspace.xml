@@ -14,7 +14,9 @@
     <option name="optimizeImportsOnTheFly" value="true" />
   </component>
   <component name="DarkyenusTimeTracker">
-    <option name="totalTimeSeconds" value="64513" />
+    <option name="totalTimeSeconds" value="67836" />
+    <option name="idleThresholdMs" value="60000" />
+    <option name="autoCountIdleSeconds" value="10" />
     <option name="gitIntegration" value="true" />
     <option name="naggedAbout" value="1" />
   </component>
@@ -86,16 +88,19 @@
     </key>
   </component>
   <component name="RunManager" selected="JUnit.SimpleTests">
-    <configuration name="ReaderMain" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="steve6472.scriptit.ReaderMain" />
+    <configuration name="TokenizerTest" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="steve6472.TokenizerTest" />
       <module name="ScriptIt" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="TokenizerTest" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="steve6472.TokenizerTest" />
+    <configuration name="SimpleTests-Debug" type="JUnit" factoryName="JUnit">
       <module name="ScriptIt" />
+      <option name="PACKAGE_NAME" value="steve6472.scriptit" />
+      <option name="MAIN_CLASS_NAME" value="steve6472.scriptit.SimpleTests" />
+      <option name="METHOD_NAME" value="" />
+      <option name="TEST_OBJECT" value="class" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -106,6 +111,19 @@
       <option name="MAIN_CLASS_NAME" value="steve6472.scriptit.SimpleTests" />
       <option name="METHOD_NAME" value="" />
       <option name="TEST_OBJECT" value="class" />
+      <envs>
+        <env name="disable_debug" value="true" />
+      </envs>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="SimpleTests.dots" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="ScriptIt" />
+      <option name="PACKAGE_NAME" value="steve6472.scriptit" />
+      <option name="MAIN_CLASS_NAME" value="steve6472.scriptit.SimpleTests" />
+      <option name="METHOD_NAME" value="dots" />
+      <option name="TEST_OBJECT" value="method" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -143,12 +161,15 @@
     <list>
       <item itemvalue="Application.TokenizerTest" />
       <item itemvalue="JUnit.SimpleTests" />
+      <item itemvalue="JUnit.SimpleTests-Debug" />
       <item itemvalue="JUnit.SimpleTests.ifNoBody" />
       <item itemvalue="JUnit.SimpleTests.ifElseNoBody" />
       <item itemvalue="JUnit.SimpleTests.returnIf" />
+      <item itemvalue="JUnit.SimpleTests.dots" />
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="JUnit.SimpleTests.dots" />
         <item itemvalue="JUnit.SimpleTests.returnIf" />
         <item itemvalue="JUnit.SimpleTests.ifElseNoBody" />
         <item itemvalue="JUnit.SimpleTests.ifNoBody" />

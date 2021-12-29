@@ -1,0 +1,8 @@
+import library System;
+import type string;
+import type char;
+
+string s = "Hello World!";
+char c = s.substring(4).charAt(2);
+
+return c;

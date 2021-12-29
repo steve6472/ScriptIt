@@ -8,7 +8,7 @@ import steve6472.scriptit.libraries.Library;
  * Project: ScriptIt
  *
  ***********************/
-class DotOperator extends Expression
+public class DotOperator extends Expression
 {
 	Expression left, right;
 	Result leftResult = Result.delay();
@@ -23,17 +23,16 @@ class DotOperator extends Expression
 		this.left = left;
 		this.right = right;
 
-		if (right instanceof UnaryOperator)
+		if (right instanceof UnaryOperator unary)
 		{
-			UnaryOperator unary = (UnaryOperator) right;
 			if (!(unary.left instanceof FunctionCall) && !(unary.left instanceof Variable))
 			{
 				throw new IllegalStateException("Expression in unary operator must be either a FunctionCall or a Variable, is " + right.getClass().getCanonicalName());
 			}
 		}
-		else if (!(right instanceof FunctionCall) && !(right instanceof Variable))
+		else if (!(right instanceof FunctionCall) && !(right instanceof Variable) && !(right instanceof DotOperator))
 		{
-			throw new IllegalStateException("Right expression of dot operator must be either a FunctionCall or a Variable, is " + right.getClass().getCanonicalName());
+			throw new IllegalStateException("Right expression of dot operator must be either a FunctionCall, Variable or DotOperator, is " + right.getClass().getCanonicalName());
 		}
 	}
 
@@ -42,10 +41,8 @@ class DotOperator extends Expression
 	{
 		if (!libraryChecked || !isLeftLibrary)
 		{
-			if (left instanceof Variable)
+			if (left instanceof Variable va)
 			{
-				Variable va = (Variable) left;
-
 				if (script.getMemory().isLibrary(va.source.variableName))
 				{
 					libraryChecked = true;
@@ -73,10 +70,8 @@ class DotOperator extends Expression
 			}
 		}
 
-		if (right instanceof FunctionCall)
+		if (right instanceof FunctionCall fc)
 		{
-			FunctionCall fc = (FunctionCall) right;
-
 			if (isLeftLibrary)
 			{
 				fc.source = FunctionSource.staticFunction(fc.source.functionName, library);
@@ -84,10 +79,8 @@ class DotOperator extends Expression
 			{
 				fc.source = FunctionSource.dot(fc.source.functionName, leftValue);
 			}
-		} else if (right instanceof UnaryOperator)
+		} else if (right instanceof UnaryOperator un)
 		{
-			UnaryOperator un = (UnaryOperator) right;
-
 			if (isLeftLibrary)
 			{
 				((FunctionCall) un.left).source = FunctionSource.staticFunction(((FunctionCall) un.left).source.functionName, library);
@@ -96,11 +89,16 @@ class DotOperator extends Expression
 				((FunctionCall) un.left).source = FunctionSource.dot(((FunctionCall) un.left).source.functionName, leftValue);
 			}
 		}
-		else if (right instanceof Variable)
+		else if (right instanceof Variable va)
 		{
-			Variable va = (Variable) right;
-
 			va.source.setValue(leftValue);
+		} else if (right instanceof DotOperator dot)
+		{
+			dot.leftValue = leftValue;
+			if (dot.left instanceof FunctionCall fc)
+			{
+				fc.source = FunctionSource.dot(fc.source.functionName, dot.leftValue);
+			}
 		}
 
 
@@ -113,6 +111,7 @@ class DotOperator extends Expression
 		rightValue = rightResult.getValue();
 
 		Result rightResult = this.rightResult;
+		System.out.println(rightResult);
 
 		leftResult = Result.delay();
 		this.rightResult = Result.delay();
@@ -123,7 +122,7 @@ class DotOperator extends Expression
 	@Override
 	public String toString()
 	{
-		return "DotOperator{}";
+		return "DotOperator{" + "left=" + left + ", right=" + right + ", leftResult=" + leftResult + ", rightResult=" + rightResult + ", leftValue=" + leftValue + ", rightValue=" + rightValue + ", isLeftLibrary=" + isLeftLibrary + ", libraryChecked=" + libraryChecked + ", library=" + library + '}';
 	}
 
 	@Override
