@@ -95,8 +95,8 @@ public class SimpleTests
 		Script script = testScript("val_not_found");
 		Assertions.assertThrows(ValueNotFoundException.class, script::runWithDelay);
 	}
-/*
-	@Test
+
+	/*@Test
 	@DisplayName(value = "Recursion (recursion)")
 	public void recursion()
 	{
@@ -166,5 +166,30 @@ public class SimpleTests
 		Script script = testScript("dots");
 		Value value = script.runWithDelay();
 		Assertions.assertEquals('W', value.getChar());
+	}
+
+	@Test
+	public void dotBinary()
+	{
+		Script script = testScript("dot_bin");
+		Value value = script.runWithDelay();
+		Assertions.assertEquals(Math.PI * 2f, value.getDouble());
+	}
+
+	@Test
+	public void delay()
+	{
+		Script script = testScript("delay");
+		long start = System.nanoTime();
+		script.runWithDelay();
+		Assertions.assertTrue(System.nanoTime() - start > 500_000);
+	}
+
+	@Test
+	public void valueChanged()
+	{
+		Script script = testScript("value_changed");
+		Value value = script.runWithDelay();
+		Assertions.assertEquals(value.getInt(), 2);
 	}
 }

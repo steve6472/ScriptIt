@@ -1,0 +1,13 @@
+import library System;
+import type int;
+
+int a = 1;
+
+function f()
+{
+    int a = 2;
+};
+
+f();
+
+return a;

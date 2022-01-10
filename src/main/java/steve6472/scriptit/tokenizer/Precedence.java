@@ -10,7 +10,6 @@ public enum Precedence
 {
 	ANYTHING,
 	ASSIGN,
-	DOT,
 	NAME_CHAIN,
 	TERNARY,
 	OR,
@@ -24,6 +23,7 @@ public enum Precedence
 	ADD_SUB,
 	MUL_DIV_MOD,
 	UNARY,
+	DOT,
 	FUNCTION_CALL,
 
 

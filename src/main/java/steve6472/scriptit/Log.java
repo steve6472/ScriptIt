@@ -32,24 +32,24 @@ public class Log
 	public static final String BRIGHT_CYAN = "\u001b[36;1m";
 	public static final String BRIGHT_WHITE = "\u001b[37;1m";
 
-	public static String black() { System.out.print(BLACK); return ""; }
-	public static String red() { System.out.print(RED); return ""; }
-	public static String green() { System.out.print(GREEN); return ""; }
-	public static String yellow() { System.out.print(YELLOW); return ""; }
-	public static String blue() { System.out.print(BLUE); return ""; }
-	public static String magenta() { System.out.print(MAGENTA); return ""; }
-	public static String cyan() { System.out.print(CYAN); return ""; }
-	public static String white() { System.out.print(WHITE); return ""; }
-	public static String reset() { System.out.print(RESET); return ""; }
+	public static String black() { System.out.print(BLACK); return BLACK; }
+	public static String red() { System.out.print(RED); return RED; }
+	public static String green() { System.out.print(GREEN); return GREEN; }
+	public static String yellow() { System.out.print(YELLOW); return YELLOW; }
+	public static String blue() { System.out.print(BLUE); return BLUE; }
+	public static String magenta() { System.out.print(MAGENTA); return MAGENTA; }
+	public static String cyan() { System.out.print(CYAN); return CYAN; }
+	public static String white() { System.out.print(WHITE); return WHITE; }
+	public static String reset() { System.out.print(RESET); return RESET; }
 
-	public static String brightBlack() { System.out.print(BRIGHT_BLACK); return ""; }
-	public static String brightRed() { System.out.print(BRIGHT_RED); return ""; }
-	public static String brightGreen() { System.out.print(BRIGHT_GREEN); return ""; }
-	public static String brightYellow() { System.out.print(BRIGHT_YELLOW); return ""; }
-	public static String brightBlue() { System.out.print(BRIGHT_BLUE); return ""; }
-	public static String brightMagenta() { System.out.print(BRIGHT_MAGENTA); return ""; }
-	public static String brightCyan() { System.out.print(BRIGHT_CYAN); return ""; }
-	public static String brightWhite() { System.out.print(BRIGHT_WHITE); return ""; }
+	public static String brightBlack() { System.out.print(BRIGHT_BLACK); return BRIGHT_BLACK; }
+	public static String brightRed() { System.out.print(BRIGHT_RED); return BRIGHT_RED; }
+	public static String brightGreen() { System.out.print(BRIGHT_GREEN); return BRIGHT_GREEN; }
+	public static String brightYellow() { System.out.print(BRIGHT_YELLOW); return BRIGHT_YELLOW; }
+	public static String brightBlue() { System.out.print(BRIGHT_BLUE); return BRIGHT_BLUE; }
+	public static String brightMagenta() { System.out.print(BRIGHT_MAGENTA); return BRIGHT_MAGENTA; }
+	public static String brightCyan() { System.out.print(BRIGHT_CYAN); return BRIGHT_CYAN; }
+	public static String brightWhite() { System.out.print(BRIGHT_WHITE); return BRIGHT_WHITE; }
 
 	public static void info(String text)
 	{

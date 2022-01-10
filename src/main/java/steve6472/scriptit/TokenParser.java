@@ -212,7 +212,8 @@ public class TokenParser
 						"-------------------------------\n" + Log.RESET);
 				break;
 			}
-			System.out.println("\n");
+			if (DEBUG)
+				System.out.println("\n");
 			depth--;
 		} while (tokenizer.matchToken(Operator.SEMICOLON, true));
 		//FIXME: add this exception

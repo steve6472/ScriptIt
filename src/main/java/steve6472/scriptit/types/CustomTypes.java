@@ -1,7 +1,6 @@
 package steve6472.scriptit.types;
 
 import steve6472.scriptit.FunctionParameters;
-import steve6472.scriptit.Script;
 import steve6472.scriptit.Type;
 import steve6472.scriptit.Value;
 
@@ -24,7 +23,7 @@ public class CustomTypes extends TypesInit
 	public static final Type COLOR = new Type("Color");
 	public static final Type LIST = new Type("List");
 
-	public static void init(Script script)
+	public static void init()
 	{
 		/*VEC2.addConstructor(FunctionParameters
 			.constructor(VEC2).addType(DOUBLE).addType(DOUBLE).build(), new TypesInit.Constructor((args) -> newValue(VEC2).setValue("x", args[0]).setValue("y", args[1])));

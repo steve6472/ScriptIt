@@ -60,7 +60,7 @@ public class Main
 		workspace.addType(CustomTypes.VEC2);
 
 		Script script = Script.createEmpty(workspace);
-		CustomTypes.init(script);
+		CustomTypes.init();
 
 //		Function doubleMul = new Function("left", "right");
 ////		doubleMul.setExpressions(script, "temp = left + right", "temp = temp * right", "return temp - left");

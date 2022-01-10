@@ -1,0 +1,6 @@
+import library Math;
+import type double;
+
+double d = Math.PI() * 2.0;
+
+return d;

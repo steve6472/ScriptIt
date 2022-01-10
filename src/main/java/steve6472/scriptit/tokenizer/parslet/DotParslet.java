@@ -16,7 +16,7 @@ public class DotParslet implements InfixParslet
 	public Expression parse(TokenParser parser, Tokenizer.Token token, Expression leftExpression)
 	{
 //		TODO: automatically recognize imported library from value dot
-		return new DotOperator(leftExpression, parser.parse(Precedence.ANYTHING));
+		return new DotOperator(leftExpression, parser.parse(getPrecedence()));
 	}
 
 	@Override

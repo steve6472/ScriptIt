@@ -181,6 +181,7 @@ public class Tokenizer
 			tokenizer.commentChar('§');
 			tokenizer.slashSlashComments(false);
 			tokenizer.slashStarComments(false);
+			tokenizer.wordChars('_', '_');
 
 			tokens = new ArrayList<>();
 
@@ -235,7 +236,7 @@ public class Tokenizer
 
 				for (Operator mergableOperator : MERGABLE_OPERATORS)
 				{
-					if (token.sval != null && peek.sval != null)
+					if (token.sval != null && peek.sval != null && !token.sval.isBlank() && !peek.sval.isBlank())
 					{
 						if (mergableOperator.getSymbol().charAt(0) == token.sval().charAt(0) && mergableOperator.getSymbol().charAt(1) == peek.sval.charAt(0))
 						{

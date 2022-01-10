@@ -1,9 +1,13 @@
 package steve6472.scriptit.test;
 
+import steve6472.scriptit.Script;
 import steve6472.scriptit.Workspace;
 import steve6472.scriptit.libraries.GeometryLibrary;
+import steve6472.scriptit.libraries.LogLibrary;
 import steve6472.scriptit.swingTest.SwingTypes;
 import steve6472.scriptit.types.CustomTypes;
+
+import java.io.File;
 
 /**********************
  * Created by steve6472 (Mirek Jozefek)
@@ -15,6 +19,8 @@ public class Swing
 {
 	public static void main(String[] args)
 	{
+//		TokenParser.DEBUG = true;
+
 		SwingTypes.init();
 
 		Workspace workspace = new Workspace();
@@ -22,6 +28,11 @@ public class Swing
 		workspace.addType(CustomTypes.COLOR);
 
 		workspace.addLibrary(new GeometryLibrary());
+		workspace.addLibrary(new LogLibrary());
+
+		Script script = Script.create(workspace, new File("scripts/pong2.txt"));
+		CustomTypes.init();
+		script.runWithDelay();
 
 //		Script script = ScriptReader.readScript(new File("scripts/pong.txt"), workspace);
 //		CustomTypes.init(script);

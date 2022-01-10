@@ -14,7 +14,7 @@
     <option name="optimizeImportsOnTheFly" value="true" />
   </component>
   <component name="DarkyenusTimeTracker">
-    <option name="totalTimeSeconds" value="67836" />
+    <option name="totalTimeSeconds" value="71421" />
     <option name="idleThresholdMs" value="60000" />
     <option name="autoCountIdleSeconds" value="10" />
     <option name="gitIntegration" value="true" />
@@ -87,9 +87,9 @@
       <recent name="steve6472.scriptit.libraries" />
     </key>
   </component>
-  <component name="RunManager" selected="JUnit.SimpleTests">
-    <configuration name="TokenizerTest" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="steve6472.TokenizerTest" />
+  <component name="RunManager" selected="Application.Swing">
+    <configuration name="Swing" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="steve6472.scriptit.test.Swing" />
       <module name="ScriptIt" />
       <method v="2">
         <option name="Make" enabled="true" />
@@ -118,62 +118,62 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="SimpleTests.dots" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+    <configuration name="SimpleTests.delay" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="ScriptIt" />
       <option name="PACKAGE_NAME" value="steve6472.scriptit" />
       <option name="MAIN_CLASS_NAME" value="steve6472.scriptit.SimpleTests" />
-      <option name="METHOD_NAME" value="dots" />
+      <option name="METHOD_NAME" value="delay" />
       <option name="TEST_OBJECT" value="method" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="SimpleTests.ifElseNoBody" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+    <configuration name="SimpleTests.dotBinary" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="ScriptIt" />
       <option name="PACKAGE_NAME" value="steve6472.scriptit" />
       <option name="MAIN_CLASS_NAME" value="steve6472.scriptit.SimpleTests" />
-      <option name="METHOD_NAME" value="ifElseNoBody" />
+      <option name="METHOD_NAME" value="dotBinary" />
       <option name="TEST_OBJECT" value="method" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="SimpleTests.ifNoBody" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+    <configuration name="SimpleTests.dotsBinary" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="ScriptIt" />
       <option name="PACKAGE_NAME" value="steve6472.scriptit" />
       <option name="MAIN_CLASS_NAME" value="steve6472.scriptit.SimpleTests" />
-      <option name="METHOD_NAME" value="ifNoBody" />
+      <option name="METHOD_NAME" value="dotsBinary" />
       <option name="TEST_OBJECT" value="method" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="SimpleTests.returnIf" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+    <configuration name="SimpleTests.valueChanged" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="ScriptIt" />
       <option name="PACKAGE_NAME" value="steve6472.scriptit" />
       <option name="MAIN_CLASS_NAME" value="steve6472.scriptit.SimpleTests" />
-      <option name="METHOD_NAME" value="returnIf" />
+      <option name="METHOD_NAME" value="valueChanged" />
       <option name="TEST_OBJECT" value="method" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
     <list>
-      <item itemvalue="Application.TokenizerTest" />
+      <item itemvalue="Application.Swing" />
       <item itemvalue="JUnit.SimpleTests" />
       <item itemvalue="JUnit.SimpleTests-Debug" />
-      <item itemvalue="JUnit.SimpleTests.ifNoBody" />
-      <item itemvalue="JUnit.SimpleTests.ifElseNoBody" />
-      <item itemvalue="JUnit.SimpleTests.returnIf" />
-      <item itemvalue="JUnit.SimpleTests.dots" />
+      <item itemvalue="JUnit.SimpleTests.dotsBinary" />
+      <item itemvalue="JUnit.SimpleTests.dotBinary" />
+      <item itemvalue="JUnit.SimpleTests.delay" />
+      <item itemvalue="JUnit.SimpleTests.valueChanged" />
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="JUnit.SimpleTests.dots" />
-        <item itemvalue="JUnit.SimpleTests.returnIf" />
-        <item itemvalue="JUnit.SimpleTests.ifElseNoBody" />
-        <item itemvalue="JUnit.SimpleTests.ifNoBody" />
-        <item itemvalue="Application.TokenizerTest" />
+        <item itemvalue="Application.Swing" />
+        <item itemvalue="JUnit.SimpleTests.valueChanged" />
+        <item itemvalue="JUnit.SimpleTests.delay" />
+        <item itemvalue="JUnit.SimpleTests.dotBinary" />
+        <item itemvalue="JUnit.SimpleTests.dotsBinary" />
       </list>
     </recent_temporary>
   </component>

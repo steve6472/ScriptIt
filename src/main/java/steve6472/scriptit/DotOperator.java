@@ -111,7 +111,6 @@ public class DotOperator extends Expression
 		rightValue = rightResult.getValue();
 
 		Result rightResult = this.rightResult;
-		System.out.println(rightResult);
 
 		leftResult = Result.delay();
 		this.rightResult = Result.delay();
