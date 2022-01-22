@@ -44,6 +44,7 @@ public class TokenParser
 		prefixParslets.put(Operator.FUNCTION, new FunctionParslet());
 		prefixParslets.put(Operator.WHILE, new WhileParslet());
 		prefixParslets.put(Operator.RETURN_IF, new ReturnIfParslet());
+		prefixParslets.put(Operator.FOR, new ForParslet());
 
 
 

@@ -27,6 +27,12 @@ public class BinaryOperator extends Expression
 	}
 
 	@Override
+	public String toString()
+	{
+		return "BinaryOperator{" + "operator=" + operator + ", left=" + left + ", right=" + right + '}';
+	}
+
+	@Override
 	public Result apply(Script script)
 	{
 		if (leftResult.isDelay())
@@ -70,12 +76,6 @@ public class BinaryOperator extends Expression
 		rightResult = Result.delay();
 
 		return result;
-	}
-
-	@Override
-	public String toString()
-	{
-		return "BinaryOperator{" + "operator=" + operator + ", left=" + left + ", right=" + right + '}';
 	}
 
 	@Override

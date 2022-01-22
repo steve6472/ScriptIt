@@ -14,7 +14,7 @@
     <option name="optimizeImportsOnTheFly" value="true" />
   </component>
   <component name="DarkyenusTimeTracker">
-    <option name="totalTimeSeconds" value="71421" />
+    <option name="totalTimeSeconds" value="82335" />
     <option name="idleThresholdMs" value="60000" />
     <option name="autoCountIdleSeconds" value="10" />
     <option name="gitIntegration" value="true" />
@@ -53,7 +53,7 @@
     <property name="com.intellij.ide.scratch.LRUPopupBuilder$1/New Scratch File" value="JAVA" />
     <property name="com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrary" value="Groovy JUnit" />
     <property name="com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrarySuperClass.Groovy JUnit" value="groovy.util.GroovyTestCase" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/!tests" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/!tests/flow/loop" />
     <property name="project.structure.last.edited" value="Modules" />
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.19655173" />
@@ -62,11 +62,15 @@
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="D:\ScriptIt\!tests\flow\loop" />
       <recent name="D:\ScriptIt\!tests" />
       <recent name="D:\ScriptIt\scripts" />
     </key>
     <key name="CreateTestDialog.Recents.Supers">
       <recent name="groovy.util.GroovyTestCase" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="D:\ScriptIt\!tests\flow\loop" />
     </key>
     <key name="MoveInnerDialog.RECENTS_KEY">
       <recent name="steve6472.scriptit.exp" />
@@ -80,14 +84,21 @@
       <recent name="steve6472.scriptit.math" />
     </key>
     <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="steve6472.scriptit.flow" />
       <recent name="steve6472.scriptit.tokenizer.parslet" />
       <recent name="steve6472.scriptit.tokenizer.parselet" />
       <recent name="steve6472.scriptit.tokenizer" />
       <recent name="steve6472" />
-      <recent name="steve6472.scriptit.libraries" />
     </key>
   </component>
-  <component name="RunManager" selected="Application.Swing">
+  <component name="RunManager" selected="Application.DelayTestThingie">
+    <configuration name="DelayTestThingie" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="steve6472.DelayTestThingie" />
+      <module name="ScriptIt" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="Swing" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="steve6472.scriptit.test.Swing" />
       <module name="ScriptIt" />
@@ -128,21 +139,11 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="SimpleTests.dotBinary" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+    <configuration name="SimpleTests.normalFor" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="ScriptIt" />
       <option name="PACKAGE_NAME" value="steve6472.scriptit" />
       <option name="MAIN_CLASS_NAME" value="steve6472.scriptit.SimpleTests" />
-      <option name="METHOD_NAME" value="dotBinary" />
-      <option name="TEST_OBJECT" value="method" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="SimpleTests.dotsBinary" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <module name="ScriptIt" />
-      <option name="PACKAGE_NAME" value="steve6472.scriptit" />
-      <option name="MAIN_CLASS_NAME" value="steve6472.scriptit.SimpleTests" />
-      <option name="METHOD_NAME" value="dotsBinary" />
+      <option name="METHOD_NAME" value="normalFor" />
       <option name="TEST_OBJECT" value="method" />
       <method v="2">
         <option name="Make" enabled="true" />
@@ -162,18 +163,18 @@
       <item itemvalue="Application.Swing" />
       <item itemvalue="JUnit.SimpleTests" />
       <item itemvalue="JUnit.SimpleTests-Debug" />
-      <item itemvalue="JUnit.SimpleTests.dotsBinary" />
-      <item itemvalue="JUnit.SimpleTests.dotBinary" />
       <item itemvalue="JUnit.SimpleTests.delay" />
       <item itemvalue="JUnit.SimpleTests.valueChanged" />
+      <item itemvalue="JUnit.SimpleTests.normalFor" />
+      <item itemvalue="Application.DelayTestThingie" />
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Application.DelayTestThingie" />
+        <item itemvalue="JUnit.SimpleTests.normalFor" />
         <item itemvalue="Application.Swing" />
         <item itemvalue="JUnit.SimpleTests.valueChanged" />
         <item itemvalue="JUnit.SimpleTests.delay" />
-        <item itemvalue="JUnit.SimpleTests.dotBinary" />
-        <item itemvalue="JUnit.SimpleTests.dotsBinary" />
       </list>
     </recent_temporary>
   </component>

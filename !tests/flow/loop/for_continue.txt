@@ -1,0 +1,15 @@
+import library System;
+import type int;
+
+int a = 1;
+
+for (int i = 1; i < 10; i++)
+{
+    if (i % 2 == 0)
+    {
+        continue;
+    };
+    a = a * i;
+};
+
+return a;

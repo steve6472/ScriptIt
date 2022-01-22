@@ -44,17 +44,6 @@ public class SimpleTests
 	}
 
 	@Test
-	@DisplayName(value = "Factorial (while)")
-	public void factorial()
-	{
-		Script script = testScript("factorial");
-		script.getMemory().addVariable("input", new Value(true, PrimitiveTypes.INT, 5));
-		Value value = script.runWithDelay();
-
-		Assertions.assertEquals(120, value.getInt());
-	}
-
-	@Test
 	@DisplayName(value = "Decision (if, else)")
 	public void decision()
 	{
@@ -190,6 +179,53 @@ public class SimpleTests
 	{
 		Script script = testScript("value_changed");
 		Value value = script.runWithDelay();
-		Assertions.assertEquals(value.getInt(), 2);
+		Assertions.assertEquals(2, value.getInt());
+	}
+
+	/*
+	 * Flow
+	 */
+
+	/*
+	 * While
+	 */
+
+	@Test
+	@DisplayName(value = "While - Factorial")
+	public void normalWhile()
+	{
+		Script script = testScript("flow/loop/while");
+		script.getMemory().addVariable("input", new Value(true, PrimitiveTypes.INT, 5));
+		Value value = script.runWithDelay();
+
+		Assertions.assertEquals(120, value.getInt());
+	}
+
+	/*
+	 * For
+	 */
+
+	@Test
+	public void normalFor()
+	{
+		Script script = testScript("flow/loop/for");
+		Value value = script.runWithDelay();
+		Assertions.assertEquals(24, value.getInt());
+	}
+
+	@Test
+	public void normalContinue()
+	{
+		Script script = testScript("flow/loop/for_continue");
+		Value value = script.runWithDelay();
+		Assertions.assertEquals(945, value.getInt());
+	}
+
+	@Test
+	public void normalBreak()
+	{
+		Script script = testScript("flow/loop/for_break");
+		Value value = script.runWithDelay();
+		Assertions.assertEquals(6, value.getInt());
 	}
 }
