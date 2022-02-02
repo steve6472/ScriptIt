@@ -1,13 +1,14 @@
 package steve6472.scriptit;
 
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import steve6472.scriptit.exceptions.ValueNotFoundException;
+import steve6472.scriptit.functions.DelayFunction;
 import steve6472.scriptit.libraries.TestLibrary;
+import steve6472.scriptit.tokenizer.TokenParser;
 import steve6472.scriptit.types.PrimitiveTypes;
 
 import java.io.File;
+import java.time.Duration;
 
 /**********************
  * Created by steve6472 (Mirek Jozefek)
@@ -19,7 +20,11 @@ public class SimpleTests
 {
 	private Script testScript(String name)
 	{
-		TokenParser.DEBUG = !Boolean.parseBoolean(System.getenv("disable_debug"));
+		boolean debug = !Boolean.parseBoolean(System.getenv("disable_debug"));
+		debug = false;
+
+		DelayFunction.DEBUG = debug;
+		TokenParser.DEBUG = debug;
 		Workspace workspace = new Workspace();
 		workspace.addLibrary(new TestLibrary());
 		Script script = Script.create(workspace, new File("!tests/" + name + ".txt"));
@@ -43,19 +48,14 @@ public class SimpleTests
 		Assertions.assertEquals(-24, value.getInt());
 	}
 
+	/*
+	TODO: do this test but with Vec4 or array
 	@Test
-	@DisplayName(value = "Decision (if, else)")
-	public void decision()
+	public void functionIntersection()
 	{
-		Script script = testScript("decision");
-		script.getMemory().addVariable("num", new Value(true, PrimitiveTypes.INT, 0));
+		Script script = testScript("function_intersection");
 		Value value = script.runWithDelay();
-		Assertions.assertEquals("ZERO", value.getString());
-
-		script.getMemory().addVariable("num", new Value(true, PrimitiveTypes.INT, 1));
-		value = script.runWithDelay();
-		Assertions.assertEquals("ONE", value.getString());
-	}
+	}*/
 
 	@Test
 	@DisplayName(value = "Function (function)")
@@ -112,44 +112,6 @@ public class SimpleTests
 	}
 
 	@Test
-	public void ifNoBody()
-	{
-		Script script = testScript("if_no_body");
-		Value value = script.runWithDelay();
-		Assertions.assertTrue(value.getBoolean());
-	}
-
-	@Test
-	public void ifElseNoBody()
-	{
-		Script script = testScript("if_else_no_body");
-		Value value = script.runWithDelay();
-		Assertions.assertFalse(value.getBoolean());
-	}
-
-	@Test
-	@DisplayName(value = "return if")
-	public void returnIf()
-	{
-		Script script = testScript("return_if");
-		Value value = script.runWithDelay();
-		Assertions.assertTrue(value.getBoolean());
-	}
-
-	@Test
-	@DisplayName(value = "returnif")
-	public void returnif()
-	{
-		Script script = testScript("returnif_true");
-		Value value = script.runWithDelay();
-		Assertions.assertEquals(value, Value.NULL);
-
-		script = testScript("returnif_false");
-		value = script.runWithDelay();
-		Assertions.assertFalse(value.getBoolean());
-	}
-
-	@Test
 	public void dots()
 	{
 		Script script = testScript("dots");
@@ -169,9 +131,9 @@ public class SimpleTests
 	public void delay()
 	{
 		Script script = testScript("delay");
-		long start = System.nanoTime();
+		long start = System.currentTimeMillis();
 		script.runWithDelay();
-		Assertions.assertTrue(System.nanoTime() - start > 500_000);
+		Assertions.assertTrue(System.currentTimeMillis() - start >= 500);
 	}
 
 	@Test
@@ -182,50 +144,133 @@ public class SimpleTests
 		Assertions.assertEquals(2, value.getInt());
 	}
 
-	/*
-	 * Flow
-	 */
-
-	/*
-	 * While
-	 */
-
-	@Test
-	@DisplayName(value = "While - Factorial")
-	public void normalWhile()
+	@Nested
+	@DisplayName("return")
+	class Return_
 	{
-		Script script = testScript("flow/loop/while");
-		script.getMemory().addVariable("input", new Value(true, PrimitiveTypes.INT, 5));
-		Value value = script.runWithDelay();
+		@Test
+		@DisplayName(value = "return if")
+		public void returnIf()
+		{
+			Script script = testScript("return/return_if");
+			Value value = script.runWithDelay();
+			Assertions.assertTrue(value.getBoolean());
+		}
 
-		Assertions.assertEquals(120, value.getInt());
+		@Test
+		@DisplayName(value = "returnif")
+		public void returnif()
+		{
+			Script script = testScript("return/returnif_true");
+			Value value = script.runWithDelay();
+			Assertions.assertEquals(value, Value.NULL);
+
+			script = testScript("return/returnif_false");
+			value = script.runWithDelay();
+			Assertions.assertFalse(value.getBoolean());
+		}
+
+		@Test
+		public void returnOne()
+		{
+			Script script = testScript("return/return");
+			Value value = script.runWithDelay();
+			Assertions.assertEquals(1, value.getInt());
+		}
 	}
 
-	/*
-	 * For
-	 */
-
-	@Test
-	public void normalFor()
+	@Nested
+	@DisplayName("flow")
+	class Flow_
 	{
-		Script script = testScript("flow/loop/for");
-		Value value = script.runWithDelay();
-		Assertions.assertEquals(24, value.getInt());
-	}
+		@Nested
+		@DisplayName("if")
+		class If_
+		{
+			@Test
+			public void ifNoBody()
+			{
+				Script script = testScript("flow/if/if_no_body");
+				Value value = script.runWithDelay();
+				Assertions.assertTrue(value.getBoolean());
+			}
 
-	@Test
-	public void normalContinue()
-	{
-		Script script = testScript("flow/loop/for_continue");
-		Value value = script.runWithDelay();
-		Assertions.assertEquals(945, value.getInt());
-	}
+			@Test
+			public void ifElseNoBody()
+			{
+				Script script = testScript("flow/if/if_else_no_body");
+				Value value = script.runWithDelay();
+				Assertions.assertFalse(value.getBoolean());
+			}
 
-	@Test
-	public void normalBreak()
-	{
-		Script script = testScript("flow/loop/for_break");
-		Value value = script.runWithDelay();
-		Assertions.assertEquals(6, value.getInt());
+			@Test
+			public void ifTrueReturnOne()
+			{
+				Script script = testScript("flow/if/if_true_return_one");
+				Value value = script.runWithDelay();
+				Assertions.assertEquals(1, value.getInt());
+			}
+
+			@Test
+			@DisplayName(value = "Decision (if, else)")
+			public void decision()
+			{
+				Script script = testScript("flow/if/decision");
+				script.getMemory().addVariable("num", new Value(true, PrimitiveTypes.INT, 0));
+				Value value = script.runWithDelay();
+				Assertions.assertEquals("ZERO", value.getString());
+
+				script.getMainExecutor().reset();
+				script.getMemory().addVariable("num", new Value(true, PrimitiveTypes.INT, 1));
+				value = script.runWithDelay();
+				Assertions.assertEquals("ONE", value.getString());
+			}
+		}
+
+		@Nested
+		@DisplayName("while")
+		class While
+		{
+			@Test
+			@DisplayName(value = "While - Factorial")
+			public void normalWhile()
+			{
+				Script script = testScript("flow/loop/while");
+				script.getMemory().addVariable("input", new Value(true, PrimitiveTypes.INT, 5));
+
+				final Value[] value = new Value[1];
+				Assertions.assertTimeoutPreemptively(Duration.ofMillis(200), () -> value[0] = script.runWithDelay());
+				Assertions.assertEquals(120, value[0].getInt());
+			}
+		}
+
+		@Nested
+		@DisplayName("for")
+		class For_
+		{
+			@Test
+			public void normalFor()
+			{
+				Script script = testScript("flow/loop/for");
+				Value value = script.runWithDelay();
+				Assertions.assertEquals(24, value.getInt());
+			}
+
+			@Test
+			public void normalContinue()
+			{
+				Script script = testScript("flow/loop/for_continue");
+				Value value = script.runWithDelay();
+				Assertions.assertEquals(945, value.getInt());
+			}
+
+			@Test
+			public void normalBreak()
+			{
+				Script script = testScript("flow/loop/for_break");
+				Value value = script.runWithDelay();
+				Assertions.assertEquals(6, value.getInt());
+			}
+		}
 	}
 }

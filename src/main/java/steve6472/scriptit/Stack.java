@@ -9,7 +9,7 @@ import java.util.List;
 public class Stack<T>
 {
 	private final int size;
-	private  List<T> stack;
+	private List<T> stack;
 
 	public Stack(int size)
 	{

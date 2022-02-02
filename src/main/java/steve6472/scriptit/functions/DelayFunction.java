@@ -24,6 +24,8 @@ public class DelayFunction extends Function
 	{
 		if (DEBUG)
 			System.out.println("Delay " + arguments[0]);
-		return Result.delay(arguments[0].getInt());
+		int delay = arguments[0].getInt();
+		script.getMainExecutor().nextAllowedExecute = System.currentTimeMillis() + delay;
+		return Result.delay(delay, true);
 	}
 }

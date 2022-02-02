@@ -1,0 +1,7 @@
+import type string;
+
+string a = "Hello World!";
+
+string b = a.substring(1, a.len() - 1);
+
+return b;

@@ -14,7 +14,7 @@
     <option name="optimizeImportsOnTheFly" value="true" />
   </component>
   <component name="DarkyenusTimeTracker">
-    <option name="totalTimeSeconds" value="82335" />
+    <option name="totalTimeSeconds" value="118679" />
     <option name="idleThresholdMs" value="60000" />
     <option name="autoCountIdleSeconds" value="10" />
     <option name="gitIntegration" value="true" />
@@ -33,6 +33,7 @@
   </component>
   <component name="HighlightingSettingsPerFile">
     <setting file="jar://$PROJECT_DIR$/../Java/16/lib/src.zip!/java.base/java/lang/String.java" root0="SKIP_INSPECTION" />
+    <setting file="jar://$PROJECT_DIR$/../Java/16/lib/src.zip!/java.desktop/java/awt/BasicStroke.java" root0="SKIP_INSPECTION" />
     <setting file="jar://$PROJECT_DIR$/../Java/16/lib/src.zip!/java.desktop/javax/swing/JFrame.java" root0="SKIP_INSPECTION" />
   </component>
   <component name="MavenImportPreferences">
@@ -50,26 +51,29 @@
   <component name="PropertiesComponent">
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="ToolWindowBuild.ShowToolbar" value="false" />
     <property name="com.intellij.ide.scratch.LRUPopupBuilder$1/New Scratch File" value="JAVA" />
     <property name="com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrary" value="Groovy JUnit" />
     <property name="com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrarySuperClass.Groovy JUnit" value="groovy.util.GroovyTestCase" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/!tests/flow/loop" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/scripts" />
     <property name="project.structure.last.edited" value="Modules" />
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.19655173" />
     <property name="restartRequiresConfirmation" value="false" />
-    <property name="settings.editor.selected.configurable" value="fileTemplates" />
+    <property name="settings.editor.selected.configurable" value="preferences.pluginManager" />
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="D:\ScriptIt\scripts" />
       <recent name="D:\ScriptIt\!tests\flow\loop" />
       <recent name="D:\ScriptIt\!tests" />
-      <recent name="D:\ScriptIt\scripts" />
     </key>
     <key name="CreateTestDialog.Recents.Supers">
       <recent name="groovy.util.GroovyTestCase" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="D:\ScriptIt\!tests\flow\if" />
+      <recent name="D:\ScriptIt\!tests\return" />
       <recent name="D:\ScriptIt\!tests\flow\loop" />
     </key>
     <key name="MoveInnerDialog.RECENTS_KEY">
@@ -84,24 +88,36 @@
       <recent name="steve6472.scriptit.math" />
     </key>
     <key name="CopyClassDialog.RECENTS_KEY">
-      <recent name="steve6472.scriptit.flow" />
+      <recent name="steve6472.scriptit.simple" />
       <recent name="steve6472.scriptit.tokenizer.parslet" />
+      <recent name="steve6472.scriptit.exceptions" />
+      <recent name="steve6472.scriptit.flow" />
       <recent name="steve6472.scriptit.tokenizer.parselet" />
-      <recent name="steve6472.scriptit.tokenizer" />
-      <recent name="steve6472" />
     </key>
   </component>
-  <component name="RunManager" selected="Application.DelayTestThingie">
-    <configuration name="DelayTestThingie" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="steve6472.DelayTestThingie" />
+  <component name="RunManager" selected="JUnit.SimpleTests">
+    <configuration name="Swing" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="steve6472.scriptit.test.Swing" />
       <module name="ScriptIt" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="Swing" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="steve6472.scriptit.test.Swing" />
+    <configuration name="SimpleTests$Flow_$For_" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="ScriptIt" />
+      <option name="PACKAGE_NAME" value="steve6472.scriptit.SimpleTests.Flow_" />
+      <option name="MAIN_CLASS_NAME" value="steve6472.scriptit.SimpleTests$Flow_$For_" />
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="SimpleTests$Flow_$For_.normalBreak" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="ScriptIt" />
+      <option name="PACKAGE_NAME" value="steve6472.scriptit.SimpleTests.Flow_" />
+      <option name="MAIN_CLASS_NAME" value="steve6472.scriptit.SimpleTests$Flow_$For_" />
+      <option name="METHOD_NAME" value="normalBreak" />
+      <option name="TEST_OBJECT" value="method" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -129,32 +145,21 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="SimpleTests.delay" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+    <configuration name="SimpleTests.functionIntersection" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="ScriptIt" />
       <option name="PACKAGE_NAME" value="steve6472.scriptit" />
       <option name="MAIN_CLASS_NAME" value="steve6472.scriptit.SimpleTests" />
-      <option name="METHOD_NAME" value="delay" />
+      <option name="METHOD_NAME" value="functionIntersection" />
       <option name="TEST_OBJECT" value="method" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="SimpleTests.normalFor" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+    <configuration name="TypeTests" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="ScriptIt" />
       <option name="PACKAGE_NAME" value="steve6472.scriptit" />
-      <option name="MAIN_CLASS_NAME" value="steve6472.scriptit.SimpleTests" />
-      <option name="METHOD_NAME" value="normalFor" />
-      <option name="TEST_OBJECT" value="method" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="SimpleTests.valueChanged" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <module name="ScriptIt" />
-      <option name="PACKAGE_NAME" value="steve6472.scriptit" />
-      <option name="MAIN_CLASS_NAME" value="steve6472.scriptit.SimpleTests" />
-      <option name="METHOD_NAME" value="valueChanged" />
-      <option name="TEST_OBJECT" value="method" />
+      <option name="MAIN_CLASS_NAME" value="steve6472.scriptit.TypeTests" />
+      <option name="TEST_OBJECT" value="class" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -163,18 +168,18 @@
       <item itemvalue="Application.Swing" />
       <item itemvalue="JUnit.SimpleTests" />
       <item itemvalue="JUnit.SimpleTests-Debug" />
-      <item itemvalue="JUnit.SimpleTests.delay" />
-      <item itemvalue="JUnit.SimpleTests.valueChanged" />
-      <item itemvalue="JUnit.SimpleTests.normalFor" />
-      <item itemvalue="Application.DelayTestThingie" />
+      <item itemvalue="JUnit.SimpleTests$Flow_$For_" />
+      <item itemvalue="JUnit.SimpleTests$Flow_$For_.normalBreak" />
+      <item itemvalue="JUnit.SimpleTests.functionIntersection" />
+      <item itemvalue="JUnit.TypeTests" />
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Application.DelayTestThingie" />
-        <item itemvalue="JUnit.SimpleTests.normalFor" />
+        <item itemvalue="JUnit.TypeTests" />
+        <item itemvalue="JUnit.SimpleTests.functionIntersection" />
         <item itemvalue="Application.Swing" />
-        <item itemvalue="JUnit.SimpleTests.valueChanged" />
-        <item itemvalue="JUnit.SimpleTests.delay" />
+        <item itemvalue="JUnit.SimpleTests$Flow_$For_.normalBreak" />
+        <item itemvalue="JUnit.SimpleTests$Flow_$For_" />
       </list>
     </recent_temporary>
   </component>

@@ -109,6 +109,7 @@ public class SwingTypes extends TypesInit
 		addProcedure(CANVAS, "setColor", (itself, r, g, b) -> ((Canvas) itself.get("canvas")).graphics2D.setColor(new Color(r.getInt(), g.getInt(), b.getInt())), INT, INT, INT);
 		addProcedure(CANVAS, "setColor", (itself, rgb) -> ((Canvas) itself.get("canvas")).graphics2D.setColor(new Color((rgb.getInt() >> 16) & 0xff, (rgb.getInt() >> 8) & 0xff, rgb.getInt() & 0xff)), INT);
 		addProcedure(CANVAS, "setColor", (itself, color) -> ((Canvas) itself.get("canvas")).graphics2D.setColor(new Color(color.getIntValue("r"), color.getIntValue("g"), color.getIntValue("b"))), CustomTypes.COLOR);
+		addProcedure(CANVAS, "setStrokeWidth", (itself, width) -> ((Canvas) itself.get("canvas")).graphics2D.setStroke(new BasicStroke((float) width.getDouble())), DOUBLE);
 
 		addProcedure(CANVAS, "drawString", (itself, text, x, y) -> ((Canvas) itself.get("canvas")).graphics2D.drawString(text.getString(), x.getInt(), y.getInt()), STRING, INT, INT);
 
@@ -116,19 +117,21 @@ public class SwingTypes extends TypesInit
 		addProcedure(CANVAS, "drawRect", (itself, x, y, w, h) -> ((Canvas) itself.get("canvas")).graphics2D.drawRect(x.getInt(), y.getInt(), w.getInt(), h.getInt()), INT, INT, INT, INT);
 
 		addProcedure(CANVAS, "drawLine", (itself, x1, y1, x2, y2) -> ((Canvas) itself.get("canvas")).graphics2D.drawLine(x1.getInt(), y1.getInt(), x2.getInt(), y2.getInt()), INT, INT, INT, INT);
-
 		addProcedure(CANVAS, "drawPoint", (itself, x, y) -> ((Canvas) itself.get("canvas")).graphics2D.drawLine(x.getInt(), y.getInt(), x.getInt(), y.getInt()), INT, INT);
+		addProcedure(CANVAS, "drawCircle", (itself, x, y, radius) -> ((Canvas) itself.get("canvas")).graphics2D.drawOval(x.getInt() - radius.getInt(), y.getInt() - radius.getInt(), radius.getInt() * 2, radius.getInt() * 2), INT, INT, INT);
+		addProcedure(CANVAS, "drawArc", (itself, x, y, radius, startAngle, endAngle) -> ((Canvas) itself.get("canvas")).graphics2D.drawArc(x.getInt() - radius.getInt(), y.getInt() - radius.getInt(), radius.getInt() * 2, radius.getInt() * 2, startAngle.getInt(), endAngle.getInt()), INT, INT, INT, INT, INT);
 	}
 
 	public static class Canvas extends JComponent
 	{
-		private final BufferedImage image;
-		private final Graphics2D graphics2D;
+		public final BufferedImage image;
+		public final Graphics2D graphics2D;
 
 		public Canvas(BufferedImage image)
 		{
 			this.image = image;
 			this.graphics2D = image.createGraphics();
+			graphics2D.setStroke(new BasicStroke(5));
 		}
 
 		public void paintComponent(Graphics g)

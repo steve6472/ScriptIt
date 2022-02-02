@@ -1,0 +1,179 @@
+import type Window;
+import type Color;
+import type int;
+import type double;
+import type string;
+import type bool;
+import type vec4;
+
+import library System;
+import library Math;
+import library Geometry;
+import library Random;
+import library Log;
+
+§
+§ Constants
+§
+bool DEBUG = true;
+
+int WIDTH = 1000;
+int HEIGHT = 1000;
+
+int CENTER_X = WIDTH / 2;
+int CENTER_Y = HEIGHT / 2;
+
+int MULTIPLIER = 2;
+
+Color WHITE = Color(255, 255, 255);
+Color BACKGROUND = Color(60, 60, 60);
+
+Color COLOR_R = Color(255, 0, 0);
+Color COLOR_L = Color(0, 255, 0);
+Color COLOR_C = Color(0, 0, 255);
+
+TEST_01 = Color(255, 0, 255);
+
+window = Window("RLC", WIDTH, HEIGHT);
+window.center();
+
+canvas = window.getCanvas();
+
+function print(string s)
+{
+    if (DEBUG)
+    {
+        System.println(s + Log.reset());
+    };
+};
+
+function vector(Color color, double x, double y)
+{
+    System.println("Color: " + color);
+    canvas.setColor(color);
+    System.println("X: " + x + ", Y: " + y);
+    System.println("_X: " + int(x) + ", Y: " + int(y));
+    canvas.drawLine(CENTER_X, CENTER_Y, int(CENTER_X + x), int(CENTER_Y + y));
+};
+
+§§§§§§§§§§§§§§§§§§§§§§§§§§
+§         VALUES         §
+§§§§§§§§§§§§§§§§§§§§§§§§§§
+
+§double multiplier = 1.8;
+double multiplier = 3.0;
+
+§ 50V, 8uF
+§double voltage_r = 38.96 * multiplier;
+§double voltage_l = 76.55 * multiplier;
+§double voltage_c = 73.69 * multiplier;
+§double total_amps = 0.16 * multiplier;
+§double total_voltage = 50.0 * multiplier;
+
+§ 100V, 8uF
+§double voltage_r = 78.88 * multiplier;
+§double voltage_l = 152.13 * multiplier;
+§double voltage_c = 148.12 * multiplier;
+§double total_amps = 0.33 * multiplier;
+§double total_voltage = 100.0 * multiplier;
+
+§ 50V, 16uF
+§double voltage_r = 30.42 * multiplier;
+§double voltage_l = 59.84 * multiplier;
+§double voltage_c = 28.29 * multiplier;
+§double total_amps = 0.12 * multiplier;
+§double total_voltage = 50.0 * multiplier;
+
+§ 100V, 16uF
+double voltage_r = 61.4 * multiplier;
+double voltage_l = 120.2 * multiplier;
+double voltage_c = 57.0 * multiplier;
+double total_amps = 0.26 * multiplier;
+double total_voltage = 100.0 * multiplier;
+
+§ TEST
+§double voltage_r = 10.0 * multiplier;
+§double voltage_l = 37.68 * multiplier;
+§double voltage_c = 10.62 * multiplier;
+§double total_amps = 0.2 * multiplier;
+§double total_voltage = 28.85 * multiplier;
+
+canvas.setColor(WHITE);
+canvas.fillRect(0, 0, WIDTH, HEIGHT);
+
+canvas.setStrokeWidth(2.0);
+canvas.setColor(Color(102, 153, 102));
+X = Geometry.drawGrid(canvas, 25, 200);
+
+canvas.setStrokeWidth(4.0);
+
+canvas.setColor(COLOR_R);
+canvas.drawString("Ur: " + voltage_r / multiplier, 10, 15);
+canvas.setColor(COLOR_L);
+canvas.drawString("Ul: " + voltage_l / multiplier, 10, 30);
+canvas.setColor(COLOR_C);
+canvas.drawString("Uc: " + voltage_c / multiplier, 10, 45);
+canvas.setColor(WHITE);
+canvas.drawString("I: " + total_amps / multiplier, 10, 60);
+canvas.drawString("U: " + total_voltage / multiplier, 10, 75);
+
+canvas.setColor(0);
+canvas.fillRect(WIDTH / 2 - 5, HEIGHT / 2 - 5, 10, 10);
+
+canvas.setColor(COLOR_R);
+canvas.drawLine(CENTER_X, CENTER_Y, int(CENTER_X + voltage_r), int(CENTER_Y + 0));
+
+canvas.setColor(COLOR_L);
+canvas.drawLine(CENTER_X, CENTER_Y, int(CENTER_X), int(CENTER_Y - voltage_l));
+
+canvas.setColor(COLOR_C);
+canvas.drawLine(CENTER_X, CENTER_Y, int(CENTER_X), int(CENTER_Y + voltage_c));
+
+canvas.setColor(COLOR_R + COLOR_C);
+canvas.drawLine(CENTER_X, CENTER_Y, int(CENTER_X + voltage_r), int(CENTER_Y + voltage_c));
+
+§§ first circle
+canvas.setColor(Color(0, 128, 0));
+canvas.drawArc(int(CENTER_X + voltage_r), int(CENTER_Y + voltage_c), int(voltage_l), 10, 90);
+
+§§ second circle
+canvas.setColor(Color(128, 128, 128));
+canvas.drawArc(CENTER_X, CENTER_Y, int(total_voltage), 100, -100);
+
+vec4 in = Geometry.circleCircleIntersection(voltage_r, voltage_c, voltage_l, 0.0, 0.0, total_voltage);
+
+canvas.setColor(COLOR_L);
+canvas.fillRect(int(in.x() + CENTER_X - 2), int(in.y() + CENTER_Y - 2), 5, 5);
+§canvas.fillRect(int(in.z() + CENTER_X - 2), int(in.w() + CENTER_Y - 2), 5, 5);
+
+
+double vUlX = in.x() - voltage_r;
+double vUlY = in.y() - voltage_c;
+
+canvas.drawLine(CENTER_X, CENTER_Y, int(CENTER_X + vUlX), int(CENTER_Y + vUlY));
+canvas.drawLine(int(CENTER_X + voltage_r), int(CENTER_Y + voltage_c), int(CENTER_X + in.x()), int(CENTER_Y + in.y()));
+
+§ total U phase line
+canvas.setColor(Color(0, 0, 0));
+canvas.drawLine(int(CENTER_X), int(CENTER_Y), int(CENTER_X + in.x()), int(CENTER_Y + in.y()));
+
+
+X = Geometry.stuff(canvas, CENTER_X + voltage_r / 2.0, CENTER_Y + voltage_c / 2.0, "Urc", 20);
+X = Geometry.stuff(canvas, CENTER_X + voltage_r / 2.0, CENTER_Y * 1.0, "Ur", 15);
+X = Geometry.stuff(canvas, vUlX / 2.0 + CENTER_X, vUlY / 2.0 + CENTER_Y, "Ul", 15);
+X = Geometry.stuff(canvas, in.x() / 2.0 + CENTER_X, in.y() / 2.0 + CENTER_Y, "U", 11);
+
+double totalFi = Math.toDeg(Math.acos(in.x() / total_voltage));
+X = Geometry.stuff(canvas, in.x() / 5.0 + CENTER_X, in.y() / 5.0 + CENTER_Y, ("φ: " + totalFi).substring(0, 8) + "°", 55);
+
+double LFi = Math.toDeg(Math.acos(vUlX / voltage_l));
+X = Geometry.stuff(canvas, vUlX / 5.0 + CENTER_X, vUlY / 5.0 + CENTER_Y, ("φL: " + LFi + "°").substring(0, 10) + "°", 65);
+
+§
+§vector(COLOR_R, 200.0, 0.0);
+§vector(COLOR_C, 0.0, 100.0);
+§
+§vector(COLOR_R + COLOR_C, 200.0, 100.0);
+§
+
+canvas.repaint();

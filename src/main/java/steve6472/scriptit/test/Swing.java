@@ -22,16 +22,18 @@ public class Swing
 //		TokenParser.DEBUG = true;
 
 		SwingTypes.init();
+		CustomTypes.init();
 
 		Workspace workspace = new Workspace();
 		workspace.addType(SwingTypes.WINDOW);
 		workspace.addType(CustomTypes.COLOR);
+		workspace.addType(CustomTypes.VEC4);
 
 		workspace.addLibrary(new GeometryLibrary());
 		workspace.addLibrary(new LogLibrary());
 
-		Script script = Script.create(workspace, new File("scripts/pong2.txt"));
-		CustomTypes.init();
+
+		Script script = Script.create(workspace, new File("scripts/rlc.txt"));
 		script.runWithDelay();
 
 //		Script script = ScriptReader.readScript(new File("scripts/pong.txt"), workspace);

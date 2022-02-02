@@ -12,6 +12,7 @@ public class Result
 {
 	private static final Result PASS = new Result(Value.NULL, ResultStatus.PASS);
 	private static final Result DELAY = new Result(Value.NULL, ResultStatus.DELAY);
+	private static final Result WAIT = new Result(Value.NULL, ResultStatus.WAIT);
 	private static final Result PASS_IF_FALSE = new Result(Value.NULL, ResultStatus.PASS_IF_FALSE);
 	private static final Result BREAK = new Result(Value.NULL, ResultStatus.BREAK);
 	private static final Result CONTINUE = new Result(Value.NULL, ResultStatus.CONTINUE);
@@ -32,15 +33,22 @@ public class Result
 		return new Result(value, ResultStatus.VALUE);
 	}
 
-	public static Result delay(int delay)
+	public static Result delay(int delay, boolean skip)
 	{
-		return new Result(Value.newValue(PrimitiveTypes.INT, delay), ResultStatus.DELAY);
+		return new Result(Value.newValue(PrimitiveTypes.INT, delay * (skip ? -1 : 1)), ResultStatus.DELAY);
 	}
 
 	public static Result delay()
 	{
-		return DELAY;
+		return delay(0, true);
 	}
+
+	public static boolean isDelaySkip(Result result)
+	{
+		return result.isDelay() && result.getValue().getInt() < 0;
+	}
+
+	public static Result wait_() { return WAIT; }
 
 	public static Result pass()
 	{

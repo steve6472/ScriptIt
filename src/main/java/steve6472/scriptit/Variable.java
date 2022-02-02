@@ -19,7 +19,7 @@ public class Variable extends Expression
 	public Result apply(Script script)
 	{
 		if (source.sourceType == VariableSourceType.MEMORY)
-			return Result.value(script.currentExecutor().memory.getVariable(source.variableName));
+			return Result.value(script.memory.getVariable(source.variableName));
 		else
 			return Result.value(source.value.getValue(source.variableName));
 	}

@@ -1,5 +1,7 @@
 package steve6472.scriptit;
 
+import steve6472.scriptit.executor.Executor;
+
 import java.util.Arrays;
 
 /**********************
@@ -10,27 +12,19 @@ import java.util.Arrays;
  ***********************/
 public class FunctionCall extends Expression
 {
-	DelayValue[] arguments;
+	Executor argumentsExecutor, functionExecutor;
+	private final Value[] args;
+
 	Function function = null;
-	Value[] args;
-	boolean isDelayed;
-	private int lastIndex = 0;
 	FunctionSource source;
+	Expression[] arguments;
 
 	public FunctionCall(FunctionSource source, Expression... arguments)
 	{
 		this.source = source;
-		this.arguments = new DelayValue[arguments.length];
-		for (int i = 0; i < arguments.length; i++)
-		{
-			this.arguments[i] = new DelayValue(arguments[i]);
-		}
+		argumentsExecutor = new Executor(arguments);
 		args = new Value[arguments.length];
-	}
-
-	public DelayValue[] getArguments()
-	{
-		return arguments;
+		this.arguments = arguments;
 	}
 
 	public FunctionSource getSource()
@@ -41,60 +35,55 @@ public class FunctionCall extends Expression
 	@Override
 	public Result apply(Script script)
 	{
-		if (!isDelayed)
+		Executor.ExecutorResult argumentsResult = argumentsExecutor.executeWhatYouCan(script);
+		if (argumentsResult.isDelay())
 		{
-			for (int currentIndex = lastIndex; currentIndex < arguments.length; currentIndex++)
+			return Result.delay();
+		} else
+		{
+			for (int i = 0; i < args.length; i++)
 			{
-				lastIndex = currentIndex;
-
-				if (arguments[currentIndex].apply(script))
-					return Result.delay();
-				args[currentIndex] = arguments[currentIndex].val();
+				Value a = argumentsExecutor.getResult(i).getValue();
+				args[i] = a;
 			}
 
 			if (function == null)
 			{
 				Type[] types = new Type[args.length];
+
 				for (int i = 0; i < args.length; i++)
 				{
-					Value a = args[i];
-					types[i] = a.type;
+					types[i] = args[i].type;
 				}
-				if (source.sourceType == FunctionSourceType.FUNCTION)
-				{
-					function = script.getMemory().getFunction(source.functionName, types);
-				}
-				else if (source.sourceType == FunctionSourceType.VALUE)
-				{
-					function = source.value.type.getFunction(source.functionName, types);
-				}
-				else if (source.sourceType == FunctionSourceType.STATIC)
-				{
-					function = source.library.getFunction(source.functionName, types);
-				}
-				else
-				{
-					throw new IllegalArgumentException("SourceType " + source.sourceType + " not implemented!");
-				}
-			}
-			function.setArguments(args);
+				function = switch (source.sourceType)
+					{
+						case FUNCTION -> script.getMemory().getFunction(source.functionName, types);
+						case STATIC -> source.library.getFunction(source.functionName, types);
+						case VALUE -> source.value.type.getFunction(source.functionName, types);
+					};
 
-			if (source.sourceType == FunctionSourceType.VALUE)
-			{
-				function.setTypeFunction(source.value);
+				if (source.sourceType == FunctionSourceType.VALUE)
+				{
+					function.setReturnThisHelper(source.value);
+				}
 			}
+
+			function.setArguments(args);
 		}
 
-		isDelayed = false;
+		if (functionExecutor == null)
+		{
+			functionExecutor = new Executor(function);
+		}
 
-		Result r = function.apply(script);
-		if (r.isDelay())
-			isDelayed = true;
+		if (functionExecutor.executeWhatYouCan(script).isDelay())
+			return Result.delay();
 
-		if (!isDelayed)
-			lastIndex = 0;
+		Result result = functionExecutor.getLastResult();
+		argumentsExecutor.reset();
+		functionExecutor.reset();
 
-		return r;
+		return result;
 	}
 
 	@Override
@@ -115,7 +104,7 @@ public class FunctionCall extends Expression
 		s.append("(");
 		for (int i = 0; i < args.length; i++)
 		{
-			s.append(arguments[i].expression.showCode(0));
+			s.append(argumentsExecutor.getExpressions().get(i).showCode(0));
 			if (i < args.length - 1)
 				s.append(Highlighter.SYMBOL).append(", ");
 		}
@@ -127,6 +116,6 @@ public class FunctionCall extends Expression
 	@Override
 	public String toString()
 	{
-		return "FunctionCall{" + "arguments=" + Arrays.toString(arguments) + ", isDelayed=" + isDelayed + ", lastIndex=" + lastIndex + ", source=" + source + '}';
+		return "FunctionCall{" + "arguments=" + Arrays.toString(arguments)+ ", source=" + source + '}';
 	}
 }

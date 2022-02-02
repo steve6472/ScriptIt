@@ -93,7 +93,7 @@ public class TypesInit
 		@Override
 		public Result apply(Script script)
 		{
-			return Result.returnValue(func.apply(typeFunction, arguments));
+			return Result.returnValue(func.apply(returnThisHelper, arguments));
 		}
 	}
 
@@ -232,7 +232,7 @@ public class TypesInit
 		@Override
 		public Result apply(Script script)
 		{
-			proc.apply(typeFunction, arguments);
+			proc.apply(returnThisHelper, arguments);
 			return Result.pass();
 		}
 	}

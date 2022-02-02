@@ -1,6 +1,7 @@
-package steve6472.scriptit;
+package steve6472.scriptit.tokenizer;
 
-import steve6472.scriptit.tokenizer.*;
+import steve6472.scriptit.*;
+import steve6472.scriptit.Stack;
 import steve6472.scriptit.tokenizer.parslet.*;
 
 import java.util.*;
@@ -16,9 +17,6 @@ import java.util.*;
 public class TokenParser
 {
 	public static boolean DEBUG = false;
-
-	private static final String COLOR_NAME = "\u001b[38;5;61m";
-	private static final String COLOR_VARIABLE = Log.WHITE;
 
 	public static int depth = 0;
 
@@ -45,6 +43,8 @@ public class TokenParser
 		prefixParslets.put(Operator.WHILE, new WhileParslet());
 		prefixParslets.put(Operator.RETURN_IF, new ReturnIfParslet());
 		prefixParslets.put(Operator.FOR, new ForParslet());
+		prefixParslets.put(Operator.CONTINUE, new ContinueParslet());
+		prefixParslets.put(Operator.BREAK, new BreakParslet());
 
 
 
@@ -97,7 +97,7 @@ public class TokenParser
 			System.out.println(tree() + s);
 	}
 
-	private final Stack<List<Expression>> functionParameters = new Stack<>(64);
+	private final steve6472.scriptit.Stack<List<Expression>> functionParameters = new Stack<>(64);
 	public Tokenizer tokenizer;
 	public Set<String> importedTypes;
 	public Workspace workspace;

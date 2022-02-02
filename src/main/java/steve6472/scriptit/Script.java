@@ -1,7 +1,9 @@
 package steve6472.scriptit;
 
+import steve6472.scriptit.executor.MainExecutor;
 import steve6472.scriptit.libraries.Library;
 import steve6472.scriptit.tokenizer.Precedence;
+import steve6472.scriptit.tokenizer.TokenParser;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -30,7 +32,7 @@ public class Script
 
 	public TokenParser parser;
 	MemoryStack memory;
-	ExpressionExecutor[] lines;
+	MainExecutor mainExecutor;
 	private int lastIndex = 0;
 	private int currentIndex = 0;
 	boolean exitOnError = false;
@@ -39,8 +41,8 @@ public class Script
 	QueuedFunctionCall<ExpressionExecutor, Boolean> currentFunction = null;
 	private boolean waitingForQueuedFunction = false;
 
-	Supplier<Long> delayStartSupplier = System::currentTimeMillis;
-	BiFunction<Long, Long, Boolean> shouldAdvance = (start, delay) -> System.currentTimeMillis() - start >= delay;
+	public Supplier<Long> delayStartSupplier = System::currentTimeMillis;
+	public BiFunction<Long, Long, Boolean> shouldAdvance = (start, delay) -> System.currentTimeMillis() - start >= delay;
 
 	public void setGetDelayStart(Supplier<Long> delayStartSupplier)
 	{
@@ -111,22 +113,17 @@ public class Script
 
 	public void setExpressions(String... expressions)
 	{
-		lines = new ExpressionExecutor[expressions.length];
+		Expression[] lines = new Expression[expressions.length];
 		for (int i = 0; i < expressions.length; i++)
 		{
-			lines[i] = new ExpressionExecutor(memory);
-			lines[i].setExpression(parser.parse(Precedence.ANYTHING));
+			lines[i] = parser.parse(Precedence.ANYTHING);
 		}
+		mainExecutor = new MainExecutor(lines);
 	}
 
 	public void setExpressions(Expression... expressions)
 	{
-		lines = new ExpressionExecutor[expressions.length];
-		for (int i = 0; i < expressions.length; i++)
-		{
-			lines[i] = new ExpressionExecutor(memory);
-			lines[i].setExpression(expressions[i]);
-		}
+		mainExecutor = new MainExecutor(expressions);
 	}
 
 	public void runQueuedFunctions()
@@ -136,6 +133,8 @@ public class Script
 
 	private Result execute_()
 	{
+		//TODO: enable queued functions
+		/*
 		if (waitingForQueuedFunction)
 		{
 			runQueuedFunctions();
@@ -174,29 +173,30 @@ public class Script
 					return result;
 				runQueuedFunctions();
 			}
-		}
+		}*/
 
-		currentIndex = lastIndex;
-		while (currentIndex < lines.length)
-		{
-			lastIndex = currentIndex;
 
-			Result result = lines[currentIndex].execute(this);
-			if (result.isReturnValue() || result.isReturn())
-			{
-				lastIndex = 0;
-				return result;
-			}
-			if (result.isDelay())
-				return result;
-			if (result.isWaitForEvents())
-			{
-				waitingForQueuedFunction = true;
-				return Result.delay();
-			}
-
-			currentIndex++;
-		}
+//		currentIndex = lastIndex;
+//		while (currentIndex < lines.length)
+//		{
+//			lastIndex = currentIndex;
+//
+//			Result result = lines[currentIndex].execute(this);
+//			if (result.isReturnValue() || result.isReturn())
+//			{
+//				lastIndex = 0;
+//				return result;
+//			}
+//			if (result.isDelay())
+//				return result;
+//			if (result.isWaitForEvents())
+//			{
+//				waitingForQueuedFunction = true;
+//				return Result.delay();
+//			}
+//
+//			currentIndex++;
+//		}
 
 		return Result.return_();
 	}
@@ -280,21 +280,35 @@ public class Script
 
 	public Value runWithDelay()
 	{
-		Result ret = Result.delay();
+		Result ret;
 
-		while (ret.isDelay() && !ret.isReturnValue() && !ret.isReturn())
+		do
 		{
-			ret = execute();
-		}
+			ret = mainExecutor.executeSingle(this);
+		} while (mainExecutor.canExecuteMore() && !ret.isReturnValue() && !ret.isReturn());
+
 		if (ret.isReturnValue())
 			return ret.getValue();
 		else
 			return Value.NULL;
+
+//		Result result;
+//
+//		do
+//		{
+//			result = mainExecutor.executeSingle(this);
+//
+//		} while (mainExecutor.canExecuteMore());
+//
+//		if (result.isReturnValue())
+//			return result.getValue();
+//		else
+//			return Value.NULL;
 	}
 
-	public ExpressionExecutor currentExecutor()
+	public MainExecutor getMainExecutor()
 	{
-		return lines[currentIndex];
+		return mainExecutor;
 	}
 
 	public MemoryStack getMemory()
@@ -307,11 +321,6 @@ public class Script
 		return workspace;
 	}
 
-	public ExpressionExecutor[] getLines()
-	{
-		return lines;
-	}
-
 	public TokenParser getParser()
 	{
 		return parser;
@@ -320,13 +329,14 @@ public class Script
 	public String showCode()
 	{
 		StringBuilder s = new StringBuilder();
-		for (int i = 0; i < lines.length; i++)
+		int len = mainExecutor.getExpressions().size();
+		for (int i = 0; i < len; i++)
 		{
-			ExpressionExecutor line = lines[i];
-			s.append(line.getExpression().showCode(0));
-			if (!(line.getExpression() instanceof If || line.getExpression() instanceof While || line.getExpression() instanceof IfElse || line.getExpression() instanceof Comment))
+			Expression expression = mainExecutor.getExpressions().get(i);
+			s.append(expression.showCode(0));
+			if (!(expression instanceof If || expression instanceof While || expression instanceof IfElse || expression instanceof Comment))
 				s.append(Highlighter.END);
-			if (i < lines.length - 1)
+			if (i < len - 1)
 				s.append("\n");
 		}
 		return s.toString();

@@ -1,7 +1,6 @@
-package steve6472.scriptit;
+package steve6472.scriptit.tokenizer;
 
-import steve6472.scriptit.tokenizer.MyStreamTokenizer;
-import steve6472.scriptit.tokenizer.Operator;
+import steve6472.scriptit.Log;
 
 import java.io.IOException;
 import java.io.StreamTokenizer;

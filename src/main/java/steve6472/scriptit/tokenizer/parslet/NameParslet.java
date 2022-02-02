@@ -2,6 +2,8 @@ package steve6472.scriptit.tokenizer.parslet;
 
 import steve6472.scriptit.*;
 import steve6472.scriptit.tokenizer.PrefixParselet;
+import steve6472.scriptit.tokenizer.TokenParser;
+import steve6472.scriptit.tokenizer.Tokenizer;
 
 /**********************
  * Created by steve6472 (Mirek Jozefek)

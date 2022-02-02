@@ -20,6 +20,13 @@ public class MathLibrary extends Library
 		addFunction("sqrt", d -> newValue(DOUBLE, Math.sqrt(d.getDouble())), DOUBLE);
 		addFunction("sin", d -> newValue(DOUBLE, Math.sin(d.getDouble())), DOUBLE);
 		addFunction("cos", d -> newValue(DOUBLE, Math.cos(d.getDouble())), DOUBLE);
+		addFunction("asin", d -> newValue(DOUBLE, Math.asin(d.getDouble())), DOUBLE);
+		addFunction("acos", d -> newValue(DOUBLE, Math.acos(d.getDouble())), DOUBLE);
+		addFunction("toRad", d -> newValue(DOUBLE, Math.toRadians(d.getDouble())), DOUBLE);
+		addFunction("toDeg", d -> newValue(DOUBLE, Math.toDegrees(d.getDouble())), DOUBLE);
+		addFunction("atan_", (a, b) -> newValue(DOUBLE, Math.atan2(a.getDouble(), b.getDouble())), DOUBLE, DOUBLE);
+		addFunction("abs", d -> newValue(DOUBLE, Math.abs(d.getDouble())), DOUBLE);
+		addFunction("hypot", (a, b) -> newValue(DOUBLE, Math.hypot(a.getDouble(), b.getDouble())), DOUBLE, DOUBLE);
 
 		addFunction("clamp", (number, min, max) -> newValue(DOUBLE, Math.min(Math.max(number.getDouble(), min.getDouble()), max.getDouble())), DOUBLE, DOUBLE, DOUBLE);
 		addFunction("clamp", (number, min, max) -> newValue(INT, Math.min(Math.max(number.getInt(), min.getInt()), max.getInt())), INT, INT, INT);

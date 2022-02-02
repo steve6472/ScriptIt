@@ -1,9 +1,7 @@
 package steve6472.scriptit.tokenizer.parslet;
 
 import steve6472.scriptit.*;
-import steve6472.scriptit.tokenizer.Operator;
-import steve6472.scriptit.tokenizer.Precedence;
-import steve6472.scriptit.tokenizer.PrefixParselet;
+import steve6472.scriptit.tokenizer.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,7 +43,7 @@ public class BodyParslet implements PrefixParselet
 		TokenParser.depth--;
 
 		Function function = new Function();
-		function.setExpressions(parser.script, expressions.toArray(Expression[]::new));
+		function.setExpressions(expressions.toArray(Expression[]::new));
 		return function;
 	}
 }

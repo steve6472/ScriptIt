@@ -1,9 +1,8 @@
 package steve6472.scriptit.tokenizer.parslet;
 
 import steve6472.scriptit.*;
-import steve6472.scriptit.tokenizer.Operator;
-import steve6472.scriptit.tokenizer.Precedence;
-import steve6472.scriptit.tokenizer.PrefixParselet;
+import steve6472.scriptit.simple.ReturnIf;
+import steve6472.scriptit.tokenizer.*;
 
 /**********************
  * Created by steve6472

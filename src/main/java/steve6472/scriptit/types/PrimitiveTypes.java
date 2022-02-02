@@ -165,7 +165,7 @@ public class PrimitiveTypes extends TypesInit
 			@Override
 			public Result apply(Script script)
 			{
-				return Result.value(newValue(INT, typeFunction.getString().length()));
+				return Result.value(newValue(INT, returnThisHelper.getString().length()));
 			}
 		});
 		STRING.addFunction(FunctionParameters.function("print").build(), new Function()
@@ -173,8 +173,8 @@ public class PrimitiveTypes extends TypesInit
 			@Override
 			public Result apply(Script script)
 			{
-				System.out.println(typeFunction.getString());
-				return Result.value(typeFunction);
+				System.out.println(returnThisHelper.getString());
+				return Result.value(returnThisHelper);
 			}
 		});
 		STRING.addFunction(FunctionParameters.create("charAt", INT), new Function()
@@ -182,7 +182,7 @@ public class PrimitiveTypes extends TypesInit
 			@Override
 			public Result apply(Script script)
 			{
-				return Result.value(newValue(CHAR, typeFunction.getString().charAt(arguments[0].getInt())));
+				return Result.value(newValue(CHAR, returnThisHelper.getString().charAt(arguments[0].getInt())));
 			}
 		});
 		STRING.addFunction(FunctionParameters.create("setChar", INT, CHAR), new Function()
@@ -190,7 +190,7 @@ public class PrimitiveTypes extends TypesInit
 			@Override
 			public Result apply(Script script)
 			{
-				StringBuilder builder = new StringBuilder(typeFunction.getString());
+				StringBuilder builder = new StringBuilder(returnThisHelper.getString());
 				builder.setCharAt(arguments[0].getInt(), arguments[1].getChar());
 				return Result.value(newValue(STRING, builder.toString()));
 			}
@@ -200,7 +200,7 @@ public class PrimitiveTypes extends TypesInit
 			@Override
 			public Result apply(Script script)
 			{
-				return Result.value(newValue(STRING, typeFunction.getString().substring(arguments[0].getInt())));
+				return Result.value(newValue(STRING, returnThisHelper.getString().substring(arguments[0].getInt())));
 			}
 		});
 		STRING.addFunction(FunctionParameters.create("substring", INT, INT), new Function()
@@ -208,7 +208,7 @@ public class PrimitiveTypes extends TypesInit
 			@Override
 			public Result apply(Script script)
 			{
-				return Result.value(newValue(STRING, typeFunction.getString().substring(arguments[0].getInt(), arguments[1].getInt())));
+				return Result.value(newValue(STRING, returnThisHelper.getString().substring(arguments[0].getInt(), arguments[1].getInt())));
 			}
 		});
 	}

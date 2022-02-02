@@ -1,5 +1,8 @@
 package steve6472.scriptit;
 
+import steve6472.scriptit.exceptions.NoBinaryOperationFoundException;
+import steve6472.scriptit.exceptions.NoOperatorFoundException;
+import steve6472.scriptit.executor.Executor;
 import steve6472.scriptit.tokenizer.Operator;
 
 import java.util.HashMap;
@@ -12,18 +15,23 @@ import java.util.HashMap;
  ***********************/
 public class BinaryOperator extends Expression
 {
+	/**
+	 * Probably a performance improvement
+	 */
+	private final Value[] operatorArguments;
+
 	Operator operator;
+	Executor operandExecutor, operationExecutor;
 	Expression left, right;
-	Result leftResult = Result.delay();
-	Result rightResult = Result.delay();
 	Function operatorFunction = null;
-	Value leftValue, rightValue;
 
 	public BinaryOperator(Operator operator, Expression left, Expression right)
 	{
 		this.operator = operator;
 		this.left = left;
 		this.right = right;
+		this.operandExecutor = new Executor(left, right);
+		operatorArguments = new Value[2];
 	}
 
 	@Override
@@ -35,47 +43,44 @@ public class BinaryOperator extends Expression
 	@Override
 	public Result apply(Script script)
 	{
-		if (leftResult.isDelay())
-			leftResult = left.apply(script);
+		if (operandExecutor.executeWhatYouCan(script).isDelay())
+			return Result.delay();
 
-		if (leftResult.isDelay())
-			return leftResult;
+		Result left = operandExecutor.getResult(0);
+		Result right = operandExecutor.getResult(1);
 
-		leftValue = leftResult.getValue();
-
-		if (rightResult.isDelay())
-			rightResult = right.apply(script);
-
-		if (rightResult.isDelay())
-			return rightResult;
-
-		rightValue = rightResult.getValue();
+		operandExecutor.reset();
 
 		if (operatorFunction == null)
 		{
-			HashMap<Operator, Function> operatorFunctionHashMap = leftValue.type.binary.get(rightValue.type);
+			HashMap<Operator, Function> operatorFunctionHashMap = left.getValue().type.binary.get(right.getValue().type);
 			if (operatorFunctionHashMap == null)
 			{
-				throw new RuntimeException("Type '" + leftValue.type.getKeyword() + "' does not have binary operation with type '" + rightValue.type.getKeyword() + "'");
+				throw new NoBinaryOperationFoundException(left.getValue().type, right.getValue().type);
 			}
 			operatorFunction = operatorFunctionHashMap.get(operator);
 
 			if (operatorFunction == null)
 			{
-				throw new RuntimeException("No operator found for type '" + leftValue.type.getKeyword() + "' with right type '" + rightValue.type.getKeyword() + "', operator: " + operator + " (" + operator.getSymbol() + ")");
+				throw new NoOperatorFoundException(operator, left.getValue().type, right.getValue().type);
 			}
 		}
 
-		operatorFunction.setArguments(new Value[] {leftValue, rightValue});
+		operatorArguments[0] = left.getValue();
+		operatorArguments[1] = right.getValue();
 
-		Result result = operatorFunction.apply(script);
-		if (result.isDelay())
-			return result;
+		operatorFunction.setArguments(operatorArguments);
 
-		leftResult = Result.delay();
-		rightResult = Result.delay();
+		if (operationExecutor == null)
+		{
+			operationExecutor = new Executor(operatorFunction);
+		}
+		operationExecutor.reset();
 
-		return result;
+		if (operationExecutor.executeWhatYouCan(script).isDelay())
+			return Result.delay();
+
+		return operationExecutor.getLastResult();
 	}
 
 	@Override

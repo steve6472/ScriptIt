@@ -1,5 +1,8 @@
 package steve6472.scriptit;
 
+import steve6472.scriptit.executor.Executor;
+import steve6472.scriptit.types.PrimitiveTypes;
+
 /**********************
  * Created by steve6472 (Mirek Jozefek)
  * On date: 5/22/2021
@@ -8,53 +11,62 @@ package steve6472.scriptit;
  ***********************/
 public class If extends Expression
 {
-	Expression condition;
-	Expression body;
-	Result condResult = Result.delay();
-	boolean isBodyDelayed;
-	Value insideValue;
+	Expression condition, body;
+
+	Executor conditionExecutor, bodyExecutor;
 
 	public If(Expression condition, Expression body)
 	{
 		this.condition = condition;
 		this.body = body;
+		if (body instanceof Function f)
+			f.setBody(true);
+
+		conditionExecutor = new Executor(condition);
+		bodyExecutor = new Executor(body);
 	}
 
 	@Override
 	public Result apply(Script script)
 	{
-		if (!isBodyDelayed)
+		if (conditionExecutor.executeWhatYouCan(script).isDelay())
+			return Result.delay();
+
+		Result conditionResult = conditionExecutor.getLastResult();
+
+		if (conditionResult.getValue().type != PrimitiveTypes.BOOL)
+			throw new RuntimeException("Incorrect type returned for condition (" + conditionResult.getValue().type + ")");
+
+		if (!conditionResult.getValue().getBoolean())
 		{
-			if (condResult.isDelay())
-				condResult = condition.apply(script);
-
-			if (condResult.isDelay())
-				return condResult;
-
-			Value condValue = condResult.getValue();
-			condResult = Result.delay();
-
-			// Condition is false -> do not continue
-			if (!condValue.getBoolean())
-				return Result.passIfFalse();
-
-			if (insideValue != Value.NULL && body instanceof Function)
-			{
-				Function f = (Function) body;
-
-				f.setTypeFunction(insideValue);
-			}
+			conditionExecutor.reset();
+			return Result.passIfFalse();
 		}
 
-		isBodyDelayed = false;
+		if (bodyExecutor.executeWhatYouCan(script).isDelay())
+			return Result.delay();
 
-		Result r = body.apply(script);
-		if (r.isDelay())
-			isBodyDelayed = true;
-		else if (r.getStatus() == ResultStatus.VALUE)
-			return Result.returnValue(r.getValue());
+//		System.out.println("BODY----------------");
+//
+//		for (int i = 0; i < bodyExecutor.getExpressions().size(); i++)
+//		{
+//			System.out.println(bodyExecutor.getExpressions().get(i) + " -> " + bodyExecutor.getResult(i));
+//		}
+//
+//		System.out.println("----------------\n\n");
 
-		return r;
+		Result result = bodyExecutor.getLastResult();
+
+		conditionExecutor.reset();
+		bodyExecutor.reset();
+
+		return result;
+	}
+
+	@Override
+	public String toString()
+	{
+		return "If{" + "condition=" + condition + ", body=" + body + '}';
 	}
 
 	@Override

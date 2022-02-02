@@ -1,5 +1,7 @@
 package steve6472.scriptit;
 
+import steve6472.scriptit.executor.Executor;
+
 /**********************
  * Created by steve6472 (Mirek Jozefek)
  * On date: 5/22/2021
@@ -10,46 +12,41 @@ public class IfElse extends Expression
 {
 	If ifFunction;
 	Expression elseFunction;
-	Result ifResult = Result.delay();
-	Result elseResult = Result.delay();
+	Executor ifExecutor, elseExecutor;
 
 	public IfElse(If ifFunction, Expression elseFunction)
 	{
 		this.ifFunction = ifFunction;
 		this.elseFunction = elseFunction;
+		if (elseFunction instanceof Function f)
+			f.setBody(true);
+		this.elseExecutor = new Executor(elseFunction);
+		this.ifExecutor = new Executor(ifFunction);
 	}
 
 	@Override
 	public Result apply(Script script)
 	{
-		if (ifResult.isDelay())
-			ifResult = ifFunction.apply(script);
+		if (ifExecutor.executeWhatYouCan(script).isDelay())
+			return Result.delay();
 
-		if (ifResult.isDelay())
-			return ifResult;
-
+		Result ifResult = ifExecutor.getLastResult();
 		if (ifResult.isIfFalse())
 		{
-			if (elseResult.isDelay())
-				elseResult = elseFunction.apply(script);
+			if (elseExecutor.executeWhatYouCan(script).isDelay())
+				return Result.delay();
+			Result elseResult = elseExecutor.getLastResult();
 
-			if (elseResult.isDelay())
-				return elseResult;
-
-			Result elseResult = this.elseResult;
-			ifResult = Result.delay();
-			this.elseResult = Result.delay();
-
-			if (elseResult.getStatus() == ResultStatus.VALUE)
-				return Result.returnValue(elseResult.getValue());
+			ifExecutor.reset();
+			elseExecutor.reset();
 
 			return elseResult;
 		} else
 		{
-			Result leftResult = this.ifResult;
-			this.ifResult = Result.delay();
-			elseResult = Result.delay();
-			return leftResult;
+			ifExecutor.reset();
+			elseExecutor.reset();
+
+			return ifResult;
 		}
 	}
 

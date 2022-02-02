@@ -83,6 +83,8 @@ public enum Operator
 	ELSE("else"),
 	WHILE("while"),
 	RETURN_IF("returnif"),
+	CONTINUE("continue"),
+	BREAK("break"),
 
 	// Other special
 	NUMBER_INT(""),

@@ -1,12 +1,12 @@
 import library System;
 import type int;
 
-§int a = 1;
+int a = 1;
 
 for (int i = 1; i < 5; i = i + 1)
 {
-§    a = a * i;
+    a = a * i;
     System.println(i);
 };
 
-//return a;
+return a;

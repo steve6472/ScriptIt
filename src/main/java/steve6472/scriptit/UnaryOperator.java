@@ -1,5 +1,6 @@
 package steve6472.scriptit;
 
+import steve6472.scriptit.executor.Executor;
 import steve6472.scriptit.tokenizer.Operator;
 
 /**********************
@@ -10,48 +11,54 @@ import steve6472.scriptit.tokenizer.Operator;
  ***********************/
 public class UnaryOperator extends Expression
 {
+	/**
+	 * Probably a performance improvement
+	 */
+	private final Value[] operatorArguments;
+
 	Operator operator;
 	Expression left;
 	Function operatorFunction = null;
-	Result leftResult = Result.delay();
-	Value leftValue;
+	Executor argumentExecutor, operationExecutor;
 
 	public UnaryOperator(Operator operator, Expression left)
 	{
 		this.operator = operator;
 		this.left = left;
+		this.argumentExecutor = new Executor(left);
+		operatorArguments = new Value[1];
 	}
 
 	@Override
 	public Result apply(Script script)
 	{
-		if (leftResult.isDelay())
-			leftResult = left.apply(script);
-
-		if (leftResult.isDelay())
-			return leftResult;
-
-		leftValue = leftResult.getValue();
+		if (argumentExecutor.executeWhatYouCan(script).isDelay())
+			return Result.delay();
 
 		if (operatorFunction == null)
 		{
-			operatorFunction = leftValue.type.unary.get(operator);
+			operatorFunction = argumentExecutor.getLastResult().getValue().type.unary.get(operator);
 
 			if (operatorFunction == null)
 			{
-				throw new RuntimeException("No operator found for type '" + leftValue.type.getKeyword() + "' with operator: " + operator + " (" + operator.getSymbol() + ")");
+				throw new RuntimeException("No operator found for type '" + argumentExecutor.getLastResult().getValue().type.getKeyword() + "' with operator: " + operator + " (" + operator.getSymbol() + ")");
 			}
 		}
 
-		operatorFunction.setArguments(new Value[] {leftValue});
-		Result apply = operatorFunction.apply(script);
+		operatorArguments[0] = argumentExecutor.getLastResult().getValue();
 
-		if (apply.isDelay())
-			return apply;
+		operatorFunction.setArguments(operatorArguments);
 
-		leftResult = Result.delay();
+		if (operationExecutor == null)
+		{
+			operationExecutor = new Executor(operatorFunction);
+		}
+		operationExecutor.reset();
 
-		return apply;
+		if (operationExecutor.executeWhatYouCan(script).isDelay())
+			return Result.delay();
+
+		return operationExecutor.getLastResult();
 	}
 
 	@Override

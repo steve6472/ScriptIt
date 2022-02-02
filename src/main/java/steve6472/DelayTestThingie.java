@@ -68,6 +68,7 @@ public class DelayTestThingie
 		do
 		{
 			result = executor.executeSingle();
+//			System.out.println(result);
 
 			safeSleep(50);
 		} while (executor.canExecuteMore());
@@ -116,7 +117,12 @@ public class DelayTestThingie
 			Expression expression = expressions.get(lastExecuted);
 			Result result = expression.execute(this);
 
-			wasLastDelay = result instanceof ResultDelay;
+			if (result instanceof ResultDelay del)
+			{
+				wasLastDelay = true;
+				if (del.skip())
+					lastExecuted++;
+			}
 
 			System.out.println("\n" + "-".repeat(16) + "\n------MAIN------\n" + "-".repeat(16));
 
