@@ -185,6 +185,14 @@ public class SimpleTests
 	@DisplayName("flow")
 	class Flow_
 	{
+		@Test
+		public void ternary()
+		{
+			Script script = testScript("flow/ternary");
+			Value value = script.runWithDelay();
+			Assertions.assertTrue(value.getBoolean());
+		}
+
 		@Nested
 		@DisplayName("if")
 		class If_

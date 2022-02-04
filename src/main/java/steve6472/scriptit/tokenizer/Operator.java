@@ -52,6 +52,10 @@ public enum Operator
 	LESS_THAN("<"),
 	GREATER_THAN(">"),
 
+	// Ternary
+	TERNARY("?"),
+	TERNARY_SPLIT(":"),
+
 	// Boolean
 	NOT("!"),
 	AND("&&", true),
