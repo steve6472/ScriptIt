@@ -13,7 +13,6 @@ public class Result
 	private static final Result PASS = new Result(Value.NULL, ResultStatus.PASS);
 	private static final Result DELAY = new Result(Value.NULL, ResultStatus.DELAY);
 	private static final Result WAIT = new Result(Value.NULL, ResultStatus.WAIT);
-	private static final Result PASS_IF_FALSE = new Result(Value.NULL, ResultStatus.PASS_IF_FALSE);
 	private static final Result BREAK = new Result(Value.NULL, ResultStatus.BREAK);
 	private static final Result CONTINUE = new Result(Value.NULL, ResultStatus.CONTINUE);
 	private static final Result RETURN_THIS = new Result(Value.NULL, ResultStatus.RETURN_THIS);
@@ -53,11 +52,6 @@ public class Result
 	public static Result pass()
 	{
 		return PASS;
-	}
-
-	public static Result passIfFalse()
-	{
-		return PASS_IF_FALSE;
 	}
 
 	public static Result breakLoop()
@@ -115,11 +109,6 @@ public class Result
 		return getStatus() == ResultStatus.RETURN;
 	}
 
-	public boolean isIfFalse()
-	{
-		return getStatus() == ResultStatus.PASS_IF_FALSE;
-	}
-
 	public boolean isBreak()
 	{
 		return getStatus() == ResultStatus.BREAK;
@@ -143,6 +132,15 @@ public class Result
 	public boolean isWaitForEvents()
 	{
 		return getStatus() == ResultStatus.WAIT_FOR_EVENTS;
+	}
+
+	public boolean isLoopControl()
+	{
+		return switch (getStatus())
+			{
+				case BREAK, CONTINUE -> true;
+				default -> false;
+			};
 	}
 
 	@Override

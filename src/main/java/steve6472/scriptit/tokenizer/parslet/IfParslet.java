@@ -23,12 +23,12 @@ public class IfParslet implements PrefixParselet
 		{
 			parser.tokenizer.consumeToken(Operator.SEMICOLON);
 			parser.tokenizer.consumeToken(Operator.ELSE);
-			return new IfElse(new If(condition, parse), parser.parse(Precedence.ANYTHING));
+			return new IfElse(condition, parse, parser.parse(Precedence.ANYTHING));
 		}
 
 		if (parser.tokenizer.matchToken(Operator.ELSE, true))
 		{
-			return new IfElse(new If(condition, parse), parser.parse(Precedence.ANYTHING));
+			return new IfElse(condition, parse, parser.parse(Precedence.ANYTHING));
 		} else
 		{
 			return new If(condition, parse);

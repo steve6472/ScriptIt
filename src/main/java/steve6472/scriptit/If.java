@@ -40,7 +40,7 @@ public class If extends Expression
 		if (!conditionResult.getValue().getBoolean())
 		{
 			conditionExecutor.reset();
-			return Result.passIfFalse();
+			return Result.pass();
 		}
 
 		if (bodyExecutor.executeWhatYouCan(script).isDelay())

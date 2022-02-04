@@ -13,7 +13,7 @@ public class ForLoop extends Expression
 	//for (int i = 1; i < 5; i++) {}
 	Expression init, condition, update, body;
 
-	Executor initExecutor, conditionBodyExecutor, updateExecutor;
+	Executor initExecutor, conditionExecutor, bodyExecutor, updateExecutor;
 	boolean first = true;
 
 	public ForLoop(Expression init, Expression condition, Expression update, Expression body)
@@ -24,10 +24,23 @@ public class ForLoop extends Expression
 		this.body = body;
 
 		initExecutor = new Executor(init);
-		If anIf = new If(condition, body);
-		conditionBodyExecutor = new Executor(anIf);
-		System.out.println("Cond and body: " + Integer.toHexString(hashCode()));
+		conditionExecutor = new Executor(condition);
+		bodyExecutor = new Executor(body);
 		updateExecutor = new Executor(update);
+	}
+
+	private void fullReset(Script script, boolean popMemory)
+	{
+		conditionExecutor.reset();
+		bodyExecutor.reset();
+		initExecutor.reset();
+		updateExecutor.reset();
+		first = true;
+
+		if (popMemory)
+		{
+			script.getMemory().pop();
+		}
 	}
 
 	@Override
@@ -44,47 +57,30 @@ public class ForLoop extends Expression
 
 		while (true)
 		{
-			System.out.println("\nNEW LOOP");
-			Executor.ExecutorResult condBodyExeRes = conditionBodyExecutor.executeWhatYouCan(script);
-			System.out.println(condBodyExeRes);
-			if (condBodyExeRes.isDelay())
+			if (conditionExecutor.executeWhatYouCan(script).isDelay())
 				return Result.delay();
 
-
-			if (!condBodyExeRes.isSkipped())
+			if (conditionExecutor.getLastResult().getValue().getBoolean())
 			{
-				System.out.println("Running cond and body");
-				Result bodyResult = conditionBodyExecutor.getLastResult();
-//				System.out.println("----------------");
-//
-//				for (int i = 0; i < conditionBodyExecutor.getExpressions().size(); i++)
-//				{
-//					System.out.println(conditionBodyExecutor.getResult(i));
-//				}
-//
-//				System.out.println("----------------\n\n");
+				if (bodyExecutor.executeWhatYouCan(script).isDelay())
+					return Result.delay();
 
-				if (bodyResult.isBreak() || bodyResult.isIfFalse())
+				Result lastResult = bodyExecutor.getLastResult();
+
+				if (lastResult.isBreak())
 				{
-					script.getMemory().pop();
-					first = true;
+					fullReset(script, true);
 					return Result.pass();
 				}
 
-				if (bodyResult.isReturnValue())
-				{
-					script.getMemory().pop();
-					first = true;
-					return bodyResult;
-				}
-			} else
-			{
 				if (updateExecutor.executeWhatYouCan(script).isDelay())
 					return Result.delay();
-				System.out.println("Inced");
 
-				conditionBodyExecutor.reset();
-				updateExecutor.reset();
+				fullReset(script, false);
+			} else
+			{
+				fullReset(script, true);
+				return Result.pass();
 			}
 		}
 	}

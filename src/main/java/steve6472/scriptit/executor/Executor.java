@@ -41,6 +41,12 @@ public class Executor
 		{
 			res = executeSingle(script);
 
+			if (res.isLoopControl())
+			{
+				lastExecuted = totalExpresisons;
+				return ExecutorResult.PASS;
+			}
+
 			if (res.isDelay())
 			{
 				if (Result.isDelaySkip(res))

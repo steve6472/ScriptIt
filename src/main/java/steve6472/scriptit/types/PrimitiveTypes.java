@@ -111,6 +111,8 @@ public class PrimitiveTypes extends TypesInit
 
 		INT.addUnaryOperator(Operator.ADD, new UnaryOperatorOverload(right -> newValue(INT, +right.getInt())));
 		INT.addUnaryOperator(Operator.SUB, new UnaryOperatorOverload(right -> newValue(INT, -right.getInt())));
+		INT.addUnaryOperator(Operator.PRE_INC, new UnaryOperatorOverload(right -> right.setValue(right.getInt() + 1)));
+		INT.addUnaryOperator(Operator.PRE_DEC, new UnaryOperatorOverload(right -> right.setValue(right.getInt() - 1)));
 		INT.addUnaryOperator(Operator.NEG, new UnaryOperatorOverload(right -> newValue(INT, ~right.getInt())));
 
 		/*

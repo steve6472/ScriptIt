@@ -3,6 +3,7 @@ package steve6472.scriptit;
 import org.junit.jupiter.api.*;
 import steve6472.scriptit.exceptions.ValueNotFoundException;
 import steve6472.scriptit.functions.DelayFunction;
+import steve6472.scriptit.libraries.LogLibrary;
 import steve6472.scriptit.libraries.TestLibrary;
 import steve6472.scriptit.tokenizer.TokenParser;
 import steve6472.scriptit.types.PrimitiveTypes;
@@ -27,6 +28,7 @@ public class SimpleTests
 		TokenParser.DEBUG = debug;
 		Workspace workspace = new Workspace();
 		workspace.addLibrary(new TestLibrary());
+		workspace.addLibrary(new LogLibrary());
 		Script script = Script.create(workspace, new File("!tests/" + name + ".txt"));
 		Highlighter.basicHighlight();
 		System.out.println(script.showCode());
@@ -232,15 +234,37 @@ public class SimpleTests
 		class While
 		{
 			@Test
-			@DisplayName(value = "While - Factorial")
+			@DisplayName(value = "normal")
 			public void normalWhile()
 			{
-				Script script = testScript("flow/loop/while");
+				Script script = testScript("flow/loop/while/while");
 				script.getMemory().addVariable("input", new Value(true, PrimitiveTypes.INT, 5));
 
 				final Value[] value = new Value[1];
 				Assertions.assertTimeoutPreemptively(Duration.ofMillis(200), () -> value[0] = script.runWithDelay());
 				Assertions.assertEquals(120, value[0].getInt());
+			}
+
+			@Test
+			@DisplayName(value = "break")
+			public void whileBreak()
+			{
+				Script script = testScript("flow/loop/while/while_break");
+
+				final Value[] value = new Value[1];
+				Assertions.assertTimeoutPreemptively(Duration.ofMillis(200), () -> value[0] = script.runWithDelay());
+				Assertions.assertEquals(4, value[0].getInt());
+			}
+
+			@Test
+			@DisplayName(value = "continue")
+			public void whileContinue()
+			{
+				Script script = testScript("flow/loop/while/while_continue");
+
+				final Value[] value = new Value[1];
+				Assertions.assertTimeoutPreemptively(Duration.ofMillis(200), () -> value[0] = script.runWithDelay());
+				Assertions.assertEquals(5, value[0].getInt());
 			}
 		}
 
@@ -249,27 +273,45 @@ public class SimpleTests
 		class For_
 		{
 			@Test
+			@DisplayName(value = "normal")
 			public void normalFor()
 			{
-				Script script = testScript("flow/loop/for");
-				Value value = script.runWithDelay();
-				Assertions.assertEquals(24, value.getInt());
+				Script script = testScript("flow/loop/for/for");
+
+				final Value[] value = new Value[1];
+				Assertions.assertTimeoutPreemptively(Duration.ofMillis(200), () -> value[0] = script.runWithDelay());
+				Assertions.assertEquals(24, value[0].getInt());
 			}
 
 			@Test
-			public void normalContinue()
+			@DisplayName(value = "continue")
+			public void forContinue()
 			{
-				Script script = testScript("flow/loop/for_continue");
-				Value value = script.runWithDelay();
-				Assertions.assertEquals(945, value.getInt());
+				Script script = testScript("flow/loop/for/for_continue");
+
+				final Value[] value = new Value[1];
+				Assertions.assertTimeoutPreemptively(Duration.ofMillis(200), () -> value[0] = script.runWithDelay());
+				Assertions.assertEquals(945, value[0].getInt());
 			}
 
 			@Test
-			public void normalBreak()
+			@DisplayName(value = "break")
+			public void forBreak()
 			{
-				Script script = testScript("flow/loop/for_break");
-				Value value = script.runWithDelay();
-				Assertions.assertEquals(6, value.getInt());
+				Script script = testScript("flow/loop/for/for_break");
+
+				final Value[] value = new Value[1];
+				Assertions.assertTimeoutPreemptively(Duration.ofMillis(200), () -> value[0] = script.runWithDelay());
+				Assertions.assertEquals(3, value[0].getInt());
+			}
+
+			@Test
+			@DisplayName(value = "var not found")
+			public void varNotFound()
+			{
+				Script script = testScript("flow/loop/for/for_var_not_found");
+
+				Assertions.assertTimeoutPreemptively(Duration.ofMillis(200), () -> Assertions.assertThrows(ValueNotFoundException.class, script::runWithDelay));
 			}
 		}
 	}

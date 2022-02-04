@@ -1,0 +1,19 @@
+import library System;
+import library Log;
+import type int;
+
+int i = 0;
+while (i < 10)
+{
+    System.println(i);
+    i = i + 1;
+    if (i == 4)
+    {
+        break;
+        Log.red();
+        System.println("The big bad = break; does not work!");
+        Log.reset();
+    };
+};
+
+return i;

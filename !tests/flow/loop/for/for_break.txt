@@ -1,0 +1,19 @@
+import library System;
+import library Log;
+import type int;
+
+int a = 0;
+
+for (int i = 0; i < 5; i = i + 1)
+{
+    a = i;
+    if (i == 3)
+    {
+        break;
+        Log.red();
+        System.println("ERROR");
+        Log.reset();
+    };
+};
+
+return a;

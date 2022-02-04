@@ -1,5 +1,7 @@
 package steve6472.scriptit;
 
+import steve6472.scriptit.executor.Executor;
+
 /**********************
  * Created by steve6472 (Mirek Jozefek)
  * On date: 5/22/2021
@@ -8,11 +10,19 @@ package steve6472.scriptit;
  ***********************/
 public class While extends Expression
 {
-	If anIf;
+	Expression condition, body;
+	Executor conditionExecutor, bodyExecutor;
 
-	public While(If anIf)
+	public While(Expression condition, Expression body)
 	{
-		this.anIf = anIf;
+		this.condition = condition;
+		this.body = body;
+		this.conditionExecutor = new Executor(condition);
+
+		if (body instanceof Function f)
+			f.setBody(true);
+
+		this.bodyExecutor = new Executor(body);
 	}
 
 	@Override
@@ -20,26 +30,38 @@ public class While extends Expression
 	{
 		while (true)
 		{
-			Result ifResult = anIf.apply(script);
+			if (conditionExecutor.executeWhatYouCan(script).isDelay())
+				return Result.delay();
 
-			if (ifResult.isDelay())
-				return ifResult;
+			if (conditionExecutor.getLastResult().getValue().getBoolean())
+			{
+				if (bodyExecutor.executeWhatYouCan(script).isDelay())
+					return Result.delay();
 
-			if (ifResult.isBreak())
+				Result lastResult = bodyExecutor.getLastResult();
+
+				if (lastResult.isBreak())
+				{
+					conditionExecutor.reset();
+					bodyExecutor.reset();
+					return Result.pass();
+				}
+
+				conditionExecutor.reset();
+				bodyExecutor.reset();
+			} else
+			{
+				conditionExecutor.reset();
+				bodyExecutor.reset();
 				return Result.pass();
-
-			if (ifResult.isReturn() || ifResult.isReturnValue())
-				return ifResult;
-
-			if (ifResult.isIfFalse())
-				return Result.pass();
+			}
 		}
 	}
 
 	@Override
 	public String showCode(int a)
 	{
-		return Highlighter.WHILE + "while " + Highlighter.BRACET + "(" + Highlighter.RESET + anIf.condition.showCode(0) + Highlighter.BRACET + ")" + Highlighter.RESET + "\n" + Highlighter.BRACET + depth(a) + "{" + Highlighter.RESET + "\n" + anIf.body.showCode(a + 1) + depth(a) + Highlighter.BRACET + "}" + Highlighter.RESET;
+		return Highlighter.WHILE + "while " + Highlighter.BRACET + "(" + Highlighter.RESET + condition.showCode(0) + Highlighter.BRACET + ")" + Highlighter.RESET + "\n" + Highlighter.BRACET + depth(a) + "{" + Highlighter.RESET + "\n" + body.showCode(a + 1) + depth(a) + Highlighter.BRACET + "}" + Highlighter.RESET;
 	}
 }
 

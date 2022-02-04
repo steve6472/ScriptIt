@@ -1,5 +1,6 @@
 import type Window;
 import type Color;
+import type Canvas;
 import type int;
 import type double;
 import type string;
@@ -56,6 +57,30 @@ function vector(Color color, double x, double y)
     canvas.drawLine(CENTER_X, CENTER_Y, int(CENTER_X + x), int(CENTER_Y + y));
 };
 
+§function drawGrid(Canvas canvas, int spacing, int count)
+§{
+§    int i = 0;
+§    int j = 0;
+§    for (i = 0; i < count; i = i + 1)
+§    {
+§        for (j = 0; j < count; j = j + 1)
+§        {
+§            canvas.drawLine(i, j * spacing, i * 2000, j * spacing);
+§            canvas.drawLine(i * spacing, j, i * spacing, j * 2000);
+§        };
+§    };
+§};
+
+function drawGrid(int spacing, int count)
+{
+    int i = 0;
+    int j = 0;
+    for (i = 0; i < count; i = i + 1)
+    {
+        canvas.drawLine(i * spacing, i, i, i * spacing);
+    };
+};
+
 §§§§§§§§§§§§§§§§§§§§§§§§§§
 §         VALUES         §
 §§§§§§§§§§§§§§§§§§§§§§§§§§
@@ -103,7 +128,9 @@ canvas.fillRect(0, 0, WIDTH, HEIGHT);
 
 canvas.setStrokeWidth(2.0);
 canvas.setColor(Color(102, 153, 102));
-X = Geometry.drawGrid(canvas, 25, 200);
+
+
+drawGrid(25, 200);
 
 canvas.setStrokeWidth(4.0);
 

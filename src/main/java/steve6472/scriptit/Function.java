@@ -113,8 +113,14 @@ public class Function extends Expression
 
 		Result lastResult = bodyExecutor.getLastResult();
 		bodyExecutor.reset();
+//		System.out.println("Code: '" + showCode(0) + "'");
 
 		Result result;
+
+		if (lastResult.isLoopControl())
+		{
+			return lastResult;
+		}
 
 		if (lastResult.isReturnThis())
 		{
@@ -124,7 +130,8 @@ public class Function extends Expression
 		else if (!isBody && lastResult.isReturnValue())
 		{
 			result = Result.value(lastResult.getValue());
-		} else if (lastResult.isReturn())
+		}
+		else if (lastResult.isReturn())
 		{
 			result = Result.pass();
 		} else

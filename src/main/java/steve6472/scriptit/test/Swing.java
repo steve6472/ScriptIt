@@ -26,6 +26,7 @@ public class Swing
 
 		Workspace workspace = new Workspace();
 		workspace.addType(SwingTypes.WINDOW);
+		workspace.addType(SwingTypes.CANVAS);
 		workspace.addType(CustomTypes.COLOR);
 		workspace.addType(CustomTypes.VEC4);
 

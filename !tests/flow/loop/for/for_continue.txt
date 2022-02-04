@@ -7,8 +7,10 @@ for (int i = 1; i < 10; i = i + 1)
 {
     if (i % 2 == 0)
     {
+        System.println("I: " + i);
         continue;
     };
+    System.println("A: " + a);
     a = a * i;
 };
 

@@ -18,6 +18,6 @@ public class WhileParslet implements PrefixParselet
 		Expression condition = parser.parse(Precedence.ANYTHING);
 		parser.tokenizer.consumeToken(Operator.BRACKET_RIGHT);
 		Expression parse = parser.parse(Precedence.ANYTHING);
-		return new While(new If(condition, parse));
+		return new While(condition, parse);
 	}
 }
