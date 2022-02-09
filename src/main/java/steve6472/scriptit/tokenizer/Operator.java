@@ -6,7 +6,7 @@ package steve6472.scriptit.tokenizer;
  * Project: ScriptIt
  *
  ***********************/
-public enum Operator
+public enum Operator implements IOperator
 {
 	// Mathematics / Binary
 	ADD("+"),
@@ -124,23 +124,8 @@ public enum Operator
 		return merge;
 	}
 
-	private static final Operator[] VALUES = values();
-
-	public static Operator[] getValues()
+	public static void init()
 	{
-		return VALUES;
-	}
-
-	public static Operator fromSymbol(String symbol)
-	{
-		for (Operator tokenType : VALUES)
-		{
-			if (tokenType.symbol.equals(symbol))
-			{
-				return tokenType;
-			}
-		}
-
-		return null;
+		IOperator.addOperators(values());
 	}
 }

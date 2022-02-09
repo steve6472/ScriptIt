@@ -51,7 +51,7 @@ public class Tokenizer
 					tokens.add(new Token(Operator.NUMBER_DOUBLE, token.sval));
 			} else if (token.token == StreamTokenizer.TT_WORD)
 			{
-				Operator type = Operator.fromSymbol(token.sval);
+				IOperator type = IOperator.fromSymbol(token.sval);
 				tokens.add(new Token(Objects.requireNonNullElse(type, Operator.NAME), token.sval));
 			} else if (token.token == '"') // String
 			{
@@ -61,7 +61,7 @@ public class Tokenizer
 				tokens.add(new Token(Operator.CHAR, token.sval));
 			} else
 			{
-				Operator type = Operator.fromSymbol(token.sval);
+				IOperator type = IOperator.fromSymbol(token.sval);
 //				System.out.println(token.sval + " -> " + type);
 				if (type == null)
 					throw new RuntimeException("Unknown symbol '" + token + "'");
@@ -108,7 +108,7 @@ public class Tokenizer
 		return peekToken(1);
 	}
 
-	public boolean matchToken(Operator expectedtype, boolean consume)
+	public boolean matchToken(IOperator expectedtype, boolean consume)
 	{
 		if (debug)
 			TokenParser.print("Matching " + expectedtype);
@@ -124,7 +124,7 @@ public class Tokenizer
 		}
 	}
 
-	public Token consumeToken(Operator expectedType)
+	public Token consumeToken(IOperator expectedType)
 	{
 		if (debug)
 			TokenParser.print("Consuming token " + expectedType);
@@ -142,7 +142,7 @@ public class Tokenizer
 		currentToken += skip;
 	}
 
-	public record Token(Operator type, String sval)
+	public record Token(IOperator type, String sval)
 	{
 		@Override
 		public String toString()
@@ -151,13 +151,13 @@ public class Tokenizer
 		}
 	}
 
-	private static final Set<Operator> MERGABLE_OPERATORS;
+	private static final Set<IOperator> MERGABLE_OPERATORS = new HashSet<>();
 
-	static
+	public static void updateMergableOperators()
 	{
-		MERGABLE_OPERATORS = new HashSet<>();
+		MERGABLE_OPERATORS.clear();
 
-		for (Operator value : Operator.getValues())
+		for (IOperator value : IOperator.getAllOperators())
 		{
 			if (value.isMerge())
 			{
@@ -165,6 +165,8 @@ public class Tokenizer
 			}
 		}
 	}
+
+	public static boolean MINI_TOKENIZER_DEBUG = false;
 
 	private static class MiniTokenizer
 	{
@@ -212,17 +214,23 @@ public class Tokenizer
 				}
 			}
 
+			if (tokens.size() < 1)
+				return;
+
 			mergeTokens();
 
-//			System.out.println("\n\n-----------------------------");
-//			System.out.println("--------Mini Tokenizer-------");
-//			System.out.println("-----------------------------");
-//
-//			tokens.forEach(System.out::println);
-//
-//			System.out.println("-----------------------------");
-//			System.out.println("--------Mini Tokenizer-------");
-//			System.out.println("-----------------------------\n\n");
+			if (MINI_TOKENIZER_DEBUG)
+			{
+				System.out.println("\n\n-----------------------------");
+				System.out.println("--------Mini Tokenizer-------");
+				System.out.println("-----------------------------");
+
+				tokens.forEach(System.out::println);
+
+				System.out.println("-----------------------------");
+				System.out.println("--------Mini Tokenizer-------");
+				System.out.println("-----------------------------\n\n");
+			}
 		}
 
 		private void mergeTokens()
@@ -233,7 +241,7 @@ public class Tokenizer
 				MiniToken token = tokens.get(i);
 				MiniToken peek = tokens.get(i + 1);
 
-				for (Operator mergableOperator : MERGABLE_OPERATORS)
+				for (IOperator mergableOperator : MERGABLE_OPERATORS)
 				{
 					if (token.sval != null && peek.sval != null && !token.sval.isBlank() && !peek.sval.isBlank())
 					{

@@ -1,6 +1,6 @@
 package steve6472.scriptit;
 
-import steve6472.scriptit.tokenizer.Operator;
+import steve6472.scriptit.tokenizer.IOperator;
 import steve6472.scriptit.types.PrimitiveTypes;
 
 import java.util.Arrays;
@@ -18,8 +18,8 @@ public class Type
 {
 	private final String keyword;
 
-	public HashMap<Type, HashMap<Operator, Function>> binary;
-	public HashMap<Operator, Function> unary;
+	public HashMap<Type, HashMap<IOperator, Function>> binary;
+	public HashMap<IOperator, Function> unary;
 
 	public HashMap<FunctionParameters, Function> functions;
 	public HashMap<FunctionParameters, Function> constructors;
@@ -33,9 +33,9 @@ public class Type
 		this.constructors = new HashMap<>();
 	}
 
-	public void addBinaryOperator(Type rightOperandType, Operator operator, Function function)
+	public void addBinaryOperator(Type rightOperandType, IOperator operator, Function function)
 	{
-		HashMap<Operator, Function> map = binary.get(rightOperandType);
+		HashMap<IOperator, Function> map = binary.get(rightOperandType);
 		if (map == null)
 		{
 			map = new HashMap<>();
@@ -44,7 +44,7 @@ public class Type
 		binary.put(rightOperandType, map);
 	}
 
-	public void addUnaryOperator(Operator operator, Function function)
+	public void addUnaryOperator(IOperator operator, Function function)
 	{
 		unary.put(operator, function);
 	}

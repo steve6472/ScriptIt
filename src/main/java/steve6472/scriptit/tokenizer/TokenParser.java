@@ -20,10 +20,10 @@ public class TokenParser
 
 	public static int depth = 0;
 
-	private static final Map<Operator, PrefixParselet> prefixParslets = new HashMap<>();
-	private static final Map<Operator, InfixParslet> infixParslets = new HashMap<>();
+	public final Map<IOperator, PrefixParselet> prefixParslets = new HashMap<>();
+	public final Map<IOperator, InfixParslet> infixParslets = new HashMap<>();
 
-	static
+	public TokenParser()
 	{
 		prefixParslets.put(Operator.NAME, new NameParslet());
 		prefixParslets.put(Operator.IMPORT, new ImportParslet());

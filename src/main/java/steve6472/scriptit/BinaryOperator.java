@@ -3,7 +3,7 @@ package steve6472.scriptit;
 import steve6472.scriptit.exceptions.NoBinaryOperationFoundException;
 import steve6472.scriptit.exceptions.NoOperatorFoundException;
 import steve6472.scriptit.executor.Executor;
-import steve6472.scriptit.tokenizer.Operator;
+import steve6472.scriptit.tokenizer.IOperator;
 
 import java.util.HashMap;
 
@@ -20,12 +20,12 @@ public class BinaryOperator extends Expression
 	 */
 	private final Value[] operatorArguments;
 
-	Operator operator;
+	IOperator operator;
 	Executor operandExecutor, operationExecutor;
 	Expression left, right;
 	Function operatorFunction = null;
 
-	public BinaryOperator(Operator operator, Expression left, Expression right)
+	public BinaryOperator(IOperator operator, Expression left, Expression right)
 	{
 		this.operator = operator;
 		this.left = left;
@@ -53,7 +53,7 @@ public class BinaryOperator extends Expression
 
 		if (operatorFunction == null)
 		{
-			HashMap<Operator, Function> operatorFunctionHashMap = left.getValue().type.binary.get(right.getValue().type);
+			HashMap<IOperator, Function> operatorFunctionHashMap = left.getValue().type.binary.get(right.getValue().type);
 			if (operatorFunctionHashMap == null)
 			{
 				throw new NoBinaryOperationFoundException(left.getValue().type, right.getValue().type);

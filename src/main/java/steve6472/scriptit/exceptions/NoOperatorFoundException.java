@@ -1,7 +1,7 @@
 package steve6472.scriptit.exceptions;
 
 import steve6472.scriptit.Type;
-import steve6472.scriptit.tokenizer.Operator;
+import steve6472.scriptit.tokenizer.IOperator;
 
 /**********************
  * Created by steve6472
@@ -11,7 +11,7 @@ import steve6472.scriptit.tokenizer.Operator;
  ***********************/
 public class NoOperatorFoundException extends RuntimeException
 {
-	public NoOperatorFoundException(Operator operator, Type left, Type right)
+	public NoOperatorFoundException(IOperator operator, Type left, Type right)
 	{
 		super("No operator found for type '" + left.getKeyword() + "' with right type '" + right.getKeyword() + "', operator: " + operator + " (" + operator.getSymbol() + ")");
 	}

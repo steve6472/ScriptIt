@@ -2,6 +2,7 @@ package steve6472.scriptit;
 
 import steve6472.scriptit.executor.MainExecutor;
 import steve6472.scriptit.libraries.Library;
+import steve6472.scriptit.tokenizer.Operator;
 import steve6472.scriptit.tokenizer.Precedence;
 import steve6472.scriptit.tokenizer.TokenParser;
 
@@ -24,6 +25,11 @@ import java.util.function.Supplier;
  ***********************/
 public class Script
 {
+	static
+	{
+		Operator.init();
+	}
+
 	private record QueuedFunctionCall<A, B>(A executor, B mustExist)
 	{
 	}
@@ -60,6 +66,43 @@ public class Script
 
 		Script script = new Script(workspace);
 		script.parser = new TokenParser();
+
+		script.parser.setExpression(script, code);
+		List<Expression> parse = script.parser.parseAll();
+		script.setExpressions(parse.toArray(Expression[]::new));
+		return script;
+	}
+
+	public static Script create(Workspace workspace, String code)
+	{
+		Script script = new Script(workspace);
+		script.parser = new TokenParser();
+
+		script.parser.setExpression(script, code);
+		List<Expression> parse = script.parser.parseAll();
+		script.setExpressions(parse.toArray(Expression[]::new));
+		return script;
+	}
+
+
+
+	public static Script create(Workspace workspace, File source, TokenParser parser)
+	{
+		String code = readFromFile(source);
+
+		Script script = new Script(workspace);
+		script.parser = parser;
+
+		script.parser.setExpression(script, code);
+		List<Expression> parse = script.parser.parseAll();
+		script.setExpressions(parse.toArray(Expression[]::new));
+		return script;
+	}
+
+	public static Script create(Workspace workspace, String code, TokenParser parser)
+	{
+		Script script = new Script(workspace);
+		script.parser = parser;
 
 		script.parser.setExpression(script, code);
 		List<Expression> parse = script.parser.parseAll();

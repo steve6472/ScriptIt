@@ -29,7 +29,7 @@ public class AssignParslet implements InfixParslet
 
 				Expression right = parser.parse(getPrecedence());
 
-				Operator op = Operator.fromSymbol(token.type().getSymbol().substring(0, token.type().getSymbol().length() - 1));
+				IOperator op = IOperator.fromSymbol(token.type().getSymbol().substring(0, token.type().getSymbol().length() - 1));
 
 				return new Assignment(name, new BinaryOperator(op, leftExpression, right));
 			}

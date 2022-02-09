@@ -1,7 +1,7 @@
 package steve6472.scriptit;
 
 import steve6472.scriptit.executor.Executor;
-import steve6472.scriptit.tokenizer.Operator;
+import steve6472.scriptit.tokenizer.IOperator;
 
 /**********************
  * Created by steve6472 (Mirek Jozefek)
@@ -16,12 +16,12 @@ public class UnaryOperator extends Expression
 	 */
 	private final Value[] operatorArguments;
 
-	Operator operator;
+	IOperator operator;
 	Expression left;
 	Function operatorFunction = null;
 	Executor argumentExecutor, operationExecutor;
 
-	public UnaryOperator(Operator operator, Expression left)
+	public UnaryOperator(IOperator operator, Expression left)
 	{
 		this.operator = operator;
 		this.left = left;

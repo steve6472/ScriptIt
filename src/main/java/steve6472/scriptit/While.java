@@ -61,7 +61,10 @@ public class While extends Expression
 	@Override
 	public String showCode(int a)
 	{
-		return Highlighter.WHILE + "while " + Highlighter.BRACET + "(" + Highlighter.RESET + condition.showCode(0) + Highlighter.BRACET + ")" + Highlighter.RESET + "\n" + Highlighter.BRACET + depth(a) + "{" + Highlighter.RESET + "\n" + body.showCode(a + 1) + depth(a) + Highlighter.BRACET + "}" + Highlighter.RESET;
+		if (body instanceof Function)
+			return Highlighter.WHILE + "while " + Highlighter.BRACET + "(" + Highlighter.RESET + condition.showCode(0) + Highlighter.BRACET + ")" + Highlighter.RESET + "\n" + Highlighter.BRACET + depth(a) + "{" + Highlighter.RESET + "\n" + body.showCode(a + 1) + depth(a) + Highlighter.BRACET + "}" + Highlighter.RESET;
+		else
+			return Highlighter.WHILE + "while " + Highlighter.BRACET + "(" + Highlighter.RESET + condition.showCode(0) + Highlighter.BRACET + ")" + Highlighter.RESET + "\n" + body.showCode(a + 1) + depth(a) + Highlighter.RESET;
 	}
 }
 
