@@ -10,7 +10,6 @@ import steve6472.scriptit.executor.Executor;
  ***********************/
 public class ForLoop extends Expression
 {
-	//for (int i = 1; i < 5; i++) {}
 	Expression init, condition, update, body;
 
 	Executor initExecutor, conditionExecutor, bodyExecutor, updateExecutor;
@@ -43,12 +42,20 @@ public class ForLoop extends Expression
 		}
 	}
 
+	/* [1]
+	 * for ( [2] int i = 1; [3] i < 5; [5] i++)
+	 * {
+	 *      [4]
+	 * }
+	 * [6]
+	 */
+
 	@Override
 	public Result apply(Script script)
 	{
 		if (first)
 		{
-			script.getMemory().push();
+			script.getMemory().push(); // [1]
 			first = false;
 		}
 
@@ -57,12 +64,12 @@ public class ForLoop extends Expression
 
 		while (true)
 		{
-			if (conditionExecutor.executeWhatYouCan(script).isDelay())
+			if (conditionExecutor.executeWhatYouCan(script).isDelay()) // [2]
 				return Result.delay();
 
-			if (conditionExecutor.getLastResult().getValue().getBoolean())
+			if (conditionExecutor.getLastResult().getValue().getBoolean()) // [3]
 			{
-				if (bodyExecutor.executeWhatYouCan(script).isDelay())
+				if (bodyExecutor.executeWhatYouCan(script).isDelay()) // [4]
 					return Result.delay();
 
 				Result lastResult = bodyExecutor.getLastResult();
@@ -73,13 +80,13 @@ public class ForLoop extends Expression
 					return Result.pass();
 				}
 
-				if (updateExecutor.executeWhatYouCan(script).isDelay())
+				if (updateExecutor.executeWhatYouCan(script).isDelay()) // [5]
 					return Result.delay();
 
 				fullReset(script, false);
 			} else
 			{
-				fullReset(script, true);
+				fullReset(script, true); // [6]
 				return Result.pass();
 			}
 		}
@@ -89,5 +96,11 @@ public class ForLoop extends Expression
 	public String showCode(int a)
 	{
 		return Highlighter.WHILE + "for " + Highlighter.BRACET + "(" + init.showCode(a) + Highlighter.SYMBOL + "; " + condition.showCode(a) + Highlighter.SYMBOL + "; " + update.showCode(a) + Highlighter.BRACET + ") \n{" + Highlighter.RESET + body.showCode(a) + Highlighter.BRACET + "}" + Highlighter.RESET;
+	}
+
+	@Override
+	public String toString()
+	{
+		return "ForLoop{" + "init=" + init + ", condition=" + condition + ", update=" + update + ", body=" + body + ", initExecutor=" + initExecutor + ", conditionExecutor=" + conditionExecutor + ", bodyExecutor=" + bodyExecutor + ", updateExecutor=" + updateExecutor + ", first=" + first + '}';
 	}
 }

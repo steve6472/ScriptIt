@@ -2,6 +2,8 @@ package steve6472.scriptit;
 
 import steve6472.scriptit.types.PrimitiveTypes;
 
+import java.util.function.Supplier;
+
 /**********************
  * Created by steve6472 (Mirek Jozefek)
  * On date: 5/20/2021
@@ -10,32 +12,33 @@ import steve6472.scriptit.types.PrimitiveTypes;
  ***********************/
 public class ValueConstant extends Expression
 {
-	public Value constant;
+	public Supplier<Value> constantSuplier;
 
-	public ValueConstant(Value constant)
+	public ValueConstant(Supplier<Value> constantSuplier)
 	{
-		this.constant = constant;
+		this.constantSuplier = constantSuplier;
 	}
 
 	@Override
 	public Result apply(Script script)
 	{
-		return Result.value(constant);
+		return Result.value(constantSuplier.get());
 	}
 
 	@Override
 	public String showCode(int a)
 	{
-		if (constant.type == PrimitiveTypes.STRING)
-			return '"' + constant.toString() + '"';
-		else if (constant.type == PrimitiveTypes.CHAR)
-			return "'" + constant + "'";
-		return constant.toString();
+		Value value = constantSuplier.get();
+		if (value.type == PrimitiveTypes.STRING)
+			return '"' + value.toString().replaceAll("\\n", "\\\\n") + '"';
+		else if (value.type == PrimitiveTypes.CHAR)
+			return "'" + value + "'";
+		return value.toString();
 	}
 
 	@Override
 	public String toString()
 	{
-		return "ValueConstant{" + "constant=" + constant + '}';
+		return "ValueConstant{" + "constant=" + constantSuplier.get() + '}';
 	}
 }

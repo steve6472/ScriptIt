@@ -5,12 +5,15 @@ import steve6472.scriptit.Type;
 import steve6472.scriptit.types.CustomTypes;
 import steve6472.scriptit.types.TypesInit;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowEvent;
 import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -120,6 +123,24 @@ public class SwingTypes extends TypesInit
 		addProcedure(CANVAS, "drawPoint", (itself, x, y) -> ((Canvas) itself.get("canvas")).graphics2D.drawLine(x.getInt(), y.getInt(), x.getInt(), y.getInt()), INT, INT);
 		addProcedure(CANVAS, "drawCircle", (itself, x, y, radius) -> ((Canvas) itself.get("canvas")).graphics2D.drawOval(x.getInt() - radius.getInt(), y.getInt() - radius.getInt(), radius.getInt() * 2, radius.getInt() * 2), INT, INT, INT);
 		addProcedure(CANVAS, "drawArc", (itself, x, y, radius, startAngle, endAngle) -> ((Canvas) itself.get("canvas")).graphics2D.drawArc(x.getInt() - radius.getInt(), y.getInt() - radius.getInt(), radius.getInt() * 2, radius.getInt() * 2, startAngle.getInt(), endAngle.getInt()), INT, INT, INT, INT, INT);
+
+		addProcedure(CANVAS, "savePNG", (itself, path) -> {
+			Canvas canvas = (Canvas) itself.get("canvas");
+			int w = canvas.getWidth();
+			int h = canvas.getHeight();
+			BufferedImage bi = new BufferedImage(w, h, BufferedImage.TYPE_INT_RGB);
+			Graphics2D g2 = bi.createGraphics();
+			canvas.paint(g2);
+			g2.dispose();
+			try
+			{
+				ImageIO.write(bi, "png", new File(path.getString()));
+			}
+			catch(IOException ioe)
+			{
+				System.out.println("Panel write help: " + ioe.getMessage());
+			}
+		}, STRING);
 	}
 
 	public static class Canvas extends JComponent

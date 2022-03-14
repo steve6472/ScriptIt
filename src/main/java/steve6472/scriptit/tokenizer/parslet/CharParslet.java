@@ -17,6 +17,6 @@ public class CharParslet implements PrefixParselet
 	@Override
 	public Expression parse(TokenParser parser, Tokenizer.Token token)
 	{
-		return new ValueConstant(Value.newValue(PrimitiveTypes.CHAR, token.sval().charAt(0)));
+		return new ValueConstant(() -> Value.newValue(PrimitiveTypes.CHAR, token.sval().charAt(0)));
 	}
 }

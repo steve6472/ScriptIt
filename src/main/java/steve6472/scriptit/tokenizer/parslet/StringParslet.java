@@ -17,6 +17,6 @@ public class StringParslet implements PrefixParselet
 	@Override
 	public Expression parse(TokenParser parser, Tokenizer.Token token)
 	{
-		return new ValueConstant(Value.newValue(PrimitiveTypes.STRING, token.sval()));
+		return new ValueConstant(() -> Value.newValue(PrimitiveTypes.STRING, token.sval()));
 	}
 }

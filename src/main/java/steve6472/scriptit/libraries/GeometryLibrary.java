@@ -1,11 +1,15 @@
 package steve6472.scriptit.libraries;
 
 import steve6472.scriptit.Value;
+import steve6472.scriptit.swingTest.SwingTypes;
 import steve6472.scriptit.types.CustomTypes;
 import steve6472.scriptit.types.PrimitiveTypes;
 
+import java.awt.*;
+
 import static steve6472.scriptit.types.PrimitiveTypes.DOUBLE;
 import static steve6472.scriptit.types.PrimitiveTypes.INT;
+import static steve6472.scriptit.types.PrimitiveTypes.STRING;
 
 /**********************
  * Created by steve6472 (Mirek Jozefek)
@@ -53,5 +57,33 @@ public class GeometryLibrary extends Library
 
 			return CustomTypes.createVec4(x2 + rx, y2 + ry, x2 - rx, y2 - ry);
 		}, DOUBLE, DOUBLE, DOUBLE, DOUBLE, DOUBLE, DOUBLE);
+
+		addFunction("stuff", (canvas, x, y, text, w) ->
+		{
+			Graphics2D graphics2D = ((SwingTypes.Canvas) canvas.get("canvas")).graphics2D;
+			graphics2D.setColor(new Color(40, 40, 40));
+			graphics2D.fillRect((int) x.getDouble(), (int) y.getDouble(), w.getInt(), 15);
+			graphics2D.setColor(Color.WHITE);
+			graphics2D.drawString(text.getString(), (int) x.getDouble(), (int) y.getDouble() + 12);
+			((SwingTypes.Canvas) canvas.get("canvas")).repaint();
+
+			return Value.newValue(INT, 0);
+		}, SwingTypes.CANVAS, DOUBLE, DOUBLE, STRING, INT);
+
+		addFunction("drawGrid", (canvas, spacing, count) ->
+		{
+			Graphics2D graphics2D = ((SwingTypes.Canvas) canvas.get("canvas")).graphics2D;
+			for (int i = 0; i < count.getInt(); i++)
+			{
+				for (int j = 0; j < count.getInt(); j++)
+				{
+					graphics2D.drawLine(i, j * spacing.getInt(), i * 2000, j * spacing.getInt());
+					graphics2D.drawLine(i * spacing.getInt(), j, i * spacing.getInt(), j * 2000);
+				}
+			}
+			((SwingTypes.Canvas) canvas.get("canvas")).repaint();
+
+			return Value.newValue(INT, 0);
+		}, SwingTypes.CANVAS, INT, INT);
 	}
 }

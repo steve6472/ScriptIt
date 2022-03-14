@@ -161,12 +161,17 @@ public class Memory
 
 	public void set(Memory other)
 	{
-		libraries.clear();
-		functions.clear();
-		variables.clear();
+		clear();
 		other.libraries.forEach((k, l) -> libraries.put(k, l));
 		other.functions.forEach((k, m) -> functions.put(k, m));
 		other.variables.forEach((k, v) -> variables.put(k, v));
+	}
+
+	public void clear()
+	{
+		libraries.clear();
+		functions.clear();
+		variables.clear();
 	}
 
 	/*

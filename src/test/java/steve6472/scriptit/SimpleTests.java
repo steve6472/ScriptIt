@@ -235,6 +235,19 @@ public class SimpleTests
 				value = script.runWithDelay();
 				Assertions.assertEquals("ONE", value.getString());
 			}
+
+			@Test
+			@DisplayName(value = "Else-If")
+			public void if_else()
+			{
+				for (int i = 0; i < 5; i++)
+				{
+					Script script = testScript("flow/if/else_if");
+					script.getMemory().addVariable("num", new Value(true, PrimitiveTypes.INT, i));
+					Value value = script.runWithDelay();
+					Assertions.assertEquals(i > 2 ? -i : i, value.getInt());
+				}
+			}
 		}
 
 		@Nested
@@ -289,6 +302,17 @@ public class SimpleTests
 				final Value[] value = new Value[1];
 				Assertions.assertTimeoutPreemptively(Duration.ofMillis(200), () -> value[0] = script.runWithDelay());
 				Assertions.assertEquals(24, value[0].getInt());
+			}
+
+			@Test
+			@DisplayName(value = "For For")
+			public void forFor()
+			{
+				Script script = testScript("flow/loop/for/for_for");
+
+				final Value[] value = new Value[1];
+				Assertions.assertTimeoutPreemptively(Duration.ofMillis(200), () -> value[0] = script.runWithDelay());
+				Assertions.assertEquals(4203632, value[0].getInt());
 			}
 
 			@Test

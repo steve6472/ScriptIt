@@ -137,7 +137,8 @@ public class Script
 		Expression[] expressions = new Expression[types.length];
 		for (int i = 0; i < types.length; i++)
 		{
-			expressions[i] = new ValueConstant(types[i]);
+			int finalI = i;
+			expressions[i] = new ValueConstant(() -> types[finalI]);
 		}
 
 		exe.setExpression(new FunctionCall(FunctionSource.function(name), expressions));

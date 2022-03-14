@@ -71,15 +71,15 @@ function vector(Color color, double x, double y)
 §    };
 §};
 
-function drawGrid(int spacing, int count)
-{
-    int i = 0;
-    int j = 0;
-    for (i = 0; i < count; i = i + 1)
-    {
-        canvas.drawLine(i * spacing, i, i, i * spacing);
-    };
-};
+§function drawGrid(int spacing, int count)
+§{
+§    int i = 0;
+§    int j = 0;
+§    for (i = 0; i < count; i = i + 1)
+§    {
+§        canvas.drawLine(i * spacing, i, i, i * spacing);
+§    };
+§};
 
 §§§§§§§§§§§§§§§§§§§§§§§§§§
 §         VALUES         §
@@ -129,8 +129,7 @@ canvas.fillRect(0, 0, WIDTH, HEIGHT);
 canvas.setStrokeWidth(2.0);
 canvas.setColor(Color(102, 153, 102));
 
-
-drawGrid(25, 200);
+Geometry.drawGrid(canvas, 25, 41);
 
 canvas.setStrokeWidth(4.0);
 
@@ -204,3 +203,4 @@ X = Geometry.stuff(canvas, vUlX / 5.0 + CENTER_X, vUlY / 5.0 + CENTER_Y, ("φL: 
 §
 
 canvas.repaint();
+canvas.savePNG("100v_16u.png");

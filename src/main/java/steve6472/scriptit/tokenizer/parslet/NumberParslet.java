@@ -25,8 +25,8 @@ public class NumberParslet implements PrefixParselet
 	public Expression parse(TokenParser parser, Tokenizer.Token token)
 	{
 		if (!isInteger)
-			return new ValueConstant(Value.newValue(PrimitiveTypes.DOUBLE, Double.parseDouble(token.sval())));
+			return new ValueConstant(() -> Value.newValue(PrimitiveTypes.DOUBLE, Double.parseDouble(token.sval())));
 		else
-			return new ValueConstant(Value.newValue(PrimitiveTypes.INT, Integer.parseInt(token.sval())));
+			return new ValueConstant(() -> Value.newValue(PrimitiveTypes.INT, Integer.parseInt(token.sval())));
 	}
 }
