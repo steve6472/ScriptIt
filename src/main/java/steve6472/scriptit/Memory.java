@@ -1,6 +1,8 @@
 package steve6472.scriptit;
 
 import steve6472.scriptit.exceptions.ValueNotFoundException;
+import steve6472.scriptit.expressions.Function;
+import steve6472.scriptit.expressions.FunctionParameters;
 import steve6472.scriptit.libraries.Library;
 import steve6472.scriptit.types.PrimitiveTypes;
 
@@ -16,10 +18,10 @@ import java.util.Map;
  ***********************/
 public class Memory
 {
-	Map<String, Library> libraries;
-	Map<FunctionParameters, Function> functions;
-	Map<String, Value> variables;
-	Map<String, Type> types;
+	public final Map<String, Library> libraries;
+	public final Map<FunctionParameters, Function> functions;
+	public final Map<String, Value> variables;
+	public final Map<String, Type> types;
 
 	public Memory()
 	{
@@ -41,7 +43,7 @@ public class Memory
 
 	public void addType(Type type)
 	{
-		type.constructors.forEach((p, f) -> functions.put(p, f));
+		type.constructors.forEach(functions::put);
 		types.put(type.getKeyword(), type);
 	}
 
@@ -162,9 +164,9 @@ public class Memory
 	public void set(Memory other)
 	{
 		clear();
-		other.libraries.forEach((k, l) -> libraries.put(k, l));
-		other.functions.forEach((k, m) -> functions.put(k, m));
-		other.variables.forEach((k, v) -> variables.put(k, v));
+		other.libraries.forEach(libraries::put);
+		other.functions.forEach(functions::put);
+		other.variables.forEach(variables::put);
 	}
 
 	public void clear()

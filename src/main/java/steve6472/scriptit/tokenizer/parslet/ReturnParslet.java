@@ -1,6 +1,7 @@
 package steve6472.scriptit.tokenizer.parslet;
 
-import steve6472.scriptit.*;
+import steve6472.scriptit.expressions.Expression;
+import steve6472.scriptit.expressions.Variable;
 import steve6472.scriptit.simple.Return;
 import steve6472.scriptit.simple.ReturnThis;
 import steve6472.scriptit.tokenizer.Precedence;

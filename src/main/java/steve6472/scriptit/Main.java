@@ -1,5 +1,7 @@
 package steve6472.scriptit;
 
+import steve6472.scriptit.expressions.Function;
+import steve6472.scriptit.expressions.FunctionParameters;
 import steve6472.scriptit.types.CustomTypes;
 import steve6472.scriptit.types.PrimitiveTypes;
 
@@ -69,7 +71,8 @@ public class Main
 
 		Function lerpFunction = new Function("start", "stop", "t");
 		lerpFunction.setExpressions(script, lerp);
-		script.memory.addFunction(FunctionParameters.function("lerp").addType(PrimitiveTypes.DOUBLE).addType(PrimitiveTypes.DOUBLE).addType(PrimitiveTypes.DOUBLE).build(), lerpFunction);
+		script.memory.addFunction(FunctionParameters
+			.function("lerp").addType(PrimitiveTypes.DOUBLE).addType(PrimitiveTypes.DOUBLE).addType(PrimitiveTypes.DOUBLE).build(), lerpFunction);
 
 		Function ifBody = new Function();
 		ifBody.setExpressions(script, "System.print(true)", "delay(1000)", "return 1");

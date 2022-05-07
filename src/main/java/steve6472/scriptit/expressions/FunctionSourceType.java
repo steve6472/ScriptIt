@@ -1,4 +1,4 @@
-package steve6472.scriptit;
+package steve6472.scriptit.expressions;
 
 /**********************
  * Created by steve6472 (Mirek Jozefek)
@@ -6,7 +6,7 @@ package steve6472.scriptit;
  * Project: ScriptIt
  *
  ***********************/
-public enum VariableSourceType
+public enum FunctionSourceType
 {
-	MEMORY, VALUE
+	FUNCTION, STATIC, VALUE
 }

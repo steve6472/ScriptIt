@@ -1,6 +1,8 @@
 package steve6472.scriptit;
 
+import steve6472.scriptit.executor.ExpressionExecutor;
 import steve6472.scriptit.executor.MainExecutor;
+import steve6472.scriptit.expressions.*;
 import steve6472.scriptit.libraries.Library;
 import steve6472.scriptit.tokenizer.Operator;
 import steve6472.scriptit.tokenizer.Precedence;
@@ -37,7 +39,7 @@ public class Script
 	private final Workspace workspace;
 
 	public TokenParser parser;
-	MemoryStack memory;
+	public MemoryStack memory;
 	MainExecutor mainExecutor;
 	private int lastIndex = 0;
 	private int currentIndex = 0;

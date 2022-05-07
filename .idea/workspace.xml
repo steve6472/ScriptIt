@@ -14,7 +14,7 @@
     <option name="optimizeImportsOnTheFly" value="true" />
   </component>
   <component name="DarkyenusTimeTracker">
-    <option name="totalTimeSeconds" value="133394" />
+    <option name="totalTimeSeconds" value="136598" />
     <option name="idleThresholdMs" value="60000" />
     <option name="autoCountIdleSeconds" value="10" />
     <option name="gitIntegration" value="true" />
@@ -26,8 +26,8 @@
         <option value="AnnotationType" />
         <option value="Record" />
         <option value="Enum" />
-        <option value="Class" />
         <option value="Interface" />
+        <option value="Class" />
       </list>
     </option>
   </component>
@@ -92,25 +92,18 @@
       <recent name="steve6472.scriptit.math" />
     </key>
     <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="steve6472.scriptit" />
       <recent name="steve6472.scriptit.simple" />
       <recent name="steve6472.scriptit.tokenizer.parslet" />
       <recent name="steve6472.scriptit.exceptions" />
       <recent name="steve6472.scriptit.flow" />
-      <recent name="steve6472.scriptit.tokenizer.parselet" />
     </key>
   </component>
-  <component name="RunManager" selected="JUnit.SimpleTests">
-    <configuration name="Swing" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="steve6472.scriptit.test.Swing" />
+  <component name="RunManager" selected="JUnit.SimpleTests.declareAssignPass">
+    <configuration name="SimpleTests$Class_" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="ScriptIt" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="SimpleTests$Flow_$For_" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <module name="ScriptIt" />
-      <option name="PACKAGE_NAME" value="steve6472.scriptit.SimpleTests.Flow_" />
-      <option name="MAIN_CLASS_NAME" value="steve6472.scriptit.SimpleTests$Flow_$For_" />
+      <option name="PACKAGE_NAME" value="steve6472.scriptit.SimpleTests" />
+      <option name="MAIN_CLASS_NAME" value="steve6472.scriptit.SimpleTests$Class_" />
       <option name="TEST_OBJECT" value="class" />
       <method v="2">
         <option name="Make" enabled="true" />
@@ -159,32 +152,42 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="SimpleTests.ternary" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+    <configuration name="SimpleTests.declareAssign" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="ScriptIt" />
       <option name="PACKAGE_NAME" value="steve6472.scriptit" />
       <option name="MAIN_CLASS_NAME" value="steve6472.scriptit.SimpleTests" />
-      <option name="METHOD_NAME" value="ternary" />
+      <option name="METHOD_NAME" value="declareAssign" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="SimpleTests.declareAssignPass" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="ScriptIt" />
+      <option name="PACKAGE_NAME" value="steve6472.scriptit" />
+      <option name="MAIN_CLASS_NAME" value="steve6472.scriptit.SimpleTests" />
+      <option name="METHOD_NAME" value="declareAssignPass" />
       <option name="TEST_OBJECT" value="method" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
     <list>
-      <item itemvalue="Application.Swing" />
       <item itemvalue="JUnit.SimpleTests" />
       <item itemvalue="JUnit.SimpleTests-Debug" />
-      <item itemvalue="JUnit.SimpleTests$Flow_$For_" />
-      <item itemvalue="JUnit.SimpleTests.ternary" />
       <item itemvalue="JUnit.SimpleTests$Flow_$If_.if_else" />
       <item itemvalue="JUnit.SimpleTests$Flow_$For_.forFor" />
+      <item itemvalue="JUnit.SimpleTests$Class_" />
+      <item itemvalue="JUnit.SimpleTests.declareAssign" />
+      <item itemvalue="JUnit.SimpleTests.declareAssignPass" />
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="JUnit.SimpleTests.declareAssignPass" />
+        <item itemvalue="JUnit.SimpleTests.declareAssign" />
+        <item itemvalue="JUnit.SimpleTests$Class_" />
         <item itemvalue="JUnit.SimpleTests$Flow_$For_.forFor" />
         <item itemvalue="JUnit.SimpleTests$Flow_$If_.if_else" />
-        <item itemvalue="Application.Swing" />
-        <item itemvalue="JUnit.SimpleTests.ternary" />
-        <item itemvalue="JUnit.SimpleTests$Flow_$For_" />
       </list>
     </recent_temporary>
   </component>

@@ -1,7 +1,8 @@
 package steve6472.scriptit.tokenizer;
 
-import steve6472.scriptit.*;
 import steve6472.scriptit.Stack;
+import steve6472.scriptit.*;
+import steve6472.scriptit.expressions.Expression;
 import steve6472.scriptit.tokenizer.parslet.*;
 
 import java.util.*;
@@ -45,6 +46,7 @@ public class TokenParser
 		prefixParslets.put(Operator.FOR, new ForParslet());
 		prefixParslets.put(Operator.CONTINUE, new ContinueParslet());
 		prefixParslets.put(Operator.BREAK, new BreakParslet());
+		prefixParslets.put(Operator.CLASS, new ClassParslet());
 
 
 
@@ -98,7 +100,7 @@ public class TokenParser
 			System.out.println(tree() + s);
 	}
 
-	private final steve6472.scriptit.Stack<List<Expression>> functionParameters = new Stack<>(64);
+	private final Stack<List<Expression>> functionParameters = new Stack<>(64);
 	public Tokenizer tokenizer;
 	public Set<String> importedTypes;
 	public Workspace workspace;

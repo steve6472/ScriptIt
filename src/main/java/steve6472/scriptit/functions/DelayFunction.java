@@ -1,6 +1,6 @@
 package steve6472.scriptit.functions;
 
-import steve6472.scriptit.Function;
+import steve6472.scriptit.expressions.Function;
 import steve6472.scriptit.Result;
 import steve6472.scriptit.Script;
 

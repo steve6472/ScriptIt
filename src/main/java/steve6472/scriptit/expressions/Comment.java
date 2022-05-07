@@ -1,4 +1,7 @@
-package steve6472.scriptit;
+package steve6472.scriptit.expressions;
+
+import steve6472.scriptit.Result;
+import steve6472.scriptit.Script;
 
 /**********************
  * Created by steve6472 (Mirek Jozefek)
@@ -6,7 +9,7 @@ package steve6472.scriptit;
  * Project: ScriptIt
  *
  ***********************/
-class Comment extends Expression
+public class Comment extends Expression
 {
 	private final String comment;
 

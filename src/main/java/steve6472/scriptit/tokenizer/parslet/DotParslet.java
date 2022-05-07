@@ -1,6 +1,7 @@
 package steve6472.scriptit.tokenizer.parslet;
 
-import steve6472.scriptit.*;
+import steve6472.scriptit.expressions.DotOperator;
+import steve6472.scriptit.expressions.Expression;
 import steve6472.scriptit.tokenizer.InfixParslet;
 import steve6472.scriptit.tokenizer.Precedence;
 import steve6472.scriptit.tokenizer.TokenParser;

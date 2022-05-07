@@ -1,5 +1,6 @@
-package steve6472.scriptit;
+package steve6472.scriptit.expressions;
 
+import steve6472.scriptit.*;
 import steve6472.scriptit.executor.Executor;
 import steve6472.scriptit.tokenizer.Precedence;
 
@@ -14,7 +15,7 @@ import java.util.Arrays;
 public class Function extends Expression
 {
 	Executor bodyExecutor;
-	String[] argumentNames;
+	public String[] argumentNames;
 	protected Value[] arguments;
 	protected Value returnThisHelper = null;
 	protected boolean isDelayed;

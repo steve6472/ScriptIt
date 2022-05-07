@@ -1,5 +1,6 @@
-package steve6472.scriptit;
+package steve6472.scriptit.expressions;
 
+import steve6472.scriptit.Value;
 import steve6472.scriptit.libraries.Library;
 
 /**********************

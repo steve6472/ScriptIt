@@ -1,6 +1,6 @@
 package steve6472.scriptit.tokenizer;
 
-import steve6472.scriptit.Expression;
+import steve6472.scriptit.expressions.Expression;
 
 /**********************
  * Created by steve6472 (Mirek Jozefek)

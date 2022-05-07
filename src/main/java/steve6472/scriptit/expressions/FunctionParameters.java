@@ -1,4 +1,6 @@
-package steve6472.scriptit;
+package steve6472.scriptit.expressions;
+
+import steve6472.scriptit.Type;
 
 import java.util.ArrayList;
 import java.util.Arrays;

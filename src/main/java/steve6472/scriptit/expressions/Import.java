@@ -1,4 +1,10 @@
-package steve6472.scriptit;
+package steve6472.scriptit.expressions;
+
+import steve6472.scriptit.Highlighter;
+import steve6472.scriptit.Result;
+import steve6472.scriptit.Script;
+import steve6472.scriptit.Type;
+import steve6472.scriptit.libraries.Library;
 
 /**********************
  * Created by steve6472 (Mirek Jozefek)
@@ -21,9 +27,22 @@ public class Import extends Expression
 	public Result apply(Script script)
 	{
 		if (type == ImportType.TYPE)
-			script.getMemory().addType(script.getWorkspace().getType(name));
-		else
-			script.getMemory().addLibrary(script.getWorkspace().getLibrary(name));
+		{
+			Type type = script.getWorkspace().getType(name);
+			if (type == null)
+			{
+				throw new RuntimeException("Type '" + name + "' not found!");
+			}
+			script.getMemory().addType(type);
+		} else
+		{
+			Library library = script.getWorkspace().getLibrary(name);
+			if (type == null)
+			{
+				throw new RuntimeException("Library '" + name + "' not found!");
+			}
+			script.getMemory().addLibrary(library);
+		}
 
 		return Result.pass();
 	}

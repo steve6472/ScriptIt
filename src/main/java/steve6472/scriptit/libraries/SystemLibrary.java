@@ -1,6 +1,8 @@
 package steve6472.scriptit.libraries;
 
 import steve6472.scriptit.*;
+import steve6472.scriptit.expressions.Function;
+import steve6472.scriptit.expressions.FunctionParameters;
 import steve6472.scriptit.types.PrimitiveTypes;
 
 import java.io.BufferedReader;
@@ -36,6 +38,15 @@ public class SystemLibrary extends Library
 			{
 				System.out.println(arguments[0]);
 				return Result.pass();
+			}
+		});
+
+		addFunction(FunctionParameters.function("isPrimitive").addType(PrimitiveTypes.NULL).build(), new Function()
+		{
+			@Override
+			public Result apply(Script script)
+			{
+				return Result.value(Value.newValue(PrimitiveTypes.BOOL, PrimitiveTypes.isPrimitive(arguments[0].type)));
 			}
 		});
 
@@ -102,6 +113,7 @@ public class SystemLibrary extends Library
 		});
 
 		addFunction("timeMs", () -> Value.newValue(PrimitiveTypes.INT, (int) System.currentTimeMillis()));
+		addFunction("timeNs", () -> Value.newValue(PrimitiveTypes.INT, (int) System.nanoTime()));
 
 		addFunction(FunctionParameters.create("acceptEvents"), new Function()
 		{

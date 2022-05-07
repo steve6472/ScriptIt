@@ -22,7 +22,7 @@ public class SimpleTests
 	private Script testScript(String name)
 	{
 		boolean debug = !Boolean.parseBoolean(System.getenv("disable_debug"));
-		debug = false;
+//		debug = false;
 
 		DelayFunction.DEBUG = debug;
 		TokenParser.DEBUG = debug;
@@ -85,6 +85,23 @@ public class SimpleTests
 	{
 		Script script = testScript("val_not_found");
 		Assertions.assertThrows(ValueNotFoundException.class, script::runWithDelay);
+	}
+
+	@Test
+	@DisplayName(value = "Declare and assign - fail")
+	public void declareAssignFail()
+	{
+		Script script = testScript("declare_assign_fail");
+		Assertions.assertThrows(RuntimeException.class, script::runWithDelay, "Type mismatch, Type{keyword='string'} != Type{keyword='int'}");
+	}
+
+	@Test
+	@DisplayName(value = "Declare and assign - pass")
+	public void declareAssignPass()
+	{
+		Script script = testScript("declare_assign_pass");
+		Value value = script.runWithDelay();
+		Assertions.assertEquals(5, value.getInt());
 	}
 
 	/*@Test
@@ -345,6 +362,19 @@ public class SimpleTests
 
 				Assertions.assertTimeoutPreemptively(Duration.ofMillis(200), () -> Assertions.assertThrows(ValueNotFoundException.class, script::runWithDelay));
 			}
+		}
+	}
+
+	@Nested
+	@DisplayName("class")
+	class Class_
+	{
+		@Test
+		@DisplayName(value = "car test")
+		public void car()
+		{
+			Script script = testScript("class/car");
+			script.runWithDelay();
 		}
 	}
 }

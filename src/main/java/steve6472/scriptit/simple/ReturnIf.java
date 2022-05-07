@@ -1,6 +1,7 @@
 package steve6472.scriptit.simple;
 
 import steve6472.scriptit.*;
+import steve6472.scriptit.expressions.Expression;
 import steve6472.scriptit.types.PrimitiveTypes;
 
 /**********************

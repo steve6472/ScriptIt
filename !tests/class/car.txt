@@ -1,0 +1,22 @@
+import library System;
+import type int;
+import type string;
+
+int a;
+
+a = 5;
+
+System.println(a);
+
+§class Car
+§{
+§    String name;
+§    int wheelCount;
+§};
+§
+§Car car = Car();
+§
+§car.name = "Subuwu";
+§car.wheelCount = 4;
+§
+§System.printDetail(car);

@@ -89,6 +89,8 @@ public enum Operator implements IOperator
 	RETURN_IF("returnif"),
 	CONTINUE("continue"),
 	BREAK("break"),
+	CLASS("class"),
+	EXTENDS("extends"),
 
 	// Other special
 	NUMBER_INT(""),

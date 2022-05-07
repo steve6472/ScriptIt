@@ -1,6 +1,8 @@
 package steve6472.scriptit.tokenizer.parslet;
 
-import steve6472.scriptit.*;
+import steve6472.scriptit.expressions.Expression;
+import steve6472.scriptit.expressions.Variable;
+import steve6472.scriptit.expressions.VariableSource;
 import steve6472.scriptit.tokenizer.*;
 
 /**********************
@@ -15,7 +17,10 @@ public class ChainedNameParslet implements InfixParslet
 	public Expression parse(TokenParser parser, Tokenizer.Token token, Expression leftExpression)
 	{
 		if (!(leftExpression instanceof Variable))
+		{
 			throw new RuntimeException("Left expression is not NameExpression (" + leftExpression + ")");
+		}
+
 		return new ChainedVariable(leftExpression, new Variable(VariableSource.memory(token.sval())));
 	}
 

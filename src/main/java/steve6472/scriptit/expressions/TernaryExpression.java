@@ -1,5 +1,7 @@
-package steve6472.scriptit;
+package steve6472.scriptit.expressions;
 
+import steve6472.scriptit.Result;
+import steve6472.scriptit.Script;
 import steve6472.scriptit.executor.Executor;
 
 /**********************

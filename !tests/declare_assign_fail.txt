@@ -1,0 +1,9 @@
+import type int;
+
+§ might need it idk im not taking any chances
+import type string;
+
+int a;
+a = "fail";
+
+return a;

@@ -1,5 +1,8 @@
-package steve6472.scriptit;
+package steve6472.scriptit.expressions;
 
+import steve6472.scriptit.Result;
+import steve6472.scriptit.Script;
+import steve6472.scriptit.Value;
 import steve6472.scriptit.executor.Executor;
 import steve6472.scriptit.tokenizer.IOperator;
 
@@ -17,7 +20,7 @@ public class UnaryOperator extends Expression
 	private final Value[] operatorArguments;
 
 	IOperator operator;
-	Expression left;
+	public Expression left;
 	Function operatorFunction = null;
 	Executor argumentExecutor, operationExecutor;
 

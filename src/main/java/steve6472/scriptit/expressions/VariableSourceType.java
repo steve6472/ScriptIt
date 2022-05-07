@@ -1,12 +1,12 @@
-package steve6472.scriptit;
+package steve6472.scriptit.expressions;
 
 /**********************
  * Created by steve6472 (Mirek Jozefek)
- * On date: 5/3/2021
+ * On date: 5/22/2021
  * Project: ScriptIt
  *
  ***********************/
-public enum OperatorType
+public enum VariableSourceType
 {
-	UNARY, BOTH, BINARY
+	MEMORY, VALUE
 }

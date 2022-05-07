@@ -1,4 +1,6 @@
-package steve6472.scriptit;
+package steve6472.scriptit.expressions;
+
+import steve6472.scriptit.Value;
 
 /**********************
  * Created by steve6472 (Mirek Jozefek)

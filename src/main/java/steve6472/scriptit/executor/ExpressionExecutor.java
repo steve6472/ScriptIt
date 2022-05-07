@@ -1,4 +1,9 @@
-package steve6472.scriptit;
+package steve6472.scriptit.executor;
+
+import steve6472.scriptit.MemoryStack;
+import steve6472.scriptit.Result;
+import steve6472.scriptit.Script;
+import steve6472.scriptit.expressions.Expression;
 
 /**********************
  * Created by steve6472 (Mirek Jozefek)
@@ -12,7 +17,7 @@ public class ExpressionExecutor
 	private Expression expression;
 	public long delay, delayStart = -1;
 
-	ExpressionExecutor(MemoryStack memory)
+	public ExpressionExecutor(MemoryStack memory)
 	{
 		this.memory = memory;
 	}

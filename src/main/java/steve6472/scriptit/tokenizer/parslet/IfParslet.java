@@ -1,6 +1,8 @@
 package steve6472.scriptit.tokenizer.parslet;
 
-import steve6472.scriptit.*;
+import steve6472.scriptit.expressions.Expression;
+import steve6472.scriptit.expressions.If;
+import steve6472.scriptit.expressions.IfElse;
 import steve6472.scriptit.tokenizer.*;
 
 /**********************

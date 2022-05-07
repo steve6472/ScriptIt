@@ -1,7 +1,7 @@
 package steve6472.scriptit.tokenizer.parslet;
 
-import steve6472.scriptit.Expression;
-import steve6472.scriptit.ForLoop;
+import steve6472.scriptit.expressions.Expression;
+import steve6472.scriptit.expressions.ForLoop;
 import steve6472.scriptit.tokenizer.*;
 
 /**********************

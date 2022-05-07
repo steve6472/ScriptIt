@@ -1,6 +1,6 @@
 package steve6472.scriptit.types;
 
-import steve6472.scriptit.FunctionParameters;
+import steve6472.scriptit.expressions.FunctionParameters;
 import steve6472.scriptit.Type;
 import steve6472.scriptit.Value;
 import steve6472.scriptit.tokenizer.Operator;

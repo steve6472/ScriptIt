@@ -1,5 +1,6 @@
-package steve6472.scriptit;
+package steve6472.scriptit.expressions;
 
+import steve6472.scriptit.*;
 import steve6472.scriptit.executor.Executor;
 
 import java.util.Arrays;
@@ -15,9 +16,9 @@ public class FunctionCall extends Expression
 	Executor argumentsExecutor, functionExecutor;
 	private final Value[] args;
 
-	Function function = null;
-	FunctionSource source;
-	Expression[] arguments;
+	public Function function = null;
+	public FunctionSource source;
+	public Expression[] arguments;
 
 	public FunctionCall(FunctionSource source, Expression... arguments)
 	{

@@ -1,7 +1,7 @@
 package steve6472.scriptit.tokenizer.parslet;
 
-import steve6472.scriptit.BinaryOperator;
-import steve6472.scriptit.Expression;
+import steve6472.scriptit.expressions.BinaryOperator;
+import steve6472.scriptit.expressions.Expression;
 import steve6472.scriptit.tokenizer.TokenParser;
 import steve6472.scriptit.tokenizer.Tokenizer;
 import steve6472.scriptit.tokenizer.InfixParslet;
