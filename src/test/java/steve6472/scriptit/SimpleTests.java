@@ -22,7 +22,7 @@ public class SimpleTests
 	private Script testScript(String name)
 	{
 		boolean debug = !Boolean.parseBoolean(System.getenv("disable_debug"));
-//		debug = false;
+		debug = true;
 
 		DelayFunction.DEBUG = debug;
 		TokenParser.DEBUG = debug;

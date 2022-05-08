@@ -88,6 +88,11 @@ public class Memory
 		}
 	}
 
+	public boolean hasVariable(String name)
+	{
+		return variables.containsKey(name);
+	}
+
 	public Value getVariable(String name)
 	{
 		Value val = variables.get(name);

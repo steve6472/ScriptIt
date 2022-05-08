@@ -1,6 +1,8 @@
 package steve6472.scriptit.expressions;
 
-import steve6472.scriptit.*;
+import steve6472.scriptit.Result;
+import steve6472.scriptit.Script;
+import steve6472.scriptit.executor.Executor;
 import steve6472.scriptit.libraries.Library;
 
 /**********************
@@ -12,13 +14,12 @@ import steve6472.scriptit.libraries.Library;
 public class DotOperator extends Expression
 {
 	Expression left, right;
-	Result leftResult = Result.delay();
-	Result rightResult = Result.delay();
-	Value leftValue, rightValue;
-	boolean isLeftLibrary = false;
-	boolean libraryChecked = false;
+	Executor leftExe, rightExe;
 	Library library = null;
 
+	DotType dotType;
+
+	// TODO: Add unary support
 	public DotOperator(Expression left, Expression right)
 	{
 		this.left = left;
@@ -35,99 +36,119 @@ public class DotOperator extends Expression
 		{
 			throw new IllegalStateException("Right expression of dot operator must be either a FunctionCall, Variable or DotOperator, is " + right.getClass().getCanonicalName());
 		}
+		leftExe = new Executor(left);
+		rightExe = new Executor(right);
 	}
 
-	@Override
-	public Result apply(Script script)
+	private Result onlyRight(Script script)
 	{
-		if (!libraryChecked || !isLeftLibrary)
-		{
-			if (left instanceof Variable va)
-			{
-				if (script.getMemory().isLibrary(va.source.variableName))
-				{
-					libraryChecked = true;
-					isLeftLibrary = true;
-					library = script.getMemory().libraries.get(va.source.variableName);
-				} else
-				{
-					if (leftResult.isDelay())
-						leftResult = left.apply(script);
+		if (rightExe.executeWhatYouCan(script).isDelay())
+			return Result.delay();
 
-					if (leftResult.isDelay())
-						return leftResult;
+		Result rightResult = rightExe.getLastResult();
 
-					leftValue = leftResult.getValue();
-				}
-			} else
-			{
-				if (leftResult.isDelay())
-					leftResult = left.apply(script);
-
-				if (leftResult.isDelay())
-					return leftResult;
-
-				leftValue = leftResult.getValue();
-			}
-		}
-
-		if (right instanceof FunctionCall fc)
-		{
-			if (isLeftLibrary)
-			{
-				fc.source = FunctionSource.staticFunction(fc.source.functionName, library);
-			} else
-			{
-				fc.source = FunctionSource.dot(fc.source.functionName, leftValue);
-			}
-		} else if (right instanceof UnaryOperator un)
-		{
-			if (isLeftLibrary)
-			{
-				((FunctionCall) un.left).source = FunctionSource.staticFunction(((FunctionCall) un.left).source.functionName, library);
-			} else
-			{
-				((FunctionCall) un.left).source = FunctionSource.dot(((FunctionCall) un.left).source.functionName, leftValue);
-			}
-		}
-		else if (right instanceof Variable va)
-		{
-			va.source.setValue(leftValue);
-		} else if (right instanceof DotOperator dot)
-		{
-			dot.leftValue = leftValue;
-			if (dot.left instanceof FunctionCall fc)
-			{
-				fc.source = FunctionSource.dot(fc.source.functionName, dot.leftValue);
-			}
-		}
-
-
-		if (rightResult.isDelay())
-			rightResult = right.apply(script);
-
-		if (rightResult.isDelay())
-			return rightResult;
-
-		rightValue = rightResult.getValue();
-
-		Result rightResult = this.rightResult;
-
-		leftResult = Result.delay();
-		this.rightResult = Result.delay();
+		leftExe.reset();
+		rightExe.reset();
 
 		return rightResult;
 	}
 
 	@Override
+	public Result apply(Script script)
+	{
+		dotType = findSimpleType(script);
+
+		switch (dotType)
+		{
+			case LIBRARY_FUNCTION ->
+			{
+				((FunctionCall) right).source = FunctionSource.staticFunction(((FunctionCall) right).source.functionName, library);
+				return onlyRight(script);
+			}
+			case VARIABLE_FUNCTION, DOT_FUNCTION, CONSTANT_FUNCTION ->
+			{
+				if (leftExe.executeWhatYouCan(script).isDelay())
+					return Result.delay();
+
+				Result leftResult = leftExe.getLastResult();
+
+				((FunctionCall) right).source = FunctionSource.dot(((FunctionCall) right).source.functionName, leftResult.getValue());
+
+				return onlyRight(script);
+			}
+			default -> throw new IllegalStateException("Unexpected value: " + dotType);
+		}
+	}
+
+	private DotType findSimpleType(Script script)
+	{
+		if (dotType != null)
+			return dotType;
+
+		// "text".substring(4);
+		if (left instanceof ValueConstant && right instanceof FunctionCall)
+		{
+			return DotType.CONSTANT_FUNCTION;
+		}
+
+		// Math.PI();
+		if (left instanceof Variable va)
+		{
+			if (script.getMemory().isLibrary(va.source.variableName))
+			{
+				if (right instanceof FunctionCall fc)
+				{
+					library = script.getMemory().libraries.get(va.source.variableName);
+					fc.source = FunctionSource.staticFunction(fc.source.functionName, library);
+					return DotType.LIBRARY_FUNCTION;
+				}
+			}
+		}
+
+		// stringVariable.charAt(3);
+		if (left instanceof Variable va)
+		{
+			if (script.getMemory().hasVariable(va.source.variableName))
+			{
+				if (right instanceof FunctionCall)
+				{
+					return DotType.VARIABLE_FUNCTION;
+				}
+			}
+		}
+
+		/*
+		 * something.getText().charAt(3);
+		 *
+		 *  -->  .getText().charAt(3)  <--
+		 */
+		if (left instanceof DotOperator)
+		{
+			if (right instanceof FunctionCall)
+			{
+				return DotType.DOT_FUNCTION;
+			}
+		}
+
+		throw new RuntimeException("DotType not found for " + left.getClass().getSimpleName() + " - " + right
+			.getClass()
+			.getSimpleName());
+	}
+
+	@Override
 	public String toString()
 	{
-		return "DotOperator{" + "left=" + left + ", right=" + right + ", leftResult=" + leftResult + ", rightResult=" + rightResult + ", leftValue=" + leftValue + ", rightValue=" + rightValue + ", isLeftLibrary=" + isLeftLibrary + ", libraryChecked=" + libraryChecked + ", library=" + library + '}';
+		return "DotOperator{" + "left=" + left + ", right=" + right + '}';
 	}
 
 	@Override
 	public String showCode(int a)
 	{
 		return left.showCode(0) + "." + right.showCode(0);
+	}
+
+	private enum DotType
+	{
+		LIBRARY_FUNCTION, VARIABLE_FUNCTION, DOT_FUNCTION, CONSTANT_FUNCTION, VARIABLE_CHAIN, VARIABLE_DOT
 	}
 }

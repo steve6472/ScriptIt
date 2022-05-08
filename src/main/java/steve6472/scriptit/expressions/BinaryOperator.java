@@ -57,7 +57,7 @@ public class BinaryOperator extends Expression
 			HashMap<IOperator, Function> operatorFunctionHashMap = left.getValue().type.binary.get(right.getValue().type);
 			if (operatorFunctionHashMap == null)
 			{
-				throw new NoBinaryOperationFoundException(left.getValue().type, right.getValue().type);
+				throw new NoBinaryOperationFoundException(left.getValue(), right.getValue());
 			}
 			operatorFunction = operatorFunctionHashMap.get(operator);
 

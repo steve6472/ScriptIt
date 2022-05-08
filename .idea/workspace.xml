@@ -14,7 +14,7 @@
     <option name="optimizeImportsOnTheFly" value="true" />
   </component>
   <component name="DarkyenusTimeTracker">
-    <option name="totalTimeSeconds" value="147223" />
+    <option name="totalTimeSeconds" value="153249" />
     <option name="idleThresholdMs" value="60000" />
     <option name="autoCountIdleSeconds" value="10" />
     <option name="gitIntegration" value="true" />
@@ -99,22 +99,12 @@
       <recent name="steve6472.scriptit.exceptions" />
     </key>
   </component>
-  <component name="RunManager" selected="JUnit.SimpleTests$Class_">
+  <component name="RunManager" selected="JUnit.SimpleTests">
     <configuration name="SimpleTests$Class_" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="ScriptIt" />
       <option name="PACKAGE_NAME" value="steve6472.scriptit.SimpleTests" />
       <option name="MAIN_CLASS_NAME" value="steve6472.scriptit.SimpleTests$Class_" />
       <option name="TEST_OBJECT" value="class" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="SimpleTests$Flow_$For_.forFor" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <module name="ScriptIt" />
-      <option name="PACKAGE_NAME" value="steve6472.scriptit.SimpleTests.Flow_" />
-      <option name="MAIN_CLASS_NAME" value="steve6472.scriptit.SimpleTests$Flow_$For_" />
-      <option name="METHOD_NAME" value="forFor" />
-      <option name="TEST_OBJECT" value="method" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -175,22 +165,35 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <configuration name="SimpleTests.dots" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="ScriptIt" />
+      <option name="PACKAGE_NAME" value="steve6472.scriptit" />
+      <option name="MAIN_CLASS_NAME" value="steve6472.scriptit.SimpleTests" />
+      <option name="METHOD_NAME" value="dots" />
+      <option name="TEST_OBJECT" value="method" />
+      <envs>
+        <env name="disable_debug" value="true" />
+      </envs>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <list>
       <item itemvalue="JUnit.SimpleTests" />
       <item itemvalue="JUnit.SimpleTests-Debug" />
-      <item itemvalue="JUnit.SimpleTests$Flow_$For_.forFor" />
       <item itemvalue="JUnit.SimpleTests$Class_" />
       <item itemvalue="JUnit.SimpleTests.declareAssign" />
       <item itemvalue="JUnit.SimpleTests.declareAssignPass" />
       <item itemvalue="JUnit.SimpleTests$Flow_$For_.normalFor" />
+      <item itemvalue="JUnit.SimpleTests.dots" />
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="JUnit.SimpleTests.dots" />
         <item itemvalue="JUnit.SimpleTests$Class_" />
         <item itemvalue="JUnit.SimpleTests$Flow_$For_.normalFor" />
         <item itemvalue="JUnit.SimpleTests.declareAssignPass" />
         <item itemvalue="JUnit.SimpleTests.declareAssign" />
-        <item itemvalue="JUnit.SimpleTests$Flow_$For_.forFor" />
       </list>
     </recent_temporary>
   </component>
