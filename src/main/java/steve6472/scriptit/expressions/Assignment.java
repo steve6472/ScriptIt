@@ -75,6 +75,8 @@ public class Assignment extends Expression
 	{
 		if (dotOperator != null)
 		{
+			assert expressionExecutor != null;
+
 			if (expressionExecutor.executeWhatYouCan(script).isDelay())
 				return Result.delay();
 
@@ -102,9 +104,12 @@ public class Assignment extends Expression
 
 		if (expression == null)
 		{
-			script.memory.addVariable(varName, Value.newValue(type));
+			Value value = Value.newValue(type);
+			script.memory.addVariable(varName, value);
 			return Result.pass();
 		}
+
+		assert expressionExecutor != null;
 
 		if (expressionExecutor.executeWhatYouCan(script).isDelay())
 			return Result.delay();
@@ -126,7 +131,7 @@ public class Assignment extends Expression
 	{
 		if (dotOperator != null)
 		{
-			return Highlighter.FUNCTION_NAME + typeName + " " + Highlighter.VAR + varName + Highlighter.RESET;
+			return dotOperator.showCode(a) + Highlighter.SYMBOL + " = " + expression.showCode(a) + Highlighter.RESET;
 		}
 
 		assert typeName != null;

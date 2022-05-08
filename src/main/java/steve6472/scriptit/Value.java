@@ -150,6 +150,11 @@ public class Value
 			Object o = values.get(SINGLE_VALUE);
 			if (o == null)
 				return "NULL";
+
+			if (this == NULL)
+			{
+				return "NULL -> " + o.toString();
+			}
 			return o.toString();
 		}
 		return "Value{" + "type=" + type.getKeyword() + ", values=" + values + '}';

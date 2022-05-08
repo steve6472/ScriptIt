@@ -6,11 +6,30 @@ class Car
 {
     string name;
     int wheelCount = 3;
+
+    function printName()
+    {
+        System.dumpVariables();
+        System.println("Car Name: '" + name + "'");
+    };
 };
 
 Car car = Car();
 
-§car.name = "Subuwu";
-§car.wheelCount = 4;
+car.name = "Subuwu";
+car.wheelCount = 4;
+
+§
+§ Split into separate tests
+§
+
+function test(Car car)
+{
+    System.println(car.name);
+};
 
 System.printDetail(car);
+test(car);
+car.printName();
+
+return car;

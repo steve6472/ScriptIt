@@ -22,7 +22,7 @@ public class SimpleTests
 	private Script testScript(String name)
 	{
 		boolean debug = !Boolean.parseBoolean(System.getenv("disable_debug"));
-		debug = true;
+		debug = false;
 
 		DelayFunction.DEBUG = debug;
 		TokenParser.DEBUG = debug;
@@ -374,7 +374,12 @@ public class SimpleTests
 		public void car()
 		{
 			Script script = testScript("class/car");
-			script.runWithDelay();
+			Value value = script.runWithDelay();
+			Assertions.assertEquals("Car", value.type.getKeyword());
+			Assertions.assertEquals(PrimitiveTypes.STRING, ((Value) value.values.get("name")).type);
+			Assertions.assertEquals(PrimitiveTypes.INT, ((Value) value.values.get("wheelCount")).type);
+			Assertions.assertEquals("Subuwu", ((Value) value.values.get("name")).getString());
+			Assertions.assertEquals(4, ((Value) value.values.get("wheelCount")).getInt());
 		}
 	}
 }

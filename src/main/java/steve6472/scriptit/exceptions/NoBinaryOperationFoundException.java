@@ -18,6 +18,6 @@ public class NoBinaryOperationFoundException extends RuntimeException
 
 	public NoBinaryOperationFoundException(Value left, Value right)
 	{
-		super("Type '" + left.type.getKeyword() + "' does not have binary operation with type '" + right.type.getKeyword() + "' (" + left + ", " + right + ")");
+		super("Type '" + left.type.getKeyword() + "' does not have binary operation with type '" + right.type.getKeyword() + "' ('" + left + "', '" + right + "')");
 	}
 }

@@ -1,7 +1,9 @@
 package steve6472.scriptit.expressions;
 
+import steve6472.scriptit.Highlighter;
 import steve6472.scriptit.Result;
 import steve6472.scriptit.Script;
+import steve6472.scriptit.Value;
 import steve6472.scriptit.executor.Executor;
 import steve6472.scriptit.libraries.Library;
 
@@ -60,12 +62,12 @@ public class DotOperator extends Expression
 
 		switch (dotType)
 		{
-			case LIBRARY_FUNCTION ->
+			case LIB_FUNC ->
 			{
 				((FunctionCall) right).source = FunctionSource.staticFunction(((FunctionCall) right).source.functionName, library);
 				return onlyRight(script);
 			}
-			case VARIABLE_FUNCTION, DOT_FUNCTION, CONSTANT_FUNCTION ->
+			case VAR_FUNC, DOT_FUNC, CONST_FUNC ->
 			{
 				if (leftExe.executeWhatYouCan(script).isDelay())
 					return Result.delay();
@@ -75,6 +77,19 @@ public class DotOperator extends Expression
 				((FunctionCall) right).source = FunctionSource.dot(((FunctionCall) right).source.functionName, leftResult.getValue());
 
 				return onlyRight(script);
+			}
+			case VAR_VAR ->
+			{
+				Result apply = left.apply(script);
+				Value value = apply.getValue();
+				Object o = value.values.get(((Variable) right).source.variableName);
+				if (o instanceof Value val)
+				{
+					return Result.value(val);
+				} else
+				{
+					throw new RuntimeException("No value '" + ((Variable) right).source.variableName + "' in variable '" + ((Variable) left).source.variableName + "' or other error lol");
+				}
 			}
 			default -> throw new IllegalStateException("Unexpected value: " + dotType);
 		}
@@ -88,7 +103,7 @@ public class DotOperator extends Expression
 		// "text".substring(4);
 		if (left instanceof ValueConstant && right instanceof FunctionCall)
 		{
-			return DotType.CONSTANT_FUNCTION;
+			return DotType.CONST_FUNC;
 		}
 
 		// Math.PI();
@@ -100,7 +115,7 @@ public class DotOperator extends Expression
 				{
 					library = script.getMemory().libraries.get(va.source.variableName);
 					fc.source = FunctionSource.staticFunction(fc.source.functionName, library);
-					return DotType.LIBRARY_FUNCTION;
+					return DotType.LIB_FUNC;
 				}
 			}
 		}
@@ -112,7 +127,7 @@ public class DotOperator extends Expression
 			{
 				if (right instanceof FunctionCall)
 				{
-					return DotType.VARIABLE_FUNCTION;
+					return DotType.VAR_FUNC;
 				}
 			}
 		}
@@ -122,12 +137,18 @@ public class DotOperator extends Expression
 		 *
 		 *  -->  .getText().charAt(3)  <--
 		 */
-		if (left instanceof DotOperator)
+		if (left instanceof DotOperator && right instanceof FunctionCall)
 		{
-			if (right instanceof FunctionCall)
-			{
-				return DotType.DOT_FUNCTION;
-			}
+			return DotType.DOT_FUNC;
+		}
+
+		/*
+		 * a.b = 3;
+		 * -->  a.b  <--
+		 */
+		if (left instanceof Variable && right instanceof Variable)
+		{
+			return DotType.VAR_VAR;
 		}
 
 		throw new RuntimeException("DotType not found for " + left.getClass().getSimpleName() + " - " + right
@@ -144,11 +165,11 @@ public class DotOperator extends Expression
 	@Override
 	public String showCode(int a)
 	{
-		return left.showCode(0) + "." + right.showCode(0);
+		return Highlighter.VAR + left.showCode(0) + Highlighter.SYMBOL + "." + Highlighter.VAR + right.showCode(0) + Highlighter.RESET;
 	}
 
 	private enum DotType
 	{
-		LIBRARY_FUNCTION, VARIABLE_FUNCTION, DOT_FUNCTION, CONSTANT_FUNCTION, VARIABLE_CHAIN, VARIABLE_DOT
+		LIB_FUNC, VAR_FUNC, DOT_FUNC, CONST_FUNC, VAR_VAR
 	}
 }

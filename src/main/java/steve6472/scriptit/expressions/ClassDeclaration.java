@@ -58,12 +58,13 @@ public class ClassDeclaration extends Expression
 				System.out.println(ass);
 				if (ass.expression == null)
 				{
-					return new VarDec(script.getMemory().getType(ass.typeName), ass.varName, Value.NULL);
+					Type type = script.getMemory().getType(ass.typeName);
+					return new VarDec(ass.varName, Value.newValue(type));
 				} else
 				{
 					Result apply = ass.expression.apply(script);
 					//System.out.println("ClassDeclaration.java:39 " + apply);
-					return new VarDec(script.getMemory().getType(ass.typeName), ass.varName, apply.getValue());
+					return new VarDec(ass.varName, apply.getValue());
 				}
 			});
 		}
@@ -78,7 +79,7 @@ public class ClassDeclaration extends Expression
 
 					if (type != null)
 					{
-						return new VarDec(type, variableName, Value.newValue(type));
+						return new VarDec(variableName, Value.newValue(type));
 					}
 				}
 
@@ -97,7 +98,10 @@ public class ClassDeclaration extends Expression
 		}
 		script.getMemory().addType(type);
 
-		functions.forEach(f -> script.getMemory().addFunction(f.params, f.function));
+		functions.forEach(f ->
+		{
+			type.addFunction(f.params, f.function);
+		});
 
 		if (constructors.isEmpty())
 		{
@@ -129,5 +133,5 @@ public class ClassDeclaration extends Expression
 		return "class " + name;
 	}
 
-	private record VarDec(Type type, String name, Value val) {}
+	private record VarDec(String name, Value val) {}
 }
