@@ -19,17 +19,7 @@ Car car = Car();
 car.name = "Subuwu";
 car.wheelCount = 4;
 
-§
-§ Split into separate tests
-§
-
-function test(Car car)
-{
-    System.println(car.name);
-};
-
 System.printDetail(car);
-test(car);
 car.printName();
 
 return car;

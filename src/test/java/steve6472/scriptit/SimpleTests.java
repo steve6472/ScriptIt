@@ -381,5 +381,32 @@ public class SimpleTests
 			Assertions.assertEquals("Subuwu", ((Value) value.values.get("name")).getString());
 			Assertions.assertEquals(4, ((Value) value.values.get("wheelCount")).getInt());
 		}
+
+		@Test
+		@DisplayName(value = "access type var from func")
+		public void access_type_var_from_func()
+		{
+			Script script = testScript("class/access_type_var_from_func");
+			Value value = script.runWithDelay();
+			Assertions.assertEquals("Car's name is Subuwu", value.getString());
+		}
+
+		@Test
+		@DisplayName(value = "getter")
+		public void getter()
+		{
+			Script script = testScript("class/getter");
+			Value value = script.runWithDelay();
+			Assertions.assertEquals("Subuwu", value.getString());
+		}
+
+		@Test
+		@DisplayName(value = "setter")
+		public void setter()
+		{
+			Script script = testScript("class/setter");
+			Value value = script.runWithDelay();
+			Assertions.assertEquals("Subuwu", value.getString());
+		}
 	}
 }

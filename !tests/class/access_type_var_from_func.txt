@@ -1,0 +1,18 @@
+import library System;
+import type int;
+import type string;
+
+class Car
+{
+    string name;
+};
+
+Car car = Car();
+car.name = "Subuwu";
+
+function test(Car car)
+{
+   return "Car's name is " + car.name;
+};
+
+return test(car);

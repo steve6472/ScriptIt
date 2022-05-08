@@ -1,0 +1,18 @@
+import library System;
+import type int;
+import type string;
+
+class Car
+{
+    string name;
+
+    function setName(string newName)
+    {
+        name = newName;
+    };
+};
+
+Car car = Car();
+car.setName("Subuwu");
+
+return car.name;

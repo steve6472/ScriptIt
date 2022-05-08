@@ -55,7 +55,6 @@ public class ClassDeclaration extends Expression
 		{
 			variables.add((script) ->
 			{
-				System.out.println(ass);
 				if (ass.expression == null)
 				{
 					Type type = script.getMemory().getType(ass.typeName);
