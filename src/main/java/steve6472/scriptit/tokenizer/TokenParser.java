@@ -1,7 +1,12 @@
 package steve6472.scriptit.tokenizer;
 
+import steve6472.scriptit.Log;
+import steve6472.scriptit.Script;
 import steve6472.scriptit.Stack;
-import steve6472.scriptit.*;
+import steve6472.scriptit.Workspace;
+import steve6472.scriptit.expressions.Assignment;
+import steve6472.scriptit.expressions.ClassDeclaration;
+import steve6472.scriptit.expressions.DeclareFunction;
 import steve6472.scriptit.expressions.Expression;
 import steve6472.scriptit.tokenizer.parslet.*;
 
@@ -23,6 +28,7 @@ public class TokenParser
 
 	public final Map<IOperator, PrefixParselet> prefixParslets = new HashMap<>();
 	public final Map<IOperator, InfixParslet> infixParslets = new HashMap<>();
+	public final Set<Class<?>> allowedInClassDeclaration = new HashSet<>();
 
 	public TokenParser()
 	{
@@ -84,6 +90,12 @@ public class TokenParser
 		infixParslets.put(Operator.ASSIGN_BIT_AND, new AssignParslet());
 
 		infixParslets.put(Operator.BRACKET_LEFT, new FunctionCallInfix());
+
+
+
+		allowedInClassDeclaration.add(DeclareFunction.class);
+		allowedInClassDeclaration.add(ChainedVariable.class);
+		allowedInClassDeclaration.add(Assignment.class);
 	}
 
 
@@ -105,6 +117,7 @@ public class TokenParser
 	public Set<String> importedTypes;
 	public Workspace workspace;
 	public Script script;
+	public Stack<ClassDeclaration> classStack;
 
 	public TokenParser setExpression(Script script, String expression)
 	{
@@ -114,6 +127,7 @@ public class TokenParser
 		tokenizer = new Tokenizer(expression);
 		tokenizer.debug = DEBUG;
 		importedTypes = new HashSet<>();
+		classStack = new Stack<>(16);
 
 		return this;
 	}
@@ -221,7 +235,45 @@ public class TokenParser
 			depth--;
 		} while (tokenizer.matchToken(Operator.SEMICOLON, true));
 		//FIXME: add this exception
-//		if (pos < line.length()) throw new RuntimeException("Unexpected: " + ch + " Rest: " + line.substring(pos));
+		//		if (pos < line.length()) throw new RuntimeException("Unexpected: " + ch + " Rest: " + line.substring(pos));
+		return expressions;
+	}
+
+	public List<Expression> parseClass()
+	{
+		List<Expression> expressions = new ArrayList<>();
+		do
+		{
+			depth++;
+			print(Log.BRIGHT_CYAN + "---Next Expression---" + Log.RESET);
+			if (tokenizer.matchToken(Operator.BRACKET_CURLY_RIGHT, true))
+			{
+				depth--;
+				break;
+			}
+			Expression next = parse(Precedence.ANYTHING);
+			if (next != null)
+			{
+				if (!allowedInClassDeclaration.contains(next.getClass()))
+				{
+					throw new RuntimeException("Expression of type '" + next.getClass().getSimpleName() + "' not allowed inside class declaration!");
+				}
+
+				expressions.add(next);
+			} else
+			{
+				if (DEBUG)
+					System.out.println(Log.BRIGHT_RED + "\n" +
+						"-------------------------------\n" +
+						"----------END OF FILE----------\n" +
+						"-------------------------------\n" + Log.RESET);
+				break;
+			}
+			if (DEBUG)
+				System.out.println("\n");
+			depth--;
+		} while (tokenizer.matchToken(Operator.SEMICOLON, true));
+
 		return expressions;
 	}
 }

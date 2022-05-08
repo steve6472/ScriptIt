@@ -2,21 +2,15 @@ import library System;
 import type int;
 import type string;
 
-int a;
+class Car
+{
+    string name;
+    int wheelCount = 3;
+};
 
-a = 5;
+Car car = Car();
 
-System.println(a);
-
-§class Car
-§{
-§    String name;
-§    int wheelCount;
-§};
-§
-§Car car = Car();
-§
 §car.name = "Subuwu";
 §car.wheelCount = 4;
-§
-§System.printDetail(car);
+
+System.printDetail(car);

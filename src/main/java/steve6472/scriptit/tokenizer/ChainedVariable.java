@@ -2,10 +2,7 @@ package steve6472.scriptit.tokenizer;
 
 import steve6472.scriptit.Result;
 import steve6472.scriptit.Script;
-import steve6472.scriptit.Type;
-import steve6472.scriptit.Value;
 import steve6472.scriptit.expressions.Expression;
-import steve6472.scriptit.expressions.Variable;
 
 /**********************
  * Created by steve6472 (Mirek Jozefek)
@@ -26,17 +23,6 @@ public class ChainedVariable extends Expression
 	@Override
 	public Result apply(Script script)
 	{
-		// Try to create un-initialized variable if possible
-		if (exp1 instanceof Variable var1 && exp2 instanceof Variable var2)
-		{
-			Type type = script.memory.getType(var1.source.variableName);
-			String variableName = var2.source.variableName;
-
-			if (type != null)
-			{
-				script.memory.addVariable(variableName, Value.newValue(type));
-			}
-		}
 		return Result.pass();
 	}
 

@@ -1,9 +1,6 @@
 package steve6472.scriptit.tokenizer.parslet;
 
-import steve6472.scriptit.expressions.Assignment;
-import steve6472.scriptit.expressions.BinaryOperator;
-import steve6472.scriptit.expressions.Expression;
-import steve6472.scriptit.expressions.Variable;
+import steve6472.scriptit.expressions.*;
 import steve6472.scriptit.tokenizer.*;
 
 /**********************
@@ -14,7 +11,6 @@ import steve6472.scriptit.tokenizer.*;
  ***********************/
 public class AssignParslet implements InfixParslet
 {
-
 	@Override
 	public Expression parse(TokenParser parser, Tokenizer.Token token, Expression leftExpression)
 	{
@@ -39,6 +35,10 @@ public class AssignParslet implements InfixParslet
 		}
 		else
 		{
+			if (leftExpression instanceof DotOperator dop)
+			{
+				return new Assignment(dop, parser.parse(getPrecedence()));
+			}
 			if (leftExpression instanceof ChainedVariable cne)
 			{
 				Expression typeExp = cne.exp1;

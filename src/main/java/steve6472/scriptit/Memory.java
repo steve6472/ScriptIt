@@ -73,9 +73,13 @@ public class Memory
 		{
 			Value value1 = variables.get(name);
 			if (value == value1)
+			{
 				return;
+			}
 			if (value1.type != value.type)
+			{
 				throw new RuntimeException("Type mismatch, " + value.type + " != " + value1.type);
+			}
 			value1.values.clear();
 			value.values.forEach(value1::setValue);
 		} else
