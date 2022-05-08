@@ -91,6 +91,7 @@ public enum Operator implements IOperator
 	BREAK("break"),
 	CLASS("class"),
 	EXTENDS("extends"),
+	INSTANCEOF("instanceof"),
 
 	// Other special
 	NUMBER_INT(""),

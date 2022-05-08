@@ -57,6 +57,7 @@ public class TokenParser
 
 
 		infixParslets.put(Operator.TERNARY, new TernaryParslet());
+		infixParslets.put(Operator.INSTANCEOF, new InstanceofParslet());
 		infixParslets.put(Operator.NAME, new ChainedNameParslet());
 		infixParslets.put(Operator.ASSIGN, new AssignParslet());
 		infixParslets.put(Operator.DOT, new DotParslet());

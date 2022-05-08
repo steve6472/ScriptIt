@@ -139,6 +139,24 @@ public class SimpleTests
 	}
 
 	@Test
+	@DisplayName(value = "instanceof")
+	public void instanceof_()
+	{
+		Script script = testScript("instanceof");
+		Value value = script.runWithDelay();
+		Assertions.assertTrue(value.getBoolean());
+	}
+
+	@Test
+	@DisplayName(value = "instanceof!")
+	public void instanceofNot_()
+	{
+		Script script = testScript("instanceof_not");
+		Value value = script.runWithDelay();
+		Assertions.assertFalse(value.getBoolean());
+	}
+
+	@Test
 	public void dotBinary()
 	{
 		Script script = testScript("dot_bin");

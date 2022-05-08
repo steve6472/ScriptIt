@@ -1,0 +1,11 @@
+import type int;
+import type char;
+import library System;
+
+int a = 4;
+
+if (a instanceof int)
+{
+    System.println("a is int");
+    return true;
+};

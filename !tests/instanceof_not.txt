@@ -1,0 +1,11 @@
+import type int;
+import type char;
+import library System;
+
+int a = 4;
+
+if (a instanceof! char)
+{
+    System.println("a is not char");
+    return false;
+};

@@ -28,6 +28,7 @@ public class Highlighter
 	public static String EMPTY_LINE = "";
 	public static String COMMENT = "%COMMENT%";
 	public static String RETURN = "%RETURN%";
+	public static String INSTANCEOF = "%INSTANCEOF%";
 
 	public static void reset()
 	{
@@ -51,6 +52,7 @@ public class Highlighter
 		EMPTY_LINE = "";
 		COMMENT = "%COMMENT%";
 		RETURN = "%RETURN%";
+		INSTANCEOF = "%INSTANCEOF%";
 	}
 
 	public static void basicHighlight()
@@ -72,5 +74,6 @@ public class Highlighter
 		LOOP_CONTROL = "\u001b[38;5;166m";
 		COMMENT = "\u001b[38;5;243m";
 		RETURN = "\u001b[38;5;166m";
+		INSTANCEOF = "\u001b[38;5;166m";
 	}
 }
