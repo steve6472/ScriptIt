@@ -22,7 +22,7 @@ public class SimpleTests
 	private Script testScript(String name)
 	{
 		boolean debug = !Boolean.parseBoolean(System.getenv("disable_debug"));
-		debug = false;
+//		debug = false;
 
 		DelayFunction.DEBUG = debug;
 		TokenParser.DEBUG = debug;
@@ -401,6 +401,20 @@ public class SimpleTests
 		}
 
 		@Test
+		@DisplayName(value = "car constructor")
+		public void constructor()
+		{
+			Script script = testScript("class/constructor");
+			Value value = script.runWithDelay();
+			System.out.println(value);
+			Assertions.assertEquals("Car", value.type.getKeyword());
+			Assertions.assertEquals(PrimitiveTypes.STRING, ((Value) value.values.get("name")).type);
+			Assertions.assertEquals(PrimitiveTypes.INT, ((Value) value.values.get("wheelCount")).type);
+			Assertions.assertEquals("Subuwu", ((Value) value.values.get("name")).getString());
+			Assertions.assertEquals(4, ((Value) value.values.get("wheelCount")).getInt());
+		}
+
+		@Test
 		@DisplayName(value = "access type var from func")
 		public void access_type_var_from_func()
 		{
@@ -425,6 +439,19 @@ public class SimpleTests
 			Script script = testScript("class/setter");
 			Value value = script.runWithDelay();
 			Assertions.assertEquals("Subuwu", value.getString());
+		}
+
+		@Test
+		@DisplayName(value = "overload binary +")
+		public void overloadPlus()
+		{
+			Script script = testScript("class/overload_plus");
+			Value value = script.runWithDelay();
+			Assertions.assertEquals("vec2", value.type.getKeyword());
+			Assertions.assertEquals(PrimitiveTypes.INT, ((Value) value.values.get("x")).type);
+			Assertions.assertEquals(PrimitiveTypes.INT, ((Value) value.values.get("y")).type);
+			Assertions.assertEquals(9, ((Value) value.values.get("x")).getInt());
+			Assertions.assertEquals(8, ((Value) value.values.get("y")).getInt());
 		}
 	}
 }

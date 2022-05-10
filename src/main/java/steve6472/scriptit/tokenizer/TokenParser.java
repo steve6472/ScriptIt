@@ -4,9 +4,7 @@ import steve6472.scriptit.Log;
 import steve6472.scriptit.Script;
 import steve6472.scriptit.Stack;
 import steve6472.scriptit.Workspace;
-import steve6472.scriptit.expressions.Assignment;
 import steve6472.scriptit.expressions.ClassDeclaration;
-import steve6472.scriptit.expressions.DeclareFunction;
 import steve6472.scriptit.expressions.Expression;
 import steve6472.scriptit.tokenizer.parslet.*;
 
@@ -28,7 +26,6 @@ public class TokenParser
 
 	public final Map<IOperator, PrefixParselet> prefixParslets = new HashMap<>();
 	public final Map<IOperator, InfixParslet> infixParslets = new HashMap<>();
-	public final Set<Class<?>> allowedInClassDeclaration = new HashSet<>();
 
 	public TokenParser()
 	{
@@ -53,6 +50,7 @@ public class TokenParser
 		prefixParslets.put(Operator.CONTINUE, new ContinueParslet());
 		prefixParslets.put(Operator.BREAK, new BreakParslet());
 		prefixParslets.put(Operator.CLASS, new ClassParslet());
+		prefixParslets.put(Operator.OVERLOAD, new OverloadParslet());
 
 
 
@@ -91,12 +89,6 @@ public class TokenParser
 		infixParslets.put(Operator.ASSIGN_BIT_AND, new AssignParslet());
 
 		infixParslets.put(Operator.BRACKET_LEFT, new FunctionCallInfix());
-
-
-
-		allowedInClassDeclaration.add(DeclareFunction.class);
-		allowedInClassDeclaration.add(ChainedVariable.class);
-		allowedInClassDeclaration.add(Assignment.class);
 	}
 
 
@@ -255,11 +247,6 @@ public class TokenParser
 			Expression next = parse(Precedence.ANYTHING);
 			if (next != null)
 			{
-				if (!allowedInClassDeclaration.contains(next.getClass()))
-				{
-					throw new RuntimeException("Expression of type '" + next.getClass().getSimpleName() + "' not allowed inside class declaration!");
-				}
-
 				expressions.add(next);
 			} else
 			{

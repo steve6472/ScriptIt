@@ -1,0 +1,17 @@
+import library System;
+import type int;
+import type string;
+
+class Car
+{
+    string name;
+    int wheelCount = 3;
+
+    function Car(string nm, int wc)
+    {
+        name = nm;
+        wheelCount = wc;
+    };
+};
+
+return Car("Subuwu", 4);

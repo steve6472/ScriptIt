@@ -42,7 +42,7 @@ public class FunctionParslet implements PrefixParselet
 		return new DeclareFunction(name, b, argTypeName[1], types);
 	}
 
-	private String[][] parseArguments(TokenParser parser)
+	public static String[][] parseArguments(TokenParser parser)
 	{
 		Tokenizer tokenizer = parser.tokenizer;
 		List<Pair> args = new ArrayList<>();

@@ -1,0 +1,29 @@
+import library System;
+import type int;
+import type string;
+
+class vec2
+{
+    int x;
+    int y;
+
+    overload binary + (vec2 other)
+    {
+        vec2 new = vec2();
+        new.x = x + other.x;
+        new.y = y + other.y;
+        return new;
+    };
+};
+
+vec2 a = vec2();
+a.x = 7;
+a.y = 3;
+
+vec2 b = vec2();
+b.x = 2;
+b.y = 5;
+
+vec2 c = a + b;
+System.printDetail(c);
+return c;

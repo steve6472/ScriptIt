@@ -21,6 +21,7 @@ public class ClassDeclaration extends Expression
 	public final Type type;
 	public final List<java.util.function.Function<Script, VarDec>> variables;
 	public final List<DeclareFunction> functions, constructors;
+	public final List<OverloadFunction> overloadFunctions;
 
 	public ClassDeclaration(String name, Type type)
 	{
@@ -29,6 +30,7 @@ public class ClassDeclaration extends Expression
 		variables = new ArrayList<>();
 		functions = new ArrayList<>();
 		constructors = new ArrayList<>();
+		overloadFunctions = new ArrayList<>();
 	}
 
 	public void add(List<Expression> expressions)
@@ -84,6 +86,9 @@ public class ClassDeclaration extends Expression
 
 				throw new RuntimeException("Chained Variable is not suitable to create un-initialized declaration of variable.");
 			});
+		} else if (ex instanceof OverloadFunction of)
+		{
+			overloadFunctions.add(of);
 		}
 	}
 
@@ -102,6 +107,7 @@ public class ClassDeclaration extends Expression
 			type.addFunction(f.params, f.function);
 		});
 
+		// Adds basic constructor without any parameters
 		if (constructors.isEmpty())
 		{
 			script.getMemory().addFunction(FunctionParameters.create(type), new Function()
@@ -120,10 +126,68 @@ public class ClassDeclaration extends Expression
 			});
 		} else
 		{
-			constructors.forEach(f -> script.getMemory().addFunction(f.params, f.function));
+			//				System.out.println("Constructor " + f.params.getName() + " " + Arrays.toString(f.params.getTypes()));
+			constructors.forEach(f -> script.getMemory().addFunction(f.params, createConstructor(f.function)));
 		}
 
+		//TODO: make this nice-er
+		overloadFunctions.forEach(f ->
+		{
+			if (f.type == OverloadFunction.OverloadType.BINARY)
+			{
+				// overload binary + (vec2 other)
+				if (f.types.length == 1)
+				{
+					type.addBinaryOperator(f.types[0], f.operator, new Function()
+					{
+						@Override
+						public Result apply(Script script)
+						{
+							f.body.setReturnThisHelper(arguments[0]);
+							f.body.setArguments(new Value[] {arguments[1]});
+							return f.body.apply(script);
+						}
+					});
+				}
+			} else if (f.type == OverloadFunction.OverloadType.UNARY)
+			{
+				type.addUnaryOperator(f.operator, new Function()
+				{
+					@Override
+					public Result apply(Script script)
+					{
+						f.body.setReturnThisHelper(arguments[0]);
+						f.body.setArguments(new Value[] {arguments[0]});
+						return f.body.apply(script);
+					}
+				});
+			}
+		});
+
 		return Result.pass();
+	}
+
+	private Function createConstructor(Function fun)
+	{
+		return new Function()
+		{
+			@Override
+			public Result apply(Script script)
+			{
+				Value value = Value.newValue(type);
+				for (java.util.function.Function<Script, VarDec> variable : variables)
+				{
+					VarDec apply = variable.apply(script);
+					value.setValue(apply.name, apply.val);
+				}
+
+				fun.setReturnThisHelper(value);
+				fun.setArguments(arguments);
+				fun.apply(script);
+
+				return Result.value(value);
+			}
+		};
 	}
 
 	@Override
