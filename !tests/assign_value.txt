@@ -1,0 +1,11 @@
+import library System;
+import type int;
+
+int a = 6;
+
+§ workaround is to cast it into the type int(a)
+int b = a;
+
+a = 7;
+
+return b;

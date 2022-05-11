@@ -2,6 +2,7 @@ package steve6472.scriptit;
 
 import org.junit.jupiter.api.*;
 import steve6472.scriptit.exceptions.ValueNotFoundException;
+import steve6472.scriptit.expressions.Function;
 import steve6472.scriptit.functions.DelayFunction;
 import steve6472.scriptit.libraries.LogLibrary;
 import steve6472.scriptit.libraries.TestLibrary;
@@ -22,7 +23,7 @@ public class SimpleTests
 	private Script testScript(String name)
 	{
 		boolean debug = !Boolean.parseBoolean(System.getenv("disable_debug"));
-//		debug = false;
+		debug = false;
 
 		DelayFunction.DEBUG = debug;
 		TokenParser.DEBUG = debug;
@@ -48,6 +49,14 @@ public class SimpleTests
 		Script script = testScript("math");
 		Value value = script.runWithDelay();
 		Assertions.assertEquals(-24, value.getInt());
+	}
+
+	@Test
+	public void assignValue()
+	{
+		Script script = testScript("assign_value");
+		Value value = script.runWithDelay();
+		Assertions.assertEquals(6, value.getInt());
 	}
 
 	/*
@@ -412,6 +421,20 @@ public class SimpleTests
 			Assertions.assertEquals(PrimitiveTypes.INT, ((Value) value.values.get("wheelCount")).type);
 			Assertions.assertEquals("Subuwu", ((Value) value.values.get("name")).getString());
 			Assertions.assertEquals(4, ((Value) value.values.get("wheelCount")).getInt());
+		}
+
+		@Test
+		@DisplayName(value = "functionVarPassThing")
+		@Disabled(value = "Test can not be automated, please use your eyes\nIf the hashes of the three printed objects are the same = something broke horribly")
+		public void functionVarPassThing()
+		{
+			Script script = testScript("class/idk_how_to_name_this");
+			script.runWithDelay();
+
+			Function render = script.getMemory().getFunction("moveBall", new Type[0]);
+			render.apply(script);
+			render.apply(script);
+			render.apply(script);
 		}
 
 		@Test

@@ -31,7 +31,7 @@ public class DeclareFunction extends Expression
 	@Override
 	public String showCode(int a)
 	{
-		StringBuilder s = new StringBuilder("function " + params.getName() + "(");
+		StringBuilder s = new StringBuilder(Highlighter.IF + "function " + Highlighter.RESET + params.getName() + "(");
 		String[] argumentNames = function.argumentNames;
 		for (int i = 0; i < argumentNames.length; i++)
 		{

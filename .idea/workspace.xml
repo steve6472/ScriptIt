@@ -14,7 +14,7 @@
     <option name="optimizeImportsOnTheFly" value="true" />
   </component>
   <component name="DarkyenusTimeTracker">
-    <option name="totalTimeSeconds" value="162192" />
+    <option name="totalTimeSeconds" value="168113" />
     <option name="idleThresholdMs" value="60000" />
     <option name="autoCountIdleSeconds" value="10" />
     <option name="gitIntegration" value="true" />
@@ -100,30 +100,21 @@
     </key>
   </component>
   <component name="RunManager" selected="JUnit.SimpleTests">
-    <configuration name="SimpleTests$Class_" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <module name="ScriptIt" />
-      <option name="PACKAGE_NAME" value="steve6472.scriptit.SimpleTests" />
-      <option name="MAIN_CLASS_NAME" value="steve6472.scriptit.SimpleTests$Class_" />
-      <option name="TEST_OBJECT" value="class" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="SimpleTests$Class_.access_type_var_from_func" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <module name="ScriptIt" />
-      <option name="PACKAGE_NAME" value="steve6472.scriptit.SimpleTests" />
-      <option name="MAIN_CLASS_NAME" value="steve6472.scriptit.SimpleTests$Class_" />
-      <option name="METHOD_NAME" value="access_type_var_from_func" />
-      <option name="TEST_OBJECT" value="method" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
     <configuration name="SimpleTests$Class_.constructor" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="ScriptIt" />
       <option name="PACKAGE_NAME" value="steve6472.scriptit.SimpleTests" />
       <option name="MAIN_CLASS_NAME" value="steve6472.scriptit.SimpleTests$Class_" />
       <option name="METHOD_NAME" value="constructor" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="SimpleTests$Class_.functionVarPassThing" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="ScriptIt" />
+      <option name="PACKAGE_NAME" value="steve6472.scriptit.SimpleTests" />
+      <option name="MAIN_CLASS_NAME" value="steve6472.scriptit.SimpleTests$Class_" />
+      <option name="METHOD_NAME" value="functionVarPassThing" />
       <option name="TEST_OBJECT" value="method" />
       <method v="2">
         <option name="Make" enabled="true" />
@@ -162,11 +153,21 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="SimpleTests.instanceof_" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+    <configuration name="SimpleTests.assignValue" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="ScriptIt" />
       <option name="PACKAGE_NAME" value="steve6472.scriptit" />
       <option name="MAIN_CLASS_NAME" value="steve6472.scriptit.SimpleTests" />
-      <option name="METHOD_NAME" value="instanceof_" />
+      <option name="METHOD_NAME" value="assignValue" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="SimpleTests.awdaw" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="ScriptIt" />
+      <option name="PACKAGE_NAME" value="steve6472.scriptit" />
+      <option name="MAIN_CLASS_NAME" value="steve6472.scriptit.SimpleTests" />
+      <option name="METHOD_NAME" value="awdaw" />
       <option name="TEST_OBJECT" value="method" />
       <method v="2">
         <option name="Make" enabled="true" />
@@ -175,19 +176,19 @@
     <list>
       <item itemvalue="JUnit.SimpleTests-Debug" />
       <item itemvalue="JUnit.SimpleTests" />
-      <item itemvalue="JUnit.SimpleTests$Class_" />
-      <item itemvalue="JUnit.SimpleTests$Class_.access_type_var_from_func" />
-      <item itemvalue="JUnit.SimpleTests.instanceof_" />
       <item itemvalue="JUnit.SimpleTests$Class_.overloadPlus" />
       <item itemvalue="JUnit.SimpleTests$Class_.constructor" />
+      <item itemvalue="JUnit.SimpleTests.awdaw" />
+      <item itemvalue="JUnit.SimpleTests.assignValue" />
+      <item itemvalue="JUnit.SimpleTests$Class_.functionVarPassThing" />
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="JUnit.SimpleTests$Class_.functionVarPassThing" />
+        <item itemvalue="JUnit.SimpleTests.assignValue" />
+        <item itemvalue="JUnit.SimpleTests.awdaw" />
         <item itemvalue="JUnit.SimpleTests$Class_.overloadPlus" />
         <item itemvalue="JUnit.SimpleTests$Class_.constructor" />
-        <item itemvalue="JUnit.SimpleTests.instanceof_" />
-        <item itemvalue="JUnit.SimpleTests$Class_" />
-        <item itemvalue="JUnit.SimpleTests$Class_.access_type_var_from_func" />
       </list>
     </recent_temporary>
   </component>

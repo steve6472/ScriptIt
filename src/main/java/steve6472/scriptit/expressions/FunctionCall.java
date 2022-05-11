@@ -62,11 +62,11 @@ public class FunctionCall extends Expression
 						case STATIC -> source.library.getFunction(source.functionName, types);
 						case VALUE -> source.value.type.getFunction(source.functionName, types);
 					};
+			}
 
-				if (source.sourceType == FunctionSourceType.VALUE)
-				{
-					function.setReturnThisHelper(source.value);
-				}
+			if (source.sourceType == FunctionSourceType.VALUE)
+			{
+				function.setReturnThisHelper(source.value);
 			}
 
 			function.setArguments(args);

@@ -1,0 +1,40 @@
+import library System;
+import type int;
+
+class test
+{
+    int t;
+
+    function test(int test)
+    {
+        t = test;
+    };
+
+    function get()
+    {
+        return t;
+    };
+};
+
+class Rectangle
+{
+    int x;
+
+    function Rectangle(int X)
+    {
+        x = X;
+    };
+};
+
+int leftPadY = 10;
+
+function moveBall()
+{
+    leftPadY += 10;
+    test v = test(leftPadY);
+
+    Rectangle theObject = Rectangle(v.get());
+
+    System.print("HASHES CAN'T BE THE SAME = ");
+    System.printDetail(theObject);
+};
