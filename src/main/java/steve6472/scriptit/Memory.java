@@ -38,11 +38,15 @@ public class Memory
 
 	public void addLibrary(Library library)
 	{
+		if (libraries.containsKey(library.getLibraryName())) return;
+
 		this.libraries.put(library.getLibraryName(), library);
 	}
 
 	public void addType(Type type)
 	{
+		if (types.containsKey(type.getKeyword())) return;
+
 		type.constructors.forEach(functions::put);
 		types.put(type.getKeyword(), type);
 	}
