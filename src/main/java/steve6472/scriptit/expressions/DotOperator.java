@@ -132,6 +132,11 @@ public class DotOperator extends Expression
 			}
 		}
 
+		if (left instanceof Variable va && right instanceof FunctionCall)
+		{
+			throw new RuntimeException("Variable - FunctionCall: Variable nor Library not found '" + va.source.variableName + "'");
+		}
+
 		/*
 		 * something.getText().charAt(3);
 		 *

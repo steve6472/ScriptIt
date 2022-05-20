@@ -196,7 +196,7 @@ public class PrimitiveTypes extends TypesInit
 		STRING.addBinaryOperator(INT, Operator.ASSIGN_ADD, new BinaryOperatorOverload((itself, right) -> itself.setValue(itself.getString() + right.getInt())));
 		STRING.addBinaryOperator(INT, Operator.ASSIGN_SUB, new BinaryOperatorOverload((itself, right) ->itself.setValue(itself.getString().substring(0, itself.getString().length() - right.getInt())))); // remove n characters from back
 		STRING.addBinaryOperator(INT, Operator.ASSIGN_MUL, new BinaryOperatorOverload((itself, right) ->itself.setValue(itself.getString().repeat(right.getInt())))); // repeat the string n times
-		
+
 		STRING.addUnaryOperator(Operator.SUB, new UnaryOperatorOverload(right -> right.setValue(new StringBuilder(right.getString()).reverse().toString()))); // reverse the string
 		STRING.addFunction(FunctionParameters.function("len").build(), new Function()
 		{
