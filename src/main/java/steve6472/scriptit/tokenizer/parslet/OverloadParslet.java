@@ -32,7 +32,6 @@ public class OverloadParslet implements PrefixParselet
 		}
 
 		IOperator operator = parser.tokenizer.nextToken().type();
-		System.out.println("Overload '" + operator + "'");
 		String[][] argTypeName = FunctionParslet.parseArguments(parser);
 		Expression body = parser.parse(Precedence.ANYTHING);
 

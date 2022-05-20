@@ -239,6 +239,14 @@ public class SimpleTests
 			Value value = script.runWithDelay();
 			Assertions.assertEquals(1, value.getInt());
 		}
+
+		@Test
+		public void returnThis()
+		{
+			Script script = testScript("return/return_this");
+			Value value = script.runWithDelay();
+			Assertions.assertEquals(9, value.getInt());
+		}
 	}
 
 	@Nested
@@ -485,7 +493,7 @@ public class SimpleTests
 		public void emptyConstructor()
 		{
 			Script script = testScript("class/empty_constructor");
-			Value value = script.runWithDelay();
+			script.runWithDelay();
 		}
 
 		@Test
@@ -493,6 +501,19 @@ public class SimpleTests
 		public void overloadPlus()
 		{
 			Script script = testScript("class/overload_plus");
+			Value value = script.runWithDelay();
+			Assertions.assertEquals("vec2", value.type.getKeyword());
+			Assertions.assertEquals(PrimitiveTypes.INT, ((Value) value.values.get("x")).type);
+			Assertions.assertEquals(PrimitiveTypes.INT, ((Value) value.values.get("y")).type);
+			Assertions.assertEquals(9, ((Value) value.values.get("x")).getInt());
+			Assertions.assertEquals(8, ((Value) value.values.get("y")).getInt());
+		}
+
+		@Test
+		@DisplayName(value = "overload binary +=")
+		public void overloadPlusAssign()
+		{
+			Script script = testScript("class/overload_plus_assign");
 			Value value = script.runWithDelay();
 			Assertions.assertEquals("vec2", value.type.getKeyword());
 			Assertions.assertEquals(PrimitiveTypes.INT, ((Value) value.values.get("x")).type);

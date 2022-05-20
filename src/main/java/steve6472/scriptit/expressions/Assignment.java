@@ -2,7 +2,12 @@ package steve6472.scriptit.expressions;
 
 import steve6472.scriptit.*;
 import steve6472.scriptit.executor.Executor;
+import steve6472.scriptit.tokenizer.IOperator;
+import steve6472.scriptit.tokenizer.Operator;
 import steve6472.scriptit.types.PrimitiveTypes;
+
+import java.util.HashSet;
+import java.util.Set;
 
 /**********************
  * Created by steve6472 (Mirek Jozefek)
@@ -15,6 +20,21 @@ import steve6472.scriptit.types.PrimitiveTypes;
  ***********************/
 public class Assignment extends Expression
 {
+	public static final Set<IOperator> COMPOUND_ASSINGMENT = new HashSet<>();
+
+	static
+	{
+		COMPOUND_ASSINGMENT.add(Operator.ASSIGN_ADD);
+		COMPOUND_ASSINGMENT.add(Operator.ASSIGN_SUB);
+		COMPOUND_ASSINGMENT.add(Operator.ASSIGN_MUL);
+		COMPOUND_ASSINGMENT.add(Operator.ASSIGN_DIV);
+		COMPOUND_ASSINGMENT.add(Operator.ASSIGN_MOD);
+		COMPOUND_ASSINGMENT.add(Operator.ASSIGN_BIT_AND);
+		COMPOUND_ASSINGMENT.add(Operator.ASSIGN_BIT_OR);
+		COMPOUND_ASSINGMENT.add(Operator.ASSIGN_BIT_XOR);
+		COMPOUND_ASSINGMENT.add(Operator.ASSIGN_NEG);
+	}
+
 	public final String typeName;
 	public final String varName;
 	public final Expression expression;
@@ -151,7 +171,13 @@ public class Assignment extends Expression
 				return Highlighter.FUNCTION_NAME + typeName + " " + Highlighter.VAR + varName + Highlighter.SYMBOL + " = " + expression.showCode(0) + Highlighter.RESET;
 			} else
 			{
-				return Highlighter.VAR + varName + Highlighter.SYMBOL + " = " + expression.showCode(0) + Highlighter.RESET;
+				if (expression instanceof BinaryOperator bo && COMPOUND_ASSINGMENT.contains(bo.operator))
+				{
+					return Highlighter.VAR + varName + Highlighter.SYMBOL + " " + bo.operator.getSymbol() + " " + bo.right.showCode(0) + Highlighter.RESET;
+				} else
+				{
+					return Highlighter.VAR + varName + Highlighter.SYMBOL + " = " + expression.showCode(0) + Highlighter.RESET;
+				}
 			}
 		}
 	}

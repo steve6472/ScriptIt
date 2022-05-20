@@ -14,7 +14,7 @@
     <option name="optimizeImportsOnTheFly" value="true" />
   </component>
   <component name="DarkyenusTimeTracker">
-    <option name="totalTimeSeconds" value="169561" />
+    <option name="totalTimeSeconds" value="172114" />
     <option name="idleThresholdMs" value="60000" />
     <option name="autoCountIdleSeconds" value="10" />
     <option name="gitIntegration" value="true" />
@@ -55,7 +55,7 @@
     <property name="com.intellij.ide.scratch.LRUPopupBuilder$1/New Scratch File" value="JAVA" />
     <property name="com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrary" value="Groovy JUnit" />
     <property name="com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrarySuperClass.Groovy JUnit" value="groovy.util.GroovyTestCase" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/!tests" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/!tests/class" />
     <property name="project.structure.last.edited" value="Modules" />
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.19655173" />
@@ -64,8 +64,8 @@
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
-      <recent name="D:\ScriptIt\!tests" />
       <recent name="D:\ScriptIt\!tests\class" />
+      <recent name="D:\ScriptIt\!tests" />
       <recent name="D:\ScriptIt\!tests\flow\loop\for" />
       <recent name="D:\ScriptIt\!tests\flow\if" />
       <recent name="D:\ScriptIt\!tests\flow\loop\while" />
@@ -105,21 +105,31 @@
     </option>
   </component>
   <component name="RunManager" selected="JUnit.SimpleTests">
-    <configuration name="SimpleTests$Class_.emptyConstructor" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <module name="ScriptIt" />
-      <option name="PACKAGE_NAME" value="steve6472.scriptit.SimpleTests" />
-      <option name="MAIN_CLASS_NAME" value="steve6472.scriptit.SimpleTests$Class_" />
-      <option name="METHOD_NAME" value="emptyConstructor" />
-      <option name="TEST_OBJECT" value="method" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
     <configuration name="SimpleTests$Class_.functionVarPassThing" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="ScriptIt" />
       <option name="PACKAGE_NAME" value="steve6472.scriptit.SimpleTests" />
       <option name="MAIN_CLASS_NAME" value="steve6472.scriptit.SimpleTests$Class_" />
       <option name="METHOD_NAME" value="functionVarPassThing" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="SimpleTests$Class_.overloadPlusAssign" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="ScriptIt" />
+      <option name="PACKAGE_NAME" value="steve6472.scriptit.SimpleTests" />
+      <option name="MAIN_CLASS_NAME" value="steve6472.scriptit.SimpleTests$Class_" />
+      <option name="METHOD_NAME" value="overloadPlusAssign" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="SimpleTests$Return_.returnThis" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="ScriptIt" />
+      <option name="PACKAGE_NAME" value="steve6472.scriptit.SimpleTests" />
+      <option name="MAIN_CLASS_NAME" value="steve6472.scriptit.SimpleTests$Return_" />
+      <option name="METHOD_NAME" value="returnThis" />
       <option name="TEST_OBJECT" value="method" />
       <method v="2">
         <option name="Make" enabled="true" />
@@ -148,16 +158,6 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="SimpleTests.assignValue" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <module name="ScriptIt" />
-      <option name="PACKAGE_NAME" value="steve6472.scriptit" />
-      <option name="MAIN_CLASS_NAME" value="steve6472.scriptit.SimpleTests" />
-      <option name="METHOD_NAME" value="assignValue" />
-      <option name="TEST_OBJECT" value="method" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
     <configuration name="SimpleTests.emptyFunction" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="ScriptIt" />
       <option name="PACKAGE_NAME" value="steve6472.scriptit" />
@@ -181,19 +181,19 @@
     <list>
       <item itemvalue="JUnit.SimpleTests-Debug" />
       <item itemvalue="JUnit.SimpleTests" />
-      <item itemvalue="JUnit.SimpleTests.assignValue" />
       <item itemvalue="JUnit.SimpleTests$Class_.functionVarPassThing" />
-      <item itemvalue="JUnit.SimpleTests$Class_.emptyConstructor" />
       <item itemvalue="JUnit.SimpleTests.emptyFunction" />
       <item itemvalue="JUnit.SimpleTests.index" />
+      <item itemvalue="JUnit.SimpleTests$Return_.returnThis" />
+      <item itemvalue="JUnit.SimpleTests$Class_.overloadPlusAssign" />
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="JUnit.SimpleTests$Class_.overloadPlusAssign" />
+        <item itemvalue="JUnit.SimpleTests$Return_.returnThis" />
         <item itemvalue="JUnit.SimpleTests.index" />
         <item itemvalue="JUnit.SimpleTests.emptyFunction" />
         <item itemvalue="JUnit.SimpleTests$Class_.functionVarPassThing" />
-        <item itemvalue="JUnit.SimpleTests$Class_.emptyConstructor" />
-        <item itemvalue="JUnit.SimpleTests.assignValue" />
       </list>
     </recent_temporary>
   </component>

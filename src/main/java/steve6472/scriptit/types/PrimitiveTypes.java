@@ -53,6 +53,18 @@ public class PrimitiveTypes extends TypesInit
 		DOUBLE.addBinaryOperator(INT, Operator.DIV, new BinaryOperatorOverload((left, right) -> newValue(DOUBLE, left.getDouble() / right.getInt())));
 		DOUBLE.addBinaryOperator(INT, Operator.MOD, new BinaryOperatorOverload((left, right) -> newValue(DOUBLE, left.getDouble() % right.getInt())));
 
+		DOUBLE.addBinaryOperator(DOUBLE, Operator.ASSIGN_ADD, new BinaryOperatorOverload((itself, right) -> itself.setValue(itself.getDouble() + right.getDouble())));
+		DOUBLE.addBinaryOperator(DOUBLE, Operator.ASSIGN_SUB, new BinaryOperatorOverload((itself, right) -> itself.setValue(itself.getDouble() - right.getDouble())));
+		DOUBLE.addBinaryOperator(DOUBLE, Operator.ASSIGN_MUL, new BinaryOperatorOverload((itself, right) -> itself.setValue(itself.getDouble() * right.getDouble())));
+		DOUBLE.addBinaryOperator(DOUBLE, Operator.ASSIGN_DIV, new BinaryOperatorOverload((itself, right) -> itself.setValue(itself.getDouble() / right.getDouble())));
+		DOUBLE.addBinaryOperator(DOUBLE, Operator.ASSIGN_MOD, new BinaryOperatorOverload((itself, right) -> itself.setValue(itself.getDouble() % right.getDouble())));
+
+		DOUBLE.addBinaryOperator(INT, Operator.ASSIGN_ADD, new BinaryOperatorOverload((itself, right) -> itself.setValue(itself.getDouble() + right.getInt())));
+		DOUBLE.addBinaryOperator(INT, Operator.ASSIGN_SUB, new BinaryOperatorOverload((itself, right) -> itself.setValue(itself.getDouble() - right.getInt())));
+		DOUBLE.addBinaryOperator(INT, Operator.ASSIGN_MUL, new BinaryOperatorOverload((itself, right) -> itself.setValue(itself.getDouble() * right.getInt())));
+		DOUBLE.addBinaryOperator(INT, Operator.ASSIGN_DIV, new BinaryOperatorOverload((itself, right) -> itself.setValue(itself.getDouble() / right.getInt())));
+		DOUBLE.addBinaryOperator(INT, Operator.ASSIGN_MOD, new BinaryOperatorOverload((itself, right) -> itself.setValue(itself.getDouble() % right.getInt())));
+
 		DOUBLE.addBinaryOperator(DOUBLE, Operator.EQUAL, new BinaryOperatorOverload((left, right) -> left.getDouble() == right.getDouble() ? TRUE() : FALSE()));
 		DOUBLE.addBinaryOperator(DOUBLE, Operator.NOT_EQUAL, new BinaryOperatorOverload((left, right) -> left.getDouble() != right.getDouble() ? TRUE() : FALSE()));
 		DOUBLE.addBinaryOperator(DOUBLE, Operator.LESS_THAN, new BinaryOperatorOverload((left, right) -> left.getDouble() < right.getDouble() ? TRUE() : FALSE()));
@@ -90,6 +102,19 @@ public class PrimitiveTypes extends TypesInit
 		INT.addBinaryOperator(DOUBLE, Operator.MUL, new BinaryOperatorOverload((left, right) -> newValue(DOUBLE, left.getInt() * right.getDouble())));
 		INT.addBinaryOperator(DOUBLE, Operator.DIV, new BinaryOperatorOverload((left, right) -> newValue(DOUBLE, left.getInt() / right.getDouble())));
 		INT.addBinaryOperator(DOUBLE, Operator.MOD, new BinaryOperatorOverload((left, right) -> newValue(DOUBLE, left.getInt() % right.getDouble())));
+
+
+		INT.addBinaryOperator(INT, Operator.ASSIGN_ADD, new BinaryOperatorOverload((itself, right) -> itself.setValue(itself.getInt() + right.getInt())));
+		INT.addBinaryOperator(INT, Operator.ASSIGN_SUB, new BinaryOperatorOverload((itself, right) -> itself.setValue(itself.getInt() - right.getInt())));
+		INT.addBinaryOperator(INT, Operator.ASSIGN_MUL, new BinaryOperatorOverload((itself, right) -> itself.setValue(itself.getInt() * right.getInt())));
+		INT.addBinaryOperator(INT, Operator.ASSIGN_DIV, new BinaryOperatorOverload((itself, right) -> itself.setValue(itself.getInt() / right.getInt())));
+		INT.addBinaryOperator(INT, Operator.ASSIGN_MOD, new BinaryOperatorOverload((itself, right) -> itself.setValue(itself.getInt() % right.getInt())));
+
+		INT.addBinaryOperator(DOUBLE, Operator.ASSIGN_ADD, new BinaryOperatorOverload((itself, right) -> itself.setValue(itself.getInt() + right.getDouble())));
+		INT.addBinaryOperator(DOUBLE, Operator.ASSIGN_SUB, new BinaryOperatorOverload((itself, right) -> itself.setValue(itself.getInt() - right.getDouble())));
+		INT.addBinaryOperator(DOUBLE, Operator.ASSIGN_MUL, new BinaryOperatorOverload((itself, right) -> itself.setValue(itself.getInt() * right.getDouble())));
+		INT.addBinaryOperator(DOUBLE, Operator.ASSIGN_DIV, new BinaryOperatorOverload((itself, right) -> itself.setValue(itself.getInt() / right.getDouble())));
+		INT.addBinaryOperator(DOUBLE, Operator.ASSIGN_MOD, new BinaryOperatorOverload((itself, right) -> itself.setValue(itself.getInt() % right.getDouble())));
 
 		INT.addBinaryOperator(INT, Operator.EQUAL, new BinaryOperatorOverload((left, right) -> left.getInt() == right.getInt() ? TRUE() : FALSE()));
 		INT.addBinaryOperator(INT, Operator.NOT_EQUAL, new BinaryOperatorOverload((left, right) -> left.getInt() != right.getInt() ? TRUE() : FALSE()));
@@ -163,6 +188,15 @@ public class PrimitiveTypes extends TypesInit
 		STRING.addBinaryOperator(INT, Operator.ADD, new BinaryOperatorOverload((left, right) -> newValue(STRING, left.getString() + right.getInt())));
 		STRING.addBinaryOperator(INT, Operator.SUB, new BinaryOperatorOverload((left, right) -> newValue(STRING, left.getString().substring(0, left.getString().length() - right.getInt())))); // remove n characters from back
 		STRING.addBinaryOperator(INT, Operator.MUL, new BinaryOperatorOverload((left, right) -> newValue(STRING, left.getString().repeat(right.getInt())))); // repeat the string n times
+
+		STRING.addBinaryOperator(STRING, Operator.ASSIGN_ADD, new BinaryOperatorOverload((itself, right) -> itself.setValue(itself.getString() + right.getString())));
+		STRING.addBinaryOperator(DOUBLE, Operator.ASSIGN_ADD, new BinaryOperatorOverload((itself, right) -> itself.setValue(itself.getString() + right.getDouble())));
+		STRING.addBinaryOperator(CHAR, Operator.ASSIGN_ADD, new BinaryOperatorOverload((itself, right) -> itself.setValue(itself.getString() + right.getChar())));
+		STRING.addBinaryOperator(BOOL, Operator.ASSIGN_ADD, new BinaryOperatorOverload((itself, right) -> itself.setValue(itself.getString() + right.getBoolean())));
+		STRING.addBinaryOperator(INT, Operator.ASSIGN_ADD, new BinaryOperatorOverload((itself, right) -> itself.setValue(itself.getString() + right.getInt())));
+		STRING.addBinaryOperator(INT, Operator.ASSIGN_SUB, new BinaryOperatorOverload((itself, right) ->itself.setValue(itself.getString().substring(0, itself.getString().length() - right.getInt())))); // remove n characters from back
+		STRING.addBinaryOperator(INT, Operator.ASSIGN_MUL, new BinaryOperatorOverload((itself, right) ->itself.setValue(itself.getString().repeat(right.getInt())))); // repeat the string n times
+		
 		STRING.addUnaryOperator(Operator.SUB, new UnaryOperatorOverload(right -> right.setValue(new StringBuilder(right.getString()).reverse().toString()))); // reverse the string
 		STRING.addFunction(FunctionParameters.function("len").build(), new Function()
 		{

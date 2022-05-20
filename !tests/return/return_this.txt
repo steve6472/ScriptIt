@@ -1,0 +1,26 @@
+import type int;
+
+class Test
+{
+    int a;
+
+    func Test(int A)
+    {
+        a = A;
+    };
+
+    func add(int toAdd)
+    {
+        a += toAdd;
+        return this;
+    };
+
+    func getA()
+    {
+        return a;
+    };
+};
+
+Test test = Test(6);
+
+return test.add(3).getA();

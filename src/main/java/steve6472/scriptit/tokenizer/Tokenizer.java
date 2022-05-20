@@ -94,6 +94,16 @@ public class Tokenizer
 		return tokens.get(currentToken);
 	}
 
+	public int getCurrentTokenIndex()
+	{
+		return currentToken;
+	}
+
+	public List<Token> getTokens()
+	{
+		return tokens;
+	}
+
 	public Token peekToken(int peek)
 	{
 		if (debug)
@@ -133,7 +143,15 @@ public class Tokenizer
 		if (expectedType == null)
 			return token;
 		if (expectedType != token.type)
-			throw new RuntimeException("Expected token type '" + expectedType + "' got '" + token.type + "'");
+		{
+			StringBuilder sb = new StringBuilder();
+			for (int i = Math.max(0, currentToken - 10); i < Math.min(currentToken + 10, tokens.size() - 1); i++)
+			{
+				sb.append(tokens.get(i).sval());
+			}
+
+			throw new RuntimeException("Expected token type '" + expectedType + "' got '" + token.type + "' around ... " + sb + " ...");
+		}
 		return null;
 	}
 

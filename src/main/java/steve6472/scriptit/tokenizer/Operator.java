@@ -95,6 +95,7 @@ public enum Operator implements IOperator
 	EXTENDS("extends"),
 	INSTANCEOF("instanceof"),
 	OVERLOAD("overload"),
+	THIS("this"),
 
 	// Other special
 	NUMBER_INT(""),

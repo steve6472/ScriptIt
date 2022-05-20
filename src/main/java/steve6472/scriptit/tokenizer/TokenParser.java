@@ -155,7 +155,13 @@ public class TokenParser
 		PrefixParselet parslet = prefixParslets.get(token.type());
 		if (parslet == null)
 		{
-			throw new RuntimeException("Parslet not found for '" + token.sval() + "'");
+			StringBuilder sb = new StringBuilder();
+			for (int i = Math.max(0, tokenizer.getCurrentTokenIndex() - 10); i < Math.min(tokenizer.getCurrentTokenIndex() + 10, tokenizer.getTokens().size() - 1); i++)
+			{
+				sb.append(tokenizer.getTokens().get(i).sval());
+			}
+
+			throw new RuntimeException("Parslet not found for '" + token.sval() + "' around ... " + sb + " ...");
 		}
 		print(Log.BRIGHT_GREEN + "---Parslet---");
 		print("Prefix: " + Log.RESET + parslet.getClass().getSimpleName());
