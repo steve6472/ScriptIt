@@ -77,6 +77,7 @@ public enum Operator implements IOperator
 	BRACKET_CURLY_RIGHT("}"),
 	BRACKET_SQUARE_LEFT("["),
 	BRACKET_SQUARE_RIGHT("]"),
+	INDEX("[]", true),
 
 	// Keywords
 	IMPORT("import"),
@@ -84,6 +85,7 @@ public enum Operator implements IOperator
 	IF("if"),
 	RETURN("return"),
 	FUNCTION("function"),
+	FUNC("func"),
 	ELSE("else"),
 	WHILE("while"),
 	RETURN_IF("returnif"),

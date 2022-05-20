@@ -5,6 +5,7 @@ import steve6472.scriptit.exceptions.NoBinaryOperationFoundException;
 import steve6472.scriptit.exceptions.NoOperatorFoundException;
 import steve6472.scriptit.executor.Executor;
 import steve6472.scriptit.tokenizer.IOperator;
+import steve6472.scriptit.tokenizer.Operator;
 
 import java.util.HashMap;
 
@@ -87,6 +88,12 @@ public class BinaryOperator extends Expression
 	@Override
 	public String showCode(int a)
 	{
-		return '(' + left.showCode(0) + " " + operator.getSymbol() + " " + right.showCode(0) + ')';
+		if (operator == Operator.INDEX)
+		{
+			return left.showCode(0) + "[" + right.showCode(0) + "]";
+		} else
+		{
+			return '(' + left.showCode(0) + " " + operator.getSymbol() + " " + right.showCode(0) + ')';
+		}
 	}
 }

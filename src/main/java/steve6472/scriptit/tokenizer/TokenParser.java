@@ -44,6 +44,7 @@ public class TokenParser
 		prefixParslets.put(Operator.BRACKET_CURLY_LEFT, new BodyParslet());
 		prefixParslets.put(Operator.RETURN, new ReturnParslet());
 		prefixParslets.put(Operator.FUNCTION, new FunctionParslet());
+		prefixParslets.put(Operator.FUNC, new FunctionParslet());
 		prefixParslets.put(Operator.WHILE, new WhileParslet());
 		prefixParslets.put(Operator.RETURN_IF, new ReturnIfParslet());
 		prefixParslets.put(Operator.FOR, new ForParslet());
@@ -89,6 +90,7 @@ public class TokenParser
 		infixParslets.put(Operator.ASSIGN_BIT_AND, new AssignParslet());
 
 		infixParslets.put(Operator.BRACKET_LEFT, new FunctionCallInfix());
+		infixParslets.put(Operator.BRACKET_SQUARE_LEFT, new IndexOperatorParslet());
 	}
 
 

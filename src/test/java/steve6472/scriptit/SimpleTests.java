@@ -59,6 +59,14 @@ public class SimpleTests
 		Assertions.assertEquals(6, value.getInt());
 	}
 
+	@Test
+	public void index()
+	{
+		Script script = testScript("index");
+		Value value = script.runWithDelay();
+		Assertions.assertEquals(129, value.getInt());
+	}
+
 	/*
 	TODO: do this test but with Vec4 or array
 	@Test
