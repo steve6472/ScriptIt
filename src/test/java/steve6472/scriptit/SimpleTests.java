@@ -78,6 +78,14 @@ public class SimpleTests
 	}
 
 	@Test
+	@DisplayName(value = "Empty Function")
+	public void emptyFunction()
+	{
+		Script script = testScript("empty_function");
+		script.runWithDelay();
+	}
+
+	@Test
 	@DisplayName(value = "Function Params (function parameters)")
 	public void functionParameters()
 	{
@@ -462,6 +470,14 @@ public class SimpleTests
 			Script script = testScript("class/setter");
 			Value value = script.runWithDelay();
 			Assertions.assertEquals("Subuwu", value.getString());
+		}
+
+		@Test
+		@DisplayName(value = "empty constructor")
+		public void emptyConstructor()
+		{
+			Script script = testScript("class/empty_constructor");
+			Value value = script.runWithDelay();
 		}
 
 		@Test

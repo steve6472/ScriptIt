@@ -70,6 +70,11 @@ public class Executor
 
 	public Result getLastResult()
 	{
+		if (passedResults.isEmpty())
+		{
+			return Result.pass();
+		}
+
 		return passedResults.get(passedResults.size() - 1);
 	}
 

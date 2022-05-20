@@ -1,0 +1,11 @@
+class Array
+{
+    function Array()
+    {
+
+    };
+};
+
+Array arr = Array();
+
+return arr;
