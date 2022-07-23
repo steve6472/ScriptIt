@@ -1,6 +1,6 @@
 import library System;
 
-§num = PASSED_FROM_CODE;
+//num = PASSED_FROM_CODE;
 
 if (num == 0)
 {

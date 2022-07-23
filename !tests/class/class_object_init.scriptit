@@ -1,0 +1,8 @@
+import type int;
+
+class Test
+{
+    int a = 10 / 2;
+} test();
+
+return test.a;

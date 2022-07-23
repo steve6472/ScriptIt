@@ -1,6 +1,6 @@
 import library System;
 
-§input = PASSED_FROM_CODE;
+//input = PASSED_FROM_CODE;
 
 mul = 1;
 

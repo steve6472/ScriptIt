@@ -1,0 +1,88 @@
+import library System;
+import library Math;
+import type int;
+import type double;
+
+class ivec3
+{
+    double a;
+    double b;
+    double c;
+
+    func ivec3()
+    {
+        a = 69.0;
+        b = 420.0;
+        c = 360.0;
+    };
+
+    func ivec3(double x, double y, double z)
+    {
+        a = x;
+        b = y;
+        c = z;
+    };
+
+    overload binary [] (int index)
+    {
+        if (index == 0)
+            return a;
+        else if (index == 1)
+            return b;
+        else if (index == 2)
+            return c;
+    };
+
+    function len()
+    {
+        return Math.sqrt(x * x + y * y + z * z);
+    };
+
+    function normalize()
+    {
+        double invLen = 1.0 / len();
+        a = invLen * a;
+        b = invLen * b;
+        c = invLen * c;
+        return this;
+    };
+
+    func mulx(int repeat, double mul)
+    {
+        for (int i = 0; i < repeat; i += 0)
+        {
+            a *= mul;
+            b *= mul;
+            c *= mul;
+            if (i == 5)
+                break;
+        };
+    };
+
+    func allSame()
+    {
+        return a == b && a == c && b == c;
+    };
+};
+
+class Tist
+{
+    int a = 5;
+} tist();
+
+System.println("This is 5: " + tist.a);
+
+ivec3 test = ivec3();
+
+if (test.allSame())
+{
+    System.println("All scalars are the same");
+} else
+{
+    System.println("Scalars are not the same");
+};
+
+System.println("the simple language is bad!");
+
+
+return test[(5 * 4) - 2 * 10] + test[(2 - 1)] - test[1 + 1];

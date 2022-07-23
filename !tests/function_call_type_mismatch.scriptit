@@ -1,0 +1,11 @@
+func charToInt(char hex)
+{
+    return hex;
+};
+
+func hexToInt(string hex)
+{
+    return charToInt(hex.charAt(0));
+};
+
+return hexToInt("f");

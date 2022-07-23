@@ -1,0 +1,8 @@
+/*
+ * Import the 'System' library
+ * to allow printing into the Java console
+ */
+import library System;
+
+// Print into the Java console using the 'System' library
+System.println("Hello simple World!");

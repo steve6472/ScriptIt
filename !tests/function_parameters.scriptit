@@ -3,7 +3,7 @@ function add(int left, int right)
     return left + right;
 };
 
-§l = PASSED_FROM_CODE;
-§r = PASSED_FROM_CODE;
+//l = PASSED_FROM_CODE;
+//r = PASSED_FROM_CODE;
 
 return add(l, r);

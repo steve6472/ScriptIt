@@ -10,6 +10,7 @@ class vec2
     overload binary + (vec2 other)
     {
         vec2 new = vec2();
+        System.printDetail(x);
         new.x = x + other.x;
         new.y = y + other.y;
         return new;
