@@ -110,6 +110,10 @@ public class PrimitiveTypes extends TypesInit
 		INT.addBinaryOperator(INT, Operator.ASSIGN_DIV, new BinaryOperatorOverload((itself, right) -> itself.setValue(itself.getInt() / right.getInt())));
 		INT.addBinaryOperator(INT, Operator.ASSIGN_MOD, new BinaryOperatorOverload((itself, right) -> itself.setValue(itself.getInt() % right.getInt())));
 
+		INT.addBinaryOperator(INT, Operator.ASSIGN_BIT_AND, new BinaryOperatorOverload((itself, right) -> itself.setValue(itself.getInt() & right.getInt())));
+		INT.addBinaryOperator(INT, Operator.ASSIGN_BIT_OR, new BinaryOperatorOverload((itself, right) -> itself.setValue(itself.getInt() | right.getInt())));
+		INT.addBinaryOperator(INT, Operator.ASSIGN_BIT_XOR, new BinaryOperatorOverload((itself, right) -> itself.setValue(itself.getInt() ^ right.getInt())));
+
 		INT.addBinaryOperator(DOUBLE, Operator.ASSIGN_ADD, new BinaryOperatorOverload((itself, right) -> itself.setValue(itself.getInt() + right.getDouble())));
 		INT.addBinaryOperator(DOUBLE, Operator.ASSIGN_SUB, new BinaryOperatorOverload((itself, right) -> itself.setValue(itself.getInt() - right.getDouble())));
 		INT.addBinaryOperator(DOUBLE, Operator.ASSIGN_MUL, new BinaryOperatorOverload((itself, right) -> itself.setValue(itself.getInt() * right.getDouble())));

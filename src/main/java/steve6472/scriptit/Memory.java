@@ -1,5 +1,6 @@
 package steve6472.scriptit;
 
+import steve6472.scriptit.exceptions.TypeMismatchException;
 import steve6472.scriptit.exceptions.ValueNotFoundException;
 import steve6472.scriptit.expressions.Function;
 import steve6472.scriptit.expressions.FunctionParameters;
@@ -75,17 +76,17 @@ public class Memory
 		 */
 		if (variables.containsKey(name))
 		{
-			Value value1 = variables.get(name);
-			if (value == value1)
+			Value existing = variables.get(name);
+			if (value == existing)
 			{
 				return;
 			}
-			if (value1.type != value.type)
+			if (existing.type != value.type)
 			{
-				throw new RuntimeException("Type mismatch, " + value.type + " != " + value1.type);
+				throw new TypeMismatchException(existing.type, value.type);
 			}
-			value1.values.clear();
-			value.values.forEach(value1::setValue);
+			existing.values.clear();
+			value.values.forEach(existing::setValue);
 		} else
 		{
 			variables.put(name, value);

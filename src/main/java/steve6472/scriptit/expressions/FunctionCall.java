@@ -36,6 +36,8 @@ public class FunctionCall extends Expression
 	@Override
 	public Result apply(Script script)
 	{
+		stackTrace("Function call name: '" + source.functionName + "', type: " + source.sourceType);
+
 		Executor.ExecutorResult argumentsResult = argumentsExecutor.executeWhatYouCan(script);
 		if (argumentsResult.isDelay())
 		{

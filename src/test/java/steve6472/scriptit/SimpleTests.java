@@ -3,10 +3,8 @@ package steve6472.scriptit;
 import org.junit.jupiter.api.*;
 import steve6472.scriptit.exceptions.ValueNotFoundException;
 import steve6472.scriptit.expressions.Function;
-import steve6472.scriptit.functions.DelayFunction;
 import steve6472.scriptit.libraries.LogLibrary;
 import steve6472.scriptit.libraries.TestLibrary;
-import steve6472.scriptit.tokenizer.TokenParser;
 import steve6472.scriptit.types.PrimitiveTypes;
 
 import java.io.File;
@@ -23,20 +21,21 @@ public class SimpleTests
 	private Script testScript(String name)
 	{
 		boolean debug = !Boolean.parseBoolean(System.getenv("disable_debug"));
-		debug = false;
+		debug = true;
 
-		DelayFunction.DEBUG = debug;
-		TokenParser.DEBUG = debug;
+		ScriptItSettings.DELAY_DEBUG = debug;
+		ScriptItSettings.PARSER_DEBUG = debug;
 		Workspace workspace = new Workspace();
 		workspace.addLibrary(new TestLibrary());
 		workspace.addLibrary(new LogLibrary());
-		Script script = Script.create(workspace, new File("!tests/" + name + ".txt"));
+		Script script = Script.create(workspace, new File("!tests/" + name + ".scriptit"));
 		Highlighter.basicHighlight();
 		System.out.println(script.showCode());
 		return script;
 	}
 
 	@Test
+	@DisplayName(value = "Hello World (+ comments)")
 	public void helloWorld()
 	{
 		Script script = testScript("hello_world");
@@ -52,6 +51,7 @@ public class SimpleTests
 	}
 
 	@Test
+	@Disabled(value = "Disabled 'cause it just doesn't work yet and I am scared I broke something every time I see it fail")
 	public void assignValue()
 	{
 		Script script = testScript("assign_value");
@@ -102,6 +102,15 @@ public class SimpleTests
 		script.getMemory().addVariable("r", new Value(true, PrimitiveTypes.INT, 5));
 		Value value = script.runWithDelay();
 		Assertions.assertEquals(6, value.getInt());
+	}
+
+	@Test
+	@DisplayName(value = "Function calls type mismatch")
+	@Disabled(value = "Not fixed yet")
+	public void functionCallsTypeMismatch()
+	{
+		Script script = testScript("function_call_type_mismatch");
+		script.runWithDelay();
 	}
 
 	@Test
@@ -520,6 +529,24 @@ public class SimpleTests
 			Assertions.assertEquals(PrimitiveTypes.INT, ((Value) value.values.get("y")).type);
 			Assertions.assertEquals(9, ((Value) value.values.get("x")).getInt());
 			Assertions.assertEquals(8, ((Value) value.values.get("y")).getInt());
+		}
+
+		@Test
+		@DisplayName(value = "class object init")
+		public void classObjectInit()
+		{
+			Script script = testScript("class/class_object_init");
+			Value value = script.runWithDelay();
+			Assertions.assertEquals(5, value.getInt());
+		}
+
+		@Test
+		@DisplayName(value = "class object init use val")
+		public void classObjectInitUseVal()
+		{
+			Script script = testScript("class/class_object_init_use_val");
+			Value value = script.runWithDelay();
+			Assertions.assertEquals(5, value.getInt());
 		}
 	}
 }

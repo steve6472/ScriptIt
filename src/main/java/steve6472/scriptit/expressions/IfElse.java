@@ -42,6 +42,8 @@ public class IfElse extends Expression
 	@Override
 	public Result apply(Script script)
 	{
+		stackTrace("If-Else");
+
 		if (conditionExecutor.executeWhatYouCan(script).isDelay())
 			return Result.delay();
 

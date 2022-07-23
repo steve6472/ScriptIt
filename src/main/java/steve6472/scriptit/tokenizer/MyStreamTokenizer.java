@@ -70,15 +70,12 @@ public class MyStreamTokenizer
 	private int LINENO = 1;
 
 	private boolean eolIsSignificantP = false;
-	private boolean slashSlashCommentsP = false;
-	private boolean slashStarCommentsP = false;
 
 	private final byte[] ctype = new byte[256];
 	private static final byte CT_WHITESPACE = 1;
 	private static final byte CT_DIGIT = 2;
 	private static final byte CT_ALPHA = 4;
 	private static final byte CT_QUOTE = 8;
-	private static final byte CT_COMMENT = 16;
 
 	/**
 	 * After a call to the {@code nextToken} method, this field
@@ -175,7 +172,6 @@ public class MyStreamTokenizer
 		wordChars('A', 'Z');
 		wordChars(128 + 32, 255);
 		whitespaceChars(0, ' ');
-		commentChar('/');
 		quoteChar('"');
 		quoteChar('\'');
 		parseNumbers();
@@ -337,21 +333,6 @@ public class MyStreamTokenizer
 	}
 
 	/**
-	 * Specified that the character argument starts a single-line
-	 * comment. All characters from the comment character to the end of
-	 * the line are ignored by this stream tokenizer.
-	 *
-	 * <p>Any other attribute settings for the specified character are cleared.
-	 *
-	 * @param ch the character.
-	 */
-	public void commentChar(int ch)
-	{
-		if (ch >= 0 && ch < ctype.length)
-			ctype[ch] = CT_COMMENT;
-	}
-
-	/**
 	 * Specifies that matching pairs of this character delimit string
 	 * constants in this tokenizer.
 	 * <p>
@@ -435,41 +416,6 @@ public class MyStreamTokenizer
 	public void eolIsSignificant(boolean flag)
 	{
 		eolIsSignificantP = flag;
-	}
-
-	/**
-	 * Determines whether or not the tokenizer recognizes C-style comments.
-	 * If the flag argument is {@code true}, this stream tokenizer
-	 * recognizes C-style comments. All text between successive
-	 * occurrences of {@code /*} and <code>*&#47;</code> are discarded.
-	 * <p>
-	 * If the flag argument is {@code false}, then C-style comments
-	 * are not treated specially.
-	 *
-	 * @param flag {@code true} indicates to recognize and ignore
-	 *             C-style comments.
-	 */
-	public void slashStarComments(boolean flag)
-	{
-		slashStarCommentsP = flag;
-	}
-
-	/**
-	 * Determines whether or not the tokenizer recognizes C++-style comments.
-	 * If the flag argument is {@code true}, this stream tokenizer
-	 * recognizes C++-style comments. Any occurrence of two consecutive
-	 * slash characters ({@code '/'}) is treated as the beginning of
-	 * a comment that extends to the end of the line.
-	 * <p>
-	 * If the flag argument is {@code false}, then C++-style
-	 * comments are not treated specially.
-	 *
-	 * @param flag {@code true} indicates to recognize and ignore
-	 *             C++-style comments.
-	 */
-	public void slashSlashComments(boolean flag)
-	{
-		slashSlashCommentsP = flag;
 	}
 
 	/**
@@ -727,66 +673,6 @@ public class MyStreamTokenizer
 
 			sval = String.copyValueOf(buf, 0, i);
 			return ttype;
-		}
-
-		if (c == '/' && (slashSlashCommentsP || slashStarCommentsP))
-		{
-			c = read();
-			if (c == '*' && slashStarCommentsP)
-			{
-				int prevc = 0;
-				while ((c = read()) != '/' || prevc != '*')
-				{
-					if (c == '\r')
-					{
-						LINENO++;
-						c = read();
-						if (c == '\n')
-						{
-							c = read();
-						}
-					} else
-					{
-						if (c == '\n')
-						{
-							LINENO++;
-							c = read();
-						}
-					}
-					if (c < 0)
-						return ttype = TT_EOF;
-					prevc = c;
-				}
-				return nextToken();
-			} else if (c == '/' && slashSlashCommentsP)
-			{
-				while ((c = read()) != '\n' && c != '\r' && c >= 0)
-					;
-				peekc = c;
-				return nextToken();
-			} else
-			{
-				/* Now see if it is still a single line comment */
-				if ((ct['/'] & CT_COMMENT) != 0)
-				{
-					while ((c = read()) != '\n' && c != '\r' && c >= 0)
-						;
-					peekc = c;
-					return nextToken();
-				} else
-				{
-					peekc = c;
-					return ttype = '/';
-				}
-			}
-		}
-
-		if ((ctype & CT_COMMENT) != 0)
-		{
-			while ((c = read()) != '\n' && c != '\r' && c >= 0)
-				;
-			peekc = c;
-			return nextToken();
 		}
 
 		return ttype = c;

@@ -1,5 +1,6 @@
 package steve6472.scriptit.functions;
 
+import steve6472.scriptit.ScriptItSettings;
 import steve6472.scriptit.expressions.Function;
 import steve6472.scriptit.Result;
 import steve6472.scriptit.Script;
@@ -12,7 +13,6 @@ import steve6472.scriptit.Script;
  ***********************/
 public class DelayFunction extends Function
 {
-	public static boolean DEBUG = false;
 
 	public DelayFunction()
 	{
@@ -22,7 +22,7 @@ public class DelayFunction extends Function
 	@Override
 	public Result apply(Script script)
 	{
-		if (DEBUG)
+		if (ScriptItSettings.DELAY_DEBUG)
 			System.out.println("Delay " + arguments[0]);
 		int delay = arguments[0].getInt();
 		script.getMainExecutor().nextAllowedExecute = System.currentTimeMillis() + delay;

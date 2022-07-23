@@ -22,6 +22,8 @@ public class ClassDeclaration extends Expression
 	public final List<java.util.function.Function<Script, VarDec>> variables;
 	public final List<DeclareFunction> functions, constructors;
 	public final List<OverloadFunction> overloadFunctions;
+	public Expression make = null;
+	public String makeName = null;
 
 	public ClassDeclaration(String name, Type type)
 	{
@@ -95,6 +97,8 @@ public class ClassDeclaration extends Expression
 	@Override
 	public Result apply(Script script)
 	{
+		stackTrace("ClassDeclaration");
+
 		Type type = script.getWorkspace().getType(name);
 		if (type == null)
 		{
@@ -110,20 +114,29 @@ public class ClassDeclaration extends Expression
 		// Adds basic constructor without any parameters
 		if (constructors.isEmpty())
 		{
-			script.getMemory().addFunction(FunctionParameters.create(type), new Function()
+			Function function = new Function()
 			{
 				@Override
 				public Result apply(Script script)
 				{
+					stackTrace(1, "Default Constructor for " + name);
+					stackTrace(1);
 					Value value = Value.newValue(type);
+					script.getMemory().push();
 					for (java.util.function.Function<Script, VarDec> variable : variables)
 					{
 						VarDec apply = variable.apply(script);
+						stackTrace("Declaring variable " + apply.name);
+						script.getMemory().variables.put(apply.name, apply.val);
 						value.setValue(apply.name, apply.val);
 					}
+					script.getMemory().pop();
+					stackTrace(-1);
 					return Result.value(value);
 				}
-			});
+			};
+			function.name = "Default Constructor for " + name;
+			script.getMemory().addFunction(FunctionParameters.create(type), function);
 		} else
 		{
 			//				System.out.println("Constructor " + f.params.getName() + " " + Arrays.toString(f.params.getTypes()));
@@ -163,6 +176,12 @@ public class ClassDeclaration extends Expression
 				});
 			}
 		});
+
+		if (make != null)
+		{
+			Result apply = make.apply(script);
+			script.memory.addVariable(makeName, apply.getValue());
+		}
 
 		return Result.pass();
 	}

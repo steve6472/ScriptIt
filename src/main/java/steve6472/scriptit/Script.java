@@ -4,6 +4,7 @@ import steve6472.scriptit.executor.ExpressionExecutor;
 import steve6472.scriptit.executor.MainExecutor;
 import steve6472.scriptit.expressions.*;
 import steve6472.scriptit.libraries.Library;
+import steve6472.scriptit.simple.Comment;
 import steve6472.scriptit.tokenizer.Operator;
 import steve6472.scriptit.tokenizer.Precedence;
 import steve6472.scriptit.tokenizer.TokenParser;
@@ -44,6 +45,8 @@ public class Script
 	private int lastIndex = 0;
 	private int currentIndex = 0;
 	boolean exitOnError = false;
+
+	public static final List<String> STACK_TRACE = new ArrayList<>();
 
 	private List<QueuedFunctionCall<ExpressionExecutor, Boolean>> queuedFunctionCalls;
 	QueuedFunctionCall<ExpressionExecutor, Boolean> currentFunction = null;
@@ -326,12 +329,23 @@ public class Script
 
 	public Value runWithDelay()
 	{
+		if (ScriptItSettings.STACK_TRACE)
+		{
+			STACK_TRACE.clear();
+			Expression.stackTraceDepth = 0;
+		}
+
 		Result ret;
 
 		do
 		{
 			ret = mainExecutor.executeSingle(this);
 		} while (mainExecutor.canExecuteMore() && !ret.isReturnValue() && !ret.isReturn());
+
+		if (!mainExecutor.isWasLastDelay() && !mainExecutor.canExecuteMore())
+		{
+			mainExecutor.reset();
+		}
 
 		if (ret.isReturnValue())
 			return ret.getValue();

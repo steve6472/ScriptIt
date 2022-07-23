@@ -32,6 +32,8 @@ public class If extends Expression
 	@Override
 	public Result apply(Script script)
 	{
+		stackTrace("If");
+
 		if (conditionExecutor.executeWhatYouCan(script).isDelay())
 			return Result.delay();
 

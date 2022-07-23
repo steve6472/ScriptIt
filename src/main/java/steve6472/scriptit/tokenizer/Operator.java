@@ -26,10 +26,13 @@ public enum Operator implements IOperator
 	ASSIGN_MUL("*=", true),
 	ASSIGN_DIV("/=", true),
 	ASSIGN_MOD("%=", true),
-	ASSIGN_NEG("~=", true),
 	ASSIGN_BIT_AND("&=", true),
 	ASSIGN_BIT_OR("|=", true),
 	ASSIGN_BIT_XOR("^=", true),
+
+	SINGLE_LINE_COMMENT("//", true),
+	MULTI_LINE_COMMENT_BEGIN("/*", true),
+	MULTI_LINE_COMMENT_END("*/", true),
 
 	/* FIXME
 	 * The merging in MiniTokenizer/TokenParser would die cause it checks only the first TWO characters
@@ -104,6 +107,7 @@ public enum Operator implements IOperator
 	STRING(""),
 	CHAR(""),
 	TYPE_NAME(""),
+	EOL(""),
 	EOF(""),
 	;
 

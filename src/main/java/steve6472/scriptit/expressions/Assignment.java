@@ -20,6 +20,9 @@ import java.util.Set;
  ***********************/
 public class Assignment extends Expression
 {
+	/**
+	 * Used for pretty print in debug
+	 */
 	public static final Set<IOperator> COMPOUND_ASSINGMENT = new HashSet<>();
 
 	static
@@ -32,7 +35,6 @@ public class Assignment extends Expression
 		COMPOUND_ASSINGMENT.add(Operator.ASSIGN_BIT_AND);
 		COMPOUND_ASSINGMENT.add(Operator.ASSIGN_BIT_OR);
 		COMPOUND_ASSINGMENT.add(Operator.ASSIGN_BIT_XOR);
-		COMPOUND_ASSINGMENT.add(Operator.ASSIGN_NEG);
 	}
 
 	public final String typeName;
@@ -95,6 +97,13 @@ public class Assignment extends Expression
 	{
 		if (dotOperator != null)
 		{
+			stackTrace("Assignment-Dot");
+		} else {
+			stackTrace("Assignment '" + varName + "' (" + typeName + ")");
+		}
+
+		if (dotOperator != null)
+		{
 			assert expressionExecutor != null;
 
 			if (expressionExecutor.executeWhatYouCan(script).isDelay())
@@ -143,7 +152,7 @@ public class Assignment extends Expression
 
 		script.memory.addVariable(varName, value);
 
-		return Result.pass();
+		return Result.value(value);
 	}
 
 	@Override

@@ -29,6 +29,16 @@ public class MainExecutor
 		return lastExecuted <= expressions.size() - 2 || wasLastDelay;
 	}
 
+	public Expression getLastExecuted()
+	{
+		return expressions.get(lastExecuted);
+	}
+
+	public boolean isWasLastDelay()
+	{
+		return wasLastDelay;
+	}
+
 	public Result executeSingle(Script script)
 	{
 		if (nextAllowedExecute != -1 && script.delayStartSupplier.get() < nextAllowedExecute)
@@ -42,7 +52,7 @@ public class MainExecutor
 		if (lastExecuted >= expressions.size())
 			return Result.return_();
 
-		Expression expression = expressions.get(lastExecuted);
+		Expression expression = getLastExecuted();
 		Result result = expression.apply(script);
 
 		if (result.isDelay())

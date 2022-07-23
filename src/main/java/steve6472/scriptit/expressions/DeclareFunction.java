@@ -17,12 +17,14 @@ public class DeclareFunction extends Expression
 	{
 		this.function = function;
 		this.function.argumentNames = argumentNames;
+		this.function.name = name;
 		this.params = FunctionParameters.create(name, argumentTypes);
 	}
 
 	@Override
 	public Result apply(Script script)
 	{
+		stackTrace(0, "Declaring function '" + function.name + "'");
 		script.getMemory().addFunction(params, function);
 
 		return Result.pass();

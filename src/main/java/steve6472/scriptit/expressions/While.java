@@ -31,6 +31,8 @@ public class While extends Expression
 	@Override
 	public Result apply(Script script)
 	{
+		stackTrace("While");
+
 		while (true)
 		{
 			if (conditionExecutor.executeWhatYouCan(script).isDelay())

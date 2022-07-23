@@ -56,6 +56,8 @@ public class ForLoop extends Expression
 	@Override
 	public Result apply(Script script)
 	{
+		stackTrace("For");
+
 		if (first)
 		{
 			script.getMemory().push(); // [1]

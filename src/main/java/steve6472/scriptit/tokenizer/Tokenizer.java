@@ -1,6 +1,7 @@
 package steve6472.scriptit.tokenizer;
 
 import steve6472.scriptit.Log;
+import steve6472.scriptit.ScriptItSettings;
 
 import java.io.IOException;
 import java.io.StreamTokenizer;
@@ -17,8 +18,8 @@ import java.util.regex.Pattern;
 public class Tokenizer
 {
 	private final List<Token> tokens;
+	private final Set<Integer> newLines;
 	private int currentToken = -1;
-	public boolean debug = false;
 
 	private static final Pattern IS_DECIMAL = Pattern.compile("([+-]?\\d*(\\.\\d+)?)+");
 	private static final Pattern IS_INTEGER = Pattern.compile("([+-]?\\d)+");
@@ -38,6 +39,7 @@ public class Tokenizer
 		MiniTokenizer miniTokenizer = new MiniTokenizer(string);
 
 		tokens = new ArrayList<>();
+		newLines = new HashSet<>();
 
 		while (miniTokenizer.hasMoreTokens())
 		{
@@ -59,7 +61,11 @@ public class Tokenizer
 			} else if (token.token == '\'') // Char
 			{
 				tokens.add(new Token(Operator.CHAR, token.sval));
-			} else
+			} else if (token.token == '\n')
+			{
+				newLines.add(tokens.size());
+			}
+			else
 			{
 				IOperator type = IOperator.fromSymbol(token.sval);
 //				System.out.println(token.sval + " -> " + type);
@@ -76,10 +82,15 @@ public class Tokenizer
 //		System.out.println("\n");
 	}
 
+	public boolean isNextTokenNewLine()
+	{
+		return newLines.contains(currentToken + 1);
+	}
+
 	public Token nextToken()
 	{
 		currentToken++;
-		if (debug)
+		if (ScriptItSettings.TOKENIZER_DEBUG)
 			TokenParser.print(Log.WHITE + currentToken + Log.RESET + " Next token: " + getCurrentToken());
 		return getCurrentToken();
 	}
@@ -106,7 +117,7 @@ public class Tokenizer
 
 	public Token peekToken(int peek)
 	{
-		if (debug)
+		if (ScriptItSettings.TOKENIZER_DEBUG)
 			TokenParser.print("Peeking " + peek);
 		if (currentToken + peek >= tokens.size())
 			return null;
@@ -120,7 +131,7 @@ public class Tokenizer
 
 	public boolean matchToken(IOperator expectedtype, boolean consume)
 	{
-		if (debug)
+		if (ScriptItSettings.TOKENIZER_DEBUG)
 			TokenParser.print("Matching " + expectedtype);
 		Token token = peekToken();
 		if (token == null || token.type != expectedtype)
@@ -136,7 +147,7 @@ public class Tokenizer
 
 	public Token consumeToken(IOperator expectedType)
 	{
-		if (debug)
+		if (ScriptItSettings.TOKENIZER_DEBUG)
 			TokenParser.print("Consuming token " + expectedType);
 		nextToken();
 		Token token = getCurrentToken();
@@ -193,14 +204,11 @@ public class Tokenizer
 
 		MiniTokenizer(String string)
 		{
-			string = string.replace('/', 'ˇ');
 			StringReader r = new StringReader(string);
 			MyStreamTokenizer tokenizer = new MyStreamTokenizer(r);
 			tokenizer.ordinaryChar('.');
-			tokenizer.commentChar('§');
-			tokenizer.slashSlashComments(false);
-			tokenizer.slashStarComments(false);
 			tokenizer.wordChars('_', '_');
+			tokenizer.eolIsSignificant(true);
 
 			tokens = new ArrayList<>();
 
@@ -222,7 +230,7 @@ public class Tokenizer
 						e = new MiniToken(token, "" + (char) token);
 					} else
 					{
-						e = new MiniToken(token, tokenizer.sval.replace('ˇ', '/'));
+						e = new MiniToken(token, tokenizer.sval);
 					}
 					tokens.add(e);
 

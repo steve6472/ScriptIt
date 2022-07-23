@@ -4,9 +4,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
-import steve6472.scriptit.functions.DelayFunction;
 import steve6472.scriptit.libraries.TestLibrary;
-import steve6472.scriptit.tokenizer.TokenParser;
 
 import java.io.File;
 
@@ -23,8 +21,8 @@ public class TypeTests
 		boolean debug = !Boolean.parseBoolean(System.getenv("disable_debug"));
 		debug = false;
 
-		DelayFunction.DEBUG = debug;
-		TokenParser.DEBUG = debug;
+		ScriptItSettings.DELAY_DEBUG = debug;
+		ScriptItSettings.PARSER_DEBUG = debug;
 		Workspace workspace = new Workspace();
 		workspace.addLibrary(new TestLibrary());
 		Script script = Script.create(workspace, new File("!tests/" + name + ".txt"));

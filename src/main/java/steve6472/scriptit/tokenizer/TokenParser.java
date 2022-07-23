@@ -1,11 +1,11 @@
 package steve6472.scriptit.tokenizer;
 
-import steve6472.scriptit.Log;
-import steve6472.scriptit.Script;
 import steve6472.scriptit.Stack;
-import steve6472.scriptit.Workspace;
+import steve6472.scriptit.*;
 import steve6472.scriptit.expressions.ClassDeclaration;
 import steve6472.scriptit.expressions.Expression;
+import steve6472.scriptit.simple.Comment;
+import steve6472.scriptit.simple.Empty;
 import steve6472.scriptit.tokenizer.parslet.*;
 
 import java.util.*;
@@ -14,18 +14,24 @@ import java.util.*;
  * Created by steve6472 (Mirek Jozefek)
  * On date: 5/13/2021
  * Project: ScriptIt
- *
- * https://en.cppreference.com/w/cpp/language/operator_precedence
+ * <p>
+ * <a href="https://en.cppreference.com/w/cpp/language/operator_precedence">...</a>
  *
  ***********************/
 public class TokenParser
 {
-	public static boolean DEBUG = false;
-
 	public static int depth = 0;
 
 	public final Map<IOperator, PrefixParselet> prefixParslets = new HashMap<>();
 	public final Map<IOperator, InfixParslet> infixParslets = new HashMap<>();
+
+	public static final Set<Expression> IGNORED_EXPRESSIONS = new HashSet<>();
+
+	static
+	{
+		IGNORED_EXPRESSIONS.add(Comment.getInstance());
+		IGNORED_EXPRESSIONS.add(Empty.getInstance());
+	}
 
 	public TokenParser()
 	{
@@ -53,7 +59,8 @@ public class TokenParser
 		prefixParslets.put(Operator.CLASS, new ClassParslet());
 		prefixParslets.put(Operator.OVERLOAD, new OverloadParslet());
 
-
+		prefixParslets.put(Operator.SINGLE_LINE_COMMENT, new SingleLineCommentParslet());
+		prefixParslets.put(Operator.MULTI_LINE_COMMENT_BEGIN, new MultiLineCommentParslet());
 
 		infixParslets.put(Operator.TERNARY, new TernaryParslet());
 		infixParslets.put(Operator.INSTANCEOF, new InstanceofParslet());
@@ -103,7 +110,7 @@ public class TokenParser
 
 	public static void print(String s)
 	{
-		if (DEBUG)
+		if (ScriptItSettings.PARSER_DEBUG)
 			System.out.println(tree() + s);
 	}
 
@@ -120,7 +127,7 @@ public class TokenParser
 		this.workspace = script.getWorkspace();
 		functionParameters.clear();
 		tokenizer = new Tokenizer(expression);
-		tokenizer.debug = DEBUG;
+		ScriptItSettings.TOKENIZER_DEBUG = ScriptItSettings.PARSER_DEBUG;
 		importedTypes = new HashSet<>();
 		classStack = new Stack<>(16);
 
@@ -168,6 +175,12 @@ public class TokenParser
 		Expression expression = parslet.parse(this, token);
 		print(Log.BRIGHT_GREEN + "Parslet " + Log.BRIGHT_YELLOW + "Result: " + Log.RESET + expression);
 
+		if (IGNORED_EXPRESSIONS.contains(expression))
+		{
+			depth--;
+			return parse(precedence);
+		}
+
 		Expression expression1 = parseInfixExpression(expression, precedence);
 		depth--;
 		return expression1;
@@ -214,35 +227,41 @@ public class TokenParser
 	{
 		depth = 0;
 		List<Expression> expressions = new ArrayList<>();
+		boolean lastIgnored = false;
 		do
 		{
 			depth++;
 			print(Log.BRIGHT_CYAN + "---Next Expression---" + Log.RESET);
 			Expression next = parse(Precedence.ANYTHING);
+
 			if (next != null)
 			{
-				expressions.add(next);
+				if (!IGNORED_EXPRESSIONS.contains(next))
+				{
+					expressions.add(next);
+				} else {
+					lastIgnored = true;
+				}
 			} else
 			{
-				if (DEBUG)
+				if (ScriptItSettings.PARSER_DEBUG)
 					System.out.println(Log.BRIGHT_RED + "\n" +
 						"-------------------------------\n" +
 						"----------END OF FILE----------\n" +
 						"-------------------------------\n" + Log.RESET);
 				break;
 			}
-			if (DEBUG)
+			if (ScriptItSettings.PARSER_DEBUG)
 				System.out.println("\n");
 			depth--;
-		} while (tokenizer.matchToken(Operator.SEMICOLON, true));
-		//FIXME: add this exception
-		//		if (pos < line.length()) throw new RuntimeException("Unexpected: " + ch + " Rest: " + line.substring(pos));
+		} while (tokenizer.matchToken(Operator.SEMICOLON, true) || lastIgnored);
 		return expressions;
 	}
 
 	public List<Expression> parseClass()
 	{
 		List<Expression> expressions = new ArrayList<>();
+		boolean lastIgnored = false;
 		do
 		{
 			depth++;
@@ -255,20 +274,25 @@ public class TokenParser
 			Expression next = parse(Precedence.ANYTHING);
 			if (next != null)
 			{
-				expressions.add(next);
+				if (!IGNORED_EXPRESSIONS.contains(next))
+				{
+					expressions.add(next);
+				} else {
+					lastIgnored = true;
+				}
 			} else
 			{
-				if (DEBUG)
+				if (ScriptItSettings.PARSER_DEBUG)
 					System.out.println(Log.BRIGHT_RED + "\n" +
 						"-------------------------------\n" +
 						"----------END OF FILE----------\n" +
 						"-------------------------------\n" + Log.RESET);
 				break;
 			}
-			if (DEBUG)
+			if (ScriptItSettings.PARSER_DEBUG)
 				System.out.println("\n");
 			depth--;
-		} while (tokenizer.matchToken(Operator.SEMICOLON, true));
+		} while (tokenizer.matchToken(Operator.SEMICOLON, true) || lastIgnored);
 
 		return expressions;
 	}

@@ -1,21 +1,27 @@
-package steve6472.scriptit.expressions;
+package steve6472.scriptit.simple;
 
 import steve6472.scriptit.Result;
 import steve6472.scriptit.Script;
+import steve6472.scriptit.expressions.Expression;
 
 /**********************
- * Created by steve6472 (Mirek Jozefek)
- * On date: 6/20/2021
+ * Created by steve6472
+ * On date: 7/23/2022
  * Project: ScriptIt
  *
  ***********************/
 public class Comment extends Expression
 {
-	private final String comment;
+	public static final Comment INSTANCE = new Comment();
 
-	public Comment(String comment)
+	private Comment()
 	{
-		this.comment = comment;
+
+	}
+
+	public static Comment getInstance()
+	{
+		return INSTANCE;
 	}
 
 	@Override
@@ -27,6 +33,6 @@ public class Comment extends Expression
 	@Override
 	public String showCode(int a)
 	{
-		return comment;
+		return "";
 	}
 }

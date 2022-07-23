@@ -1,13 +1,13 @@
 package steve6472.scriptit.tokenizer.parslet;
 
 import steve6472.scriptit.Log;
+import steve6472.scriptit.ScriptItSettings;
 import steve6472.scriptit.Type;
 import steve6472.scriptit.expressions.ClassDeclaration;
 import steve6472.scriptit.expressions.Expression;
-import steve6472.scriptit.tokenizer.Operator;
-import steve6472.scriptit.tokenizer.PrefixParselet;
-import steve6472.scriptit.tokenizer.TokenParser;
-import steve6472.scriptit.tokenizer.Tokenizer;
+import steve6472.scriptit.expressions.FunctionCall;
+import steve6472.scriptit.expressions.FunctionSource;
+import steve6472.scriptit.tokenizer.*;
 
 import java.util.List;
 
@@ -22,7 +22,7 @@ public class ClassParslet implements PrefixParselet
 	@Override
 	public Expression parse(TokenParser parser, Tokenizer.Token token)
 	{
-		if (TokenParser.DEBUG)
+		if (ScriptItSettings.PARSER_DEBUG)
 		{
 			TokenParser.print(Log.BRIGHT_BLUE + "---------------");
 			TokenParser.print("---  CLASS  ---");
@@ -44,7 +44,24 @@ public class ClassParslet implements PrefixParselet
 		List<Expression> expressions = parser.parseClass();
 		declaration.add(expressions);
 
-		if (TokenParser.DEBUG)
+		if (parser.tokenizer.peekToken(1).type() == Operator.NAME)
+		{
+			String sval = parser.tokenizer.peekToken(1).sval();
+
+			Expression parse = parser.parse(Precedence.ANYTHING);
+			if (!(parse instanceof FunctionCall fc))
+			{
+				throw new RuntimeException("Function call expected (constructor of '" + name + "' class)");
+			}
+
+			fc.source = FunctionSource.function(name);
+
+			declaration.make = parse;
+			declaration.makeName = sval;
+			TokenParser.print(Log.WHITE + "[" + Log.BRIGHT_BLUE + "MAKE" + Log.WHITE + "]" + Log.RESET);
+		}
+
+		if (ScriptItSettings.PARSER_DEBUG)
 		{
 			TokenParser.print(Log.BRIGHT_BLUE + "----------------------");
 			TokenParser.print("---  END OF CLASS  ---");

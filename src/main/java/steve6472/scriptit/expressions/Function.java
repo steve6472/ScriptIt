@@ -1,7 +1,11 @@
 package steve6472.scriptit.expressions;
 
-import steve6472.scriptit.*;
+import steve6472.scriptit.Highlighter;
+import steve6472.scriptit.Result;
+import steve6472.scriptit.Script;
+import steve6472.scriptit.Value;
 import steve6472.scriptit.executor.Executor;
+import steve6472.scriptit.simple.Comment;
 import steve6472.scriptit.tokenizer.Precedence;
 
 import java.util.Arrays;
@@ -20,6 +24,7 @@ public class Function extends Expression
 	protected Value returnThisHelper = null;
 	protected boolean isDelayed;
 	protected boolean isBody;
+	public String name;
 
 	/**
 	 * @param argumentNames arg names
@@ -77,16 +82,22 @@ public class Function extends Expression
 	@Override
 	public Result apply(Script script)
 	{
+		stackTrace("Function '" + (name == null ? "UNKNOWN" : name) + "'");
+
 		if (!isDelayed)
 		{
 			script.getMemory().push();
 
 			if (arguments != null)
 			{
+				stackTrace(1, "Adding variables");
+				stackTrace(1);
 				for (int i = 0; i < arguments.length; i++)
 				{
+					stackTrace("name: " + this.argumentNames[i] + ", type: " + arguments[i].type.getKeyword());
 					script.getMemory().addVariable(this.argumentNames[i], arguments[i]);
 				}
+				stackTrace(-1);
 			}
 
 			if (returnThisHelper != null)
@@ -103,11 +114,15 @@ public class Function extends Expression
 			}
 		}
 
+		stackTrace("Executing body");
+		stackTrace(1);
 		if (bodyExecutor.executeWhatYouCan(script).isDelay())
 		{
 			isDelayed = true;
+			stackTrace(-1);
 			return Result.delay();
 		}
+		stackTrace(-1);
 		isDelayed = false;
 
 		script.getMemory().pop();

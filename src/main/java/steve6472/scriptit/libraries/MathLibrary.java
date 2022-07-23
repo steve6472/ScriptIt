@@ -31,6 +31,12 @@ public class MathLibrary extends Library
 		addFunction("clamp", (number, min, max) -> newValue(DOUBLE, Math.min(Math.max(number.getDouble(), min.getDouble()), max.getDouble())), DOUBLE, DOUBLE, DOUBLE);
 		addFunction("clamp", (number, min, max) -> newValue(INT, Math.min(Math.max(number.getInt(), min.getInt()), max.getInt())), INT, INT, INT);
 
+		addFunction("min", (a, b) -> newValue(INT, Math.min(a.getInt(), b.getInt())), INT, INT);
+		addFunction("max", (a, b) -> newValue(INT, Math.max(a.getInt(), b.getInt())), INT, INT);
+
+		addFunction("min", (a, b) -> newValue(DOUBLE, Math.min(a.getDouble(), b.getDouble())), DOUBLE, DOUBLE);
+		addFunction("max", (a, b) -> newValue(DOUBLE, Math.max(a.getDouble(), b.getDouble())), DOUBLE, DOUBLE);
+
 		addFunction("lerp", (start, end, value) -> newValue(DOUBLE, start.getDouble() + value.getDouble() * (end.getDouble() - start.getDouble())), DOUBLE, DOUBLE, DOUBLE);
 
 		addFunction("isEven", number -> newValue(DOUBLE, number.getDouble() % 2.0 == 0 ? TRUE() : FALSE()), DOUBLE);
