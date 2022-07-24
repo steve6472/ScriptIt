@@ -2,6 +2,7 @@ package steve6472.scriptit.tokenizer;
 
 import steve6472.scriptit.Stack;
 import steve6472.scriptit.*;
+import steve6472.scriptit.expressions.Attributes;
 import steve6472.scriptit.expressions.ClassDeclaration;
 import steve6472.scriptit.expressions.Expression;
 import steve6472.scriptit.simple.Comment;
@@ -25,13 +26,7 @@ public class TokenParser
 	public final Map<IOperator, PrefixParselet> prefixParslets = new HashMap<>();
 	public final Map<IOperator, InfixParslet> infixParslets = new HashMap<>();
 
-	public static final Set<Expression> IGNORED_EXPRESSIONS = new HashSet<>();
-
-	static
-	{
-		IGNORED_EXPRESSIONS.add(Comment.getInstance());
-		IGNORED_EXPRESSIONS.add(Empty.getInstance());
-	}
+	public final Set<Class<?>> ignoredExpressions = new HashSet<>();
 
 	public TokenParser()
 	{
@@ -58,9 +53,12 @@ public class TokenParser
 		prefixParslets.put(Operator.BREAK, new BreakParslet());
 		prefixParslets.put(Operator.CLASS, new ClassParslet());
 		prefixParslets.put(Operator.OVERLOAD, new OverloadParslet());
+		prefixParslets.put(Operator.BRACKET_SQUARE_LEFT, new AttributeParslet());
 
 		prefixParslets.put(Operator.SINGLE_LINE_COMMENT, new SingleLineCommentParslet());
 		prefixParslets.put(Operator.MULTI_LINE_COMMENT_BEGIN, new MultiLineCommentParslet());
+
+
 
 		infixParslets.put(Operator.TERNARY, new TernaryParslet());
 		infixParslets.put(Operator.INSTANCEOF, new InstanceofParslet());
@@ -98,6 +96,11 @@ public class TokenParser
 
 		infixParslets.put(Operator.BRACKET_LEFT, new FunctionCallInfix());
 		infixParslets.put(Operator.BRACKET_SQUARE_LEFT, new IndexOperatorParslet());
+
+
+
+		ignoredExpressions.add(Comment.class);
+		ignoredExpressions.add(Empty.class);
 	}
 
 
@@ -120,6 +123,7 @@ public class TokenParser
 	public Workspace workspace;
 	public Script script;
 	public Stack<ClassDeclaration> classStack;
+	public Attributes lastAttributes;
 
 	public TokenParser setExpression(Script script, String expression)
 	{
@@ -175,7 +179,7 @@ public class TokenParser
 		Expression expression = parslet.parse(this, token);
 		print(Log.BRIGHT_GREEN + "Parslet " + Log.BRIGHT_YELLOW + "Result: " + Log.RESET + expression);
 
-		if (IGNORED_EXPRESSIONS.contains(expression))
+		if (ignoredExpressions.contains(expression.getClass()))
 		{
 			depth--;
 			return parse(precedence);
@@ -236,9 +240,9 @@ public class TokenParser
 
 			if (next != null)
 			{
-				if (!IGNORED_EXPRESSIONS.contains(next))
+				if (!ignoredExpressions.contains(next.getClass()))
 				{
-					expressions.add(next);
+					addExpression(next, expressions);
 				} else {
 					lastIgnored = true;
 				}
@@ -274,9 +278,9 @@ public class TokenParser
 			Expression next = parse(Precedence.ANYTHING);
 			if (next != null)
 			{
-				if (!IGNORED_EXPRESSIONS.contains(next))
+				if (!ignoredExpressions.contains(next.getClass()))
 				{
-					expressions.add(next);
+					addExpression(next, expressions);
 				} else {
 					lastIgnored = true;
 				}
@@ -295,5 +299,25 @@ public class TokenParser
 		} while (tokenizer.matchToken(Operator.SEMICOLON, true) || lastIgnored);
 
 		return expressions;
+	}
+
+	protected void addExpression(Expression next, List<Expression> expressions)
+	{
+		if (lastAttributes != null)
+		{
+			expressions.add(next);
+			expressions.add(lastAttributes);
+			lastAttributes.setNextExpr(workspace, next);
+			lastAttributes = null;
+		} else
+		{
+			if (next instanceof Attributes atr)
+			{
+				lastAttributes = atr;
+			} else
+			{
+				expressions.add(next);
+			}
+		}
 	}
 }

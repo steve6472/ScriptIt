@@ -12,4 +12,5 @@ public class ScriptItSettings
 	public static boolean DELAY_DEBUG = false;
 	public static boolean TOKENIZER_DEBUG = false;
 	public static boolean STACK_TRACE = false;
+	public static boolean PARSER_WARNINGS = false;
 }

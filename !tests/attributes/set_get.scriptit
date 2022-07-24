@@ -1,0 +1,9 @@
+import type int;
+
+//[get(), set(), dep("Don't use this")];
+[set(), get()];
+int a = 3;
+
+setA(getA() + 3);
+
+return getA();

@@ -1,6 +1,8 @@
 package steve6472.scriptit;
 
 import org.junit.jupiter.api.*;
+import steve6472.scriptit.attributes.AttributeGet;
+import steve6472.scriptit.attributes.AttributeSet;
 import steve6472.scriptit.exceptions.ValueNotFoundException;
 import steve6472.scriptit.expressions.Function;
 import steve6472.scriptit.libraries.LogLibrary;
@@ -18,19 +20,29 @@ import java.time.Duration;
  ***********************/
 public class SimpleTests
 {
-	private Script testScript(String name)
+	private void setDebugs()
 	{
 		boolean debug = !Boolean.parseBoolean(System.getenv("disable_debug"));
-		debug = true;
+		debug = false;
 
 		ScriptItSettings.DELAY_DEBUG = debug;
 		ScriptItSettings.PARSER_DEBUG = debug;
-		Workspace workspace = new Workspace();
+	}
+
+	private Script testScript(String name)
+	{
+		return testScript(name, new Workspace());
+	}
+
+	private Script testScript(String name, Workspace workspace)
+	{
+		setDebugs();
+
 		workspace.addLibrary(new TestLibrary());
 		workspace.addLibrary(new LogLibrary());
 		Script script = Script.create(workspace, new File("!tests/" + name + ".scriptit"));
 		Highlighter.basicHighlight();
-		System.out.println(script.showCode());
+		System.out.println(script.showCode() + "\n");
 		return script;
 	}
 
@@ -213,6 +225,45 @@ public class SimpleTests
 		Script script = testScript("value_changed");
 		Value value = script.runWithDelay();
 		Assertions.assertEquals(2, value.getInt());
+	}
+
+	@Nested
+	@DisplayName("attributes")
+	class Attributes_
+	{
+		@Test
+		public void get()
+		{
+			Workspace workspace = new Workspace();
+			workspace.addAttribute(new AttributeGet());
+
+			Script script = testScript("attributes/get", workspace);
+			Value value = script.runWithDelay();
+			Assertions.assertEquals(6, value.getInt());
+		}
+
+		@Test
+		public void set()
+		{
+			Workspace workspace = new Workspace();
+			workspace.addAttribute(new AttributeSet());
+
+			Script script = testScript("attributes/set", workspace);
+			Value value = script.runWithDelay();
+			Assertions.assertEquals(6, value.getInt());
+		}
+
+		@Test
+		public void setGet()
+		{
+			Workspace workspace = new Workspace();
+			workspace.addAttribute(new AttributeSet());
+			workspace.addAttribute(new AttributeGet());
+
+			Script script = testScript("attributes/set_get", workspace);
+			Value value = script.runWithDelay();
+			Assertions.assertEquals(6, value.getInt());
+		}
 	}
 
 	@Nested

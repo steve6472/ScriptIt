@@ -1,0 +1,8 @@
+import type int;
+
+[set()];
+int a = 0;
+
+setA(6);
+
+return a;

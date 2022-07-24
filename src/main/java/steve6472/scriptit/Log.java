@@ -4,7 +4,7 @@ package steve6472.scriptit;
  * Created by steve6472
  * On date: 17.04.2020
  * Project: NoiseGenerator
- * https://en.wikipedia.org/wiki/ANSI_escape_code#Escape_sequences
+ * <a href="https://en.wikipedia.org/wiki/ANSI_escape_code#Escape_sequences">...</a>
  *
  ***********************/
 public class Log
@@ -67,6 +67,12 @@ public class Log
 	{
 		if (PRINT_ERROR)
 			System.out.println(RED + text + WHITE);
+	}
+
+	public static void scriptWarning(String text)
+	{
+		if (ScriptItSettings.PARSER_WARNINGS)
+			System.out.println(WHITE + "[" + BRIGHT_YELLOW + "WARNING" + WHITE + "] " + YELLOW + text);
 	}
 
 }

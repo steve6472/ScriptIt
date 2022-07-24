@@ -1,5 +1,6 @@
 package steve6472.scriptit;
 
+import steve6472.scriptit.attributes.Attribute;
 import steve6472.scriptit.libraries.Library;
 import steve6472.scriptit.libraries.MathLibrary;
 import steve6472.scriptit.libraries.RandomLibrary;
@@ -19,6 +20,7 @@ public class Workspace
 {
 	private final Map<String, Library> libraries = new HashMap<>();
 	private final Map<String, Type> types = new HashMap<>();
+	private final Map<String, Attribute> attributes = new HashMap<>();
 
 	public Workspace()
 	{
@@ -62,5 +64,15 @@ public class Workspace
 	public Type getType(String name)
 	{
 		return this.types.get(name);
+	}
+
+	public void addAttribute(Attribute attribute)
+	{
+		this.attributes.put(attribute.getName(), attribute);
+	}
+
+	public Attribute getAttribute(String name)
+	{
+		return attributes.get(name);
 	}
 }
