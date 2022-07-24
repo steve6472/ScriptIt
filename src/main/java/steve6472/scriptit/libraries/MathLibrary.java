@@ -42,5 +42,12 @@ public class MathLibrary extends Library
 		addFunction("isEven", number -> newValue(DOUBLE, number.getDouble() % 2.0 == 0 ? TRUE() : FALSE()), DOUBLE);
 		addFunction("isEven", number -> newValue(INT, number.getInt() % 2 == 0 ? TRUE() : FALSE()), INT);
 
+		addFunction("floor", number -> newValue(DOUBLE, Math.floor(number.getDouble())), DOUBLE);
+		addFunction("floor", number -> newValue(INT, Math.floor(number.getInt())), INT);
+
+		addFunction("ceil", number -> newValue(DOUBLE, Math.ceil(number.getDouble())), DOUBLE);
+		addFunction("ceil", number -> newValue(INT, Math.ceil(number.getInt())), INT);
+
+		addFunction("floorMod", (x, y) -> newValue(INT, Math.floorMod(x.getInt(), y.getInt())), INT, INT);
 	}
 }
