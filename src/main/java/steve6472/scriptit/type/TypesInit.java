@@ -1,8 +1,12 @@
-package steve6472.scriptit.types;
+package steve6472.scriptit.type;
 
-import steve6472.scriptit.*;
+import steve6472.scriptit.Result;
+import steve6472.scriptit.Script;
 import steve6472.scriptit.expressions.Function;
 import steve6472.scriptit.expressions.FunctionParameters;
+import steve6472.scriptit.value.PrimitiveValue;
+import steve6472.scriptit.value.UniversalValue;
+import steve6472.scriptit.value.Value;
 
 /**********************
  * Created by steve6472 (Mirek Jozefek)
@@ -12,6 +16,28 @@ import steve6472.scriptit.expressions.FunctionParameters;
  ***********************/
 public class TypesInit
 {
+	public static <T> PrimitiveValue<T> newPrimitive(PrimitiveType<?> type, T value)
+	{
+		return PrimitiveValue.newValue(type, value);
+	}
+
+	public static <T> PrimitiveValue<T> newPrimitive(T value)
+	{
+		return PrimitiveValue.newValue(value);
+	}
+
+	public static UniversalValue newUniversal(Type type)
+	{
+		return UniversalValue.newValue(type);
+	}
+
+	public static UniversalValue newUniversal(Type type, Object value)
+	{
+		return UniversalValue.newValue(type, value);
+	}
+
+
+
 	@FunctionalInterface
 	protected interface BinaryOperator
 	{
@@ -358,5 +384,45 @@ public class TypesInit
 	public static void addFProcedure(Type type, String name, MultiParamProcedure procedure, Type... types)
 	{
 		type.addFunction(FunctionParameters.create(name, types), new Proc(procedure));
+	}
+
+	/*
+	 * Primitive specific
+	 */
+
+	public static class PBinaryOperatorOverload<Left extends Value, Right extends Value> extends Function
+	{
+		private final PrimitiveType.BinaryOperator<Left, Right> func;
+
+		public PBinaryOperatorOverload(PrimitiveType.BinaryOperator<Left, Right> func)
+		{
+			super("left", "right");
+			this.func = func;
+		}
+
+		@Override
+		@SuppressWarnings(value = "unchecked")
+		public Result apply(Script script)
+		{
+			return Result.value(func.apply((Left) arguments[0], (Right) arguments[1]));
+		}
+	}
+
+	public static class PUnaryOperatorOverload<Right extends Value> extends Function
+	{
+		private final PrimitiveType.UnaryOperator<Right> func;
+
+		public PUnaryOperatorOverload(PrimitiveType.UnaryOperator<Right> func)
+		{
+			super("right");
+			this.func = func;
+		}
+
+		@Override
+		@SuppressWarnings(value = "unchecked")
+		public Result apply(Script script)
+		{
+			return Result.value(func.apply((Right) arguments[0]));
+		}
 	}
 }

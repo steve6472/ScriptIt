@@ -1,9 +1,12 @@
 package steve6472.scriptit.libraries;
 
-import steve6472.scriptit.*;
+import steve6472.scriptit.Result;
+import steve6472.scriptit.Script;
 import steve6472.scriptit.expressions.Function;
 import steve6472.scriptit.expressions.FunctionParameters;
-import steve6472.scriptit.types.PrimitiveTypes;
+import steve6472.scriptit.type.PrimitiveTypes;
+import steve6472.scriptit.value.PrimitiveValue;
+import steve6472.scriptit.value.Value;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -46,7 +49,7 @@ public class SystemLibrary extends Library
 			@Override
 			public Result apply(Script script)
 			{
-				return Result.value(Value.newValue(PrimitiveTypes.BOOL, PrimitiveTypes.isPrimitive(arguments[0].type)));
+				return Result.value(PrimitiveValue.newValue(PrimitiveTypes.BOOL, arguments[0].isPrimitive()));
 			}
 		});
 
@@ -77,7 +80,7 @@ public class SystemLibrary extends Library
 				}
 
 				if (value != null)
-					return Result.value(Value.newValue(PrimitiveTypes.STRING, value));
+					return Result.value(PrimitiveValue.newValue(PrimitiveTypes.STRING, value));
 				else
 					return Result.value(Value.NULL);
 			}
@@ -88,7 +91,7 @@ public class SystemLibrary extends Library
 			@Override
 			public Result apply(Script script)
 			{
-				return Result.value(Value.newValue(PrimitiveTypes.CHAR, (char) arguments[0].getInt()));
+				return Result.value(PrimitiveValue.newValue(PrimitiveTypes.CHAR, (char) arguments[0].asPrimitive().getInt()));
 			}
 		});
 
@@ -112,8 +115,8 @@ public class SystemLibrary extends Library
 			}
 		});
 
-		addFunction("timeMs", () -> Value.newValue(PrimitiveTypes.INT, (int) System.currentTimeMillis()));
-		addFunction("timeNs", () -> Value.newValue(PrimitiveTypes.INT, (int) System.nanoTime()));
+		addFunction("timeMs", () -> PrimitiveValue.newValue(PrimitiveTypes.INT, (int) System.currentTimeMillis()));
+		addFunction("timeNs", () -> PrimitiveValue.newValue(PrimitiveTypes.INT, (int) System.nanoTime()));
 
 		addFunction(FunctionParameters.create("acceptEvents"), new Function()
 		{

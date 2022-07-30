@@ -1,6 +1,6 @@
 package steve6472.scriptit.tokenizer.parslet;
 
-import steve6472.scriptit.Type;
+import steve6472.scriptit.type.Type;
 import steve6472.scriptit.expressions.Expression;
 import steve6472.scriptit.expressions.Function;
 import steve6472.scriptit.expressions.OverloadFunction;

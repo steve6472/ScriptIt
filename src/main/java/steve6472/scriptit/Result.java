@@ -1,6 +1,8 @@
 package steve6472.scriptit;
 
-import steve6472.scriptit.types.PrimitiveTypes;
+import steve6472.scriptit.type.PrimitiveTypes;
+import steve6472.scriptit.value.PrimitiveValue;
+import steve6472.scriptit.value.Value;
 
 /**********************
  * Created by steve6472 (Mirek Jozefek)
@@ -34,7 +36,7 @@ public class Result
 
 	public static Result delay(int delay, boolean skip)
 	{
-		return new Result(Value.newValue(PrimitiveTypes.INT, delay * (skip ? -1 : 1)), ResultStatus.DELAY);
+		return new Result(PrimitiveValue.newValue(PrimitiveTypes.INT, delay * (skip ? -1 : 1)), ResultStatus.DELAY);
 	}
 
 	public static Result delay()
@@ -44,7 +46,7 @@ public class Result
 
 	public static boolean isDelaySkip(Result result)
 	{
-		return result.isDelay() && result.getValue().getInt() < 0;
+		return result.isDelay() && result.getPrimitiveValue().getInt() < 0;
 	}
 
 	public static Result wait_() { return WAIT; }
@@ -87,6 +89,11 @@ public class Result
 	public Value getValue()
 	{
 		return value;
+	}
+
+	public PrimitiveValue<?> getPrimitiveValue()
+	{
+		return (PrimitiveValue<?>) value;
 	}
 
 	public ResultStatus getStatus()

@@ -2,7 +2,7 @@ package steve6472.scriptit.simple;
 
 import steve6472.scriptit.*;
 import steve6472.scriptit.expressions.Expression;
-import steve6472.scriptit.types.PrimitiveTypes;
+import steve6472.scriptit.type.PrimitiveTypes;
 
 /**********************
  * Created by steve6472
@@ -28,7 +28,7 @@ public class ReturnIf extends Expression
 			return ifResult;
 
 		if (ifResult.getStatus() == ResultStatus.VALUE && ifResult.getValue().type == PrimitiveTypes.BOOL)
-			return ifResult.getValue().getBoolean() ? Result.return_() : Result.pass();
+			return ifResult.getValue().asPrimitive().getBoolean() ? Result.return_() : Result.pass();
 
 		return null;
 	}

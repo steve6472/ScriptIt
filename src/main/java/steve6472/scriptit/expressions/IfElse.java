@@ -47,7 +47,7 @@ public class IfElse extends Expression
 		if (conditionExecutor.executeWhatYouCan(script).isDelay())
 			return Result.delay();
 
-		if (conditionExecutor.getLastResult().getValue().getBoolean())
+		if (conditionExecutor.getLastResult().getValue().asPrimitive().getBoolean())
 		{
 			if (ifBodyExecutor.executeWhatYouCan(script).isDelay())
 				return Result.delay();

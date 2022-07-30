@@ -1,11 +1,13 @@
 package steve6472.scriptit.expressions;
 
-import steve6472.scriptit.*;
+import steve6472.scriptit.Result;
+import steve6472.scriptit.Script;
 import steve6472.scriptit.exceptions.NoBinaryOperationFoundException;
 import steve6472.scriptit.exceptions.NoOperatorFoundException;
 import steve6472.scriptit.executor.Executor;
 import steve6472.scriptit.tokenizer.IOperator;
 import steve6472.scriptit.tokenizer.Operator;
+import steve6472.scriptit.value.Value;
 
 import java.util.HashMap;
 

@@ -5,6 +5,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import steve6472.scriptit.libraries.TestLibrary;
+import steve6472.scriptit.value.Value;
 
 import java.io.File;
 
@@ -40,7 +41,7 @@ public class TypeTests
 		{
 			Script script = testScript("types/string/substring");
 			Value value = script.runWithDelay();
-			Assertions.assertEquals(value.getString(), "ello World");
+			Assertions.assertEquals(value.asPrimitive().getString(), "ello World");
 		}
 	}
 }

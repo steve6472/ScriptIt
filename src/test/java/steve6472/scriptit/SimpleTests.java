@@ -7,7 +7,10 @@ import steve6472.scriptit.exceptions.ValueNotFoundException;
 import steve6472.scriptit.expressions.Function;
 import steve6472.scriptit.libraries.LogLibrary;
 import steve6472.scriptit.libraries.TestLibrary;
-import steve6472.scriptit.types.PrimitiveTypes;
+import steve6472.scriptit.type.PrimitiveTypes;
+import steve6472.scriptit.type.Type;
+import steve6472.scriptit.value.PrimitiveValue;
+import steve6472.scriptit.value.Value;
 
 import java.io.File;
 import java.time.Duration;
@@ -59,16 +62,19 @@ public class SimpleTests
 	{
 		Script script = testScript("math");
 		Value value = script.runWithDelay();
-		Assertions.assertEquals(-24, value.getInt());
+		Assertions.assertEquals(-24, value.asPrimitive().getInt());
 	}
 
 	@Test
+	/*
+	 * TODO: Probably can use the new PrimitiveValue thing to check for the assignment & fix it
+	 */
 	@Disabled(value = "Disabled 'cause it just doesn't work yet and I am scared I broke something every time I see it fail")
 	public void assignValue()
 	{
 		Script script = testScript("assign_value");
 		Value value = script.runWithDelay();
-		Assertions.assertEquals(6, value.getInt());
+		Assertions.assertEquals(6, value.asPrimitive().getInt());
 	}
 
 	@Test
@@ -76,7 +82,7 @@ public class SimpleTests
 	{
 		Script script = testScript("index");
 		Value value = script.runWithDelay();
-		Assertions.assertEquals(129, value.getInt());
+		Assertions.assertEquals(129, value.asPrimitive().getInt());
 	}
 
 	/*
@@ -94,7 +100,7 @@ public class SimpleTests
 	{
 		Script script = testScript("function");
 		Value value = script.runWithDelay();
-		Assertions.assertEquals(1, value.getInt());
+		Assertions.assertEquals(1, value.asPrimitive().getInt());
 	}
 
 	@Test
@@ -110,10 +116,10 @@ public class SimpleTests
 	public void functionParameters()
 	{
 		Script script = testScript("function_parameters");
-		script.getMemory().addVariable("l", new Value(true, PrimitiveTypes.INT, 1));
-		script.getMemory().addVariable("r", new Value(true, PrimitiveTypes.INT, 5));
+		script.getMemory().addVariable("l", PrimitiveValue.newValue(PrimitiveTypes.INT, 1));
+		script.getMemory().addVariable("r", PrimitiveValue.newValue(PrimitiveTypes.INT, 5));
 		Value value = script.runWithDelay();
-		Assertions.assertEquals(6, value.getInt());
+		Assertions.assertEquals(6, value.asPrimitive().getInt());
 	}
 
 	@Test
@@ -147,7 +153,7 @@ public class SimpleTests
 	{
 		Script script = testScript("declare_assign_pass");
 		Value value = script.runWithDelay();
-		Assertions.assertEquals(5, value.getInt());
+		Assertions.assertEquals(5, value.asPrimitive().getInt());
 	}
 
 	/*@Test
@@ -164,7 +170,7 @@ public class SimpleTests
 	{
 		Script script = testScript("nested_functions");
 		Value value = script.runWithDelay();
-		Assertions.assertEquals(15, value.getInt());
+		Assertions.assertEquals(15, value.asPrimitive().getInt());
 	}
 
 	@Test
@@ -173,7 +179,7 @@ public class SimpleTests
 	{
 		Script script = testScript("assign_plus");
 		Value value = script.runWithDelay();
-		Assertions.assertEquals(3, value.getInt());
+		Assertions.assertEquals(3, value.asPrimitive().getInt());
 	}
 
 	@Test
@@ -181,7 +187,7 @@ public class SimpleTests
 	{
 		Script script = testScript("dots");
 		Value value = script.runWithDelay();
-		Assertions.assertEquals('W', value.getChar());
+		Assertions.assertEquals('W', value.asPrimitive().getChar());
 	}
 
 	@Test
@@ -190,7 +196,7 @@ public class SimpleTests
 	{
 		Script script = testScript("instanceof");
 		Value value = script.runWithDelay();
-		Assertions.assertTrue(value.getBoolean());
+		Assertions.assertTrue(value.asPrimitive().getBoolean());
 	}
 
 	@Test
@@ -199,7 +205,7 @@ public class SimpleTests
 	{
 		Script script = testScript("instanceof_not");
 		Value value = script.runWithDelay();
-		Assertions.assertFalse(value.getBoolean());
+		Assertions.assertFalse(value.asPrimitive().getBoolean());
 	}
 
 	@Test
@@ -207,7 +213,7 @@ public class SimpleTests
 	{
 		Script script = testScript("dot_bin");
 		Value value = script.runWithDelay();
-		Assertions.assertEquals(Math.PI * 2f, value.getDouble());
+		Assertions.assertEquals(Math.PI * 2f, value.asPrimitive().getDouble());
 	}
 
 	@Test
@@ -224,7 +230,7 @@ public class SimpleTests
 	{
 		Script script = testScript("value_changed");
 		Value value = script.runWithDelay();
-		Assertions.assertEquals(2, value.getInt());
+		Assertions.assertEquals(2, value.asPrimitive().getInt());
 	}
 
 	@Nested
@@ -239,7 +245,7 @@ public class SimpleTests
 
 			Script script = testScript("attributes/get", workspace);
 			Value value = script.runWithDelay();
-			Assertions.assertEquals(6, value.getInt());
+			Assertions.assertEquals(6, value.asPrimitive().getInt());
 		}
 
 		@Test
@@ -250,7 +256,7 @@ public class SimpleTests
 
 			Script script = testScript("attributes/set", workspace);
 			Value value = script.runWithDelay();
-			Assertions.assertEquals(6, value.getInt());
+			Assertions.assertEquals(6, value.asPrimitive().getInt());
 		}
 
 		@Test
@@ -262,7 +268,7 @@ public class SimpleTests
 
 			Script script = testScript("attributes/set_get", workspace);
 			Value value = script.runWithDelay();
-			Assertions.assertEquals(6, value.getInt());
+			Assertions.assertEquals(6, value.asPrimitive().getInt());
 		}
 	}
 
@@ -276,7 +282,7 @@ public class SimpleTests
 		{
 			Script script = testScript("return/return_if");
 			Value value = script.runWithDelay();
-			Assertions.assertTrue(value.getBoolean());
+			Assertions.assertTrue(value.asPrimitive().getBoolean());
 		}
 
 		@Test
@@ -289,7 +295,7 @@ public class SimpleTests
 
 			script = testScript("return/returnif_false");
 			value = script.runWithDelay();
-			Assertions.assertFalse(value.getBoolean());
+			Assertions.assertFalse(value.asPrimitive().getBoolean());
 		}
 
 		@Test
@@ -297,7 +303,7 @@ public class SimpleTests
 		{
 			Script script = testScript("return/return");
 			Value value = script.runWithDelay();
-			Assertions.assertEquals(1, value.getInt());
+			Assertions.assertEquals(1, value.asPrimitive().getInt());
 		}
 
 		@Test
@@ -305,7 +311,7 @@ public class SimpleTests
 		{
 			Script script = testScript("return/return_this");
 			Value value = script.runWithDelay();
-			Assertions.assertEquals(9, value.getInt());
+			Assertions.assertEquals(9, value.asPrimitive().getInt());
 		}
 	}
 
@@ -318,7 +324,7 @@ public class SimpleTests
 		{
 			Script script = testScript("flow/ternary");
 			Value value = script.runWithDelay();
-			Assertions.assertTrue(value.getBoolean());
+			Assertions.assertTrue(value.asPrimitive().getBoolean());
 		}
 
 		@Nested
@@ -330,7 +336,7 @@ public class SimpleTests
 			{
 				Script script = testScript("flow/if/if_no_body");
 				Value value = script.runWithDelay();
-				Assertions.assertTrue(value.getBoolean());
+				Assertions.assertTrue(value.asPrimitive().getBoolean());
 			}
 
 			@Test
@@ -338,7 +344,7 @@ public class SimpleTests
 			{
 				Script script = testScript("flow/if/if_else_no_body");
 				Value value = script.runWithDelay();
-				Assertions.assertFalse(value.getBoolean());
+				Assertions.assertFalse(value.asPrimitive().getBoolean());
 			}
 
 			@Test
@@ -346,7 +352,7 @@ public class SimpleTests
 			{
 				Script script = testScript("flow/if/if_true_return_one");
 				Value value = script.runWithDelay();
-				Assertions.assertEquals(1, value.getInt());
+				Assertions.assertEquals(1, value.asPrimitive().getInt());
 			}
 
 			@Test
@@ -354,14 +360,14 @@ public class SimpleTests
 			public void decision()
 			{
 				Script script = testScript("flow/if/decision");
-				script.getMemory().addVariable("num", new Value(true, PrimitiveTypes.INT, 0));
+				script.getMemory().addVariable("num", PrimitiveValue.newValue(PrimitiveTypes.INT, 0));
 				Value value = script.runWithDelay();
-				Assertions.assertEquals("ZERO", value.getString());
+				Assertions.assertEquals("ZERO", value.asPrimitive().getString());
 
 				script.getMainExecutor().reset();
-				script.getMemory().addVariable("num", new Value(true, PrimitiveTypes.INT, 1));
+				script.getMemory().addVariable("num", PrimitiveValue.newValue(PrimitiveTypes.INT, 1));
 				value = script.runWithDelay();
-				Assertions.assertEquals("ONE", value.getString());
+				Assertions.assertEquals("ONE", value.asPrimitive().getString());
 			}
 
 			@Test
@@ -371,9 +377,9 @@ public class SimpleTests
 				for (int i = 0; i < 5; i++)
 				{
 					Script script = testScript("flow/if/else_if");
-					script.getMemory().addVariable("num", new Value(true, PrimitiveTypes.INT, i));
+					script.getMemory().addVariable("num", PrimitiveValue.newValue(PrimitiveTypes.INT, i));
 					Value value = script.runWithDelay();
-					Assertions.assertEquals(i > 2 ? -i : i, value.getInt());
+					Assertions.assertEquals(i > 2 ? -i : i, value.asPrimitive().getInt());
 				}
 			}
 		}
@@ -387,11 +393,11 @@ public class SimpleTests
 			public void normalWhile()
 			{
 				Script script = testScript("flow/loop/while/while");
-				script.getMemory().addVariable("input", new Value(true, PrimitiveTypes.INT, 5));
+				script.getMemory().addVariable("input", PrimitiveValue.newValue(PrimitiveTypes.INT, 5));
 
 				final Value[] value = new Value[1];
 				Assertions.assertTimeoutPreemptively(Duration.ofMillis(200), () -> value[0] = script.runWithDelay());
-				Assertions.assertEquals(120, value[0].getInt());
+				Assertions.assertEquals(120, value[0].asPrimitive().getInt());
 			}
 
 			@Test
@@ -402,7 +408,7 @@ public class SimpleTests
 
 				final Value[] value = new Value[1];
 				Assertions.assertTimeoutPreemptively(Duration.ofMillis(200), () -> value[0] = script.runWithDelay());
-				Assertions.assertEquals(4, value[0].getInt());
+				Assertions.assertEquals(4, value[0].asPrimitive().getInt());
 			}
 
 			@Test
@@ -413,7 +419,7 @@ public class SimpleTests
 
 				final Value[] value = new Value[1];
 				Assertions.assertTimeoutPreemptively(Duration.ofMillis(200), () -> value[0] = script.runWithDelay());
-				Assertions.assertEquals(5, value[0].getInt());
+				Assertions.assertEquals(5, value[0].asPrimitive().getInt());
 			}
 		}
 
@@ -429,7 +435,7 @@ public class SimpleTests
 
 				final Value[] value = new Value[1];
 				Assertions.assertTimeoutPreemptively(Duration.ofMillis(200), () -> value[0] = script.runWithDelay());
-				Assertions.assertEquals(24, value[0].getInt());
+				Assertions.assertEquals(24, value[0].asPrimitive().getInt());
 			}
 
 			@Test
@@ -440,7 +446,7 @@ public class SimpleTests
 
 				final Value[] value = new Value[1];
 				Assertions.assertTimeoutPreemptively(Duration.ofMillis(200), () -> value[0] = script.runWithDelay());
-				Assertions.assertEquals(4203632, value[0].getInt());
+				Assertions.assertEquals(4203632, value[0].asPrimitive().getInt());
 			}
 
 			@Test
@@ -451,7 +457,7 @@ public class SimpleTests
 
 				final Value[] value = new Value[1];
 				Assertions.assertTimeoutPreemptively(Duration.ofMillis(200), () -> value[0] = script.runWithDelay());
-				Assertions.assertEquals(945, value[0].getInt());
+				Assertions.assertEquals(945, value[0].asPrimitive().getInt());
 			}
 
 			@Test
@@ -462,7 +468,7 @@ public class SimpleTests
 
 				final Value[] value = new Value[1];
 				Assertions.assertTimeoutPreemptively(Duration.ofMillis(200), () -> value[0] = script.runWithDelay());
-				Assertions.assertEquals(3, value[0].getInt());
+				Assertions.assertEquals(3, value[0].asPrimitive().getInt());
 			}
 
 			@Test
@@ -487,10 +493,10 @@ public class SimpleTests
 			Script script = testScript("class/car");
 			Value value = script.runWithDelay();
 			Assertions.assertEquals("Car", value.type.getKeyword());
-			Assertions.assertEquals(PrimitiveTypes.STRING, ((Value) value.values.get("name")).type);
-			Assertions.assertEquals(PrimitiveTypes.INT, ((Value) value.values.get("wheelCount")).type);
-			Assertions.assertEquals("Subuwu", ((Value) value.values.get("name")).getString());
-			Assertions.assertEquals(4, ((Value) value.values.get("wheelCount")).getInt());
+			Assertions.assertEquals(PrimitiveTypes.STRING, value.getValueByName("name").type);
+			Assertions.assertEquals(PrimitiveTypes.INT, value.getValueByName("wheelCount").type);
+			Assertions.assertEquals("Subuwu", value.getValueByName("name").asPrimitive().getString());
+			Assertions.assertEquals(4, value.getValueByName("wheelCount").asPrimitive().getInt());
 		}
 
 		@Test
@@ -501,24 +507,28 @@ public class SimpleTests
 			Value value = script.runWithDelay();
 			System.out.println(value);
 			Assertions.assertEquals("Car", value.type.getKeyword());
-			Assertions.assertEquals(PrimitiveTypes.STRING, ((Value) value.values.get("name")).type);
-			Assertions.assertEquals(PrimitiveTypes.INT, ((Value) value.values.get("wheelCount")).type);
-			Assertions.assertEquals("Subuwu", ((Value) value.values.get("name")).getString());
-			Assertions.assertEquals(4, ((Value) value.values.get("wheelCount")).getInt());
+			Assertions.assertEquals(PrimitiveTypes.STRING, value.getValueByName("name").type);
+			Assertions.assertEquals(PrimitiveTypes.INT, value.getValueByName("wheelCount").type);
+			Assertions.assertEquals("Subuwu", value.getValueByName("name").asPrimitive().getString());
+			Assertions.assertEquals(4, value.getValueByName("wheelCount").asPrimitive().getInt());
 		}
 
 		@Test
 		@DisplayName(value = "functionVarPassThing")
-		@Disabled(value = "Test can not be automated, please use your eyes\nIf the hashes of the three printed objects are the same = something broke horribly")
 		public void functionVarPassThing()
 		{
 			Script script = testScript("class/idk_how_to_name_this");
 			script.runWithDelay();
 
-			Function render = script.getMemory().getFunction("moveBall", new Type[0]);
-			render.apply(script);
-			render.apply(script);
-			render.apply(script);
+			Function func = script.getMemory().getFunction("moveBall", new Type[0]);
+			Value var0 = func.apply(script).getValue();
+			Value var1 = func.apply(script).getValue();
+			Value var2 = func.apply(script).getValue();
+
+			if (var0.hashCode() == var1.hashCode() && var1.hashCode() == var2.hashCode() && var0.hashCode() == var2.hashCode())
+			{
+				Assertions.fail("Hashes are the same!");
+			}
 		}
 
 		@Test
@@ -527,7 +537,7 @@ public class SimpleTests
 		{
 			Script script = testScript("class/access_type_var_from_func");
 			Value value = script.runWithDelay();
-			Assertions.assertEquals("Car's name is Subuwu", value.getString());
+			Assertions.assertEquals("Car's name is Subuwu", value.asPrimitive().getString());
 		}
 
 		@Test
@@ -536,7 +546,7 @@ public class SimpleTests
 		{
 			Script script = testScript("class/getter");
 			Value value = script.runWithDelay();
-			Assertions.assertEquals("Subuwu", value.getString());
+			Assertions.assertEquals("Subuwu", value.asPrimitive().getString());
 		}
 
 		@Test
@@ -545,7 +555,7 @@ public class SimpleTests
 		{
 			Script script = testScript("class/setter");
 			Value value = script.runWithDelay();
-			Assertions.assertEquals("Subuwu", value.getString());
+			Assertions.assertEquals("Subuwu", value.asPrimitive().getString());
 		}
 
 		@Test
@@ -563,10 +573,10 @@ public class SimpleTests
 			Script script = testScript("class/overload_plus");
 			Value value = script.runWithDelay();
 			Assertions.assertEquals("vec2", value.type.getKeyword());
-			Assertions.assertEquals(PrimitiveTypes.INT, ((Value) value.values.get("x")).type);
-			Assertions.assertEquals(PrimitiveTypes.INT, ((Value) value.values.get("y")).type);
-			Assertions.assertEquals(9, ((Value) value.values.get("x")).getInt());
-			Assertions.assertEquals(8, ((Value) value.values.get("y")).getInt());
+			Assertions.assertEquals(PrimitiveTypes.INT, value.getValueByName("x").type);
+			Assertions.assertEquals(PrimitiveTypes.INT, value.getValueByName("y").type);
+			Assertions.assertEquals(9, value.getValueByName("x").asPrimitive().getInt());
+			Assertions.assertEquals(8, value.getValueByName("y").asPrimitive().getInt());
 		}
 
 		@Test
@@ -576,10 +586,10 @@ public class SimpleTests
 			Script script = testScript("class/overload_plus_assign");
 			Value value = script.runWithDelay();
 			Assertions.assertEquals("vec2", value.type.getKeyword());
-			Assertions.assertEquals(PrimitiveTypes.INT, ((Value) value.values.get("x")).type);
-			Assertions.assertEquals(PrimitiveTypes.INT, ((Value) value.values.get("y")).type);
-			Assertions.assertEquals(9, ((Value) value.values.get("x")).getInt());
-			Assertions.assertEquals(8, ((Value) value.values.get("y")).getInt());
+			Assertions.assertEquals(PrimitiveTypes.INT, value.getValueByName("x").type);
+			Assertions.assertEquals(PrimitiveTypes.INT, value.getValueByName("y").type);
+			Assertions.assertEquals(9, value.getValueByName("x").asPrimitive().getInt());
+			Assertions.assertEquals(8, value.getValueByName("y").asPrimitive().getInt());
 		}
 
 		@Test
@@ -588,7 +598,7 @@ public class SimpleTests
 		{
 			Script script = testScript("class/class_object_init");
 			Value value = script.runWithDelay();
-			Assertions.assertEquals(5, value.getInt());
+			Assertions.assertEquals(5, value.asPrimitive().getInt());
 		}
 
 		@Test
@@ -597,7 +607,7 @@ public class SimpleTests
 		{
 			Script script = testScript("class/class_object_init_use_val");
 			Value value = script.runWithDelay();
-			Assertions.assertEquals(5, value.getInt());
+			Assertions.assertEquals(5, value.asPrimitive().getInt());
 		}
 	}
 }

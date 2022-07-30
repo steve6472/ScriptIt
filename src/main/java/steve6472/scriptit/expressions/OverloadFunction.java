@@ -2,7 +2,7 @@ package steve6472.scriptit.expressions;
 
 import steve6472.scriptit.Result;
 import steve6472.scriptit.Script;
-import steve6472.scriptit.Type;
+import steve6472.scriptit.type.Type;
 import steve6472.scriptit.tokenizer.IOperator;
 
 import java.util.Arrays;

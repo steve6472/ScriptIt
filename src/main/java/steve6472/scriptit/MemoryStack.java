@@ -2,7 +2,7 @@ package steve6472.scriptit;
 
 import steve6472.scriptit.expressions.FunctionParameters;
 import steve6472.scriptit.functions.DelayFunction;
-import steve6472.scriptit.types.PrimitiveTypes;
+import steve6472.scriptit.type.PrimitiveTypes;
 
 /**********************
  * Created by steve6472 (Mirek Jozefek)

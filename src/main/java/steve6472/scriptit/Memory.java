@@ -5,7 +5,9 @@ import steve6472.scriptit.exceptions.ValueNotFoundException;
 import steve6472.scriptit.expressions.Function;
 import steve6472.scriptit.expressions.FunctionParameters;
 import steve6472.scriptit.libraries.Library;
-import steve6472.scriptit.types.PrimitiveTypes;
+import steve6472.scriptit.type.PrimitiveTypes;
+import steve6472.scriptit.type.Type;
+import steve6472.scriptit.value.Value;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -85,8 +87,8 @@ public class Memory
 			{
 				throw new TypeMismatchException(existing.type, value.type);
 			}
-			existing.values.clear();
-			value.values.forEach(existing::setValue);
+			existing.clear();
+			existing.setFrom(value);
 		} else
 		{
 			variables.put(name, value);

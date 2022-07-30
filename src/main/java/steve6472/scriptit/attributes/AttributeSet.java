@@ -2,6 +2,7 @@ package steve6472.scriptit.attributes;
 
 import steve6472.scriptit.*;
 import steve6472.scriptit.expressions.*;
+import steve6472.scriptit.type.Type;
 
 /**
  * Created by steve6472

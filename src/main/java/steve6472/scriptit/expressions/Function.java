@@ -3,10 +3,10 @@ package steve6472.scriptit.expressions;
 import steve6472.scriptit.Highlighter;
 import steve6472.scriptit.Result;
 import steve6472.scriptit.Script;
-import steve6472.scriptit.Value;
 import steve6472.scriptit.executor.Executor;
 import steve6472.scriptit.simple.Comment;
 import steve6472.scriptit.tokenizer.Precedence;
+import steve6472.scriptit.value.Value;
 
 import java.util.Arrays;
 
@@ -102,13 +102,10 @@ public class Function extends Expression
 
 			if (returnThisHelper != null)
 			{
-				returnThisHelper.values.forEach((k, v) ->
+				if (!returnThisHelper.isPrimitive())
 				{
-					if (!returnThisHelper.isPrimitive())
-					{
-						script.getMemory().addVariable(k, (Value) v);
-					}
-				});
+					returnThisHelper.addValuesToMemory(script.getMemory());
+				}
 
 				returnThisHelper.type.functions.forEach((p, f) -> script.getMemory().addFunction(p, f));
 			}

@@ -1,14 +1,16 @@
-package steve6472.scriptit;
+package steve6472.scriptit.type;
 
 import steve6472.scriptit.expressions.Function;
 import steve6472.scriptit.expressions.FunctionParameters;
 import steve6472.scriptit.tokenizer.IOperator;
-import steve6472.scriptit.types.PrimitiveTypes;
+import steve6472.scriptit.value.UniversalValue;
+import steve6472.scriptit.value.Value;
 
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.function.Supplier;
 
 /**********************
  * Created by steve6472 (Mirek Jozefek)
@@ -26,6 +28,8 @@ public class Type
 	public HashMap<FunctionParameters, Function> functions;
 	public HashMap<FunctionParameters, Function> constructors;
 
+	private Supplier<Value> uninitValue;
+
 	public Type(String keyword)
 	{
 		this.keyword = keyword;
@@ -33,6 +37,18 @@ public class Type
 		this.unary = new HashMap<>();
 		this.functions = new HashMap<>();
 		this.constructors = new HashMap<>();
+		uninitValue = () -> UniversalValue.newValue(this);
+	}
+
+	/**
+	 *
+	 * @param keyword keyword
+	 * @param uninitValue gets created when assignment does not supply any value : <code>int a;</code>
+	 */
+	public Type(String keyword, Supplier<Value> uninitValue)
+	{
+		this(keyword);
+		this.uninitValue = uninitValue;
 	}
 
 	public void addBinaryOperator(Type rightOperandType, IOperator operator, Function function)
@@ -59,6 +75,17 @@ public class Type
 	public void addConstructor(FunctionParameters parameters, Function function)
 	{
 		this.constructors.put(parameters, function);
+	}
+
+	public Type setUninitValue(Supplier<Value> uninitValue)
+	{
+		this.uninitValue = uninitValue;
+		return this;
+	}
+
+	public Value uninitValue()
+	{
+		return uninitValue.get();
 	}
 
 	public Function getFunction(String name, Type[] types)

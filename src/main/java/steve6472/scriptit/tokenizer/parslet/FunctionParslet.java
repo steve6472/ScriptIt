@@ -1,10 +1,10 @@
 package steve6472.scriptit.tokenizer.parslet;
 
-import steve6472.scriptit.*;
 import steve6472.scriptit.expressions.DeclareFunction;
 import steve6472.scriptit.expressions.Expression;
 import steve6472.scriptit.expressions.Function;
 import steve6472.scriptit.tokenizer.*;
+import steve6472.scriptit.type.Type;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -1,7 +1,11 @@
 package steve6472.scriptit.expressions;
 
-import steve6472.scriptit.*;
+import steve6472.scriptit.Highlighter;
+import steve6472.scriptit.Result;
+import steve6472.scriptit.Script;
+import steve6472.scriptit.type.Type;
 import steve6472.scriptit.executor.Executor;
+import steve6472.scriptit.value.Value;
 
 import java.util.Arrays;
 

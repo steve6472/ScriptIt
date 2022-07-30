@@ -38,7 +38,7 @@ public class While extends Expression
 			if (conditionExecutor.executeWhatYouCan(script).isDelay())
 				return Result.delay();
 
-			if (conditionExecutor.getLastResult().getValue().getBoolean())
+			if (conditionExecutor.getLastResult().getValue().asPrimitive().getBoolean())
 			{
 				if (bodyExecutor.executeWhatYouCan(script).isDelay())
 					return Result.delay();

@@ -32,7 +32,7 @@ public class TernaryExpression extends Expression
 		if (conditionExecutor.executeWhatYouCan(script).isDelay())
 			return Result.delay();
 
-		if (conditionExecutor.getLastResult().getValue().getBoolean())
+		if (conditionExecutor.getLastResult().getValue().asPrimitive().getBoolean())
 		{
 			if (trueExecutor.executeWhatYouCan(script).isDelay())
 				return Result.delay();

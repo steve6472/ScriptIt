@@ -1,12 +1,12 @@
 package steve6472.scriptit.tokenizer.parslet;
 
-import steve6472.scriptit.*;
 import steve6472.scriptit.expressions.Expression;
 import steve6472.scriptit.expressions.ValueConstant;
 import steve6472.scriptit.tokenizer.PrefixParselet;
 import steve6472.scriptit.tokenizer.TokenParser;
 import steve6472.scriptit.tokenizer.Tokenizer;
-import steve6472.scriptit.types.PrimitiveTypes;
+import steve6472.scriptit.type.PrimitiveTypes;
+import steve6472.scriptit.value.PrimitiveValue;
 
 /**********************
  * Created by steve6472
@@ -19,6 +19,6 @@ public class StringParslet implements PrefixParselet
 	@Override
 	public Expression parse(TokenParser parser, Tokenizer.Token token)
 	{
-		return new ValueConstant(() -> Value.newValue(PrimitiveTypes.STRING, token.sval()));
+		return new ValueConstant(() -> PrimitiveValue.newValue(PrimitiveTypes.STRING, token.sval()));
 	}
 }

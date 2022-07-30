@@ -2,9 +2,9 @@ package steve6472.scriptit.expressions;
 
 import steve6472.scriptit.Result;
 import steve6472.scriptit.Script;
-import steve6472.scriptit.Value;
 import steve6472.scriptit.executor.Executor;
 import steve6472.scriptit.tokenizer.IOperator;
+import steve6472.scriptit.value.Value;
 
 /**********************
  * Created by steve6472 (Mirek Jozefek)

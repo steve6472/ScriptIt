@@ -4,7 +4,7 @@ import steve6472.scriptit.Highlighter;
 import steve6472.scriptit.Result;
 import steve6472.scriptit.Script;
 import steve6472.scriptit.executor.Executor;
-import steve6472.scriptit.types.PrimitiveTypes;
+import steve6472.scriptit.type.PrimitiveTypes;
 
 /**********************
  * Created by steve6472 (Mirek Jozefek)
@@ -42,7 +42,7 @@ public class If extends Expression
 		if (conditionResult.getValue().type != PrimitiveTypes.BOOL)
 			throw new RuntimeException("Incorrect type returned for condition (" + conditionResult.getValue().type + ")");
 
-		if (!conditionResult.getValue().getBoolean())
+		if (!conditionResult.getValue().asPrimitive().getBoolean())
 		{
 			conditionExecutor.reset();
 			return Result.pass();

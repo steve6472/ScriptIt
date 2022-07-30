@@ -26,15 +26,17 @@ class Rectangle
     };
 };
 
-int leftPadY = 10;
+int leftPadY = 0;
 
 function moveBall()
 {
-    leftPadY += 10;
+    // High number so the hashes are visibly different
+    leftPadY += 323456789;
     test v = test(leftPadY);
 
     Rectangle theObject = Rectangle(v.get());
 
-    System.print("HASHES CAN'T BE THE SAME = ");
+    System.print("HASHES MUST NOT BE THE SAME = ");
     System.printDetail(theObject);
+    return theObject;
 };

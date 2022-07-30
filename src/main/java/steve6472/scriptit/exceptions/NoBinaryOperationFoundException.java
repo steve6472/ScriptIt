@@ -1,7 +1,7 @@
 package steve6472.scriptit.exceptions;
 
-import steve6472.scriptit.Type;
-import steve6472.scriptit.Value;
+import steve6472.scriptit.type.Type;
+import steve6472.scriptit.value.Value;
 
 /**********************
  * Created by steve6472

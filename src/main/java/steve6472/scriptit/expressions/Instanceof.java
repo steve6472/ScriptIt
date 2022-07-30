@@ -3,9 +3,9 @@ package steve6472.scriptit.expressions;
 import steve6472.scriptit.Highlighter;
 import steve6472.scriptit.Result;
 import steve6472.scriptit.Script;
-import steve6472.scriptit.Type;
+import steve6472.scriptit.type.Type;
 import steve6472.scriptit.executor.Executor;
-import steve6472.scriptit.types.PrimitiveTypes;
+import steve6472.scriptit.type.PrimitiveTypes;
 
 /**********************
  * Created by steve6472

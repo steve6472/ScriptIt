@@ -2,9 +2,10 @@ package steve6472.scriptit.expressions;
 
 import steve6472.scriptit.Result;
 import steve6472.scriptit.Script;
-import steve6472.scriptit.Type;
-import steve6472.scriptit.Value;
+import steve6472.scriptit.type.Type;
 import steve6472.scriptit.tokenizer.ChainedVariable;
+import steve6472.scriptit.value.UniversalValue;
+import steve6472.scriptit.value.Value;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -62,7 +63,7 @@ public class ClassDeclaration extends Expression
 				if (ass.expression == null)
 				{
 					Type type = script.getMemory().getType(ass.typeName);
-					return new VarDec(ass.varName, Value.newValue(type));
+					return new VarDec(ass.varName, type.uninitValue());
 				} else
 				{
 					Result apply = ass.expression.apply(script);
@@ -82,7 +83,7 @@ public class ClassDeclaration extends Expression
 
 					if (type != null)
 					{
-						return new VarDec(variableName, Value.newValue(type));
+						return new VarDec(variableName, type.uninitValue());
 					}
 				}
 
@@ -121,7 +122,7 @@ public class ClassDeclaration extends Expression
 				{
 					stackTrace(1, "Default Constructor for " + name);
 					stackTrace(1);
-					Value value = Value.newValue(type);
+					UniversalValue value = UniversalValue.newValue(type);
 					script.getMemory().push();
 					for (java.util.function.Function<Script, VarDec> variable : variables)
 					{
@@ -193,7 +194,7 @@ public class ClassDeclaration extends Expression
 			@Override
 			public Result apply(Script script)
 			{
-				Value value = Value.newValue(type);
+				UniversalValue value = UniversalValue.newValue(type);
 				for (java.util.function.Function<Script, VarDec> variable : variables)
 				{
 					VarDec apply = variable.apply(script);

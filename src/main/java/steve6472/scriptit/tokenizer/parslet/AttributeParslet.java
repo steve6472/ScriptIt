@@ -30,10 +30,7 @@ public class AttributeParslet implements PrefixParselet
 		// No attributes
 		if (tokenizer.peekToken().type() == Operator.BRACKET_SQUARE_RIGHT)
 		{
-			if (ScriptItSettings.PARSER_WARNINGS)
-			{
-				Log.scriptWarning("Attribute Field contains no Attributes");
-			}
+			Log.scriptWarning(ScriptItSettings.PARSER_WARNINGS, "Attribute Field contains no Attributes");
 			return new Attributes();
 		}
 

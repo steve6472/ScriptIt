@@ -13,7 +13,6 @@ import steve6472.scriptit.Script;
  ***********************/
 public class DelayFunction extends Function
 {
-
 	public DelayFunction()
 	{
 		super((String) null);
@@ -24,7 +23,7 @@ public class DelayFunction extends Function
 	{
 		if (ScriptItSettings.DELAY_DEBUG)
 			System.out.println("Delay " + arguments[0]);
-		int delay = arguments[0].getInt();
+		int delay = arguments[0].asPrimitive().getInt();
 		script.getMainExecutor().nextAllowedExecute = System.currentTimeMillis() + delay;
 		return Result.delay(delay, true);
 	}

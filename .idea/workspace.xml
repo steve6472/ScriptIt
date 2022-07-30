@@ -5,12 +5,73 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="f9500a56-889a-454a-a933-4a804591d857" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/src/main/java/steve6472/scriptit/type/PrimitiveTypes.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/steve6472/scriptit/value/UniversalValue.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/!tests/class/idk_how_to_name_this.scriptit" beforeDir="false" afterPath="$PROJECT_DIR$/!tests/class/idk_how_to_name_this.scriptit" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/steve6472/scriptit/Log.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/steve6472/scriptit/Log.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/steve6472/scriptit/Main.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/steve6472/scriptit/Memory.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/steve6472/scriptit/Memory.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/steve6472/scriptit/MemoryStack.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/steve6472/scriptit/MemoryStack.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/steve6472/scriptit/Result.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/steve6472/scriptit/Result.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/steve6472/scriptit/Script.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/steve6472/scriptit/Script.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/steve6472/scriptit/ScriptItSettings.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/steve6472/scriptit/ScriptItSettings.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/steve6472/scriptit/Type.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/steve6472/scriptit/type/Type.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/steve6472/scriptit/Value.java" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/steve6472/scriptit/Workspace.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/steve6472/scriptit/Workspace.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/steve6472/scriptit/tokenizer/TokenParser.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/steve6472/scriptit/tokenizer/TokenParser.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/steve6472/scriptit/attributes/AttributeSet.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/steve6472/scriptit/attributes/AttributeSet.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/steve6472/scriptit/exceptions/NoBinaryOperationFoundException.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/steve6472/scriptit/exceptions/NoBinaryOperationFoundException.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/steve6472/scriptit/exceptions/NoOperatorFoundException.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/steve6472/scriptit/exceptions/NoOperatorFoundException.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/steve6472/scriptit/exceptions/ScriptItExceptionHelper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/steve6472/scriptit/exceptions/ScriptItExceptionHelper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/steve6472/scriptit/exceptions/TypeMismatchException.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/steve6472/scriptit/exceptions/TypeMismatchException.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/steve6472/scriptit/executor/ExpressionExecutor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/steve6472/scriptit/executor/ExpressionExecutor.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/steve6472/scriptit/expressions/Assignment.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/steve6472/scriptit/expressions/Assignment.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/steve6472/scriptit/expressions/BinaryOperator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/steve6472/scriptit/expressions/BinaryOperator.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/steve6472/scriptit/expressions/ClassDeclaration.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/steve6472/scriptit/expressions/ClassDeclaration.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/steve6472/scriptit/expressions/Constant.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/steve6472/scriptit/expressions/DeclareFunction.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/steve6472/scriptit/expressions/DeclareFunction.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/steve6472/scriptit/expressions/DotOperator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/steve6472/scriptit/expressions/DotOperator.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/steve6472/scriptit/expressions/ForLoop.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/steve6472/scriptit/expressions/ForLoop.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/steve6472/scriptit/expressions/Function.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/steve6472/scriptit/expressions/Function.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/steve6472/scriptit/expressions/FunctionCall.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/steve6472/scriptit/expressions/FunctionCall.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/steve6472/scriptit/expressions/FunctionParameters.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/steve6472/scriptit/expressions/FunctionParameters.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/steve6472/scriptit/expressions/FunctionSource.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/steve6472/scriptit/expressions/FunctionSource.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/steve6472/scriptit/expressions/If.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/steve6472/scriptit/expressions/If.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/steve6472/scriptit/expressions/IfElse.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/steve6472/scriptit/expressions/IfElse.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/steve6472/scriptit/expressions/Import.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/steve6472/scriptit/expressions/Import.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/steve6472/scriptit/expressions/Instanceof.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/steve6472/scriptit/expressions/Instanceof.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/steve6472/scriptit/expressions/OverloadFunction.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/steve6472/scriptit/expressions/OverloadFunction.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/steve6472/scriptit/expressions/TernaryExpression.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/steve6472/scriptit/expressions/TernaryExpression.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/steve6472/scriptit/expressions/UnaryOperator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/steve6472/scriptit/expressions/UnaryOperator.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/steve6472/scriptit/expressions/ValueConstant.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/steve6472/scriptit/expressions/ValueConstant.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/steve6472/scriptit/expressions/Variable.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/steve6472/scriptit/expressions/Variable.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/steve6472/scriptit/expressions/VariableSource.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/steve6472/scriptit/expressions/VariableSource.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/steve6472/scriptit/expressions/While.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/steve6472/scriptit/expressions/While.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/steve6472/scriptit/functions/DelayFunction.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/steve6472/scriptit/functions/DelayFunction.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/steve6472/scriptit/libraries/GeometryLibrary.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/steve6472/scriptit/libraries/GeometryLibrary.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/steve6472/scriptit/libraries/Library.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/steve6472/scriptit/libraries/Library.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/steve6472/scriptit/libraries/LogLibrary.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/steve6472/scriptit/libraries/LogLibrary.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/steve6472/scriptit/libraries/MathLibrary.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/steve6472/scriptit/libraries/MathLibrary.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/steve6472/scriptit/libraries/RandomLibrary.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/steve6472/scriptit/libraries/RandomLibrary.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/steve6472/scriptit/libraries/SystemLibrary.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/steve6472/scriptit/libraries/SystemLibrary.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/steve6472/scriptit/simple/ReturnIf.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/steve6472/scriptit/simple/ReturnIf.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/steve6472/scriptit/swingTest/SwingTypes.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/steve6472/scriptit/swingTest/SwingTypes.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/steve6472/scriptit/test/EventTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/steve6472/scriptit/test/EventTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/steve6472/scriptit/test/Swing.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/steve6472/scriptit/test/Swing.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/steve6472/scriptit/tokenizer/parslet/AttributeParslet.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/steve6472/scriptit/tokenizer/parslet/AttributeParslet.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/steve6472/scriptit/tokenizer/parslet/ChainedNameParslet.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/steve6472/scriptit/tokenizer/parslet/ChainedNameParslet.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/steve6472/scriptit/tokenizer/parslet/CharParslet.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/steve6472/scriptit/tokenizer/parslet/CharParslet.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/steve6472/scriptit/tokenizer/parslet/ClassParslet.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/steve6472/scriptit/tokenizer/parslet/ClassParslet.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/steve6472/scriptit/tokenizer/parslet/FunctionParslet.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/steve6472/scriptit/tokenizer/parslet/FunctionParslet.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/steve6472/scriptit/tokenizer/parslet/NumberParslet.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/steve6472/scriptit/tokenizer/parslet/NumberParslet.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/steve6472/scriptit/tokenizer/parslet/OverloadParslet.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/steve6472/scriptit/tokenizer/parslet/OverloadParslet.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/steve6472/scriptit/tokenizer/parslet/StringParslet.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/steve6472/scriptit/tokenizer/parslet/StringParslet.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/steve6472/scriptit/types/CustomTypes.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/steve6472/scriptit/type/CustomTypes.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/steve6472/scriptit/types/PrimitiveTypes.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/steve6472/scriptit/types/TypesInit.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/steve6472/scriptit/type/TypesInit.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/test/java/steve6472/scriptit/SimpleTests.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/steve6472/scriptit/SimpleTests.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/steve6472/scriptit/TypeTests.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/steve6472/scriptit/TypeTests.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -21,7 +82,7 @@
     <option name="optimizeImportsOnTheFly" value="true" />
   </component>
   <component name="DarkyenusTimeTracker">
-    <option name="totalTimeSeconds" value="195368" />
+    <option name="totalTimeSeconds" value="215048" />
     <option name="idleThresholdMs" value="60000" />
     <option name="autoCountIdleSeconds" value="10" />
     <option name="gitIntegration" value="true" />
@@ -56,6 +117,9 @@
       </MavenGeneralSettings>
     </option>
   </component>
+  <component name="ProblemsViewState">
+    <option name="selectedTabId" value="CurrentFile" />
+  </component>
   <component name="ProjectId" id="1rt7uOCF43OAPTO3siVJBPmG0Fy" />
   <component name="ProjectLevelVcsManager">
     <ConfirmationsSetting value="1" id="Add" />
@@ -67,10 +131,10 @@
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
     "last_opened_file_path": "D:/ScriptIt/!tests/attributes",
-    "project.structure.last.edited": "Modules",
-    "project.structure.proportion": "0.0",
-    "project.structure.side.proportion": "0.0",
-    "settings.editor.selected.configurable": "fileTemplates"
+    "project.structure.last.edited": "Project",
+    "project.structure.proportion": "0.15",
+    "project.structure.side.proportion": "0.2",
+    "settings.editor.selected.configurable": "reference.projectsettings.compiler.javacompiler"
   }
 }]]></component>
   <component name="RecentsManager">
@@ -109,11 +173,11 @@
       <recent name="steve6472.scriptit.math" />
     </key>
     <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="steve6472.scriptit" />
       <recent name="steve6472.scriptit.attributes" />
       <recent name="steve6472.scriptit.simple" />
       <recent name="steve6472.scriptit.exceptions" />
       <recent name="steve6472.scriptit.tokenizer.parslet" />
-      <recent name="steve6472.scriptit.expressions" />
     </key>
   </component>
   <component name="RunAnythingCache">
@@ -131,21 +195,21 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="SimpleTests$Attributes_.set" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <module name="ScriptIt" />
-      <option name="PACKAGE_NAME" value="steve6472.scriptit.SimpleTests" />
-      <option name="MAIN_CLASS_NAME" value="steve6472.scriptit.SimpleTests$Attributes_" />
-      <option name="METHOD_NAME" value="set" />
-      <option name="TEST_OBJECT" value="method" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
     <configuration name="SimpleTests$Attributes_.setGet" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="ScriptIt" />
       <option name="PACKAGE_NAME" value="steve6472.scriptit.SimpleTests" />
       <option name="MAIN_CLASS_NAME" value="steve6472.scriptit.SimpleTests$Attributes_" />
       <option name="METHOD_NAME" value="setGet" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="SimpleTests$Class_.functionVarPassThing" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="ScriptIt" />
+      <option name="PACKAGE_NAME" value="steve6472.scriptit.SimpleTests" />
+      <option name="MAIN_CLASS_NAME" value="steve6472.scriptit.SimpleTests$Class_" />
+      <option name="METHOD_NAME" value="functionVarPassThing" />
       <option name="TEST_OBJECT" value="method" />
       <method v="2">
         <option name="Make" enabled="true" />
@@ -184,11 +248,11 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="SimpleTests.attributes" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+    <configuration name="SimpleTests.functionCallsTypeMismatch" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="ScriptIt" />
       <option name="PACKAGE_NAME" value="steve6472.scriptit" />
       <option name="MAIN_CLASS_NAME" value="steve6472.scriptit.SimpleTests" />
-      <option name="METHOD_NAME" value="attributes" />
+      <option name="METHOD_NAME" value="functionCallsTypeMismatch" />
       <option name="TEST_OBJECT" value="method" />
       <method v="2">
         <option name="Make" enabled="true" />
@@ -197,32 +261,53 @@
     <list>
       <item itemvalue="JUnit.SimpleTests-Debug" />
       <item itemvalue="JUnit.SimpleTests" />
+      <item itemvalue="JUnit.SimpleTests$Class_.functionVarPassThing" />
+      <item itemvalue="JUnit.SimpleTests.functionCallsTypeMismatch" />
       <item itemvalue="JUnit.SimpleTests$Attributes_" />
-      <item itemvalue="JUnit.SimpleTests$Attributes_.set" />
       <item itemvalue="JUnit.SimpleTests$Attributes_.setGet" />
-      <item itemvalue="JUnit.SimpleTests.attributes" />
       <item itemvalue="JUnit.SimpleTests.assignValue" />
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="JUnit.SimpleTests.assignValue" />
+        <item itemvalue="JUnit.SimpleTests.functionCallsTypeMismatch" />
+        <item itemvalue="JUnit.SimpleTests$Class_.functionVarPassThing" />
         <item itemvalue="JUnit.SimpleTests$Attributes_" />
         <item itemvalue="JUnit.SimpleTests$Attributes_.setGet" />
-        <item itemvalue="JUnit.SimpleTests$Attributes_.set" />
-        <item itemvalue="JUnit.SimpleTests.attributes" />
-        <item itemvalue="JUnit.SimpleTests.assignValue" />
       </list>
     </recent_temporary>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
-      <changelist id="0b0c4c8e-0a53-4f51-ba23-acec8d11992d" name="Default Changelist" comment="" />
+      <changelist id="f9500a56-889a-454a-a933-4a804591d857" name="Changes" comment="" />
       <created>1619783755722</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1619783755722</updated>
     </task>
     <servers />
+  </component>
+  <component name="Vcs.Log.History.Properties">
+    <option name="COLUMN_ID_ORDER">
+      <list>
+        <option value="Default.Root" />
+        <option value="Default.Author" />
+        <option value="Default.Date" />
+        <option value="Default.Subject" />
+      </list>
+    </option>
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

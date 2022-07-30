@@ -5,7 +5,8 @@ import steve6472.scriptit.libraries.Library;
 import steve6472.scriptit.libraries.MathLibrary;
 import steve6472.scriptit.libraries.RandomLibrary;
 import steve6472.scriptit.libraries.SystemLibrary;
-import steve6472.scriptit.types.PrimitiveTypes;
+import steve6472.scriptit.type.PrimitiveTypes;
+import steve6472.scriptit.type.Type;
 
 import java.util.HashMap;
 import java.util.Map;

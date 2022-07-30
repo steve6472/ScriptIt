@@ -1,10 +1,14 @@
 package steve6472.scriptit.expressions;
 
-import steve6472.scriptit.*;
+import steve6472.scriptit.Highlighter;
+import steve6472.scriptit.Result;
+import steve6472.scriptit.Script;
+import steve6472.scriptit.type.Type;
 import steve6472.scriptit.executor.Executor;
 import steve6472.scriptit.tokenizer.IOperator;
 import steve6472.scriptit.tokenizer.Operator;
-import steve6472.scriptit.types.PrimitiveTypes;
+import steve6472.scriptit.type.PrimitiveTypes;
+import steve6472.scriptit.value.Value;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -114,8 +118,8 @@ public class Assignment extends Expression
 
 			Result apply = dotOperator.apply(script);
 			Value dotValue = apply.getValue();
-			dotValue.values.clear();
-			value.values.forEach(dotValue.values::put);
+			dotValue.clear();
+			dotValue.setFrom(value);
 
 			expressionExecutor.reset();
 
@@ -133,7 +137,7 @@ public class Assignment extends Expression
 
 		if (expression == null)
 		{
-			Value value = Value.newValue(type);
+			Value value = type.uninitValue();
 			script.memory.addVariable(varName, value);
 			return Result.pass();
 		}

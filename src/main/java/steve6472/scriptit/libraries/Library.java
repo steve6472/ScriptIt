@@ -3,7 +3,9 @@ package steve6472.scriptit.libraries;
 import steve6472.scriptit.*;
 import steve6472.scriptit.expressions.Function;
 import steve6472.scriptit.expressions.FunctionParameters;
-import steve6472.scriptit.types.PrimitiveTypes;
+import steve6472.scriptit.type.PrimitiveTypes;
+import steve6472.scriptit.type.Type;
+import steve6472.scriptit.value.Value;
 
 import java.util.Arrays;
 import java.util.HashMap;

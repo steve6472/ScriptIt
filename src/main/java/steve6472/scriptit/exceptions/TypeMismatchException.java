@@ -1,6 +1,6 @@
 package steve6472.scriptit.exceptions;
 
-import steve6472.scriptit.Type;
+import steve6472.scriptit.type.Type;
 
 /**********************
  * Created by steve6472 (Mirek Jozefek)
@@ -13,5 +13,10 @@ public class TypeMismatchException extends RuntimeException
 	public TypeMismatchException(Type expectedType, Type actualType)
 	{
 		super("Expected: " + expectedType + ", got: " + actualType);
+	}
+
+	public TypeMismatchException(String message, Type expectedType, Type actualType)
+	{
+		super(message.formatted(expectedType, actualType));
 	}
 }

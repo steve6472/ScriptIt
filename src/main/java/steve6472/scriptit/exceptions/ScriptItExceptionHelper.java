@@ -16,10 +16,31 @@ public class ScriptItExceptionHelper
 	{
 		StringBuilder builder = new StringBuilder();
 
-		builder.append(ex.getClass().getSimpleName()).append("\n");
-		builder.append(ex.getMessage()).append("\n").append("\n");
+		if (ex != null)
+		{
+			builder.append(ex.getClass().getSimpleName()).append("\n");
+			builder.append(ex.getMessage()).append("\n").append("\n");
+		}
+
 
 		Collections.reverse(Script.STACK_TRACE);
+
+		for (String s : Script.STACK_TRACE)
+		{
+			builder.append(s).append("\n");
+		}
+
+		return builder.toString();
+	}
+
+	public static String getStackTrace(Script script, boolean reverse)
+	{
+		StringBuilder builder = new StringBuilder();
+
+		if (reverse)
+		{
+			Collections.reverse(Script.STACK_TRACE);
+		}
 
 		for (String s : Script.STACK_TRACE)
 		{

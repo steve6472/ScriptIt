@@ -69,9 +69,9 @@ public class Log
 			System.out.println(RED + text + WHITE);
 	}
 
-	public static void scriptWarning(String text)
+	public static void scriptWarning(boolean warningType, String text)
 	{
-		if (ScriptItSettings.PARSER_WARNINGS)
+		if (warningType)
 			System.out.println(WHITE + "[" + BRIGHT_YELLOW + "WARNING" + WHITE + "] " + YELLOW + text);
 	}
 

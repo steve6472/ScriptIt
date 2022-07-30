@@ -1,7 +1,7 @@
 package steve6472.scriptit.expressions;
 
-import steve6472.scriptit.Value;
 import steve6472.scriptit.libraries.Library;
+import steve6472.scriptit.value.Value;
 
 /**********************
  * Created by steve6472 (Mirek Jozefek)

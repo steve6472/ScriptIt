@@ -72,7 +72,7 @@ public class ForLoop extends Expression
 			if (conditionExecutor.executeWhatYouCan(script).isDelay()) // [2]
 				return Result.delay();
 
-			if (conditionExecutor.getLastResult().getValue().getBoolean()) // [3]
+			if (conditionExecutor.getLastResult().getValue().asPrimitive().getBoolean()) // [3]
 			{
 				if (bodyExecutor.executeWhatYouCan(script).isDelay()) // [4]
 					return Result.delay();

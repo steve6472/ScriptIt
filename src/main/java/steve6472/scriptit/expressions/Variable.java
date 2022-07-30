@@ -23,7 +23,7 @@ public class Variable extends Expression
 		if (source.sourceType == VariableSourceType.MEMORY)
 			return Result.value(script.memory.getVariable(source.variableName));
 		else
-			return Result.value(source.value.getValue(source.variableName));
+			return Result.value(source.value.getValueByName(source.variableName));
 	}
 
 	@Override

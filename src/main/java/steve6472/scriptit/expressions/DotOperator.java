@@ -3,9 +3,9 @@ package steve6472.scriptit.expressions;
 import steve6472.scriptit.Highlighter;
 import steve6472.scriptit.Result;
 import steve6472.scriptit.Script;
-import steve6472.scriptit.Value;
 import steve6472.scriptit.executor.Executor;
 import steve6472.scriptit.libraries.Library;
+import steve6472.scriptit.value.Value;
 
 /**********************
  * Created by steve6472 (Mirek Jozefek)
@@ -82,7 +82,7 @@ public class DotOperator extends Expression
 			{
 				Result apply = left.apply(script);
 				Value value = apply.getValue();
-				Object o = value.values.get(((Variable) right).source.variableName);
+				Object o = value.getValueByName(((Variable) right).source.variableName);
 				if (o instanceof Value val)
 				{
 					return Result.value(val);

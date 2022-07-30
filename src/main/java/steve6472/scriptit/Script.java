@@ -8,6 +8,7 @@ import steve6472.scriptit.simple.Comment;
 import steve6472.scriptit.tokenizer.Operator;
 import steve6472.scriptit.tokenizer.Precedence;
 import steve6472.scriptit.tokenizer.TokenParser;
+import steve6472.scriptit.value.Value;
 
 import java.io.BufferedReader;
 import java.io.File;
