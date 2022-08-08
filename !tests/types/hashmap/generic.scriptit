@@ -1,0 +1,16 @@
+import type HashMap;
+import type int;
+
+import library System;
+
+HashMap map = HashMap();
+map.put("world", 42);
+map.put("stone", 1);
+
+// Normal getter
+int world = map.get("world");
+
+// Fancy getter
+int stone = map["stone"];
+
+return world - stone;

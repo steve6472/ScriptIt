@@ -19,6 +19,13 @@ public class PrimitiveType<A extends Value> extends Type
 	public PrimitiveType(String keyword)
 	{
 		super(keyword);
+		setUninitValue(() -> PrimitiveValue.newEmptyValue(this));
+	}
+
+	public PrimitiveType(String keyword, Supplier<Value> uninitValue)
+	{
+		super(keyword);
+		setUninitValue(uninitValue);
 	}
 
 	public <T extends Value> void addBinaryOperator(PrimitiveType<T> rightOperandType, IOperator operator, TypesInit.PBinaryOperatorOverload<A, T> function)
@@ -47,17 +54,5 @@ public class PrimitiveType<A extends Value> extends Type
 	public interface UnaryOperator<Right extends Value>
 	{
 		Value apply(Right right);
-	}
-
-	@Override
-	public Type setUninitValue(Supplier<Value> uninitValue)
-	{
-		throw new RuntimeException("PrimitiveType automatically creates its value");
-	}
-
-	@Override
-	public Value uninitValue()
-	{
-		return PrimitiveValue.newEmptyValue(this);
 	}
 }

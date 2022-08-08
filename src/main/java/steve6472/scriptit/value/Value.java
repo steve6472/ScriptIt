@@ -1,8 +1,9 @@
 package steve6472.scriptit.value;
 
 import steve6472.scriptit.Memory;
-import steve6472.scriptit.type.Type;
+import steve6472.scriptit.type.PrimitiveType;
 import steve6472.scriptit.type.PrimitiveTypes;
+import steve6472.scriptit.type.Type;
 
 import java.util.Objects;
 
@@ -47,6 +48,18 @@ public abstract class Value
 	public UniversalValue asUniversal()
 	{
 		return (UniversalValue) this;
+	}
+
+	@SuppressWarnings("unchecked")
+	public <T extends Value> T as(PrimitiveType<T> t)
+	{
+		return (T) this;
+	}
+
+	@SuppressWarnings("unchecked")
+	public <T extends Value> T as(Class<T> t)
+	{
+		return (T) this;
 	}
 
 	/*
@@ -101,6 +114,30 @@ public abstract class Value
 		protected NullValue()
 		{
 			super(PrimitiveTypes.NULL);
+		}
+
+		@Override
+		public <T> PrimitiveValue<T> asPrimitive()
+		{
+			throw new RuntimeException("Unsopported Operation (null)");
+		}
+
+		@Override
+		public UniversalValue asUniversal()
+		{
+			throw new RuntimeException("Unsopported Operation (null)");
+		}
+
+		@Override
+		public <T extends Value> T as(Class<T> t)
+		{
+			throw new RuntimeException("Unsopported Operation (null)");
+		}
+
+		@Override
+		public <T extends Value> T as(PrimitiveType<T> t)
+		{
+			throw new RuntimeException("Unsopported Operation (null)");
 		}
 
 		@Override
