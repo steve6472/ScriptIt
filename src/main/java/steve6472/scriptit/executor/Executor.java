@@ -47,6 +47,11 @@ public class Executor
 				return ExecutorResult.PASS;
 			}
 
+			if (res.doesReturn())
+			{
+				return ExecutorResult.PASS;
+			}
+
 			if (res.isDelay())
 			{
 				if (Result.isDelaySkip(res))

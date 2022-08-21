@@ -1,14 +1,13 @@
 import library System;
 
-§n = PASSED_FROM_CODE;
-
+// This dies probably 'cause variables are "the same" when stack is pushed
 function fibonacci(int num)
 {
     if (num == 0) { return 0; };
     if (num == 1) { return 1; };
     num = num - 1;
-    a = fibonacci(num);
-    return a;
+
+    return fibonacci(num);
 };
 
 return fibonacci(3);

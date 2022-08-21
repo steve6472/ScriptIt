@@ -12,6 +12,7 @@ public class ScriptItSettings
 	public static boolean DELAY_DEBUG = false;
 	public static boolean TOKENIZER_DEBUG = false;
 	public static boolean STACK_TRACE = false;
+	public static int MAX_STACK_TRACE_SIZE = 1024;
 	public static boolean PARSER_WARNINGS = false;
 	public static boolean PRIMITIVE_TYPES_MISMATCH_WARNING = true;
 }

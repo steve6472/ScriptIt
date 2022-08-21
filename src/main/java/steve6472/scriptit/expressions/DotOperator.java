@@ -78,7 +78,7 @@ public class DotOperator extends Expression
 
 				return onlyRight(script);
 			}
-			case VAR_VAR ->
+			case VAR_VAR, DOT_VAR ->
 			{
 				Result apply = left.apply(script);
 				Value value = apply.getValue();
@@ -156,6 +156,11 @@ public class DotOperator extends Expression
 			return DotType.VAR_VAR;
 		}
 
+		if (left instanceof DotOperator && right instanceof Variable)
+		{
+			return DotType.DOT_VAR;
+		}
+
 		throw new RuntimeException("DotType not found for " + left.getClass().getSimpleName() + " - " + right
 			.getClass()
 			.getSimpleName());
@@ -175,6 +180,6 @@ public class DotOperator extends Expression
 
 	private enum DotType
 	{
-		LIB_FUNC, VAR_FUNC, DOT_FUNC, CONST_FUNC, VAR_VAR
+		LIB_FUNC, VAR_FUNC, DOT_FUNC, CONST_FUNC, VAR_VAR, DOT_VAR
 	}
 }

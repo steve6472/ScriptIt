@@ -121,7 +121,7 @@ public class TypesInit
 		@Override
 		public Result apply(Script script)
 		{
-			return Result.returnValue(func.apply(returnThisHelper, arguments));
+			return Result.value(func.apply(returnThisHelper, arguments));
 		}
 	}
 

@@ -3,6 +3,7 @@ package steve6472.scriptit;
 import org.junit.jupiter.api.*;
 import steve6472.scriptit.attributes.AttributeGet;
 import steve6472.scriptit.attributes.AttributeSet;
+import steve6472.scriptit.exceptions.ScriptItExceptionHelper;
 import steve6472.scriptit.exceptions.ValueNotFoundException;
 import steve6472.scriptit.expressions.Function;
 import steve6472.scriptit.libraries.LogLibrary;
@@ -30,6 +31,8 @@ public class SimpleTests
 
 		ScriptItSettings.DELAY_DEBUG = debug;
 		ScriptItSettings.PARSER_DEBUG = debug;
+
+		ScriptItSettings.STACK_TRACE = true;
 	}
 
 	private Script testScript(String name)
@@ -156,13 +159,14 @@ public class SimpleTests
 		Assertions.assertEquals(5, value.asPrimitive().getInt());
 	}
 
-	/*@Test
+	@Test
 	@DisplayName(value = "Recursion (recursion)")
 	public void recursion()
 	{
 		Script script = testScript("recursion");
-		Assertions.assertTimeoutPreemptively(Duration.ofMillis(200), script::runWithDelay);
-	}*/
+		Value value = Assertions.assertTimeoutPreemptively(Duration.ofMillis(200), script::runWithDelay);
+		Assertions.assertEquals(8, value.asPrimitive().getInt());
+	}
 
 	@Test
 	@DisplayName(value = "Nested function (nested function)")
@@ -212,8 +216,15 @@ public class SimpleTests
 	public void dotBinary()
 	{
 		Script script = testScript("dot_bin");
-		Value value = script.runWithDelay();
-		Assertions.assertEquals(Math.PI * 2f, value.asPrimitive().getDouble());
+		try
+		{
+			Value value = script.runWithDelay();
+			Assertions.assertEquals(Math.PI * 2f, value.asPrimitive().getDouble());
+		} catch (Exception ex)
+		{
+			System.out.println(ScriptItExceptionHelper.getStackTrace(script, false));
+			ex.printStackTrace();
+		}
 	}
 
 	@Test
@@ -231,6 +242,20 @@ public class SimpleTests
 		Script script = testScript("value_changed");
 		Value value = script.runWithDelay();
 		Assertions.assertEquals(2, value.asPrimitive().getInt());
+	}
+
+	@Nested
+	@DisplayName("functions")
+	class Functions
+	{
+		@Test
+		@DisplayName(value = "Early exit function (if)")
+		public void exitFunctionIf()
+		{
+			Script script = testScript("functions/exit_function_if");
+			Value value = script.runWithDelay();
+			Assertions.assertEquals(0, value.asPrimitive().getInt());
+		}
 	}
 
 	@Nested

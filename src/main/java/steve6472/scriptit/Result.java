@@ -150,6 +150,15 @@ public class Result
 			};
 	}
 
+	public boolean doesReturn()
+	{
+		return switch (getStatus())
+			{
+				case RETURN, RETURN_VALUE, RETURN_THIS -> true;
+				default -> false;
+			};
+	}
+
 	@Override
 	public String toString()
 	{

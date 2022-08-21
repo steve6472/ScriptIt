@@ -91,7 +91,8 @@ public class Tokenizer
 	{
 		currentToken++;
 		if (ScriptItSettings.TOKENIZER_DEBUG)
-			TokenParser.print(Log.WHITE + currentToken + Log.RESET + " Next token: " + getCurrentToken());
+			TokenParser.print(Log.WHITE + currentToken + Log.RESET + " Next token: " + getCurrentToken()
+				+ (getCurrentToken() != null ? (" '" + Log.WHITE + getCurrentToken().type.getSymbol() + Log.RESET + "'") : ""));
 		return getCurrentToken();
 	}
 
@@ -132,7 +133,7 @@ public class Tokenizer
 	public boolean matchToken(IOperator expectedtype, boolean consume)
 	{
 		if (ScriptItSettings.TOKENIZER_DEBUG)
-			TokenParser.print("Matching " + expectedtype);
+			TokenParser.print("Matching " + expectedtype + (expectedtype != null ? (" '" + Log.WHITE + expectedtype.getSymbol() + Log.RESET + "'") : ""));
 		Token token = peekToken();
 		if (token == null || token.type != expectedtype)
 		{

@@ -14,10 +14,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 import java.util.function.BiFunction;
 import java.util.function.Supplier;
 
@@ -47,7 +44,7 @@ public class Script
 	private int currentIndex = 0;
 	boolean exitOnError = false;
 
-	public static final List<String> STACK_TRACE = new ArrayList<>();
+	public static final LinkedList<String> STACK_TRACE = new LinkedList<>();
 
 	private List<QueuedFunctionCall<ExpressionExecutor, Boolean>> queuedFunctionCalls;
 	QueuedFunctionCall<ExpressionExecutor, Boolean> currentFunction = null;

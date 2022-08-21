@@ -32,12 +32,18 @@ public class MemoryStack extends Memory
 
 	public MemoryStack push()
 	{
+		if (curr + 1 >= memories.length)
+			throw new RuntimeException("Tried to push memory over the set maximum depth of " + memories.length);
+
 		memories[curr++].set(this);
 		return this;
 	}
 
 	public MemoryStack pop()
 	{
+		if (curr - 1 < 0)
+			throw new RuntimeException("Tried to push memory under the depth of 0");
+
 		set(memories[--curr]);
 		return this;
 	}

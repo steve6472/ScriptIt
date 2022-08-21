@@ -55,8 +55,8 @@ public class Function extends Expression
 	}
 
 	/**
-	 * @param body false: will transform 'return 1' to just '1' 'cause functions return values
-	 *             true: will retain the functionality of 'return 1'
+	 * @param body false: will transform 'return 1' to just '1' 'cause functions return values <br>
+	 *             true: will retain the functionality of 'return 1' <br>
 	 *             default: false
 	 */
 	public void setBody(boolean body)
@@ -67,7 +67,7 @@ public class Function extends Expression
 	/**
 	 * The dot signalizes that the type is VALUE and sets the typeFunction
 	 * "string".getThatString()
-	 *
+	 * <p>
 	 * function getThatString()
 	 * {
 	 *     return this; <--- HERE
@@ -127,6 +127,7 @@ public class Function extends Expression
 		Result lastResult = bodyExecutor.getLastResult();
 		bodyExecutor.reset();
 //		System.out.println("Code: '" + showCode(0) + "'");
+		stackTrace(-1);
 
 		Result result;
 

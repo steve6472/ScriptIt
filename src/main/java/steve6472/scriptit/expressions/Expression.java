@@ -37,7 +37,10 @@ public abstract class Expression
 			return;
 		}
 
-		Script.STACK_TRACE.add(depthOperator.repeat(Math.max(0, stackTraceDepth)) + text);
+		if (Script.STACK_TRACE.size() >= ScriptItSettings.MAX_STACK_TRACE_SIZE)
+			Script.STACK_TRACE.removeFirst();
+
+		Script.STACK_TRACE.addLast(depthOperator.repeat(Math.max(0, stackTraceDepth)) + text);
 	}
 
 	protected void stackTrace(String text)
@@ -49,7 +52,10 @@ public abstract class Expression
 			return;
 		}
 
-		Script.STACK_TRACE.add(depthOperator.repeat(Math.max(0, stackTraceDepth)) + text);
+		if (Script.STACK_TRACE.size() >= ScriptItSettings.MAX_STACK_TRACE_SIZE)
+			Script.STACK_TRACE.removeFirst();
+
+		Script.STACK_TRACE.addLast(depthOperator.repeat(Math.max(0, stackTraceDepth)) + text);
 	}
 
 	protected String depth(int a)
