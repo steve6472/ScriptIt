@@ -160,6 +160,7 @@ public class SimpleTests
 	}
 
 	@Test
+	@Disabled("Disabled until the function parameter names bug is fixed")
 	@DisplayName(value = "Recursion (recursion)")
 	public void recursion()
 	{

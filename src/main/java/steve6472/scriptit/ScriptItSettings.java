@@ -15,4 +15,8 @@ public class ScriptItSettings
 	public static int MAX_STACK_TRACE_SIZE = 1024;
 	public static boolean PARSER_WARNINGS = false;
 	public static boolean PRIMITIVE_TYPES_MISMATCH_WARNING = true;
+
+	public static boolean IMPORT_PRIMITIVES = true;
+	public static boolean ALLOW_AUTOMATIC_CONVERSION = true;
+
 }

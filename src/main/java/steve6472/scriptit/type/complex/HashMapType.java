@@ -6,15 +6,13 @@ import steve6472.scriptit.expressions.Function;
 import steve6472.scriptit.expressions.FunctionParameters;
 import steve6472.scriptit.tokenizer.Operator;
 import steve6472.scriptit.type.PrimitiveType;
-import steve6472.scriptit.type.PrimitiveTypes;
 import steve6472.scriptit.type.TypesInit;
 import steve6472.scriptit.value.SingleValue;
 import steve6472.scriptit.value.Value;
 
 import java.util.HashMap;
 
-import static steve6472.scriptit.type.PrimitiveTypes.INT;
-import static steve6472.scriptit.type.PrimitiveTypes.STRING;
+import static steve6472.scriptit.type.PrimitiveTypes.*;
 
 /**
  * Created by steve6472
@@ -38,9 +36,9 @@ public class HashMapType extends TypesInit
 		});
 
 		// TODO: add wildcard
-		addProcedure(HASH_MAP, "put", (itself, k, v) -> itself.as(HASH_MAP).get().put(k, v), STRING, INT);
-		addFunction(HASH_MAP, "get", (itself, k) -> itself.as(HASH_MAP).get().get(k), STRING);
+		addProcedure(HASH_MAP, "put", (itself, k, v) -> itself.as(HASH_MAP).get().put(k, v), ANY_TYPE, ANY_TYPE);
+		addFunction(HASH_MAP, "get", (itself, k) -> itself.as(HASH_MAP).get().get(k), ANY_TYPE);
 
-		HASH_MAP.addBinaryOperator(STRING, Operator.INDEX, new PBinaryOperatorOverload<>((itself, right) -> itself.get().get(right)));
+		HASH_MAP.addBinaryOperator(ANY_TYPE, Operator.INDEX, new PBinaryOperatorOverload<>((itself, right) -> itself.get().get(right)));
 	}
 }

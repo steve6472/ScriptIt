@@ -9,9 +9,7 @@ import steve6472.scriptit.type.PrimitiveTypes;
 import steve6472.scriptit.type.Type;
 import steve6472.scriptit.value.Value;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 /**********************
  * Created by steve6472 (Mirek Jozefek)
@@ -120,31 +118,78 @@ public class Memory
 
 	public Function getFunction(String name, Type[] types)
 	{
-		Function func = null;
+		record Funcs(int fitness, Function function) {}
+
+		List<Funcs> foundFunctions = new ArrayList<>();
+		Function exactMatch = null;
+
 		main: for (Map.Entry<FunctionParameters, Function> e : functions.entrySet())
 		{
-			FunctionParameters parameters = e.getKey();
+			FunctionParameters functionParams = e.getKey();
 			Function function = e.getValue();
 
-			if (!parameters.getName().equals(name))
+			// Continue searching if function name does not match
+			if (!functionParams.getName().equals(name))
 				continue;
-			if (parameters.getTypes().length != types.length)
+
+			// Continue searching if argument length is incorrect
+			// TODO: Make FunctionParameters hold a bool about if function accepts infinite amount of parameters and test it
+			if (functionParams.getTypes().length != types.length)
 				continue;
+
+			boolean foundExactMatch = true;
+			int fitness = 0;
+
+			// Try to match parameter types
 			for (int i = 0; i < types.length; i++)
 			{
-				if (parameters.getTypes()[i] != PrimitiveTypes.NULL && parameters.getTypes()[i] != types[i])
+				// Accepts any type, try to match other types
+				if (functionParams.getTypes()[i] == PrimitiveTypes.ANY_TYPE)
+				{
+					fitness += 1;
+					foundExactMatch = false;
+					continue;
+				}
+
+				// Automatic type conversion int -> double
+				if (ScriptItSettings.ALLOW_AUTOMATIC_CONVERSION)
+				{
+					if (functionParams.getTypes()[i] == PrimitiveTypes.DOUBLE && types[i] == PrimitiveTypes.INT)
+					{
+						fitness += 2;
+						foundExactMatch = false;
+						continue;
+					}
+				}
+
+				if (functionParams.getTypes()[i] != types[i])
 				{
 					continue main;
 				}
+
+				fitness += 3;
 			}
-			func = function;
-			break;
+
+			if (foundExactMatch)
+			{
+				exactMatch = function;
+				break;
+			} else
+			{
+				foundFunctions.add(new Funcs(fitness, function));
+			}
 		}
 
-		if (func == null)
+		if (exactMatch != null)
+			return exactMatch;
+
+		if (foundFunctions.isEmpty())
 			throw new RuntimeException("Function '" + name + "' with argument types " + Arrays.toString(types) + " not found!");
 
-		return func;
+		return foundFunctions
+			.stream()
+			.min(Comparator.comparingInt(a -> a.fitness))
+			.orElseThrow(() -> new RuntimeException("Function '" + name + "' with argument types " + Arrays.toString(types) + " not found!")).function;
 	}
 
 	public boolean hasFunction(String name, Type[] types)

@@ -7,6 +7,7 @@ import steve6472.scriptit.exceptions.NoOperatorFoundException;
 import steve6472.scriptit.executor.Executor;
 import steve6472.scriptit.tokenizer.IOperator;
 import steve6472.scriptit.tokenizer.Operator;
+import steve6472.scriptit.type.PrimitiveTypes;
 import steve6472.scriptit.value.Value;
 
 import java.util.HashMap;
@@ -58,6 +59,11 @@ public class BinaryOperator extends Expression
 		if (operatorFunction == null)
 		{
 			HashMap<IOperator, Function> operatorFunctionHashMap = left.getValue().type.binary.get(right.getValue().type);
+
+			// try to find any type
+			if (operatorFunctionHashMap == null)
+				operatorFunctionHashMap = left.getValue().type.binary.get(PrimitiveTypes.ANY_TYPE);
+
 			if (operatorFunctionHashMap == null)
 			{
 				throw new NoBinaryOperationFoundException(left.getValue(), right.getValue());

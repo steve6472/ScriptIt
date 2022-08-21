@@ -118,16 +118,6 @@ public class SystemLibrary extends Library
 		addFunction("timeMs", () -> PrimitiveValue.newValue(PrimitiveTypes.INT, (int) System.currentTimeMillis()));
 		addFunction("timeNs", () -> PrimitiveValue.newValue(PrimitiveTypes.INT, (int) System.nanoTime()));
 
-		addFunction(FunctionParameters.create("acceptEvents"), new Function()
-		{
-			@Override
-			public Result apply(Script script)
-			{
-				script.runQueuedFunctions();
-				return Result.pass();
-			}
-		});
-
 		addFunction(FunctionParameters.create("waitForEvents"), new Function()
 		{
 			@Override

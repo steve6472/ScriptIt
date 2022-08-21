@@ -8,6 +8,8 @@ import steve6472.scriptit.simple.Comment;
 import steve6472.scriptit.tokenizer.Operator;
 import steve6472.scriptit.tokenizer.Precedence;
 import steve6472.scriptit.tokenizer.TokenParser;
+import steve6472.scriptit.type.PrimitiveTypes;
+import steve6472.scriptit.type.Type;
 import steve6472.scriptit.value.Value;
 
 import java.io.BufferedReader;
@@ -40,15 +42,11 @@ public class Script
 	public TokenParser parser;
 	public MemoryStack memory;
 	MainExecutor mainExecutor;
-	private int lastIndex = 0;
-	private int currentIndex = 0;
 	boolean exitOnError = false;
 
 	public static final LinkedList<String> STACK_TRACE = new LinkedList<>();
 
-	private List<QueuedFunctionCall<ExpressionExecutor, Boolean>> queuedFunctionCalls;
 	QueuedFunctionCall<ExpressionExecutor, Boolean> currentFunction = null;
-	private boolean waitingForQueuedFunction = false;
 
 	public Supplier<Long> delayStartSupplier = System::currentTimeMillis;
 	public BiFunction<Long, Long, Boolean> shouldAdvance = (start, delay) -> System.currentTimeMillis() - start >= delay;
@@ -122,30 +120,23 @@ public class Script
 	{
 		this.workspace = workspace;
 		this.memory = new MemoryStack(64);
-		this.queuedFunctionCalls = new ArrayList<>();
+
+		if (ScriptItSettings.IMPORT_PRIMITIVES)
+		{
+			addTypeIfFound(PrimitiveTypes.INT);
+			addTypeIfFound(PrimitiveTypes.DOUBLE);
+			addTypeIfFound(PrimitiveTypes.CHAR);
+			addTypeIfFound(PrimitiveTypes.STRING);
+			addTypeIfFound(PrimitiveTypes.BOOL);
+		}
 	}
 
-	/**
-	 * Calls function inside script
-	 * If the script is currently delayed it waits for the delay to end and calls the function immediately
-	 *
-	 * @param mustExist if true and function does not exist in script throwns an error
-	 * @param name name of function
-	 * @param types parameters
-	 */
-	public void queueFunctionCall(boolean mustExist, String name, Value... types)
+	private void addTypeIfFound(Type type)
 	{
-		ExpressionExecutor exe = new ExpressionExecutor(getMemory());
-
-		Expression[] expressions = new Expression[types.length];
-		for (int i = 0; i < types.length; i++)
+		if (workspace.getType(type.getKeyword()) != null)
 		{
-			int finalI = i;
-			expressions[i] = new ValueConstant(() -> types[finalI]);
+			memory.addType(type);
 		}
-
-		exe.setExpression(new FunctionCall(FunctionSource.function(name), expressions));
-		queuedFunctionCalls.add(new QueuedFunctionCall<>(exe, mustExist));
 	}
 
 	public void addVariable(String name, Value value)
@@ -173,158 +164,6 @@ public class Script
 		mainExecutor = new MainExecutor(expressions);
 	}
 
-	public void runQueuedFunctions()
-	{
-		currentFunction = queuedFunctionCalls.isEmpty() ? null : queuedFunctionCalls.remove(0);
-	}
-
-	private Result execute_()
-	{
-		//TODO: enable queued functions
-		/*
-		if (waitingForQueuedFunction)
-		{
-			runQueuedFunctions();
-			if (currentFunction == null)
-				return Result.delay(1);
-		}
-
-		if (currentFunction != null)
-		{
-			if (waitingForQueuedFunction)
-			{
-				waitingForQueuedFunction = false;
-			}
-			if (!currentFunction.mustExist())
-			{
-				FunctionCall functionCall = (FunctionCall) currentFunction.executor().getExpression();
-				DelayValue[] args = functionCall.arguments;
-				Type[] types = new Type[args.length];
-				for (int i = 0; i < args.length; i++)
-				{
-					Value a = ((ValueConstant) args[i].expression).constant;
-					types[i] = a.type;
-				}
-
-				if (getMemory().hasFunction(functionCall.source.functionName, types))
-				{
-					Result result = currentFunction.executor().execute(this);
-					if (result.isDelay())
-						return result;
-					runQueuedFunctions();
-				}
-			} else
-			{
-				Result result = currentFunction.executor().execute(this);
-				if (result.isDelay())
-					return result;
-				runQueuedFunctions();
-			}
-		}*/
-
-
-//		currentIndex = lastIndex;
-//		while (currentIndex < lines.length)
-//		{
-//			lastIndex = currentIndex;
-//
-//			Result result = lines[currentIndex].execute(this);
-//			if (result.isReturnValue() || result.isReturn())
-//			{
-//				lastIndex = 0;
-//				return result;
-//			}
-//			if (result.isDelay())
-//				return result;
-//			if (result.isWaitForEvents())
-//			{
-//				waitingForQueuedFunction = true;
-//				return Result.delay();
-//			}
-//
-//			currentIndex++;
-//		}
-
-		return Result.return_();
-	}
-
-	public static String COLOR_WHILE = Log.RED;
-	public static String COLOR_IF_ELSE = Log.GREEN;
-	public static String COLOR_IF = Log.YELLOW;
-	public static String COLOR_FUNCTION = Log.BLUE;
-
-	public Result execute()
-	{
-		try
-		{
-			return execute_();
-		} catch (Exception ex)
-		{
-			List<StackTraceElement> stackTraceElements = new ArrayList<>(Arrays.asList(ex.getStackTrace()));
-			Collections.reverse(stackTraceElements);
-
-			boolean inWhile = false;
-			boolean isBody = false;
-			boolean wasInScript = false;
-
-			for (StackTraceElement e : stackTraceElements)
-			{
-				String errorLine = e.toString();
-				String expression = errorLine.replace("steve6472.scriptit.", "");
-				if (expression.startsWith("Script.") || expression.startsWith("ExpressionExecutor.execute"))
-				{
-					wasInScript = true;
-					continue;
-				}
-
-				if (!wasInScript)
-					continue;
-
-				if (expression.startsWith("While.apply"))
-				{
-					System.out.print(COLOR_WHILE + "While" + Log.RESET + " -> ");
-					inWhile = true;
-					isBody = true;
-				} else if (expression.startsWith("If.apply"))
-				{
-					if (inWhile)
-					{
-						System.out.print(COLOR_IF + "Condition" + Log.RESET + " -> ");
-						inWhile = false;
-					} else
-					{
-						System.out.print(COLOR_IF + "If" + Log.RESET + " -> ");
-					}
-					isBody = true;
-				} else if (expression.startsWith("Function.apply"))
-				{
-					if (isBody)
-					{
-						System.out.print(COLOR_FUNCTION + "Body" + Log.RESET + " -> ");
-						isBody = false;
-					} else
-					{
-						System.out.print(COLOR_FUNCTION + "Function" + Log.RESET + " -> ");
-					}
-					isBody = false;
-				} else if (expression.startsWith("IfElse.apply"))
-				{
-					System.out.print(COLOR_IF_ELSE + "IfElse" + Log.RESET + " -> ");
-					isBody = true;
-				} else
-				{
-					System.out.print(expression + " -> ");
-				}
-			}
-			System.out.println("\n");
-			ex.printStackTrace();
-
-			if (exitOnError)
-				System.exit(1);
-			throw ex;
-		}
-	}
-
 	public Value runWithDelay()
 	{
 		if (ScriptItSettings.STACK_TRACE)
@@ -349,19 +188,6 @@ public class Script
 			return ret.getValue();
 		else
 			return Value.NULL;
-
-//		Result result;
-//
-//		do
-//		{
-//			result = mainExecutor.executeSingle(this);
-//
-//		} while (mainExecutor.canExecuteMore());
-//
-//		if (result.isReturnValue())
-//			return result.getValue();
-//		else
-//			return Value.NULL;
 	}
 
 	public MainExecutor getMainExecutor()
@@ -392,7 +218,7 @@ public class Script
 		{
 			Expression expression = mainExecutor.getExpressions().get(i);
 			s.append(expression.showCode(0));
-			if (!(expression instanceof If || expression instanceof While || expression instanceof IfElse || expression instanceof Comment))
+			if (!(expression instanceof Comment))
 				s.append(Highlighter.END);
 			if (i < len - 1)
 				s.append("\n");

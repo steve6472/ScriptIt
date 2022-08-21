@@ -5,23 +5,15 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="f9500a56-889a-454a-a933-4a804591d857" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/!tests/recursion.scriptit" beforeDir="false" afterPath="$PROJECT_DIR$/!tests/recursion.scriptit" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/steve6472/scriptit/MemoryStack.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/steve6472/scriptit/MemoryStack.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/steve6472/scriptit/Result.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/steve6472/scriptit/Result.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/steve6472/scriptit/Memory.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/steve6472/scriptit/Memory.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/steve6472/scriptit/Script.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/steve6472/scriptit/Script.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/steve6472/scriptit/ScriptItSettings.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/steve6472/scriptit/ScriptItSettings.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/steve6472/scriptit/executor/Executor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/steve6472/scriptit/executor/Executor.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/steve6472/scriptit/expressions/DotOperator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/steve6472/scriptit/expressions/DotOperator.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/steve6472/scriptit/expressions/Expression.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/steve6472/scriptit/expressions/Expression.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/steve6472/scriptit/expressions/Function.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/steve6472/scriptit/expressions/Function.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/steve6472/scriptit/libraries/Library.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/steve6472/scriptit/libraries/Library.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/steve6472/scriptit/tokenizer/Tokenizer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/steve6472/scriptit/tokenizer/Tokenizer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/steve6472/scriptit/type/TypesInit.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/steve6472/scriptit/type/TypesInit.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/steve6472/scriptit/expressions/BinaryOperator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/steve6472/scriptit/expressions/BinaryOperator.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/steve6472/scriptit/libraries/SystemLibrary.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/steve6472/scriptit/libraries/SystemLibrary.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/steve6472/scriptit/type/PrimitiveTypes.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/steve6472/scriptit/type/PrimitiveTypes.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/steve6472/scriptit/type/complex/HashMapType.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/steve6472/scriptit/type/complex/HashMapType.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/test/java/steve6472/scriptit/SimpleTests.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/steve6472/scriptit/SimpleTests.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" beforeDir="false" afterPath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -29,7 +21,7 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="DarkyenusTimeTracker">
-    <option name="totalTimeSeconds" value="223823" />
+    <option name="totalTimeSeconds" value="227629" />
     <option name="idleThresholdMs" value="60000" />
     <option name="autoCountIdleSeconds" value="10" />
     <option name="gitIntegration" value="true" />
@@ -133,16 +125,6 @@
     </option>
   </component>
   <component name="RunManager" selected="JUnit.SimpleTests">
-    <configuration name="SimpleTests$Flow_$While.whileBreak" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <module name="ScriptIt" />
-      <option name="PACKAGE_NAME" value="steve6472.scriptit.SimpleTests.Flow_" />
-      <option name="MAIN_CLASS_NAME" value="steve6472.scriptit.SimpleTests$Flow_$While" />
-      <option name="METHOD_NAME" value="whileBreak" />
-      <option name="TEST_OBJECT" value="method" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
     <configuration name="SimpleTests$Functions.exitFunctionIf" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="ScriptIt" />
       <option name="PACKAGE_NAME" value="steve6472.scriptit.SimpleTests" />
@@ -205,22 +187,31 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <configuration name="TypeTests" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="ScriptIt" />
+      <option name="PACKAGE_NAME" value="steve6472.scriptit" />
+      <option name="MAIN_CLASS_NAME" value="steve6472.scriptit.TypeTests" />
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <list>
       <item itemvalue="JUnit.SimpleTests-Debug" />
       <item itemvalue="JUnit.SimpleTests" />
       <item itemvalue="JUnit.SimpleTests.dotBinary" />
+      <item itemvalue="JUnit.TypeTests" />
       <item itemvalue="JUnit.TypeTests$HashMap_" />
-      <item itemvalue="JUnit.SimpleTests$Flow_$While.whileBreak" />
       <item itemvalue="JUnit.SimpleTests$Functions.exitFunctionIf" />
       <item itemvalue="JUnit.SimpleTests.recursion" />
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="JUnit.TypeTests" />
+        <item itemvalue="JUnit.TypeTests$HashMap_" />
         <item itemvalue="JUnit.SimpleTests.recursion" />
         <item itemvalue="JUnit.SimpleTests.dotBinary" />
         <item itemvalue="JUnit.SimpleTests$Functions.exitFunctionIf" />
-        <item itemvalue="JUnit.TypeTests$HashMap_" />
-        <item itemvalue="JUnit.SimpleTests$Flow_$While.whileBreak" />
       </list>
     </recent_temporary>
   </component>
