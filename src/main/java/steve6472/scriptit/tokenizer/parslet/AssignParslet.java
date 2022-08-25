@@ -1,7 +1,9 @@
 package steve6472.scriptit.tokenizer.parslet;
 
 import steve6472.scriptit.expressions.*;
+import steve6472.scriptit.expressions.Assignment;
 import steve6472.scriptit.tokenizer.*;
+import steve6472.scriptit.type.ArrayType;
 
 /**********************
  * Created by steve6472 (Mirek Jozefek)
@@ -14,6 +16,9 @@ public class AssignParslet implements InfixParslet
 	@Override
 	public Expression parse(TokenParser parser, Tokenizer.Token token, Expression leftExpression)
 	{
+		/*
+		 * a += 2;
+		 */
 		if (token.type() != Operator.ASSIGN)
 		{
 			if (leftExpression instanceof ChainedVariable)
@@ -21,52 +26,20 @@ public class AssignParslet implements InfixParslet
 				throw new RuntimeException("Non-Simple assignment can not be a declaration");
 			} else
 			{
-				String name = null;
-
-				if (leftExpression instanceof Variable ne)
-					name = ne.source.variableName;
 
 				Expression right = parser.parse(getPrecedence());
 
-				return new Assignment(name, new BinaryOperator(token.type(), leftExpression, right));
+				return Assignment.newFancyStyle(leftExpression, new BinaryOperator(token.type(), leftExpression, right));
 			}
 		}
 		else
 		{
-			if (leftExpression instanceof DotOperator dop)
-			{
-				return new Assignment(dop, parser.parse(getPrecedence()));
-			}
-			if (leftExpression instanceof ChainedVariable cne)
-			{
-				Expression typeExp = cne.exp1;
-				Expression nameExp = cne.exp2;
-
-				String type = null;
-				String name = null;
-
-				if (typeExp instanceof Variable ne)
-					type = ne.source.variableName;
-
-				if (nameExp instanceof Variable ne)
-					name = ne.source.variableName;
-
-				if (type == null || name == null)
-					throw new RuntimeException();
-
-				Expression right = parser.parse(getPrecedence());
-
-				return new Assignment(type, name, right);
-			} else
-			{
-				String name = null;
-
-				if (leftExpression instanceof Variable ne)
-					name = ne.source.variableName;
-
-				Expression parse = parser.parse(getPrecedence());
-				return new Assignment(name, parse);
-			}
+			/*
+			 * obj.var = xxx;
+			 * int a = xxx;
+             * int[] a = xxx;
+			 */
+			return Assignment.newFancyStyle(leftExpression, parser.parse(getPrecedence()));
 		}
 	}
 

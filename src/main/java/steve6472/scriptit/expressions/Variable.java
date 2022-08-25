@@ -1,6 +1,7 @@
 package steve6472.scriptit.expressions;
 
 import steve6472.scriptit.*;
+import steve6472.scriptit.value.Value;
 
 /**********************
  * Created by steve6472 (Mirek Jozefek)
@@ -10,31 +11,33 @@ import steve6472.scriptit.*;
  ***********************/
 public class Variable extends Expression
 {
-	public VariableSource source;
+	public String variableName;
 
-	public Variable(VariableSource source)
+	public Variable(String variableName)
 	{
-		this.source = source;
+		this.variableName = variableName;
+	}
+
+	public Value getValue(Script script)
+	{
+		return script.memory.getVariable(variableName);
 	}
 
 	@Override
 	public Result apply(Script script)
 	{
-		if (source.sourceType == VariableSourceType.MEMORY)
-			return Result.value(script.memory.getVariable(source.variableName));
-		else
-			return Result.value(source.value.getValueByName(source.variableName));
+		return Result.value(getValue(script));
 	}
 
 	@Override
 	public String toString()
 	{
-		return "Variable{" + "source=" + source + '}';
+		return "Variable{" + "source=" + variableName + '}';
 	}
 
 	@Override
 	public String showCode(int a)
 	{
-		return Highlighter.VAR + source.variableName + Highlighter.RESET;
+		return Highlighter.VAR + variableName + Highlighter.RESET;
 	}
 }

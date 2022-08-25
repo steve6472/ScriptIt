@@ -11,8 +11,7 @@ import steve6472.scriptit.value.SingleValue;
 import steve6472.scriptit.value.Value;
 
 import java.util.HashMap;
-
-import static steve6472.scriptit.type.PrimitiveTypes.*;
+import java.util.Optional;
 
 /**
  * Created by steve6472
@@ -37,7 +36,7 @@ public class HashMapType extends TypesInit
 
 		// TODO: add wildcard
 		addProcedure(HASH_MAP, "put", (itself, k, v) -> itself.as(HASH_MAP).get().put(k, v), ANY_TYPE, ANY_TYPE);
-		addFunction(HASH_MAP, "get", (itself, k) -> itself.as(HASH_MAP).get().get(k), ANY_TYPE);
+		addFunction(HASH_MAP, "get", (itself, k) -> Optional.of(itself.as(HASH_MAP).get().get(k)).orElse(Value.NULL), ANY_TYPE);
 
 		HASH_MAP.addBinaryOperator(ANY_TYPE, Operator.INDEX, new PBinaryOperatorOverload<>((itself, right) -> itself.get().get(right)));
 	}

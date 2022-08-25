@@ -119,7 +119,7 @@ public class Tokenizer
 	public Token peekToken(int peek)
 	{
 		if (ScriptItSettings.TOKENIZER_DEBUG)
-			TokenParser.print("Peeking " + peek);
+			TokenParser.print("Peeking " + peek + (currentToken + peek < tokens.size() ? " (" + tokens.get(currentToken + peek) + ")" : ""));
 		if (currentToken + peek >= tokens.size())
 			return null;
 		return tokens.get(currentToken + peek);

@@ -4,6 +4,7 @@ import steve6472.scriptit.MemoryStack;
 import steve6472.scriptit.Result;
 import steve6472.scriptit.Script;
 import steve6472.scriptit.expressions.*;
+import steve6472.scriptit.expressions.Assignment;
 
 /**
  * Created by steve6472
@@ -15,6 +16,7 @@ public class AttributeGet extends Attribute
 	@Override
 	public void apply(Script script, Expression nextExpr, ValueConstant... constants)
 	{
+		/*
 		if (!(nextExpr instanceof Assignment ass))
 		{
 			return;
@@ -35,7 +37,7 @@ public class AttributeGet extends Attribute
 			{
 				return Result.value(script.getMemory().getVariable(ass.varName));
 			}
-		});
+		});*/
 	}
 
 	@Override

@@ -62,13 +62,14 @@ public class ClassDeclaration extends Expression
 			{
 				if (ass.expression == null)
 				{
-					Type type = script.getMemory().getType(ass.typeName);
-					return new VarDec(ass.varName, type.uninitValue());
+					Assignment.DeclarationData declarationData = ass.resolveDeclarationType(script, ass.valuePath);
+					Value value = ass.declareUninitValue(script, declarationData);
+					return new VarDec(declarationData.variableName(), value);
 				} else
 				{
-					Result apply = ass.expression.apply(script);
-					//System.out.println("ClassDeclaration.java:39 " + apply);
-					return new VarDec(ass.varName, apply.getValue());
+					Assignment.DeclarationData declarationData = ass.resolveDeclarationType(script, ass.valuePath);
+					Value value = ass.declareInitValue(script, declarationData);
+					return new VarDec(declarationData.variableName(), value);
 				}
 			});
 		}
@@ -78,8 +79,8 @@ public class ClassDeclaration extends Expression
 			{
 				if (var.exp1 instanceof Variable var1 && var.exp2 instanceof Variable var2)
 				{
-					Type type = script.memory.getType(var1.source.variableName);
-					String variableName = var2.source.variableName;
+					Type type = script.memory.getType(var1.variableName);
+					String variableName = var2.variableName;
 
 					if (type != null)
 					{

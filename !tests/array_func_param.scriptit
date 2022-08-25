@@ -1,0 +1,11 @@
+func getFrom(int[] array, int index)
+{
+    return array[index];
+};
+
+int[] arr = int[3];
+arr[0] = 1;
+arr[1] = 2;
+arr[2] = 3;
+
+return getFrom(arr, 1);

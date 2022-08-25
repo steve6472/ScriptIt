@@ -22,7 +22,7 @@ public class FunctionCallInfix implements InfixParslet
 	{
 		if (!(leftExpression instanceof Variable v))
 			throw new RuntimeException("Not a name ???? (" + leftExpression + ")");
-		return new FunctionCall(FunctionSource.function(v.source.variableName), parser.parseArguments(false));
+		return new FunctionCall(FunctionSource.function(v.variableName), parser.parseArguments(false));
 	}
 
 	@Override

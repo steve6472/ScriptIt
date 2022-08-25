@@ -25,9 +25,9 @@ public class BinaryOperator extends Expression
 	 */
 	private final Value[] operatorArguments;
 
-	IOperator operator;
+	public IOperator operator;
+	public Expression left, right;
 	Executor operandExecutor, operationExecutor;
-	Expression left, right;
 	Function operatorFunction = null;
 
 	public BinaryOperator(IOperator operator, Expression left, Expression right)

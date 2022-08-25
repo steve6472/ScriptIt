@@ -2,6 +2,7 @@ package steve6472.scriptit.attributes;
 
 import steve6472.scriptit.*;
 import steve6472.scriptit.expressions.*;
+import steve6472.scriptit.expressions.Assignment;
 import steve6472.scriptit.type.Type;
 
 /**
@@ -13,7 +14,7 @@ public class AttributeSet extends Attribute
 {
 	@Override
 	public void apply(Script script, Expression nextExpr, ValueConstant... constants)
-	{
+	{/*
 		if (!(nextExpr instanceof Assignment ass))
 		{
 			return;
@@ -33,7 +34,7 @@ public class AttributeSet extends Attribute
 
 		String functionName = "set" + ass.varName.substring(0, 1).toUpperCase() + ass.varName.substring(1);
 
-		Assignment assignment = new Assignment(ass.varName, new Variable(VariableSource.memory("_value")));
+		Assignment assignment = Assignment.assignment(ass.varName, new Variable("_value"));
 
 		MemoryStack memory = script.getMemory();
 
@@ -41,7 +42,7 @@ public class AttributeSet extends Attribute
 		Function func = new Function("_value");
 		func.setExpressions(assignment);
 
-		memory.addFunction(FunctionParameters.function(functionName).addType(type).build(), func);
+		memory.addFunction(FunctionParameters.function(functionName).addType(type).build(), func);*/
 	}
 
 	@Override

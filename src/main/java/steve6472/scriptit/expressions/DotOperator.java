@@ -82,13 +82,13 @@ public class DotOperator extends Expression
 			{
 				Result apply = left.apply(script);
 				Value value = apply.getValue();
-				Object o = value.getValueByName(((Variable) right).source.variableName);
+				Object o = value.getValueByName(((Variable) right).variableName);
 				if (o instanceof Value val)
 				{
 					return Result.value(val);
 				} else
 				{
-					throw new RuntimeException("No value '" + ((Variable) right).source.variableName + "' in variable '" + ((Variable) left).source.variableName + "' or other error lol");
+					throw new RuntimeException("No value '" + ((Variable) right).variableName + "' in variable '" + ((Variable) left).variableName + "' or other error lol");
 				}
 			}
 			default -> throw new IllegalStateException("Unexpected value: " + dotType);
@@ -109,11 +109,11 @@ public class DotOperator extends Expression
 		// Math.PI();
 		if (left instanceof Variable va)
 		{
-			if (script.getMemory().isLibrary(va.source.variableName))
+			if (script.getMemory().isLibrary(va.variableName))
 			{
 				if (right instanceof FunctionCall fc)
 				{
-					library = script.getMemory().libraries.get(va.source.variableName);
+					library = script.getMemory().libraries.get(va.variableName);
 					fc.source = FunctionSource.staticFunction(fc.source.functionName, library);
 					return DotType.LIB_FUNC;
 				}
@@ -123,7 +123,7 @@ public class DotOperator extends Expression
 		// stringVariable.charAt(3);
 		if (left instanceof Variable va)
 		{
-			if (script.getMemory().hasVariable(va.source.variableName))
+			if (script.getMemory().hasVariable(va.variableName))
 			{
 				if (right instanceof FunctionCall)
 				{
@@ -134,7 +134,7 @@ public class DotOperator extends Expression
 
 		if (left instanceof Variable va && right instanceof FunctionCall)
 		{
-			throw new RuntimeException("Variable - FunctionCall: Variable nor Library not found '" + va.source.variableName + "'");
+			throw new RuntimeException("Variable - FunctionCall: Variable nor Library not found '" + va.variableName + "'");
 		}
 
 		/*
@@ -156,6 +156,10 @@ public class DotOperator extends Expression
 			return DotType.VAR_VAR;
 		}
 
+		/*
+		 * a.b.c = 4;
+		 * --> .b.c <--
+		 */
 		if (left instanceof DotOperator && right instanceof Variable)
 		{
 			return DotType.DOT_VAR;

@@ -27,7 +27,7 @@ public class SimpleTests
 	private void setDebugs()
 	{
 		boolean debug = !Boolean.parseBoolean(System.getenv("disable_debug"));
-		debug = false;
+		debug = true;
 
 		ScriptItSettings.DELAY_DEBUG = debug;
 		ScriptItSettings.PARSER_DEBUG = debug;
@@ -72,7 +72,6 @@ public class SimpleTests
 	/*
 	 * TODO: Probably can use the new PrimitiveValue thing to check for the assignment & fix it
 	 */
-	@Disabled(value = "Disabled 'cause it just doesn't work yet and I am scared I broke something every time I see it fail")
 	public void assignValue()
 	{
 		Script script = testScript("assign_value");
@@ -241,6 +240,22 @@ public class SimpleTests
 	public void valueChanged()
 	{
 		Script script = testScript("value_changed");
+		Value value = script.runWithDelay();
+		Assertions.assertEquals(2, value.asPrimitive().getInt());
+	}
+
+	@Test
+	public void arrayDeclaration()
+	{
+		Script script = testScript("array_declaration");
+		Value value = script.runWithDelay();
+		Assertions.assertEquals(2, value.asPrimitive().getInt());
+	}
+
+	@Test
+	public void arrayFuncParam()
+	{
+		Script script = testScript("array_func_param");
 		Value value = script.runWithDelay();
 		Assertions.assertEquals(2, value.asPrimitive().getInt());
 	}

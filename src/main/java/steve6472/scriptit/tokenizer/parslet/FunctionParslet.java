@@ -52,7 +52,14 @@ public class FunctionParslet implements PrefixParselet
 			{
 				do
 				{
+//					boolean isArray = false;
 					String type = tokenizer.nextToken().sval();
+//					if (tokenizer.matchToken(Operator.INDEX, true))
+//					{
+//						isArray = true;
+//						System.out.println("ARRAY");
+//					}
+
 					String name = tokenizer.nextToken().sval();
 					args.add(new Pair(type, name));
 				} while (tokenizer.matchToken(Operator.COMMA, true));

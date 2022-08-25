@@ -14,16 +14,6 @@ import steve6472.scriptit.value.PrimitiveValue;
  ***********************/
 public class PrimitiveTypes extends TypesInit
 {
-	public static final PrimitiveType<PrimitiveValue<Double>> DOUBLE = new PrimitiveType<>("double");
-	public static final PrimitiveType<PrimitiveValue<Integer>> INT = new PrimitiveType<>("int");
-	public static final PrimitiveType<PrimitiveValue<Boolean>> BOOL = new PrimitiveType<>("bool");
-	public static final PrimitiveType<PrimitiveValue<String>> STRING = new PrimitiveType<>("string");
-	public static final PrimitiveType<PrimitiveValue<Character>> CHAR = new PrimitiveType<>("char");
-	public static final PrimitiveType<PrimitiveValue<Void>> NULL = new PrimitiveType<>("null");
-
-	// Create alias for "any type" parameter... type. . . thingie
-	public static final PrimitiveType<PrimitiveValue<Void>> ANY_TYPE = NULL;
-
 	public static PrimitiveValue<Boolean> TRUE()
 	{
 		return newPrimitive(BOOL, true);

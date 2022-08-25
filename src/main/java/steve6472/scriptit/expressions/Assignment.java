@@ -3,13 +3,22 @@ package steve6472.scriptit.expressions;
 import steve6472.scriptit.Highlighter;
 import steve6472.scriptit.Result;
 import steve6472.scriptit.Script;
+import steve6472.scriptit.ScriptItSettings;
+import steve6472.scriptit.exceptions.TypeMismatchException;
+import steve6472.scriptit.expressions.BinaryOperator;
+import steve6472.scriptit.expressions.DotOperator;
+import steve6472.scriptit.expressions.Expression;
+import steve6472.scriptit.tokenizer.ChainedVariable;
+import steve6472.scriptit.type.ArrayType;
 import steve6472.scriptit.type.Type;
 import steve6472.scriptit.executor.Executor;
 import steve6472.scriptit.tokenizer.IOperator;
 import steve6472.scriptit.tokenizer.Operator;
 import steve6472.scriptit.type.PrimitiveTypes;
+import steve6472.scriptit.value.DoubleValue;
 import steve6472.scriptit.value.Value;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -17,187 +26,318 @@ import java.util.Set;
  * Created by steve6472 (Mirek Jozefek)
  * On date: 5/20/2021
  * Project: ScriptIt
- *
+ * <br>
  * This should probably be done with separate classes
  * Especially the dot operator assignment
  *
  ***********************/
 public class Assignment extends Expression
 {
+	public final Expression valuePath;
+	public final Executor valuePathExecutor;
+
+	public Expression expression;
+	public Executor expressionExecutor;
+
+
+	public boolean isDeclaration;
+	private Type arrayType;
+
+	public static Assignment newFancyStyle(Expression path, Expression expression)
+	{
+		return new Assignment(path, expression);
+	}
+
+	private Assignment(Expression path, Expression expression)
+	{
+		this.expression = expression;
+		this.valuePath = path;
+
+		this.valuePathExecutor = new Executor(valuePath);
+
+		validatePath(valuePath);
+
+		if (expression != null)
+		{
+//			if (valuePath instanceof ChainedVariable cv && cv.exp1 instanceof IndexTypeExpression && expression instanceof BinaryOperator bo && bo.operator == Operator.INDEX)
+//			{
+//				this.expression = bo.right;
+//				this.expressionExecutor = new Executor(bo.right);
+//			} else
+//			{
+				this.expressionExecutor = new Executor(expression);
+//			}
+		} else
+		{
+			this.expressionExecutor = null;
+		}
+		this.isDeclaration = expressionExecutor == null || valuePath instanceof ChainedVariable;
+	}
+
+	private void validatePath(Expression path)
+	{
+		// TODO: maybe add a setting to allow this idk
+		if (path instanceof FunctionCall)
+			throw new RuntimeException("Can not assign to value returned from function!");
+
+		if (path instanceof BinaryOperator bo)
+		{
+			if (bo.operator != Operator.INDEX)
+				throw new RuntimeException("Binary Operator assignment accepts only arrays (Index) -> []");
+		}
+
+		/*
+		 * Allowed
+		 */
+
+		if (path instanceof DotOperator) return;
+		if (path instanceof Variable) return;
+		if (path instanceof ChainedVariable) return;
+		if (path instanceof IndexTypeExpression) return;
+	}
+
 	/**
-	 * Used for pretty print in debug
+	 * @param script script
+	 * @return null if path requires a delay, value otherwise
 	 */
-	public static final Set<IOperator> COMPOUND_ASSINGMENT = new HashSet<>();
-
-	static
+	public Value resolvePathValue(Script script)
 	{
-		COMPOUND_ASSINGMENT.add(Operator.ASSIGN_ADD);
-		COMPOUND_ASSINGMENT.add(Operator.ASSIGN_SUB);
-		COMPOUND_ASSINGMENT.add(Operator.ASSIGN_MUL);
-		COMPOUND_ASSINGMENT.add(Operator.ASSIGN_DIV);
-		COMPOUND_ASSINGMENT.add(Operator.ASSIGN_MOD);
-		COMPOUND_ASSINGMENT.add(Operator.ASSIGN_BIT_AND);
-		COMPOUND_ASSINGMENT.add(Operator.ASSIGN_BIT_OR);
-		COMPOUND_ASSINGMENT.add(Operator.ASSIGN_BIT_XOR);
+		if (valuePath instanceof Variable var)
+		{
+			return var.getValue(script);
+		}
+
+		if (valuePath instanceof FunctionCall || valuePath instanceof BinaryOperator || valuePath instanceof DotOperator)
+		{
+			if (valuePathExecutor.executeWhatYouCan(script).isDelay())
+				return null;
+
+			Value value = valuePathExecutor.getLastResult().getValue();
+			if (value != null)
+			{
+				return value;
+			} else
+			{
+				throw new RuntimeException("BinaryOperator did not return a value ?!");
+			}
+		}
+
+		return null;
 	}
 
-	public final String typeName;
-	public final String varName;
-	public final Expression expression;
-	public final Executor expressionExecutor;
-	public final DotOperator dotOperator;
-	private Type type;
+	public record DeclarationData(String variableName, Type variableType, boolean isArray) {}
 
-	public Assignment(String type, String varName, Expression expression)
+	public DeclarationData resolveDeclarationType(Script script, Expression valuePath)
 	{
-		this.typeName = type;
-		this.varName = varName;
-		this.expression = expression;
-		if (expression != null)
+		if (valuePath instanceof ChainedVariable cv)
 		{
-			this.expressionExecutor = new Executor(expression);
+			String name;
+
+			if (cv.exp2 instanceof Variable var_)
+			{
+				name = var_.variableName;
+			} else
+			{
+				throw new RuntimeException("Declaration does not have a name! or something idk what to type here");
+			}
+
+			System.out.println(cv.exp1);
+
+			if (cv.exp1 instanceof IndexTypeExpression ite)
+			{
+				return new DeclarationData(name, script.getMemory().getType(ite.left.variableName), true);
+			}
+			else if (cv.exp1 instanceof Variable var)
+			{
+				return new DeclarationData(name, script.getMemory().getType(var.variableName), false);
+			}
+		}
+
+		throw new RuntimeException("Unknown declaration for " + valuePath);
+	}
+
+	public Value declareUninitValue(Script script, DeclarationData data)
+	{
+		if (data.isArray)
+		{
+			return DoubleValue.newValue(ArrayType.ARRAY, null, data.variableType);
 		} else
 		{
-			this.expressionExecutor = null;
+			return data.variableType.uninitValue();
 		}
-		this.dotOperator = null;
 	}
 
-	public Assignment(String varName, Expression expression)
+	private void transformExpressionIntoArray(Type type)
 	{
-		this.typeName = "null";
-		this.type = PrimitiveTypes.NULL;
-		this.varName = varName;
-		this.expression = expression;
-		if (expression != null)
+		// Transform int[5] to 5
+		if (expression instanceof BinaryOperator bo && bo.operator == Operator.INDEX)
 		{
-			this.expressionExecutor = new Executor(expression);
+			expression = bo.right;
+			expressionExecutor = new Executor(expression);
+			arrayType = type;
+		}
+	}
+
+	private Value createArray(Script script, Type type)
+	{
+		if (expressionExecutor.executeWhatYouCan(script).isDelay())
+			return null;
+
+		Value value = expressionExecutor.getLastResult().getValue();
+		if (value.type != PrimitiveTypes.INT)
+		{
+			throw new RuntimeException("Can not create array, size is not an int");
+		}
+
+		int capacity = value.asPrimitive().getInt();
+		ArrayList<Value> list = new ArrayList<>(capacity);
+
+		for (int i = 0; i < capacity; i++)
+		{
+			list.add(type.uninitValue());
+		}
+
+		//TODO: size from expression
+		//TODO: check type
+
+		return DoubleValue.newValue(ArrayType.ARRAY, list, type);
+	}
+
+	public Value declareInitValue(Script script, DeclarationData data)
+	{
+		if (data.isArray)
+		{
+			transformExpressionIntoArray(data.variableType);
+
+			return createArray(script, data.variableType);
 		} else
 		{
-			this.expressionExecutor = null;
-		}
-		this.dotOperator = null;
-		if (expression == null)
-		{
-			throw new RuntimeException("Can not create assignment of variable with no type nor any value!");
-		}
-	}
+			if (expressionExecutor.executeWhatYouCan(script).isDelay())
+				return null;
 
-	public Assignment(DotOperator dop, Expression expression)
-	{
-		this.typeName = null;
-		this.varName = null;
-		this.expression = expression;
-		this.expressionExecutor = new Executor(expression);
-		this.dotOperator = dop;
-		if (expression == null)
-		{
-			throw new RuntimeException("var.val name; is not allowed!");
+			Value value = expressionExecutor.getLastResult().getValue();
+
+			if (value.isPrimitive())
+			{
+				Value value1 = value.type.uninitValue();
+				value1.setFrom(value);
+				value = value1;
+			}
+
+			if (value.type != data.variableType)
+				throw new TypeMismatchException("Can not assign", data.variableType, value.type);
+
+			return value;
 		}
 	}
 
 	@Override
 	public Result apply(Script script)
 	{
-		if (dotOperator != null)
+		if (isDeclaration)
 		{
-			stackTrace("Assignment-Dot");
-		} else {
-			stackTrace("Assignment '" + varName + "' (" + typeName + ")");
-		}
+			DeclarationData data = resolveDeclarationType(script, valuePath);
 
-		if (dotOperator != null)
-		{
-			assert expressionExecutor != null;
+			Value value;
 
-			if (expressionExecutor.executeWhatYouCan(script).isDelay())
+			if (expression == null)
+			{
+				value = declareUninitValue(script, data);
+			} else
+			{
+				value = declareInitValue(script, data);
+			}
+
+			if (value == null)
 				return Result.delay();
 
-			Result expressionResult = expressionExecutor.getLastResult();
-			Value value = expressionResult.getValue();
+			if (expression != null)
+			{
+				expressionExecutor.reset();
+			}
 
-			Result apply = dotOperator.apply(script);
-			Value dotValue = apply.getValue();
-			dotValue.clear();
-			dotValue.setFrom(value);
+			script.memory.addVariable(data.variableName, value);
+			return Result.value(value);
+		} else
+		{
+			Value value = resolvePathValue(script);
 
+			if (value == null)
+				return Result.delay();
+
+			Result lastResult;
+
+			if (value.type == ArrayType.ARRAY)
+			{
+				Type type = value.as(ArrayType.ARRAY).getSecond();
+				transformExpressionIntoArray(type);
+
+				lastResult = Result.value(createArray(script, type));
+
+			} else
+			{
+				if (expressionExecutor.executeWhatYouCan(script).isDelay())
+					return Result.delay();
+
+				lastResult = expressionExecutor.getLastResult();
+			}
+
+			valuePathExecutor.reset();
 			expressionExecutor.reset();
 
-			return Result.pass();
+			if (value.type != lastResult.getValue().type)
+				throw new TypeMismatchException(value.type, lastResult.getValue().type);
+
+			// Makes everything pass by value
+			value.setFrom(lastResult.getValue());
+			return lastResult;
 		}
-
-		assert varName != null;
-
-		if (type == null)
-		{
-			type = script.getMemory().getType(typeName);
-			if (type == null)
-				throw new RuntimeException("Type '" + typeName + "' not found in memory!");
-		}
-
-		if (expression == null)
-		{
-			Value value = type.uninitValue();
-			script.memory.addVariable(varName, value);
-			return Result.pass();
-		}
-
-		assert expressionExecutor != null;
-
-		if (expressionExecutor.executeWhatYouCan(script).isDelay())
-			return Result.delay();
-
-		Result expressionResult = expressionExecutor.getLastResult();
-		Value value = expressionResult.getValue();
-		expressionExecutor.reset();
-
-		if (type != PrimitiveTypes.NULL && value.type != type)
-			throw new IllegalStateException("Returned type does not match (" + type + " != " + value.type);
-
-		script.memory.addVariable(varName, value);
-
-		return Result.value(value);
 	}
 
 	@Override
 	public String showCode(int a)
 	{
-		if (dotOperator != null)
+		if (arrayType != null)
 		{
-			return dotOperator.showCode(a) + Highlighter.SYMBOL + " = " + expression.showCode(a) + Highlighter.RESET;
+			return valuePath + " = " + arrayType.getKeyword() + "[" + expression.showCode(a) + "]";
 		}
-
-		assert typeName != null;
-		if (expression == null)
-		{
-			if (!typeName.equals("null"))
-			{
-				return Highlighter.FUNCTION_NAME + typeName + " " + Highlighter.VAR + varName + Highlighter.RESET;
-			} else
-			{
-				throw new RuntimeException("Uuuuhhhh bad. Bonk!");
-			}
-		} else
-		{
-			if (!typeName.equals("null"))
-			{
-				return Highlighter.FUNCTION_NAME + typeName + " " + Highlighter.VAR + varName + Highlighter.SYMBOL + " = " + expression.showCode(0) + Highlighter.RESET;
-			} else
-			{
-				if (expression instanceof BinaryOperator bo && COMPOUND_ASSINGMENT.contains(bo.operator))
-				{
-					return Highlighter.VAR + varName + Highlighter.SYMBOL + " " + bo.operator.getSymbol() + " " + bo.right.showCode(0) + Highlighter.RESET;
-				} else
-				{
-					return Highlighter.VAR + varName + Highlighter.SYMBOL + " = " + expression.showCode(0) + Highlighter.RESET;
-				}
-			}
-		}
+		return valuePath + " = " + expression;
+//		if (dotOperator != null)
+//		{
+//			return dotOperator.showCode(a) + Highlighter.SYMBOL + " = " + expression.showCode(a) + Highlighter.RESET;
+//		}
+//
+//		assert typeName != null;
+//		if (expression == null)
+//		{
+//			if (!typeName.equals("null"))
+//			{
+//				return Highlighter.FUNCTION_NAME + typeName + " " + Highlighter.VAR + varName + Highlighter.RESET;
+//			} else
+//			{
+//				throw new RuntimeException("Uuuuhhhh bad. Bonk!");
+//			}
+//		} else
+//		{
+//			if (!typeName.equals("null"))
+//			{
+//				return Highlighter.FUNCTION_NAME + typeName + " " + Highlighter.VAR + varName + Highlighter.SYMBOL + " = " + expression.showCode(0) + Highlighter.RESET;
+//			} else
+//			{
+//				if (expression instanceof BinaryOperator bo && ScriptItSettings.COMPOUND_ASSINGMENT.contains(bo.operator))
+//				{
+//					return Highlighter.VAR + varName + Highlighter.SYMBOL + " " + bo.operator.getSymbol() + " " + bo.right.showCode(0) + Highlighter.RESET;
+//				} else
+//				{
+//					return Highlighter.VAR + varName + Highlighter.SYMBOL + " = " + expression.showCode(0) + Highlighter.RESET;
+//				}
+//			}
+//		}
 	}
 
 	@Override
 	public String toString()
 	{
-		return "Assignment{" + "typeName='" + typeName + '\'' + ", varName='" + varName + '\'' + ", expression=" + expression + ", type=" + type + '}';
+		return "Assignment{" + "valuePath=" + valuePath + ", expression=" + expression  + ", isDeclaration=" + isDeclaration + '}';
 	}
 }
