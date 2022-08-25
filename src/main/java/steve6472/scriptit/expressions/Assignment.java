@@ -32,9 +32,11 @@ public class Assignment extends Expression
 	public Expression expression;
 	public Executor expressionExecutor;
 
+	public final boolean isDeclaration;
 
-	public boolean isDeclaration;
-	private Type arrayType;
+	private Type type;
+	private String variableName;
+	private boolean isArray;
 
 	public static Assignment newFancyStyle(Expression path, Expression expression)
 	{
@@ -57,7 +59,6 @@ public class Assignment extends Expression
 		{
 			this.expressionExecutor = null;
 		}
-		System.out.println(valuePath);
 		this.isDeclaration = expressionExecutor == null || valuePath instanceof ChainedVariable;
 	}
 
@@ -90,6 +91,7 @@ public class Assignment extends Expression
 	{
 		if (valuePath instanceof Variable var)
 		{
+			variableName = var.variableName;
 			return var.getValue(script);
 		}
 
@@ -155,7 +157,7 @@ public class Assignment extends Expression
 		{
 			expression = bo.right;
 			expressionExecutor = new Executor(expression);
-			arrayType = type;
+			isArray = true;
 		}
 	}
 
@@ -216,6 +218,12 @@ public class Assignment extends Expression
 		{
 			DeclarationData data = resolveDeclarationType(script, valuePath);
 
+			if (type == null)
+			{
+				type = data.variableType;
+				variableName = data.variableName;
+			}
+
 			Value value;
 
 			if (expression == null)
@@ -271,45 +279,67 @@ public class Assignment extends Expression
 		}
 	}
 
+	public Type getType()
+	{
+		return type;
+	}
+
+	public String getVariableName()
+	{
+		return variableName;
+	}
+
+	public boolean isArray()
+	{
+		return isArray;
+	}
+
 	@Override
 	public String showCode(int a)
 	{
-		if (arrayType != null)
+		if (isDeclaration)
 		{
-			return valuePath + " = " + arrayType.getKeyword() + "[" + expression.showCode(a) + "]";
+			if (type != null)
+			{
+				if (isArray)
+				{
+					return type.getKeyword() + " " + variableName + " = " + type.getKeyword() + "[" + expression.showCode(a) + "]";
+				} else
+				{
+					return type.getKeyword() + " " + variableName + " = " + expression.showCode(a);
+				}
+			} else
+			{
+				if (expression == null)
+				{
+					return valuePath.showCode(a);
+				} else
+				{
+					return valuePath.showCode(a) + " = " + expression.showCode(a);
+				}
+			}
+		} else
+		{
+			if (type != null)
+			{
+				if (isArray)
+				{
+					return variableName + " = " + type.getKeyword() + "[" + expression.showCode(a) + "]";
+				} else
+				{
+					return variableName + " = " + expression.showCode(a);
+				}
+			} else
+			{
+				if (expression == null)
+				{
+					return valuePath.showCode(a);
+				} else
+				{
+					return valuePath.showCode(a) + " = " + expression.showCode(a);
+				}
+			}
 		}
-		return valuePath + " = " + expression;
-//		if (dotOperator != null)
-//		{
-//			return dotOperator.showCode(a) + Highlighter.SYMBOL + " = " + expression.showCode(a) + Highlighter.RESET;
-//		}
-//
-//		assert typeName != null;
-//		if (expression == null)
-//		{
-//			if (!typeName.equals("null"))
-//			{
-//				return Highlighter.FUNCTION_NAME + typeName + " " + Highlighter.VAR + varName + Highlighter.RESET;
-//			} else
-//			{
-//				throw new RuntimeException("Uuuuhhhh bad. Bonk!");
-//			}
-//		} else
-//		{
-//			if (!typeName.equals("null"))
-//			{
-//				return Highlighter.FUNCTION_NAME + typeName + " " + Highlighter.VAR + varName + Highlighter.SYMBOL + " = " + expression.showCode(0) + Highlighter.RESET;
-//			} else
-//			{
-//				if (expression instanceof BinaryOperator bo && ScriptItSettings.COMPOUND_ASSINGMENT.contains(bo.operator))
-//				{
-//					return Highlighter.VAR + varName + Highlighter.SYMBOL + " " + bo.operator.getSymbol() + " " + bo.right.showCode(0) + Highlighter.RESET;
-//				} else
-//				{
-//					return Highlighter.VAR + varName + Highlighter.SYMBOL + " = " + expression.showCode(0) + Highlighter.RESET;
-//				}
-//			}
-//		}
 	}
 
 	@Override

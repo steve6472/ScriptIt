@@ -289,7 +289,6 @@ public class SimpleTests
 
 	@Nested
 	@DisplayName("attributes")
-	@Disabled
 	class Attributes_
 	{
 		@Test

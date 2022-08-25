@@ -16,18 +16,18 @@ public class AttributeGet extends Attribute
 	@Override
 	public void apply(Script script, Expression nextExpr, ValueConstant... constants)
 	{
-		/*
+
 		if (!(nextExpr instanceof Assignment ass))
 		{
 			return;
 		}
 
-		if (ass.varName == null)
+		if (ass.getVariableName() == null)
 		{
 			throw new RuntimeException("Can not generate get function for expression %s because varName is null".formatted(nextExpr));
 		}
 
-		String functionName = "get" + ass.varName.substring(0, 1).toUpperCase() + ass.varName.substring(1);
+		String functionName = "get" + ass.getVariableName().substring(0, 1).toUpperCase() + ass.getVariableName().substring(1);
 
 		MemoryStack memory = script.getMemory();
 		memory.addFunction(FunctionParameters.function(functionName).build(), new Function()
@@ -35,9 +35,9 @@ public class AttributeGet extends Attribute
 			@Override
 			public Result apply(Script script)
 			{
-				return Result.value(script.getMemory().getVariable(ass.varName));
+				return Result.value(script.getMemory().getVariable(ass.getVariableName()));
 			}
-		});*/
+		});
 	}
 
 	@Override
