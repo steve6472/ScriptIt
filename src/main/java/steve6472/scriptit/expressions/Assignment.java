@@ -37,6 +37,7 @@ public class Assignment extends Expression
 	private Type type;
 	private String variableName;
 	private boolean isArray;
+	private boolean isAuto;
 
 	public static Assignment newFancyStyle(Expression path, Expression expression)
 	{
@@ -113,6 +114,10 @@ public class Assignment extends Expression
 		return null;
 	}
 
+	/**
+	 * @param variableName var name
+	 * @param variableType null for auto
+	 */
 	public record DeclarationData(String variableName, Type variableType) {}
 
 	public DeclarationData resolveDeclarationType(Script script, Expression valuePath)
@@ -127,6 +132,12 @@ public class Assignment extends Expression
 			} else
 			{
 				throw new RuntimeException("Declaration does not have a name! or something idk what to type here");
+			}
+
+			if (cv.exp1 instanceof AutoExpression)
+			{
+				isAuto = true;
+				return new DeclarationData(name, null);
 			}
 
 			if (cv.exp1 instanceof Variable var)
@@ -191,7 +202,24 @@ public class Assignment extends Expression
 
 	public Value declareInitValue(Script script, DeclarationData data)
 	{
-		if (data.variableType.isArray())
+		if (data.variableType == null)
+		{
+			if (expressionExecutor.executeWhatYouCan(script).isDelay())
+				return null;
+
+			Value value = expressionExecutor.getLastResult().getValue();
+			type = value.type;
+
+			if (value.isPrimitive())
+			{
+				Value value1 = value.type.uninitValue();
+				value1.setFrom(value);
+				value = value1;
+			}
+
+			return value;
+		}
+		else if (data.variableType.isArray())
 		{
 			transformExpressionIntoArray(data.variableType);
 

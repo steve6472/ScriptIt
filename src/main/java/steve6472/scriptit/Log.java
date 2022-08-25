@@ -72,7 +72,13 @@ public class Log
 	public static void scriptWarning(boolean warningType, String text)
 	{
 		if (warningType)
-			System.out.println(WHITE + "[" + BRIGHT_YELLOW + "WARNING" + WHITE + "] " + YELLOW + text);
+			System.out.println(WHITE + "[" + BRIGHT_YELLOW + "WARNING" + WHITE + "] " + YELLOW + text + RESET);
+	}
+
+	public static void scriptDebug(boolean debugType, String text)
+	{
+		if (debugType)
+			System.out.println(WHITE + "[" + BRIGHT_BLACK + "DEBUG" + WHITE + "] " + CYAN + text + RESET);
 	}
 
 }

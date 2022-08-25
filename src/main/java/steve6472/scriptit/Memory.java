@@ -5,6 +5,7 @@ import steve6472.scriptit.exceptions.ValueNotFoundException;
 import steve6472.scriptit.expressions.Function;
 import steve6472.scriptit.expressions.FunctionParameters;
 import steve6472.scriptit.libraries.Library;
+import steve6472.scriptit.type.ClassType;
 import steve6472.scriptit.type.PrimitiveTypes;
 import steve6472.scriptit.type.Type;
 import steve6472.scriptit.value.Value;
@@ -163,6 +164,18 @@ public class Memory
 						fitness += 2;
 						foundExactMatch = false;
 						continue;
+					}
+				}
+
+				if (ScriptItSettings.ALLOW_CLASS_TYPE_CONVERSION)
+				{
+					if (functionParams.getTypes()[i] instanceof ClassType pct && types[i] instanceof ClassType ct)
+					{
+						if (pct.clazz.isAssignableFrom(ct.clazz))
+						{
+							fitness += 3;
+							continue;
+						}
 					}
 				}
 

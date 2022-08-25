@@ -6,13 +6,17 @@
   <component name="ChangeListManager">
     <list default="true" id="f9500a56-889a-454a-a933-4a804591d857" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/scripts/!object_transformer.scriptit" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/!object_transformer.scriptit" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/steve6472/scriptit/ClassTransformer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/steve6472/scriptit/ClassTransformer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/steve6472/scriptit/Log.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/steve6472/scriptit/Log.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/steve6472/scriptit/Memory.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/steve6472/scriptit/Memory.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/steve6472/scriptit/ScriptItSettings.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/steve6472/scriptit/ScriptItSettings.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/steve6472/scriptit/expressions/DeclareFunction.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/steve6472/scriptit/expressions/DeclareFunction.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/steve6472/scriptit/expressions/Function.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/steve6472/scriptit/expressions/Function.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/steve6472/scriptit/libraries/ArraysLibrary.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/steve6472/scriptit/libraries/ArraysLibrary.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/steve6472/scriptit/type/PrimitiveType.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/steve6472/scriptit/type/PrimitiveType.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/steve6472/scriptit/type/Type.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/steve6472/scriptit/type/Type.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/steve6472/scriptit/expressions/Assignment.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/steve6472/scriptit/expressions/Assignment.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/steve6472/scriptit/tokenizer/Operator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/steve6472/scriptit/tokenizer/Operator.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/steve6472/scriptit/tokenizer/TokenParser.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/steve6472/scriptit/tokenizer/TokenParser.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/steve6472/scriptit/tokenizer/parslet/ChainedNameParslet.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/steve6472/scriptit/tokenizer/parslet/ChainedNameParslet.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/steve6472/scriptit/SimpleTests.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/steve6472/scriptit/SimpleTests.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" beforeDir="false" afterPath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -20,7 +24,7 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="DarkyenusTimeTracker">
-    <option name="totalTimeSeconds" value="259364" />
+    <option name="totalTimeSeconds" value="262006" />
     <option name="idleThresholdMs" value="60000" />
     <option name="autoCountIdleSeconds" value="10" />
     <option name="gitIntegration" value="true" />
@@ -111,9 +115,9 @@
       <recent name="steve6472.scriptit.math" />
     </key>
     <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="steve6472.scriptit.tokenizer.parslet" />
       <recent name="steve6472.scriptit.value" />
       <recent name="steve6472.scriptit.expressions.assignment" />
-      <recent name="steve6472.scriptit.tokenizer.parslet" />
       <recent name="steve6472.scriptit" />
       <recent name="steve6472.scriptit.attributes" />
     </key>
@@ -127,15 +131,6 @@
     <configuration name="ClassTransformer" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="steve6472.scriptit.ClassTransformer" />
       <module name="ScriptIt" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="SimpleTests$Attributes_" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <module name="ScriptIt" />
-      <option name="PACKAGE_NAME" value="steve6472.scriptit.SimpleTests" />
-      <option name="MAIN_CLASS_NAME" value="steve6472.scriptit.SimpleTests$Attributes_" />
-      <option name="TEST_OBJECT" value="class" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -159,6 +154,16 @@
       <envs>
         <env name="disable_debug" value="true" />
       </envs>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="SimpleTests.auto" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="ScriptIt" />
+      <option name="PACKAGE_NAME" value="steve6472.scriptit" />
+      <option name="MAIN_CLASS_NAME" value="steve6472.scriptit.SimpleTests" />
+      <option name="METHOD_NAME" value="auto" />
+      <option name="TEST_OBJECT" value="method" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -199,7 +204,7 @@
       <item itemvalue="Application.ClassTransformer" />
       <item itemvalue="JUnit.SimpleTests-Debug" />
       <item itemvalue="JUnit.SimpleTests" />
-      <item itemvalue="JUnit.SimpleTests$Attributes_" />
+      <item itemvalue="JUnit.SimpleTests.auto" />
       <item itemvalue="JUnit.SimpleTests.delay" />
       <item itemvalue="JUnit.TypeTests" />
       <item itemvalue="JUnit.TypeTests$HashMap_.getValues" />
@@ -207,10 +212,10 @@
     <recent_temporary>
       <list>
         <item itemvalue="Application.ClassTransformer" />
+        <item itemvalue="JUnit.SimpleTests.auto" />
+        <item itemvalue="JUnit.SimpleTests.delay" />
         <item itemvalue="JUnit.TypeTests" />
         <item itemvalue="JUnit.TypeTests$HashMap_.getValues" />
-        <item itemvalue="JUnit.SimpleTests.delay" />
-        <item itemvalue="JUnit.SimpleTests$Attributes_" />
       </list>
     </recent_temporary>
   </component>

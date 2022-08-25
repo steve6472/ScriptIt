@@ -7,9 +7,21 @@ System.println(foo.getCount());
 foo.bar.setName("Jerremy");
 
 [injectJavaParam("steve6472.scriptit.ClassTransformer$Bar", "b")];
-func test()
+func testBar()
 {
     System.println(b.getName());
 };
 
-test(foo.bar);
+testBar(foo.bar);
+
+
+
+
+[injectJavaParam("steve6472.scriptit.ClassTransformer$Inter", "inter")];
+func testInterface()
+{
+    inter.setCount(69);
+    System.println(inter.getCount());
+};
+
+testInterface(foo);

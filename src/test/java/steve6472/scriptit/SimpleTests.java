@@ -244,6 +244,15 @@ public class SimpleTests
 		Assertions.assertEquals(2, value.asPrimitive().getInt());
 	}
 
+	@Test
+	public void auto()
+	{
+		Script script = testScript("auto");
+		Value value = script.runWithDelay();
+		Assertions.assertEquals(PrimitiveTypes.INT, value.type);
+		Assertions.assertEquals(5, value.asPrimitive().getInt());
+	}
+
 	@Nested
 	@DisplayName("arrays")
 	class Arrays

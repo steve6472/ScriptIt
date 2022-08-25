@@ -5,6 +5,7 @@ import steve6472.scriptit.expressions.Function;
 import steve6472.scriptit.expressions.FunctionParameters;
 import steve6472.scriptit.libraries.LogLibrary;
 import steve6472.scriptit.libraries.TestLibrary;
+import steve6472.scriptit.type.ClassType;
 import steve6472.scriptit.type.PrimitiveTypes;
 import steve6472.scriptit.type.Type;
 import steve6472.scriptit.value.PrimitiveValue;
@@ -13,10 +14,7 @@ import steve6472.scriptit.value.Value;
 
 import java.io.File;
 import java.lang.reflect.*;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by steve6472
@@ -61,8 +59,10 @@ public class ClassTransformer
 			return cachedType;
 		}
 
-		Type generatedType = new Type(generateClassName(clazz.getName()));
+		Type generatedType = new ClassType(generateClassName(clazz.getName()), clazz);
 		generatedType.createArraySubtype();
+
+		Log.scriptDebug(ScriptItSettings.CLASS_TRANSFORMER_DEBUG, "Generated type -> " + generatedType.getKeyword());
 
 		CACHE.put(clazz, generatedType);
 
@@ -76,8 +76,18 @@ public class ClassTransformer
 
 	private static void generateFunctions(Class<?> clazz, Type type, UniversalValue value)
 	{
-		for (Method declaredMethod : clazz.getDeclaredMethods())
+		main: for (Method declaredMethod : clazz.getMethods())
 		{
+			for (Method method : Object.class.getDeclaredMethods())
+			{
+				if (declaredMethod.getName().equals(method.getName()) && Arrays.equals(declaredMethod.getParameters(), method.getParameters()))
+				{
+					continue main;
+				}
+			}
+
+			Log.scriptDebug(ScriptItSettings.CLASS_TRANSFORMER_DEBUG, "Adding function -> " + declaredMethod.getName());
+
 			Parameter[] parameters = declaredMethod.getParameters();
 			String[] argumentNames = new String[parameters.length];
 
@@ -130,6 +140,7 @@ public class ClassTransformer
 	public static Value transformObject(Object object) throws IllegalAccessException
 	{
 		Class<?> clazz = object.getClass();
+		Log.scriptDebug(ScriptItSettings.CLASS_TRANSFORMER_DEBUG, "Transforming -> " + clazz.getName());
 
 		if (clazz == Integer.class) return PrimitiveTypes.INT.newValue(object);
 		if (clazz == Double.class) return PrimitiveTypes.DOUBLE.newValue(object);
@@ -167,16 +178,35 @@ public class ClassTransformer
 			return array;
 		}
 
+		Type t = CACHE.get(clazz);
+
 
 		Type type = generateType(clazz);
 		UniversalValue uv = UniversalValue.newValue(type);
 		uv.setValue("java object", object);
-		generateFunctions(clazz, type, uv);
+
+		if (t == null)
+			generateFunctions(clazz, type, uv);
 
 		for (Field declaredField : clazz.getDeclaredFields())
 		{
-			declaredField.setAccessible(true);
+			// ignore static
+			if ((declaredField.getModifiers() & Modifier.STATIC) != 0)
+				continue;
+
+			if ((declaredField.getModifiers() & Modifier.PRIVATE) != 0)
+				continue;
+
+			if ((declaredField.getModifiers() & Modifier.TRANSIENT) != 0)
+				continue;
+
 			Object o = declaredField.get(object);
+
+			if (uv.getValue(declaredField.getName()) != null)
+				continue;
+
+			Log.scriptDebug(ScriptItSettings.CLASS_TRANSFORMER_DEBUG, "Adding field -> " + declaredField.getName());
+
 			if (o == null)
 			{
 				uv.setValue(declaredField.getName(), Value.NULL);
@@ -191,6 +221,9 @@ public class ClassTransformer
 
 	public static void main(String[] args) throws IllegalAccessException
 	{
+		ScriptItSettings.CLASS_TRANSFORMER_DEBUG = true;
+		ScriptItSettings.ALLOW_CLASS_TYPE_CONVERSION = true;
+
 		Foo foo = new Foo();
 		foo.setCount(5);
 		foo.fancy = false;
@@ -245,17 +278,20 @@ public class ClassTransformer
 		return script;
 	}
 
-	static class Foo
+	static class Foo implements Inter
 	{
 		int count;
 		boolean fancy;
 		Bar bar;
+		long a;
 
+		@Override
 		public int getCount()
 		{
 			return count;
 		}
 
+		@Override
 		public void setCount(int count)
 		{
 			this.count = count;
@@ -275,5 +311,11 @@ public class ClassTransformer
 		{
 			this.name = name;
 		}
+	}
+
+	interface Inter
+	{
+		int getCount();
+		void setCount(int count);
 	}
 }

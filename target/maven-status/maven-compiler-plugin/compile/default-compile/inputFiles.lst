@@ -1,3 +1,4 @@
+D:\ScriptIt\src\main\java\steve6472\scriptit\expressions\AutoExpression.java
 D:\ScriptIt\src\main\java\steve6472\scriptit\expressions\If.java
 D:\ScriptIt\src\main\java\steve6472\scriptit\expressions\FunctionCall.java
 D:\ScriptIt\src\main\java\steve6472\scriptit\tokenizer\parslet\SingleLineCommentParslet.java
@@ -39,6 +40,7 @@ D:\ScriptIt\src\main\java\steve6472\scriptit\simple\Return.java
 D:\ScriptIt\src\main\java\steve6472\scriptit\tokenizer\parslet\FunctionParslet.java
 D:\ScriptIt\src\main\java\steve6472\scriptit\tokenizer\parslet\UnaryParselet.java
 D:\ScriptIt\src\main\java\steve6472\scriptit\Memory.java
+D:\ScriptIt\src\main\java\steve6472\scriptit\attributes\AttributeJavaParamInjector.java
 D:\ScriptIt\src\main\java\steve6472\scriptit\value\Value.java
 D:\ScriptIt\src\main\java\steve6472\scriptit\tokenizer\parslet\AssignParslet.java
 D:\ScriptIt\src\main\java\steve6472\scriptit\executor\Executor.java
@@ -71,6 +73,7 @@ D:\ScriptIt\src\main\java\steve6472\scriptit\tokenizer\TokenParser.java
 D:\ScriptIt\src\main\java\steve6472\scriptit\attributes\AttributeGet.java
 D:\ScriptIt\src\main\java\steve6472\scriptit\tokenizer\parslet\ClassParslet.java
 D:\ScriptIt\src\main\java\steve6472\scriptit\simple\Break.java
+D:\ScriptIt\src\main\java\steve6472\scriptit\type\ClassType.java
 D:\ScriptIt\src\main\java\steve6472\scriptit\libraries\SystemLibrary.java
 D:\ScriptIt\src\main\java\steve6472\scriptit\executor\MainExecutor.java
 D:\ScriptIt\src\main\java\steve6472\scriptit\expressions\UnaryOperator.java
@@ -79,6 +82,7 @@ D:\ScriptIt\src\main\java\steve6472\scriptit\value\UniversalValue.java
 D:\ScriptIt\src\main\java\steve6472\scriptit\tokenizer\IOperator.java
 D:\ScriptIt\src\main\java\steve6472\scriptit\tokenizer\parslet\ArrayTypeParslet.java
 D:\ScriptIt\src\main\java\steve6472\scriptit\expressions\OverloadFunction.java
+D:\ScriptIt\src\main\java\steve6472\scriptit\tokenizer\parslet\AutoParslet.java
 D:\ScriptIt\src\main\java\steve6472\scriptit\libraries\Library.java
 D:\ScriptIt\src\main\java\steve6472\scriptit\libraries\TestLibrary.java
 D:\ScriptIt\src\main\java\steve6472\scriptit\tokenizer\PrefixParselet.java

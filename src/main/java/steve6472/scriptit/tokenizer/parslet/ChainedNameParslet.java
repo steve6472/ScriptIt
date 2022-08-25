@@ -16,6 +16,11 @@ public class ChainedNameParslet implements InfixParslet
 	@Override
 	public Expression parse(TokenParser parser, Tokenizer.Token token, Expression leftExpression)
 	{
+		if (leftExpression instanceof AutoExpression)
+		{
+			return new ChainedVariable(leftExpression, new Variable(token.sval()));
+		}
+
 		if (!(leftExpression instanceof Variable var1))
 		{
 			throw new RuntimeException("Left expression is not NameExpression (" + leftExpression + ")");

@@ -99,6 +99,7 @@ public enum Operator implements IOperator
 	INSTANCEOF("instanceof"),
 	OVERLOAD("overload"),
 	THIS("this"),
+	AUTO("auto"),
 
 	// Other special
 	NUMBER_INT(""),
