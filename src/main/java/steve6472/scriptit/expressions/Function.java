@@ -25,6 +25,7 @@ public class Function extends Expression
 	protected boolean isDelayed;
 	protected boolean isBody;
 	public String name;
+	public FunctionParameters parameters;
 
 	/**
 	 * @param argumentNames arg names

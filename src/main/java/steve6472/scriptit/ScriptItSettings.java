@@ -24,6 +24,7 @@ public class ScriptItSettings
 
 	public static boolean IMPORT_PRIMITIVES = true;
 	public static boolean ALLOW_AUTOMATIC_CONVERSION = true;
+	public static boolean ALLOW_UNSAFE = false;
 
 
 	/**

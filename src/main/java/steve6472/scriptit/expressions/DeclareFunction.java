@@ -11,8 +11,8 @@ import steve6472.scriptit.type.Type;
  ***********************/
 public class DeclareFunction extends Expression
 {
-	Function function;
-	FunctionParameters params;
+	public Function function;
+	public FunctionParameters params;
 
 	public DeclareFunction(String name, Function function, String[] argumentNames, Type[] argumentTypes)
 	{

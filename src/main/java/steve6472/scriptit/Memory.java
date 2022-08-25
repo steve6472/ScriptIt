@@ -117,6 +117,7 @@ public class Memory
 	public void addFunction(FunctionParameters parameters, Function function)
 	{
 		functions.put(parameters, function);
+		function.parameters = parameters;
 	}
 
 	public Function getFunction(String name, Type[] types)

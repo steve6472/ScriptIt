@@ -1,0 +1,15 @@
+import library System;
+
+System.println(foo.getCount());
+foo.setCount(1);
+System.println(foo.getCount());
+
+foo.bar.setName("Jerremy");
+
+[injectJavaParam("steve6472.scriptit.ClassTransformer$Bar", "b")];
+func test()
+{
+    System.println(b.getName());
+};
+
+test(foo.bar);

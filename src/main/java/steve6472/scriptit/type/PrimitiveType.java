@@ -28,6 +28,11 @@ public class PrimitiveType<A extends Value> extends Type
 		setUninitValue(uninitValue);
 	}
 
+	public <T> PrimitiveValue<T> newValue(T value)
+	{
+		return PrimitiveValue.newValue(this, value);
+	}
+
 	public <T extends Value> void addBinaryOperator(PrimitiveType<T> rightOperandType, IOperator operator, TypesInit.PBinaryOperatorOverload<A, T> function)
 	{
 		HashMap<IOperator, Function> map = binary.get(rightOperandType);

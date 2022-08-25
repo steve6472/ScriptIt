@@ -6,10 +6,13 @@
   <component name="ChangeListManager">
     <list default="true" id="f9500a56-889a-454a-a933-4a804591d857" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/steve6472/scriptit/Memory.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/steve6472/scriptit/Memory.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/steve6472/scriptit/ScriptItSettings.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/steve6472/scriptit/ScriptItSettings.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/steve6472/scriptit/expressions/DeclareFunction.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/steve6472/scriptit/expressions/DeclareFunction.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/steve6472/scriptit/expressions/Function.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/steve6472/scriptit/expressions/Function.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/steve6472/scriptit/libraries/ArraysLibrary.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/steve6472/scriptit/libraries/ArraysLibrary.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/steve6472/scriptit/type/PrimitiveType.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/steve6472/scriptit/type/PrimitiveType.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/steve6472/scriptit/type/Type.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/steve6472/scriptit/type/Type.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/steve6472/scriptit/type/complex/HashMapType.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/steve6472/scriptit/type/complex/HashMapType.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/steve6472/scriptit/value/Value.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/steve6472/scriptit/value/Value.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/steve6472/scriptit/TypeTests.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/steve6472/scriptit/TypeTests.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -17,7 +20,7 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="DarkyenusTimeTracker">
-    <option name="totalTimeSeconds" value="251264" />
+    <option name="totalTimeSeconds" value="259364" />
     <option name="idleThresholdMs" value="60000" />
     <option name="autoCountIdleSeconds" value="10" />
     <option name="gitIntegration" value="true" />
@@ -63,15 +66,15 @@
     <option name="showExcludedFiles" value="false" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "last_opened_file_path": "D:/ScriptIt/!tests/types/hashmap",
-    "project.structure.last.edited": "Project",
-    "project.structure.proportion": "0.15",
-    "project.structure.side.proportion": "0.2",
-    "settings.editor.selected.configurable": "editor.preferences.import"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;last_opened_file_path&quot;: &quot;D:/ScriptIt/!tests/types/hashmap&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Project&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;editor.preferences.import&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CreateClassDialog.RecentsKey">
       <recent name="steve6472.scriptit.simple" />
@@ -120,22 +123,19 @@
       <command value="git" />
     </option>
   </component>
-  <component name="RunManager" selected="JUnit.TypeTests">
+  <component name="RunManager" selected="Application.ClassTransformer">
+    <configuration name="ClassTransformer" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="steve6472.scriptit.ClassTransformer" />
+      <module name="ScriptIt" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="SimpleTests$Attributes_" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="ScriptIt" />
       <option name="PACKAGE_NAME" value="steve6472.scriptit.SimpleTests" />
       <option name="MAIN_CLASS_NAME" value="steve6472.scriptit.SimpleTests$Attributes_" />
       <option name="TEST_OBJECT" value="class" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="SimpleTests$Attributes_.set" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <module name="ScriptIt" />
-      <option name="PACKAGE_NAME" value="steve6472.scriptit.SimpleTests" />
-      <option name="MAIN_CLASS_NAME" value="steve6472.scriptit.SimpleTests$Attributes_" />
-      <option name="METHOD_NAME" value="set" />
-      <option name="TEST_OBJECT" value="method" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -196,21 +196,21 @@
       </method>
     </configuration>
     <list>
+      <item itemvalue="Application.ClassTransformer" />
       <item itemvalue="JUnit.SimpleTests-Debug" />
       <item itemvalue="JUnit.SimpleTests" />
       <item itemvalue="JUnit.SimpleTests$Attributes_" />
-      <item itemvalue="JUnit.SimpleTests$Attributes_.set" />
       <item itemvalue="JUnit.SimpleTests.delay" />
       <item itemvalue="JUnit.TypeTests" />
       <item itemvalue="JUnit.TypeTests$HashMap_.getValues" />
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Application.ClassTransformer" />
         <item itemvalue="JUnit.TypeTests" />
         <item itemvalue="JUnit.TypeTests$HashMap_.getValues" />
         <item itemvalue="JUnit.SimpleTests.delay" />
         <item itemvalue="JUnit.SimpleTests$Attributes_" />
-        <item itemvalue="JUnit.SimpleTests$Attributes_.set" />
       </list>
     </recent_temporary>
   </component>

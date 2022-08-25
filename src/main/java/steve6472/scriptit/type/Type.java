@@ -182,7 +182,16 @@ public class Type
 		return DoubleValue.newValue(arrayType, values, this);
 	}
 
-	private static final class ArraySubType extends PrimitiveType<DoubleValue<List<Value>, Type>>
+	public Value createEmptyArray()
+	{
+		Type arrayType = this.isArray() ? this : this.getArraySubtype();
+		if (arrayType == null)
+			throw new RuntimeException("Array type not valid!");
+
+		return DoubleValue.newValue(arrayType, new ArrayList<>(), this);
+	}
+
+	public static final class ArraySubType extends PrimitiveType<DoubleValue<List<Value>, Type>>
 	{
 		Type superType;
 
