@@ -94,7 +94,7 @@ public class TokenParser
 		infixParslets.put(Operator.ASSIGN_BIT_XOR, new AssignParslet());
 		infixParslets.put(Operator.ASSIGN_BIT_AND, new AssignParslet());
 
-		infixParslets.put(Operator.INDEX, new IndexParslet());
+		infixParslets.put(Operator.INDEX, new ArrayTypeParslet());
 		infixParslets.put(Operator.BRACKET_LEFT, new FunctionCallInfix());
 		infixParslets.put(Operator.BRACKET_SQUARE_LEFT, new IndexOperatorParslet());
 

@@ -3,7 +3,6 @@ package steve6472.scriptit.tokenizer.parslet;
 import steve6472.scriptit.expressions.*;
 import steve6472.scriptit.expressions.Assignment;
 import steve6472.scriptit.tokenizer.*;
-import steve6472.scriptit.type.ArrayType;
 
 /**********************
  * Created by steve6472 (Mirek Jozefek)

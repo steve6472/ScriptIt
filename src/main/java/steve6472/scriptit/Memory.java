@@ -50,6 +50,9 @@ public class Memory
 
 		type.constructors.forEach(functions::put);
 		types.put(type.getKeyword(), type);
+
+		if (type.getArraySubtype() != null)
+			addType(type.getArraySubtype());
 	}
 
 	public void addVariable(String name, Value value)
@@ -247,6 +250,14 @@ public class Memory
 		{
 			if (!k.equals("true") && !k.equals("false"))
 				System.out.println(k + " = " + v);
+		});
+	}
+
+	public void dumpTypes()
+	{
+		types.forEach((k, v) ->
+		{
+			System.out.println(k + " = " + v);
 		});
 	}
 

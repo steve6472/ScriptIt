@@ -29,6 +29,10 @@ public class Workspace
 		addLibrary(new SystemLibrary());
 		addLibrary(new RandomLibrary());
 
+		// Make fucking sure the static initializer runs
+		// Arrays break without this
+		PrimitiveTypes.TRUE();
+
 		addType(PrimitiveTypes.DOUBLE);
 		addType(PrimitiveTypes.INT);
 		addType(PrimitiveTypes.BOOL);
@@ -55,6 +59,9 @@ public class Workspace
 	public void addType(Type type)
 	{
 		this.types.put(type.getKeyword(), type);
+
+		if (type.getArraySubtype() != null)
+			this.types.put(type.getArraySubtype().getKeyword(), type.getArraySubtype());
 	}
 
 	public void removeType(String name)

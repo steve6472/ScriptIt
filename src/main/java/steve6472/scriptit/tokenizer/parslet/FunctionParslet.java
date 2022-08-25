@@ -33,6 +33,7 @@ public class FunctionParslet implements PrefixParselet
 		{
 			String s = strings[i];
 			types[i] = parser.script.getWorkspace().getType(s);
+
 			if (types[i] == null)
 			{
 				throw new RuntimeException("Type '" + s + "' not found");
@@ -52,16 +53,11 @@ public class FunctionParslet implements PrefixParselet
 			{
 				do
 				{
-//					boolean isArray = false;
 					String type = tokenizer.nextToken().sval();
-//					if (tokenizer.matchToken(Operator.INDEX, true))
-//					{
-//						isArray = true;
-//						System.out.println("ARRAY");
-//					}
+					boolean isArray = tokenizer.matchToken(Operator.INDEX, true);
 
 					String name = tokenizer.nextToken().sval();
-					args.add(new Pair(type, name));
+					args.add(new Pair(type + (isArray ? Operator.INDEX.getSymbol() : ""), name));
 				} while (tokenizer.matchToken(Operator.COMMA, true));
 				tokenizer.consumeToken(Operator.BRACKET_RIGHT);
 			}

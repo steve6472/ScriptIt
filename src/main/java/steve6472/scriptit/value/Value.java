@@ -18,6 +18,8 @@ public abstract class Value
 
 	protected Value(Type type)
 	{
+		if (type == null)
+			throw new RuntimeException("Can not create Value with null type");
 		this.type = type;
 	}
 

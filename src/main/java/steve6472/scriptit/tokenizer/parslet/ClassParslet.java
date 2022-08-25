@@ -36,6 +36,7 @@ public class ClassParslet implements PrefixParselet
 		}
 
 		Type type = new Type(name);
+		type.createArraySubtype();
 
 		ClassDeclaration declaration = new ClassDeclaration(name, type);
 		parser.script.getWorkspace().addType(type);

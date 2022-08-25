@@ -26,6 +26,12 @@ public class PrimitiveTypes extends TypesInit
 
 	static
 	{
+		DOUBLE.createArraySubtype();
+		INT.createArraySubtype();
+		BOOL.createArraySubtype();
+		STRING.createArraySubtype();
+		CHAR.createArraySubtype();
+
 		/*
 		 * Double
 		 */

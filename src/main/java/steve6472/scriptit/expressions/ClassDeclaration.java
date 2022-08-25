@@ -63,7 +63,7 @@ public class ClassDeclaration extends Expression
 				if (ass.expression == null)
 				{
 					Assignment.DeclarationData declarationData = ass.resolveDeclarationType(script, ass.valuePath);
-					Value value = ass.declareUninitValue(script, declarationData);
+					Value value = ass.declareUninitValue(declarationData);
 					return new VarDec(declarationData.variableName(), value);
 				} else
 				{

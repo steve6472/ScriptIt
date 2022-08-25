@@ -27,7 +27,7 @@ public class SimpleTests
 	private void setDebugs()
 	{
 		boolean debug = !Boolean.parseBoolean(System.getenv("disable_debug"));
-		debug = true;
+		debug = false;
 
 		ScriptItSettings.DELAY_DEBUG = debug;
 		ScriptItSettings.PARSER_DEBUG = debug;
@@ -244,20 +244,33 @@ public class SimpleTests
 		Assertions.assertEquals(2, value.asPrimitive().getInt());
 	}
 
-	@Test
-	public void arrayDeclaration()
+	@Nested
+	@DisplayName("arrays")
+	class Arrays
 	{
-		Script script = testScript("array_declaration");
-		Value value = script.runWithDelay();
-		Assertions.assertEquals(2, value.asPrimitive().getInt());
-	}
+		@Test
+		public void declaration()
+		{
+			Script script = testScript("array/declaration");
+			Value value = script.runWithDelay();
+			Assertions.assertEquals(2, value.asPrimitive().getInt());
+		}
 
-	@Test
-	public void arrayFuncParam()
-	{
-		Script script = testScript("array_func_param");
-		Value value = script.runWithDelay();
-		Assertions.assertEquals(2, value.asPrimitive().getInt());
+		@Test
+		public void declarationSeparate()
+		{
+			Script script = testScript("array/declaration_separate");
+			Value value = script.runWithDelay();
+			Assertions.assertEquals(2, value.asPrimitive().getInt());
+		}
+
+		@Test
+		public void arrayFuncParam()
+		{
+			Script script = testScript("array/func_param");
+			Value value = script.runWithDelay();
+			Assertions.assertEquals(2, value.asPrimitive().getInt());
+		}
 	}
 
 	@Nested
@@ -276,6 +289,7 @@ public class SimpleTests
 
 	@Nested
 	@DisplayName("attributes")
+	@Disabled
 	class Attributes_
 	{
 		@Test

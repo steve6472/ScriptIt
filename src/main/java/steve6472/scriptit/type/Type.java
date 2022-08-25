@@ -1,15 +1,16 @@
 package steve6472.scriptit.type;
 
+import steve6472.scriptit.Result;
 import steve6472.scriptit.expressions.Function;
 import steve6472.scriptit.expressions.FunctionParameters;
 import steve6472.scriptit.tokenizer.IOperator;
+import steve6472.scriptit.tokenizer.Operator;
+import steve6472.scriptit.value.DoubleValue;
 import steve6472.scriptit.value.UniversalValue;
 import steve6472.scriptit.value.Value;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
+import java.sql.Array;
+import java.util.*;
 import java.util.function.Supplier;
 
 /**********************
@@ -21,6 +22,8 @@ import java.util.function.Supplier;
 public class Type
 {
 	private final String keyword;
+
+	private Type arraySubtype;
 
 	public HashMap<Type, HashMap<IOperator, Function>> binary;
 	public HashMap<IOperator, Function> unary;
@@ -83,6 +86,18 @@ public class Type
 		return this;
 	}
 
+	public Type createArraySubtype()
+	{
+		if (arraySubtype == null)
+			this.arraySubtype = new ArraySubType(this);
+		return this;
+	}
+
+	public Type getArraySubtype()
+	{
+		return arraySubtype;
+	}
+
 	public Value uninitValue()
 	{
 		return uninitValue.get();
@@ -117,6 +132,11 @@ public class Type
 		return func;
 	}
 
+	public final boolean isArray()
+	{
+		return this instanceof ArraySubType;
+	}
+
 	public String getKeyword()
 	{
 		return keyword;
@@ -143,5 +163,47 @@ public class Type
 	public int hashCode()
 	{
 		return Objects.hash(keyword);
+	}
+
+	public static Type getArraySuperType(Type type)
+	{
+		if (type instanceof ArraySubType ast)
+			return ast.getSuperType();
+
+		return null;
+	}
+
+	private static final class ArraySubType extends PrimitiveType<DoubleValue<List<Value>, Type>>
+	{
+		Type superType;
+
+		public ArraySubType(Type type)
+		{
+			super(type.getKeyword() + Operator.INDEX.getSymbol());
+
+			superType = type;
+
+			addBinaryOperator(PrimitiveTypes.INT, Operator.INDEX, new TypesInit.PBinaryOperatorOverload<>((arr, i) -> arr.getFirst().get(i.getInt())));
+			addConstructor(FunctionParameters.constructor(this).build(), new TypesInit.Constructor((c) -> {throw new RuntimeException("no array constructor for you");}));
+
+			TypesInit.addFunction(this, "getTypeKeyword", (itself) -> TypesInit.newPrimitive(PrimitiveTypes.STRING, superType.getKeyword()));
+			/*
+			addFunction(this, "getType", (itself) ->
+			{
+				// return new type -> PrimitiveType<SingleValue<Type>> TYPE
+				// TYPE.constructor(STRING, text -> memory.findType(text));
+			});*/
+		}
+
+		public Type getSuperType()
+		{
+			return superType;
+		}
+
+		@Override
+		public Type createArraySubtype()
+		{
+			throw new RuntimeException("Can not create multidimensional arrays! (I am too lazy to add that)");
+		}
 	}
 }

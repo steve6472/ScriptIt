@@ -16,22 +16,6 @@ public class ChainedNameParslet implements InfixParslet
 	@Override
 	public Expression parse(TokenParser parser, Tokenizer.Token token, Expression leftExpression)
 	{
-		if (leftExpression instanceof IndexTypeExpression ite)
-		{
-			/*
-			 * Try to create un-initialized assignment if possible
-			 * int[] b;
-			 */
-			Type type = parser.script.getWorkspace().getType(ite.left.variableName);
-			if (type != null && parser.tokenizer.peekToken().type() == Operator.SEMICOLON)
-			{
-				String variableName = token.sval();
-				return Assignment.newFancyStyle(new ChainedVariable(ite, new Variable(variableName)), null);
-			}
-
-			return new ChainedVariable(leftExpression, new Variable(token.sval()));
-		}
-
 		if (!(leftExpression instanceof Variable var1))
 		{
 			throw new RuntimeException("Left expression is not NameExpression (" + leftExpression + ")");

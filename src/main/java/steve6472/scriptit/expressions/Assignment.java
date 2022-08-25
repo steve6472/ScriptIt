@@ -1,26 +1,19 @@
 package steve6472.scriptit.expressions;
 
-import steve6472.scriptit.Highlighter;
+import steve6472.scriptit.Log;
 import steve6472.scriptit.Result;
 import steve6472.scriptit.Script;
-import steve6472.scriptit.ScriptItSettings;
 import steve6472.scriptit.exceptions.TypeMismatchException;
-import steve6472.scriptit.expressions.BinaryOperator;
-import steve6472.scriptit.expressions.DotOperator;
-import steve6472.scriptit.expressions.Expression;
 import steve6472.scriptit.tokenizer.ChainedVariable;
-import steve6472.scriptit.type.ArrayType;
 import steve6472.scriptit.type.Type;
 import steve6472.scriptit.executor.Executor;
-import steve6472.scriptit.tokenizer.IOperator;
 import steve6472.scriptit.tokenizer.Operator;
 import steve6472.scriptit.type.PrimitiveTypes;
 import steve6472.scriptit.value.DoubleValue;
+import steve6472.scriptit.value.PrimitiveValue;
 import steve6472.scriptit.value.Value;
 
 import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Set;
 
 /**********************
  * Created by steve6472 (Mirek Jozefek)
@@ -59,18 +52,12 @@ public class Assignment extends Expression
 
 		if (expression != null)
 		{
-//			if (valuePath instanceof ChainedVariable cv && cv.exp1 instanceof IndexTypeExpression && expression instanceof BinaryOperator bo && bo.operator == Operator.INDEX)
-//			{
-//				this.expression = bo.right;
-//				this.expressionExecutor = new Executor(bo.right);
-//			} else
-//			{
-				this.expressionExecutor = new Executor(expression);
-//			}
+			this.expressionExecutor = new Executor(expression);
 		} else
 		{
 			this.expressionExecutor = null;
 		}
+		System.out.println(valuePath);
 		this.isDeclaration = expressionExecutor == null || valuePath instanceof ChainedVariable;
 	}
 
@@ -93,7 +80,6 @@ public class Assignment extends Expression
 		if (path instanceof DotOperator) return;
 		if (path instanceof Variable) return;
 		if (path instanceof ChainedVariable) return;
-		if (path instanceof IndexTypeExpression) return;
 	}
 
 	/**
@@ -125,7 +111,7 @@ public class Assignment extends Expression
 		return null;
 	}
 
-	public record DeclarationData(String variableName, Type variableType, boolean isArray) {}
+	public record DeclarationData(String variableName, Type variableType) {}
 
 	public DeclarationData resolveDeclarationType(Script script, Expression valuePath)
 	{
@@ -141,26 +127,21 @@ public class Assignment extends Expression
 				throw new RuntimeException("Declaration does not have a name! or something idk what to type here");
 			}
 
-			System.out.println(cv.exp1);
-
-			if (cv.exp1 instanceof IndexTypeExpression ite)
+			if (cv.exp1 instanceof Variable var)
 			{
-				return new DeclarationData(name, script.getMemory().getType(ite.left.variableName), true);
-			}
-			else if (cv.exp1 instanceof Variable var)
-			{
-				return new DeclarationData(name, script.getMemory().getType(var.variableName), false);
+				Type type = script.getMemory().getType(var.variableName);
+				return new DeclarationData(name, type);
 			}
 		}
 
 		throw new RuntimeException("Unknown declaration for " + valuePath);
 	}
 
-	public Value declareUninitValue(Script script, DeclarationData data)
+	public Value declareUninitValue(DeclarationData data)
 	{
-		if (data.isArray)
+		if (data.variableType.isArray())
 		{
-			return DoubleValue.newValue(ArrayType.ARRAY, null, data.variableType);
+			return DoubleValue.newValue(data.variableType, null, Type.getArraySuperType(data.variableType));
 		} else
 		{
 			return data.variableType.uninitValue();
@@ -194,18 +175,15 @@ public class Assignment extends Expression
 
 		for (int i = 0; i < capacity; i++)
 		{
-			list.add(type.uninitValue());
+			list.add(Type.getArraySuperType(type).uninitValue());
 		}
 
-		//TODO: size from expression
-		//TODO: check type
-
-		return DoubleValue.newValue(ArrayType.ARRAY, list, type);
+		return DoubleValue.newValue(type, list, Type.getArraySuperType(type));
 	}
 
 	public Value declareInitValue(Script script, DeclarationData data)
 	{
-		if (data.isArray)
+		if (data.variableType.isArray())
 		{
 			transformExpressionIntoArray(data.variableType);
 
@@ -242,7 +220,7 @@ public class Assignment extends Expression
 
 			if (expression == null)
 			{
-				value = declareUninitValue(script, data);
+				value = declareUninitValue(data);
 			} else
 			{
 				value = declareInitValue(script, data);
@@ -267,13 +245,12 @@ public class Assignment extends Expression
 
 			Result lastResult;
 
-			if (value.type == ArrayType.ARRAY)
+			if (value.type.isArray())
 			{
-				Type type = value.as(ArrayType.ARRAY).getSecond();
+				Type type = (Type) value.as(DoubleValue.class).getSecond();
 				transformExpressionIntoArray(type);
 
-				lastResult = Result.value(createArray(script, type));
-
+				lastResult = Result.value(createArray(script, value.type));
 			} else
 			{
 				if (expressionExecutor.executeWhatYouCan(script).isDelay())

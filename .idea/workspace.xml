@@ -5,29 +5,24 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="f9500a56-889a-454a-a933-4a804591d857" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/!tests/declare_assign_pass.scriptit" beforeDir="false" afterPath="$PROJECT_DIR$/!tests/declare_assign_pass.scriptit" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/!tests/flow/loop/while/while.scriptit" beforeDir="false" afterPath="$PROJECT_DIR$/!tests/flow/loop/while/while.scriptit" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/!tests/array_declaration.scriptit" beforeDir="false" afterPath="$PROJECT_DIR$/!tests/array/declaration.scriptit" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/!tests/array_func_param.scriptit" beforeDir="false" afterPath="$PROJECT_DIR$/!tests/array/func_param.scriptit" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/steve6472/scriptit/ScriptItSettings.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/steve6472/scriptit/ScriptItSettings.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/steve6472/scriptit/attributes/AttributeGet.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/steve6472/scriptit/attributes/AttributeGet.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/steve6472/scriptit/attributes/AttributeSet.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/steve6472/scriptit/attributes/AttributeSet.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/steve6472/scriptit/Memory.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/steve6472/scriptit/Memory.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/steve6472/scriptit/Workspace.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/steve6472/scriptit/Workspace.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/steve6472/scriptit/expressions/Assignment.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/steve6472/scriptit/expressions/Assignment.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/steve6472/scriptit/expressions/BinaryOperator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/steve6472/scriptit/expressions/BinaryOperator.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/steve6472/scriptit/expressions/ClassDeclaration.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/steve6472/scriptit/expressions/ClassDeclaration.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/steve6472/scriptit/expressions/DotOperator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/steve6472/scriptit/expressions/DotOperator.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/steve6472/scriptit/expressions/Variable.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/steve6472/scriptit/expressions/Variable.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/steve6472/scriptit/expressions/VariableSource.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/steve6472/scriptit/expressions/VariableSourceType.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/steve6472/scriptit/expressions/IndexTypeExpression.java" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/steve6472/scriptit/tokenizer/TokenParser.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/steve6472/scriptit/tokenizer/TokenParser.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/steve6472/scriptit/tokenizer/Tokenizer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/steve6472/scriptit/tokenizer/Tokenizer.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/steve6472/scriptit/tokenizer/parslet/AssignParslet.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/steve6472/scriptit/tokenizer/parslet/AssignParslet.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/steve6472/scriptit/tokenizer/parslet/ChainedNameParslet.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/steve6472/scriptit/tokenizer/parslet/ChainedNameParslet.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/steve6472/scriptit/tokenizer/parslet/FunctionCallInfix.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/steve6472/scriptit/tokenizer/parslet/FunctionCallInfix.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/steve6472/scriptit/tokenizer/parslet/ClassParslet.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/steve6472/scriptit/tokenizer/parslet/ClassParslet.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/steve6472/scriptit/tokenizer/parslet/FunctionParslet.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/steve6472/scriptit/tokenizer/parslet/FunctionParslet.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/steve6472/scriptit/tokenizer/parslet/NameParslet.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/steve6472/scriptit/tokenizer/parslet/NameParslet.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/steve6472/scriptit/tokenizer/parslet/IndexParslet.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/steve6472/scriptit/tokenizer/parslet/ArrayTypeParslet.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/steve6472/scriptit/type/ArrayType.java" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/steve6472/scriptit/type/PrimitiveTypes.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/steve6472/scriptit/type/PrimitiveTypes.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/steve6472/scriptit/type/TypesInit.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/steve6472/scriptit/type/TypesInit.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/steve6472/scriptit/type/complex/HashMapType.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/steve6472/scriptit/type/complex/HashMapType.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/steve6472/scriptit/type/Type.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/steve6472/scriptit/type/Type.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/steve6472/scriptit/value/Value.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/steve6472/scriptit/value/Value.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/test/java/steve6472/scriptit/SimpleTests.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/steve6472/scriptit/SimpleTests.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -36,7 +31,7 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="DarkyenusTimeTracker">
-    <option name="totalTimeSeconds" value="244181" />
+    <option name="totalTimeSeconds" value="249536" />
     <option name="idleThresholdMs" value="60000" />
     <option name="autoCountIdleSeconds" value="10" />
     <option name="gitIntegration" value="true" />
@@ -82,35 +77,35 @@
     <option name="showExcludedFiles" value="false" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;last_opened_file_path&quot;: &quot;D:/ScriptIt/!tests/attributes&quot;,
-    &quot;project.structure.last.edited&quot;: &quot;Project&quot;,
-    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
-    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;editor.preferences.import&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "last_opened_file_path": "D:/ScriptIt/!tests/array",
+    "project.structure.last.edited": "Project",
+    "project.structure.proportion": "0.15",
+    "project.structure.side.proportion": "0.2",
+    "settings.editor.selected.configurable": "editor.preferences.import"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CreateClassDialog.RecentsKey">
       <recent name="steve6472.scriptit.simple" />
     </key>
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="D:\ScriptIt\!tests\array" />
       <recent name="D:\ScriptIt\!tests\attributes" />
       <recent name="D:\ScriptIt\!tests\class" />
       <recent name="D:\ScriptIt\!tests" />
       <recent name="D:\ScriptIt\!tests\flow\loop\for" />
-      <recent name="D:\ScriptIt\!tests\flow\if" />
     </key>
     <key name="CreateTestDialog.Recents.Supers">
       <recent name="groovy.util.GroovyTestCase" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="D:\ScriptIt\!tests\array" />
       <recent name="D:\ScriptIt\!tests\attributes" />
       <recent name="D:\ScriptIt\!tests" />
       <recent name="D:\ScriptIt\!tests\flow\loop\for" />
       <recent name="D:\ScriptIt\!tests\flow\loop\while" />
-      <recent name="D:\ScriptIt\!tests\flow\if" />
     </key>
     <key name="MoveMembersDialog.RECENTS_KEY">
       <recent name="steve6472.scriptit.ScriptItSettings" />
@@ -139,16 +134,32 @@
       <command value="git" />
     </option>
   </component>
-  <component name="RunManager" selected="JUnit.SimpleTests.arrayFuncParam">
-    <configuration name="SimpleTests$Class_.getter" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+  <component name="RunManager" selected="JUnit.SimpleTests">
+    <configuration name="SimpleTests$Arrays" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="ScriptIt" />
       <option name="PACKAGE_NAME" value="steve6472.scriptit.SimpleTests" />
-      <option name="MAIN_CLASS_NAME" value="steve6472.scriptit.SimpleTests$Class_" />
-      <option name="METHOD_NAME" value="getter" />
+      <option name="MAIN_CLASS_NAME" value="steve6472.scriptit.SimpleTests$Arrays" />
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="SimpleTests$Arrays.arrayFuncParam" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="ScriptIt" />
+      <option name="PACKAGE_NAME" value="steve6472.scriptit.SimpleTests" />
+      <option name="MAIN_CLASS_NAME" value="steve6472.scriptit.SimpleTests$Arrays" />
+      <option name="METHOD_NAME" value="arrayFuncParam" />
       <option name="TEST_OBJECT" value="method" />
-      <envs>
-        <env name="disable_debug" value="true" />
-      </envs>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="SimpleTests$Arrays.declaration" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="ScriptIt" />
+      <option name="PACKAGE_NAME" value="steve6472.scriptit.SimpleTests" />
+      <option name="MAIN_CLASS_NAME" value="steve6472.scriptit.SimpleTests$Arrays" />
+      <option name="METHOD_NAME" value="declaration" />
+      <option name="TEST_OBJECT" value="method" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -176,34 +187,11 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="SimpleTests.arrayDeclaration" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <module name="ScriptIt" />
-      <option name="PACKAGE_NAME" value="steve6472.scriptit" />
-      <option name="MAIN_CLASS_NAME" value="steve6472.scriptit.SimpleTests" />
-      <option name="METHOD_NAME" value="arrayDeclaration" />
-      <option name="TEST_OBJECT" value="method" />
-      <envs>
-        <env name="disable_debug" value="true" />
-      </envs>
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
     <configuration name="SimpleTests.arrayFuncParam" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="ScriptIt" />
       <option name="PACKAGE_NAME" value="steve6472.scriptit" />
       <option name="MAIN_CLASS_NAME" value="steve6472.scriptit.SimpleTests" />
       <option name="METHOD_NAME" value="arrayFuncParam" />
-      <option name="TEST_OBJECT" value="method" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="SimpleTests.assignValue" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <module name="ScriptIt" />
-      <option name="PACKAGE_NAME" value="steve6472.scriptit" />
-      <option name="MAIN_CLASS_NAME" value="steve6472.scriptit.SimpleTests" />
-      <option name="METHOD_NAME" value="assignValue" />
       <option name="TEST_OBJECT" value="method" />
       <method v="2">
         <option name="Make" enabled="true" />
@@ -222,19 +210,19 @@
     <list>
       <item itemvalue="JUnit.SimpleTests-Debug" />
       <item itemvalue="JUnit.SimpleTests" />
+      <item itemvalue="JUnit.SimpleTests$Arrays" />
+      <item itemvalue="JUnit.SimpleTests$Arrays.arrayFuncParam" />
+      <item itemvalue="JUnit.SimpleTests$Arrays.declaration" />
       <item itemvalue="JUnit.SimpleTests.arrayFuncParam" />
       <item itemvalue="JUnit.SimpleTests.recursion" />
-      <item itemvalue="JUnit.SimpleTests$Class_.getter" />
-      <item itemvalue="JUnit.SimpleTests.assignValue" />
-      <item itemvalue="JUnit.SimpleTests.arrayDeclaration" />
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="JUnit.SimpleTests.arrayFuncParam" />
         <item itemvalue="JUnit.SimpleTests.recursion" />
-        <item itemvalue="JUnit.SimpleTests.arrayDeclaration" />
-        <item itemvalue="JUnit.SimpleTests.assignValue" />
-        <item itemvalue="JUnit.SimpleTests$Class_.getter" />
+        <item itemvalue="JUnit.SimpleTests$Arrays.arrayFuncParam" />
+        <item itemvalue="JUnit.SimpleTests$Arrays" />
+        <item itemvalue="JUnit.SimpleTests$Arrays.declaration" />
+        <item itemvalue="JUnit.SimpleTests.arrayFuncParam" />
       </list>
     </recent_temporary>
   </component>
