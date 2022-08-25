@@ -5,6 +5,7 @@ import steve6472.scriptit.type.PrimitiveType;
 import steve6472.scriptit.type.PrimitiveTypes;
 import steve6472.scriptit.type.Type;
 
+import java.util.List;
 import java.util.Objects;
 
 public abstract class Value
@@ -79,6 +80,19 @@ public abstract class Value
 
 	public abstract Value getValueByName(String name);
 	public abstract void setValueByName(String name, Value value);
+
+	/*
+	 * Array
+	 */
+
+	public static Value createArray(List<Value> values, Type type)
+	{
+		Type arrayType = type.isArray() ? type : type.getArraySubtype();
+		if (arrayType == null)
+			throw new RuntimeException("Array type not valid!");
+
+		return DoubleValue.newValue(arrayType, values, type);
+	}
 
 	/*
 	 * Fancy functions

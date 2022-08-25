@@ -54,7 +54,7 @@ public class TypeTests
 		{
 			Script script = testScript("types/string/substring");
 			Value value = script.runWithDelay();
-			Assertions.assertEquals(value.asPrimitive().getString(), "ello World");
+			Assertions.assertEquals("ello World", value.asPrimitive().getString());
 		}
 	}
 
@@ -71,7 +71,19 @@ public class TypeTests
 
 			Script script = testScript("types/hashmap/generic", workspace);
 			Value value = script.runWithDelay();
-			Assertions.assertEquals(value.asPrimitive().getInt(), 41);
+			Assertions.assertEquals(41, value.asPrimitive().getInt());
+		}
+
+		@Test
+		public void getValues()
+		{
+			Workspace workspace = new Workspace();
+			HashMapType.init();
+			workspace.addType(HashMapType.HASH_MAP);
+
+			Script script = testScript("types/hashmap/get_values", workspace);
+			Value value = script.runWithDelay();
+			Assertions.assertEquals(42, value.asPrimitive().getInt());
 		}
 	}
 }

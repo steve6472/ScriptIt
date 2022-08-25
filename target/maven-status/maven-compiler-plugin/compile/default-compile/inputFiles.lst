@@ -1,5 +1,4 @@
 D:\ScriptIt\src\main\java\steve6472\scriptit\expressions\If.java
-D:\ScriptIt\src\main\java\steve6472\scriptit\expressions\VariableSource.java
 D:\ScriptIt\src\main\java\steve6472\scriptit\expressions\FunctionCall.java
 D:\ScriptIt\src\main\java\steve6472\scriptit\tokenizer\parslet\SingleLineCommentParslet.java
 D:\ScriptIt\src\main\java\steve6472\scriptit\ScriptItSettings.java
@@ -18,8 +17,8 @@ D:\ScriptIt\src\main\java\steve6472\scriptit\tokenizer\parslet\BreakParslet.java
 D:\ScriptIt\src\main\java\steve6472\scriptit\expressions\FunctionSourceType.java
 D:\ScriptIt\src\main\java\steve6472\scriptit\tokenizer\parslet\AttributeParslet.java
 D:\ScriptIt\src\main\java\steve6472\scriptit\tokenizer\parslet\ReturnIfParslet.java
-D:\ScriptIt\src\main\java\steve6472\scriptit\expressions\VariableSourceType.java
 D:\ScriptIt\src\main\java\steve6472\scriptit\expressions\Instanceof.java
+D:\ScriptIt\src\main\java\steve6472\scriptit\type\complex\HashMapType.java
 D:\ScriptIt\src\main\java\steve6472\scriptit\tokenizer\ChainedVariable.java
 D:\ScriptIt\src\main\java\steve6472\scriptit\expressions\BinaryOperator.java
 D:\ScriptIt\src\main\java\steve6472\scriptit\executor\ExpressionExecutor.java
@@ -31,6 +30,7 @@ D:\ScriptIt\src\main\java\steve6472\scriptit\Script.java
 D:\ScriptIt\src\main\java\steve6472\scriptit\expressions\ClassDeclaration.java
 D:\ScriptIt\src\main\java\steve6472\scriptit\expressions\FunctionParameters.java
 D:\ScriptIt\src\main\java\steve6472\scriptit\simple\Continue.java
+D:\ScriptIt\src\main\java\steve6472\scriptit\value\DoubleValue.java
 D:\ScriptIt\src\main\java\steve6472\scriptit\expressions\Attributes.java
 D:\ScriptIt\src\main\java\steve6472\scriptit\expressions\IfElse.java
 D:\ScriptIt\src\main\java\steve6472\scriptit\tokenizer\parslet\StringParslet.java
@@ -51,7 +51,9 @@ D:\ScriptIt\src\main\java\steve6472\scriptit\libraries\RandomLibrary.java
 D:\ScriptIt\src\main\java\steve6472\scriptit\type\PrimitiveTypes.java
 D:\ScriptIt\src\main\java\steve6472\scriptit\type\Type.java
 D:\ScriptIt\src\main\java\steve6472\scriptit\exceptions\NoOperatorFoundException.java
+D:\ScriptIt\src\main\java\steve6472\scriptit\libraries\ArraysLibrary.java
 D:\ScriptIt\src\main\java\steve6472\scriptit\expressions\DeclareFunction.java
+D:\ScriptIt\src\main\java\steve6472\scriptit\value\SingleValue.java
 D:\ScriptIt\src\main\java\steve6472\scriptit\MemoryStack.java
 D:\ScriptIt\src\main\java\steve6472\scriptit\tokenizer\parslet\BodyParslet.java
 D:\ScriptIt\src\main\java\steve6472\scriptit\tokenizer\Tokenizer.java
@@ -74,6 +76,7 @@ D:\ScriptIt\src\main\java\steve6472\scriptit\expressions\UnaryOperator.java
 D:\ScriptIt\src\main\java\steve6472\scriptit\Result.java
 D:\ScriptIt\src\main\java\steve6472\scriptit\value\UniversalValue.java
 D:\ScriptIt\src\main\java\steve6472\scriptit\tokenizer\IOperator.java
+D:\ScriptIt\src\main\java\steve6472\scriptit\tokenizer\parslet\ArrayTypeParslet.java
 D:\ScriptIt\src\main\java\steve6472\scriptit\expressions\OverloadFunction.java
 D:\ScriptIt\src\main\java\steve6472\scriptit\libraries\Library.java
 D:\ScriptIt\src\main\java\steve6472\scriptit\libraries\TestLibrary.java

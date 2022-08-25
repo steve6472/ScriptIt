@@ -167,6 +167,12 @@ public class Assignment extends Expression
 			return null;
 
 		Value value = expressionExecutor.getLastResult().getValue();
+
+		if (value.type.isArray())
+		{
+			return value;
+		}
+
 		if (value.type != PrimitiveTypes.INT)
 		{
 			throw new RuntimeException("Can not create array, size is not an int");

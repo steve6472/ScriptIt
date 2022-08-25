@@ -173,6 +173,15 @@ public class Type
 		return null;
 	}
 
+	public Value createArray(List<Value> values)
+	{
+		Type arrayType = this.isArray() ? this : this.getArraySubtype();
+		if (arrayType == null)
+			throw new RuntimeException("Array type not valid!");
+
+		return DoubleValue.newValue(arrayType, values, this);
+	}
+
 	private static final class ArraySubType extends PrimitiveType<DoubleValue<List<Value>, Type>>
 	{
 		Type superType;
@@ -187,6 +196,9 @@ public class Type
 			addConstructor(FunctionParameters.constructor(this).build(), new TypesInit.Constructor((c) -> {throw new RuntimeException("no array constructor for you");}));
 
 			TypesInit.addFunction(this, "getTypeKeyword", (itself) -> TypesInit.newPrimitive(PrimitiveTypes.STRING, superType.getKeyword()));
+			TypesInit.addFunction(this, "len", (itself) -> TypesInit.newPrimitive(PrimitiveTypes.INT, itself.as(this).getFirst().size()));
+
+
 			/*
 			addFunction(this, "getType", (itself) ->
 			{

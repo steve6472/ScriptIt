@@ -1,0 +1,21 @@
+import type HashMap;
+import type int;
+
+import library System;
+
+HashMap map = HashMap();
+map.put("stone", 12);
+map.put("world", 30);
+
+string[] keys = map.keySet();
+
+int r = 0;
+
+for (int i = 0; i < keys.len(); i += 1)
+{
+    string s = keys[i];
+    int v = map.get(s);
+    r += v;
+};
+
+return r;
