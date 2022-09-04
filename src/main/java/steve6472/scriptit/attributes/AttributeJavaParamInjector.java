@@ -1,6 +1,6 @@
 package steve6472.scriptit.attributes;
 
-import steve6472.scriptit.ClassTransformer;
+import steve6472.scriptit.transformer.JavaTransformer;
 import steve6472.scriptit.Script;
 import steve6472.scriptit.ScriptItSettings;
 import steve6472.scriptit.expressions.*;
@@ -39,7 +39,7 @@ public class AttributeJavaParamInjector extends Attribute
 		try
 		{
 			Class<?> aClass = Class.forName(path);
-			type = ClassTransformer.generateType(aClass);
+			type = JavaTransformer.generateType(aClass);
 		} catch (ClassNotFoundException e)
 		{
 			throw new RuntimeException(e);

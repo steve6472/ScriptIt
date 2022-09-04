@@ -6,7 +6,7 @@ System.println(foo.getCount());
 
 foo.bar.setName("Jerremy");
 
-[injectJavaParam("steve6472.scriptit.ClassTransformer$Bar", "b")];
+[injectJavaParam("steve6472.scriptit.transformer.ClassTransformer$Bar", "b")];
 func testBar()
 {
     System.println(b.getName());
@@ -17,7 +17,7 @@ testBar(foo.bar);
 
 
 
-[injectJavaParam("steve6472.scriptit.ClassTransformer$Inter", "inter")];
+[injectJavaParam("steve6472.scriptit.transformer.ClassTransformer$Inter", "inter")];
 func testInterface()
 {
     inter.setCount(69);

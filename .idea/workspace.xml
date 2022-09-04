@@ -7,16 +7,11 @@
     <list default="true" id="f9500a56-889a-454a-a933-4a804591d857" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/scripts/!object_transformer.scriptit" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/!object_transformer.scriptit" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/steve6472/scriptit/ClassTransformer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/steve6472/scriptit/ClassTransformer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/steve6472/scriptit/ClassTransformer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/steve6472/scriptit/transformer/JavaTransformer.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/steve6472/scriptit/Log.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/steve6472/scriptit/Log.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/steve6472/scriptit/Memory.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/steve6472/scriptit/Memory.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/steve6472/scriptit/ScriptItSettings.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/steve6472/scriptit/ScriptItSettings.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/steve6472/scriptit/expressions/Assignment.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/steve6472/scriptit/expressions/Assignment.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/steve6472/scriptit/attributes/AttributeJavaParamInjector.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/steve6472/scriptit/attributes/AttributeJavaParamInjector.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/steve6472/scriptit/libraries/SystemLibrary.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/steve6472/scriptit/libraries/SystemLibrary.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/steve6472/scriptit/tokenizer/Operator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/steve6472/scriptit/tokenizer/Operator.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/steve6472/scriptit/tokenizer/TokenParser.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/steve6472/scriptit/tokenizer/TokenParser.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/steve6472/scriptit/tokenizer/parslet/ChainedNameParslet.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/steve6472/scriptit/tokenizer/parslet/ChainedNameParslet.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/steve6472/scriptit/SimpleTests.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/steve6472/scriptit/SimpleTests.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" beforeDir="false" afterPath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -24,7 +19,7 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="DarkyenusTimeTracker">
-    <option name="totalTimeSeconds" value="262006" />
+    <option name="totalTimeSeconds" value="287541" />
     <option name="idleThresholdMs" value="60000" />
     <option name="autoCountIdleSeconds" value="10" />
     <option name="gitIntegration" value="true" />
@@ -35,8 +30,8 @@
       <list>
         <option value="AnnotationType" />
         <option value="Record" />
-        <option value="Enum" />
         <option value="Interface" />
+        <option value="Enum" />
         <option value="Class" />
       </list>
     </option>
@@ -109,17 +104,18 @@
     </key>
     <key name="MoveClassesOrPackagesDialog.RECENTS_KEY">
       <recent name="steve6472.scriptit" />
+      <recent name="steve6472.scriptit.transformer" />
     </key>
     <key name="CreateTestDialog.RecentsKey">
       <recent name="steve6472.scriptit.exp" />
       <recent name="steve6472.scriptit.math" />
     </key>
     <key name="CopyClassDialog.RECENTS_KEY">
-      <recent name="steve6472.scriptit.tokenizer.parslet" />
-      <recent name="steve6472.scriptit.value" />
-      <recent name="steve6472.scriptit.expressions.assignment" />
-      <recent name="steve6472.scriptit" />
-      <recent name="steve6472.scriptit.attributes" />
+      <recent name="steve6472.scriptit.newtokenizer" />
+      <recent name="steve6472.scriptit.transformer.parser" />
+      <recent name="steve6472.scriptit.transformer.config" />
+      <recent name="steve6472.scriptit.transformer.info" />
+      <recent name="steve6472.scriptit.tokenizer" />
     </key>
   </component>
   <component name="RunAnythingCache">
@@ -127,9 +123,16 @@
       <command value="git" />
     </option>
   </component>
-  <component name="RunManager" selected="Application.ClassTransformer">
-    <configuration name="ClassTransformer" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="steve6472.scriptit.ClassTransformer" />
+  <component name="RunManager" selected="Application.SchemeParser">
+    <configuration name="JavaTransformer" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="steve6472.scriptit.transformer.JavaTransformer" />
+      <module name="ScriptIt" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="SchemeParser" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="steve6472.scriptit.transformer.SchemeParser" />
       <module name="ScriptIt" />
       <method v="2">
         <option name="Make" enabled="true" />
@@ -181,16 +184,6 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="TypeTests$HashMap_.getValues" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <module name="ScriptIt" />
-      <option name="PACKAGE_NAME" value="steve6472.scriptit.TypeTests" />
-      <option name="MAIN_CLASS_NAME" value="steve6472.scriptit.TypeTests$HashMap_" />
-      <option name="METHOD_NAME" value="getValues" />
-      <option name="TEST_OBJECT" value="method" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
     <configuration name="TypeTests" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="ScriptIt" />
       <option name="PACKAGE_NAME" value="steve6472.scriptit" />
@@ -201,21 +194,21 @@
       </method>
     </configuration>
     <list>
-      <item itemvalue="Application.ClassTransformer" />
+      <item itemvalue="Application.JavaTransformer" />
+      <item itemvalue="Application.SchemeParser" />
       <item itemvalue="JUnit.SimpleTests-Debug" />
       <item itemvalue="JUnit.SimpleTests" />
       <item itemvalue="JUnit.SimpleTests.auto" />
       <item itemvalue="JUnit.SimpleTests.delay" />
       <item itemvalue="JUnit.TypeTests" />
-      <item itemvalue="JUnit.TypeTests$HashMap_.getValues" />
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Application.ClassTransformer" />
+        <item itemvalue="Application.SchemeParser" />
+        <item itemvalue="Application.JavaTransformer" />
         <item itemvalue="JUnit.SimpleTests.auto" />
         <item itemvalue="JUnit.SimpleTests.delay" />
         <item itemvalue="JUnit.TypeTests" />
-        <item itemvalue="JUnit.TypeTests$HashMap_.getValues" />
       </list>
     </recent_temporary>
   </component>

@@ -1,0 +1,52 @@
+alias steve6472.scriptit.transformer.Animal: Animal
+alias steve6472.scriptit.transformer.Cat: Cat
+alias steve6472.scriptit.transformer.Feline: Feline
+alias steve6472.scriptit.transformer.FoodType: FoodType
+alias steve6472.scriptit.transformer.Farm: Farm
+
+//alias java.lang.String: String
+
+/*
+    class:
+        deny default
+        allow
+
+        allow_methods
+        allow_fields
+
+    methods fields:
+        deny default
+        allow
+
+    object:
+        deny
+        allow
+*/
+
+class Farm:
+{
+    type: allow_methods
+    object: deny
+}
+
+class Animal:
+{
+    type: allow
+    object: deny
+}
+
+// String setName(String): allow
+class Cat:
+{
+    type: deny
+
+    methods:
+    {
+        String getName(): allow
+    }
+
+    fields:
+    {
+        String name: deny
+    }
+}

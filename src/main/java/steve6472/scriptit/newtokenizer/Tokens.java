@@ -1,12 +1,11 @@
-package steve6472.scriptit.tokenizer;
+package steve6472.scriptit.newtokenizer;
 
-/**********************
- * Created by steve6472 (Mirek Jozefek)
- * On date: 12/18/2021
+/**
+ * Created by steve6472
+ * Date: 9/3/2022
  * Project: ScriptIt
- *
- ***********************/
-public enum Operator implements IOperator
+ */
+public enum Tokens implements IToken
 {
 	// Mathematics / Binary
 	ADD("+"),
@@ -101,42 +100,36 @@ public enum Operator implements IOperator
 	THIS("this"),
 	AUTO("auto"),
 
-	// Other special
-	NUMBER_INT(""),
-	NUMBER_DOUBLE(""),
-	NAME(""),
-	STRING(""),
-	CHAR(""),
-	EOL(""),
-	EOF(""),
 	;
 
-	String symbol;
-	boolean merge;
+	private final String symbol;
+	private final boolean isMerge;
 
-	Operator(String symbol, boolean merge)
+	Tokens()
 	{
-		this.symbol = symbol;
-		this.merge = merge;
+		this("", false);
 	}
 
-	Operator(String symbol)
+	Tokens(String symbol)
 	{
-		this.symbol = symbol;
+		this(symbol, false);
 	}
 
+	Tokens(String symbol, boolean isMerge)
+	{
+		this.symbol = symbol;
+		this.isMerge = isMerge;
+	}
+
+	@Override
 	public String getSymbol()
 	{
 		return symbol;
 	}
 
+	@Override
 	public boolean isMerge()
 	{
-		return merge;
-	}
-
-	public static void init()
-	{
-		IOperator.addOperators(values());
+		return isMerge;
 	}
 }

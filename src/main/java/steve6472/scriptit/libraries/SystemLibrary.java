@@ -59,6 +59,14 @@ public class SystemLibrary extends Library
 			public Result apply(Script script)
 			{
 				System.out.println(arguments[0] + ", hash: " + arguments[0].hashCode());
+				System.out.println("Binary: ");
+				arguments[0].type.binary.forEach((a, b) -> System.out.println("\t" + a + " -> " + b));
+				System.out.println("Unary: ");
+				arguments[0].type.unary.forEach((a, b) -> System.out.println("\t" + a + " -> " + b));
+				System.out.println("Constructors: ");
+				arguments[0].type.constructors.forEach((a, b) -> System.out.println("\t" + a + " -> " + b));
+				System.out.println("Functions: ");
+				arguments[0].type.functions.forEach((a, b) -> System.out.println("\t" + a + " -> " + b));
 				return Result.pass();
 			}
 		});

@@ -1,10 +1,11 @@
-package steve6472.scriptit;
+package steve6472.scriptit.transformer;
 
-import steve6472.scriptit.attributes.AttributeJavaParamInjector;
+import steve6472.scriptit.Log;
+import steve6472.scriptit.Result;
+import steve6472.scriptit.Script;
+import steve6472.scriptit.ScriptItSettings;
 import steve6472.scriptit.expressions.Function;
 import steve6472.scriptit.expressions.FunctionParameters;
-import steve6472.scriptit.libraries.LogLibrary;
-import steve6472.scriptit.libraries.TestLibrary;
 import steve6472.scriptit.type.ClassType;
 import steve6472.scriptit.type.PrimitiveTypes;
 import steve6472.scriptit.type.Type;
@@ -12,7 +13,6 @@ import steve6472.scriptit.value.PrimitiveValue;
 import steve6472.scriptit.value.UniversalValue;
 import steve6472.scriptit.value.Value;
 
-import java.io.File;
 import java.lang.reflect.*;
 import java.util.*;
 
@@ -21,11 +21,25 @@ import java.util.*;
  * Date: 8/25/2022
  * Project: ScriptIt
  */
-public class ClassTransformer
+public class JavaTransformer
 {
-	private static final Map<Class<?>, Type> CACHE = new HashMap<>();
+	public static final Map<Class<?>, Type> CACHE = new HashMap<>();
+	public static final Set<Type> FUNCTION_GENERATED = new HashSet<>();
+//	{
+//		@Override
+//		public Type put(Class<?> key, Type value)
+//		{
+//			System.out.println(Log.BLUE + "Putting " + key + " -> " + value + Log.RESET);
+//			return super.put(key, value);
+//		}
+//	};
 
 	static
+	{
+		initCache();
+	}
+
+	public static void initCache()
 	{
 		CACHE.put(int.class, PrimitiveTypes.INT);
 		CACHE.put(double.class, PrimitiveTypes.DOUBLE);
@@ -62,6 +76,8 @@ public class ClassTransformer
 		Type generatedType = new ClassType(generateClassName(clazz.getName()), clazz);
 		generatedType.createArraySubtype();
 
+		Log.scriptDebug(ScriptItSettings.CLASS_TRANSFORMER_DEBUG, "");
+		Log.scriptDebug(ScriptItSettings.CLASS_TRANSFORMER_DEBUG, "");
 		Log.scriptDebug(ScriptItSettings.CLASS_TRANSFORMER_DEBUG, "Generated type -> " + generatedType.getKeyword());
 
 		CACHE.put(clazz, generatedType);
@@ -74,30 +90,41 @@ public class ClassTransformer
 		return "generated_" + classPath.replaceAll("\\.", "_").replaceAll("\\$", "___");
 	}
 
-	private static void generateFunctions(Class<?> clazz, Type type, UniversalValue value)
+	private static void generateFunctions(Class<?> clazz, Type type)
 	{
+		if (FUNCTION_GENERATED.contains(type))
+			return;
+
+		FUNCTION_GENERATED.add(type);
+
+		Log.scriptDebug(ScriptItSettings.CLASS_TRANSFORMER_DEBUG, "Generating functions for -> " + type.getKeyword());
 		main: for (Method declaredMethod : clazz.getMethods())
 		{
-			for (Method method : Object.class.getDeclaredMethods())
-			{
-				if (declaredMethod.getName().equals(method.getName()) && Arrays.equals(declaredMethod.getParameters(), method.getParameters()))
-				{
-					continue main;
-				}
-			}
-
-			Log.scriptDebug(ScriptItSettings.CLASS_TRANSFORMER_DEBUG, "Adding function -> " + declaredMethod.getName());
+//			for (Method method : Object.class.getDeclaredMethods())
+//			{
+//				if (declaredMethod.getName().equals(method.getName()) && Arrays.equals(declaredMethod.getParameters(), method.getParameters()))
+//				{
+//					continue main;
+//				}
+//			}
 
 			Parameter[] parameters = declaredMethod.getParameters();
 			String[] argumentNames = new String[parameters.length];
+
+			Log.scriptDebug(ScriptItSettings.CLASS_TRANSFORMER_DEBUG, "Adding function -> " + declaredMethod.getName() + " (" + parameters.length + ")");
 
 			FunctionParameters.FunctionParametersBuilder builder = FunctionParameters.function(declaredMethod.getName());
 
 			for (int i = 0; i < parameters.length; i++)
 			{
 				argumentNames[i] = parameters[i].getName();
-				builder.addType(generateType(parameters[i].getType()));
+				Log.scriptDebug(ScriptItSettings.CLASS_TRANSFORMER_DEBUG, Log.YELLOW + "\tGenerating argument " + argumentNames[i] + ", " + parameters[i].getType());
+				Type type1 = generateType(parameters[i].getType());
+//				generateFunctions(parameters[i].getType(), type1);
+				builder.addType(type1);
 			}
+
+			Log.scriptDebug(ScriptItSettings.CLASS_TRANSFORMER_DEBUG, "");
 
 			Function function = new Function(argumentNames)
 			{
@@ -131,7 +158,6 @@ public class ClassTransformer
 					}
 				}
 			};
-			function.setReturnThisHelper(value);
 
 			type.addFunction(builder.build(), function);
 		}
@@ -140,6 +166,7 @@ public class ClassTransformer
 	public static Value transformObject(Object object) throws IllegalAccessException
 	{
 		Class<?> clazz = object.getClass();
+		Log.scriptDebug(ScriptItSettings.CLASS_TRANSFORMER_DEBUG, "");
 		Log.scriptDebug(ScriptItSettings.CLASS_TRANSFORMER_DEBUG, "Transforming -> " + clazz.getName());
 
 		if (clazz == Integer.class) return PrimitiveTypes.INT.newValue(object);
@@ -178,15 +205,13 @@ public class ClassTransformer
 			return array;
 		}
 
-		Type t = CACHE.get(clazz);
-
 
 		Type type = generateType(clazz);
-		UniversalValue uv = UniversalValue.newValue(type);
-		uv.setValue("java object", object);
 
-		if (t == null)
-			generateFunctions(clazz, type, uv);
+		// custom Value, objects are held, accessed when needed and transformed to value
+		JavaValue uv = new JavaValue(type);
+		uv.setValue("java object", object);
+		generateFunctions(clazz, type);
 
 		for (Field declaredField : clazz.getDeclaredFields())
 		{
@@ -200,122 +225,28 @@ public class ClassTransformer
 			if ((declaredField.getModifiers() & Modifier.TRANSIENT) != 0)
 				continue;
 
-			Object o = declaredField.get(object);
-
-			if (uv.getValue(declaredField.getName()) != null)
-				continue;
-
-			Log.scriptDebug(ScriptItSettings.CLASS_TRANSFORMER_DEBUG, "Adding field -> " + declaredField.getName());
-
-			if (o == null)
+			try
 			{
-				uv.setValue(declaredField.getName(), Value.NULL);
-			} else
+				Object o = declaredField.get(object);
+
+				if (uv.getValue(declaredField.getName()) != null)
+					continue;
+
+				if (o == null)
+				{
+					uv.setValue(declaredField.getName(), null);
+					Log.scriptDebug(ScriptItSettings.CLASS_TRANSFORMER_DEBUG, "Adding field -> " + declaredField.getName() + " -> null");
+				} else
+				{
+					uv.setValue(declaredField.getName(), o);
+					Log.scriptDebug(ScriptItSettings.CLASS_TRANSFORMER_DEBUG, "Adding field -> " + declaredField.getName() + " -> " + o);
+				}
+			} catch (IllegalAccessException ignored)
 			{
-				uv.setValue(declaredField.getName(), transformObject(o));
+
 			}
 		}
 
 		return uv;
-	}
-
-	public static void main(String[] args) throws IllegalAccessException
-	{
-		ScriptItSettings.CLASS_TRANSFORMER_DEBUG = true;
-		ScriptItSettings.ALLOW_CLASS_TYPE_CONVERSION = true;
-
-		Foo foo = new Foo();
-		foo.setCount(5);
-		foo.fancy = false;
-		foo.bar = new Bar();
-		foo.bar.setName("James");
-
-		PrimitiveTypes.TRUE();
-
-		Value value = transformObject(foo);
-
-		if (value == null)
-		{
-			System.out.println("NULL");
-			return;
-		}
-
-		System.out.println("");
-
-		System.out.println(value.type);
-		if (value instanceof UniversalValue universal)
-			universal.values.forEach((k, v) -> System.out.println("\t" + k + " -> " + v));
-		else
-			System.out.println(value);
-		System.out.println("Binary: ");
-		value.type.binary.forEach((a, b) -> System.out.println("\t" + a + " -> " + b));
-		System.out.println("Unary: ");
-		value.type.unary.forEach((a, b) -> System.out.println("\t" + a + " -> " + b));
-		System.out.println("Constructors: ");
-		value.type.constructors.forEach((a, b) -> System.out.println("\t" + a + " -> " + b));
-		System.out.println("Functions: ");
-		value.type.functions.forEach((a, b) -> System.out.println("\t" + a + " -> " + b));
-
-		Script script = testScript("!object_transformer");
-		script.getMemory().addVariable("foo", value);
-		script.runWithDelay();
-	}
-
-	private static Script testScript(String name)
-	{
-		return testScript(name, new Workspace());
-	}
-
-	private static Script testScript(String name, Workspace workspace)
-	{
-		ScriptItSettings.ALLOW_UNSAFE = true;
-		workspace.addLibrary(new TestLibrary());
-		workspace.addLibrary(new LogLibrary());
-		workspace.addAttribute(new AttributeJavaParamInjector());
-		Script script = Script.create(workspace, new File("scripts/" + name + ".scriptit"));
-		Highlighter.basicHighlight();
-		System.out.println(script.showCode() + "\n");
-		return script;
-	}
-
-	static class Foo implements Inter
-	{
-		int count;
-		boolean fancy;
-		Bar bar;
-		long a;
-
-		@Override
-		public int getCount()
-		{
-			return count;
-		}
-
-		@Override
-		public void setCount(int count)
-		{
-			this.count = count;
-		}
-	}
-
-	static class Bar
-	{
-		String name;
-
-		public String getName()
-		{
-			return name;
-		}
-
-		public void setName(String name)
-		{
-			this.name = name;
-		}
-	}
-
-	interface Inter
-	{
-		int getCount();
-		void setCount(int count);
 	}
 }
