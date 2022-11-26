@@ -1,5 +1,6 @@
 package steve6472.scriptit.transformer;
 
+import steve6472.scriptit.Script;
 import steve6472.scriptit.type.Type;
 import steve6472.scriptit.value.UniversalValue;
 import steve6472.scriptit.value.Value;
@@ -11,9 +12,13 @@ import steve6472.scriptit.value.Value;
  */
 public class JavaValue extends UniversalValue
 {
-	protected JavaValue(Type type)
+	// Holds a reference to Script so I can use Configs
+	private final Script script;
+
+	protected JavaValue(Script script, Type type)
 	{
 		super(type);
+		this.script = script;
 	}
 
 	@Override
@@ -21,7 +26,7 @@ public class JavaValue extends UniversalValue
 	{
 		try
 		{
-			return JavaTransformer.transformObject(values.get(name));
+			return JavaTransformer.transformObject(values.get(name), script);
 		} catch (IllegalAccessException e)
 		{
 			throw new RuntimeException(e);

@@ -9,5 +9,11 @@ public class FieldConfig extends Config
 {
 	public String type;
 	public String name;
-	public Setting setting;
+	public Setting setting = Setting.DENY;
+
+	@Override
+	public String toString()
+	{
+		return "FieldConfig{" + "type='" + type + '\'' + ", name='" + name + '\'' + ", setting=" + setting + '}';
+	}
 }

@@ -5,10 +5,12 @@ import steve6472.scriptit.libraries.Library;
 import steve6472.scriptit.libraries.MathLibrary;
 import steve6472.scriptit.libraries.RandomLibrary;
 import steve6472.scriptit.libraries.SystemLibrary;
+import steve6472.scriptit.transformer.parser.config.Config;
 import steve6472.scriptit.type.PrimitiveTypes;
 import steve6472.scriptit.type.Type;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**********************
@@ -22,6 +24,7 @@ public class Workspace
 	private final Map<String, Library> libraries = new HashMap<>();
 	private final Map<String, Type> types = new HashMap<>();
 	private final Map<String, Attribute> attributes = new HashMap<>();
+	private final Map<String, List<Config>> transformers = new HashMap<>();
 
 	public Workspace()
 	{
@@ -62,6 +65,16 @@ public class Workspace
 
 		if (type.getArraySubtype() != null)
 			this.types.put(type.getArraySubtype().getKeyword(), type.getArraySubtype());
+	}
+
+	public void addTransformer(String name, List<Config> loadedConfig)
+	{
+		transformers.put(name, loadedConfig);
+	}
+
+	public List<Config> getTransformer(String name)
+	{
+		return transformers.get(name);
 	}
 
 	public void removeType(String name)

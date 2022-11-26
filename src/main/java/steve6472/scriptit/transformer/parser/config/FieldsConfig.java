@@ -11,4 +11,10 @@ import java.util.List;
 public class FieldsConfig extends Config
 {
 	public List<FieldConfig> configs = new ArrayList<>();
+
+	@Override
+	public String toString()
+	{
+		return "FieldsConfig{" + "configs=" + configs + '}';
+	}
 }

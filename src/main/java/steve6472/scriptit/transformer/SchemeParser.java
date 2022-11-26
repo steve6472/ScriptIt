@@ -1,13 +1,13 @@
 package steve6472.scriptit.transformer;
 
+import steve6472.scriptit.Log;
+import steve6472.scriptit.ScriptItSettings;
 import steve6472.scriptit.newtokenizer.IToken;
 import steve6472.scriptit.newtokenizer.MainTokens;
 import steve6472.scriptit.newtokenizer.TokenParser;
 import steve6472.scriptit.newtokenizer.TokenStorage;
-import steve6472.scriptit.transformer.parser.config.AliasConfig;
-import steve6472.scriptit.transformer.parser.config.ClassConfig;
+import steve6472.scriptit.transformer.parser.config.*;
 import steve6472.scriptit.transformer.parser.*;
-import steve6472.scriptit.transformer.parser.config.Config;
 
 import java.io.File;
 import java.io.IOException;
@@ -23,17 +23,31 @@ import java.util.Map;
  */
 public class SchemeParser
 {
+	public static final Map<String, String> JAVA_ALIAS = Map.of(
+		"String", String.class.getName(),
+		"int", Integer.class.getName(),
+		"bool", Boolean.class.getName(),
+		"boolean", Boolean.class.getName(),
+		"double", Double.class.getName(),
+		"float", Float.class.getName(),
+		"byte", Byte.class.getName(),
+		"short", Short.class.getName(),
+		"char", Character.class.getName(),
+		"Object", Object.class.getName()
+	);
+
 	public static final MethodParslet METHOD_PARSLET = new MethodParslet();
 	public static final FieldParslet FIELD_PARSLET = new FieldParslet();
 
-	public static void main(String[] args) throws IOException
+	private final TokenStorage tokenStorage;
+	private TokenParser<Config, Data> parser;
+
+	public SchemeParser()
 	{
-		TokenStorage tokenStorage = new TokenStorage();
+		tokenStorage = new TokenStorage();
 		tokenStorage.addTokens(Token.class);
 
-		TokenParser<Config, Data> parser = new TokenParser<>(tokenStorage);
-
-		parser.tokenize(new Data(), Files.readString(new File("!tests/transformer/scheme.txt").toPath()));
+		parser = new TokenParser<>(tokenStorage);
 
 		parser.prefixParslet(Token.ALIAS, new AliasParslet());
 		parser.prefixParslet(MainTokens.NAME, new PathParslet());
@@ -46,23 +60,81 @@ public class SchemeParser
 
 		parser.prefixParslet(Token.COMMENT, new CommentParslet());
 		parser.prefixParslet(Token.MULTI_COMMENT_START, new MultiCommentParslet());
+	}
+
+	public List<Config> createConfigs(File schemeFile)
+	{
+		try
+		{
+			parser.tokenize(new Data(), Files.readString(schemeFile.toPath()));
+		} catch (IOException e)
+		{
+			throw new RuntimeException(e);
+		}
 
 		List<Config> configs = parser.parseAll();
 
+		applyAlias(configs);
+
+		// Clear useless configs
+		configs.removeIf(c -> c instanceof CommentInformation);
+
+		for (Config config : configs)
+		{
+			Log.scriptDebug(ScriptItSettings.SCHEME_PARSER_DEBUG, "" + config);
+		}
+
+		return configs;
+	}
+
+	private void applyAliasToConfig(Map<String, String> pathMap, Config config)
+	{
+		if (config instanceof AliasConfig ac) pathMap.put(ac.getAlias(), ac.getJavaPath());
+		if (config instanceof MethodsConfig msc) msc.configs.forEach(mc -> applyAliasToConfig(pathMap, mc));
+		if (config instanceof FieldConfig fc) fc.type = getAlias(pathMap, fc.type);
+		if (config instanceof FieldsConfig fsc) fsc.configs.forEach(fc -> applyAliasToConfig(pathMap, fc));
+
+		if (config instanceof MethodConfig mc)
+		{
+			mc.returnType = getAlias(pathMap, mc.returnType);
+			mc.arguments.replaceAll(s -> getAlias(pathMap, s));
+		}
+
+		if (config instanceof ClassConfig cc)
+		{
+			cc.path = getAlias(pathMap, cc.path);
+			cc.methods.forEach(mc -> applyAliasToConfig(pathMap, mc));
+			cc.fields.forEach(fc -> applyAliasToConfig(pathMap, fc));
+		}
+	}
+
+	public void applyAlias(List<Config> configs)
+	{
 		Map<String, String> pathMap = new HashMap<>();
 
 		for (Config config : configs)
 		{
-			if (config instanceof AliasConfig ac)
-			{
-				pathMap.put(ac.getAlias(), ac.getJavaPath());
-			}
-
-			if (config instanceof ClassConfig cc)
-			{
-				cc.path = pathMap.getOrDefault(cc.path, cc.path);
-			}
+			applyAliasToConfig(pathMap, config);
 		}
+	}
+
+	private String getAlias(Map<String, String> pathMap, String original)
+	{
+		// Either use the defined alias, use Java alias or use provided path
+		String s = pathMap.get(original);
+		if (s != null)
+		{
+			return s;
+		} else
+		{
+			return JAVA_ALIAS.getOrDefault(original, original);
+		}
+	}
+
+	public static void main(String[] args) throws IOException
+	{
+		SchemeParser schemeParser = new SchemeParser();
+		schemeParser.createConfigs(new File("!tests/transformer/scheme.txt"));
 	}
 
 	public record Data() {}

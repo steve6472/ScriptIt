@@ -4,7 +4,6 @@ import steve6472.scriptit.newtokenizer.PrefixParselet;
 import steve6472.scriptit.newtokenizer.TokenParser;
 import steve6472.scriptit.newtokenizer.Tokenizer;
 import steve6472.scriptit.transformer.SchemeParser;
-import steve6472.scriptit.transformer.config.*;
 import steve6472.scriptit.transformer.parser.config.Config;
 import steve6472.scriptit.transformer.parser.config.MethodConfig;
 import steve6472.scriptit.transformer.parser.config.MethodsConfig;

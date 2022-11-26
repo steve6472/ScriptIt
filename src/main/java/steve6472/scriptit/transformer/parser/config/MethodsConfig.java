@@ -11,4 +11,10 @@ import java.util.List;
 public class MethodsConfig extends Config
 {
 	public List<MethodConfig> configs = new ArrayList<>();
+
+	@Override
+	public String toString()
+	{
+		return "MethodsConfig{" + "configs=" + configs + '}';
+	}
 }

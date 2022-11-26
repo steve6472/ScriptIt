@@ -12,7 +12,13 @@ public class MethodConfig extends Config
 {
 	public String returnType;
 	public String name;
-	public Setting setting;
+	public Setting setting = Setting.DENY;
 
 	public List<String> arguments = new ArrayList<>();
+
+	@Override
+	public String toString()
+	{
+		return "MethodConfig{" + "returnType='" + returnType + '\'' + ", name='" + name + '\'' + ", setting=" + setting + ", arguments=" + arguments + '}';
+	}
 }

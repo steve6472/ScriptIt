@@ -1,10 +1,11 @@
 package steve6472.scriptit.transformer.parser;
 
+import steve6472.scriptit.Log;
+import steve6472.scriptit.ScriptItSettings;
 import steve6472.scriptit.newtokenizer.PrefixParselet;
 import steve6472.scriptit.newtokenizer.TokenParser;
 import steve6472.scriptit.newtokenizer.Tokenizer;
 import steve6472.scriptit.transformer.SchemeParser;
-import steve6472.scriptit.transformer.config.*;
 import steve6472.scriptit.transformer.parser.config.*;
 
 import java.util.List;
@@ -54,6 +55,8 @@ public class ClassParslet implements PrefixParselet<Config, SchemeParser.Data>
 				throw new RuntimeException("Config not allowed " + c.getClass().getSimpleName());
 			}
 		});
+
+//		Log.scriptDebug(ScriptItSettings.SCHEME_PARSER_DEBUG, "ClassConfig: " + classConfig);
 
 		return classConfig;
 	}

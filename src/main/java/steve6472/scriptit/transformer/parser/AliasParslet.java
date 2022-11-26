@@ -1,5 +1,7 @@
 package steve6472.scriptit.transformer.parser;
 
+import steve6472.scriptit.Log;
+import steve6472.scriptit.ScriptItSettings;
 import steve6472.scriptit.newtokenizer.MainTokens;
 import steve6472.scriptit.newtokenizer.PrefixParselet;
 import steve6472.scriptit.newtokenizer.TokenParser;
@@ -23,7 +25,7 @@ public class AliasParslet implements PrefixParselet<Config, SchemeParser.Data>
 		tokenizer.matchToken(SchemeParser.Token.OP, true);
 		tokenizer.matchToken(MainTokens.NAME, true);
 
-		System.out.println("Alias path = " + path.getPath() + ": " + tokenizer.getCurrentToken().sval());
+//		Log.scriptDebug(ScriptItSettings.SCHEME_PARSER_DEBUG, "Alias path = " + path.getPath() + ": " + tokenizer.getCurrentToken().sval());
 		return new AliasConfig(path.getPath(), tokenizer.getCurrentToken().sval());
 	}
 }

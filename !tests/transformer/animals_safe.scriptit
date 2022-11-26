@@ -1,0 +1,16 @@
+transformer farm;
+import library System;
+
+//System.dumpFunctions();
+
+Cat jarryTheCat = Cat("Jerry");
+
+Farm farm = Farm();
+farm.addAnimal(jarryTheCat);
+
+System.println("Animals at farm: " + farm.getAnimalCount());
+auto a = farm.getAnimals();
+System.println(a.get(0));
+System.println(a.get(0).getName());
+System.println(a.get(0).id());
+System.println(a);

@@ -6,6 +6,7 @@ import steve6472.scriptit.Script;
 import steve6472.scriptit.ScriptItSettings;
 import steve6472.scriptit.expressions.Function;
 import steve6472.scriptit.expressions.FunctionParameters;
+import steve6472.scriptit.transformer.parser.config.*;
 import steve6472.scriptit.type.ClassType;
 import steve6472.scriptit.type.PrimitiveTypes;
 import steve6472.scriptit.type.Type;
@@ -62,10 +63,17 @@ public class JavaTransformer
 		CACHE.put(Double[].class, PrimitiveTypes.DOUBLE.getArraySubtype());
 		CACHE.put(Boolean[].class, PrimitiveTypes.BOOL.getArraySubtype());
 		CACHE.put(Character[].class, PrimitiveTypes.CHAR.getArraySubtype());
+
+		CACHE.put(Object.class, PrimitiveTypes.ANY_TYPE);
 	}
 
-	public static Type generateType(Class<?> clazz)
+	public static Type generateType(Class<?> clazz, Script script)
 	{
+		if (!canBeTransformed(script, clazz))
+		{
+			throw new RuntimeException("Tried to transform denied class '" + clazz.getName() + "'");
+		}
+
 		Type cachedType = CACHE.get(clazz);
 
 		if (cachedType != null)
@@ -73,11 +81,12 @@ public class JavaTransformer
 			return cachedType;
 		}
 
-		Type generatedType = new ClassType(generateClassName(clazz.getName()), clazz);
-		generatedType.createArraySubtype();
+		Log.scriptDebug(ScriptItSettings.CLASS_TRANSFORMER_DEBUG, Log.RED + "-".repeat(32));
 
-		Log.scriptDebug(ScriptItSettings.CLASS_TRANSFORMER_DEBUG, "");
-		Log.scriptDebug(ScriptItSettings.CLASS_TRANSFORMER_DEBUG, "");
+		Type generatedType = new ClassType(getAliasFromClass(script, clazz), clazz);
+		generatedType.createArraySubtype();
+		generateConstructors(script, clazz, generatedType);
+
 		Log.scriptDebug(ScriptItSettings.CLASS_TRANSFORMER_DEBUG, "Generated type -> " + generatedType.getKeyword());
 
 		CACHE.put(clazz, generatedType);
@@ -90,7 +99,80 @@ public class JavaTransformer
 		return "generated_" + classPath.replaceAll("\\.", "_").replaceAll("\\$", "___");
 	}
 
-	private static void generateFunctions(Class<?> clazz, Type type)
+	private static void generateConstructors(Script script, Class<?> clazz, Type type)
+	{
+		for (Constructor<?> constructor : clazz.getConstructors())
+		{
+			// Do not generate any constructors for abstract classes
+			if ((clazz.getModifiers() & Modifier.ABSTRACT) != 0)
+			{
+				continue;
+			}
+
+			if (!canTransformConstructor(script, clazz, constructor))
+			{
+				Log.scriptDebug(ScriptItSettings.CLASS_TRANSFORMER_IGNORED_DEBUG, "Ignoring disabled constructor " + constructor);
+				continue;
+			}
+
+			Parameter[] parameters = constructor.getParameters();
+			String[] argumentNames = new String[parameters.length];
+
+			FunctionParameters.FunctionParametersBuilder builder = FunctionParameters.function(type.getKeyword());
+
+			for (int i = 0; i < parameters.length; i++)
+			{
+				argumentNames[i] = parameters[i].getName();
+				Log.scriptDebug(ScriptItSettings.CLASS_TRANSFORMER_DEBUG, Log.YELLOW + "\tGenerating argument " + argumentNames[i] + ", " + parameters[i].getType());
+				try
+				{
+					Type type1 = generateType(parameters[i].getType(), script);
+					//					generateFunctions(parameters[i].getType(), type1);
+					builder.addType(type1);
+				} catch (Exception exception)
+				{
+					throw new RuntimeException(
+						"Error thrown when generating types for constructor parameters (" + constructor.getName() + Arrays.toString(constructor.getParameters()) + " of class " + clazz.getName() + ")"
+						, exception);
+				}
+			}
+
+			Function function = new Function(argumentNames)
+			{
+				@Override
+				public Result apply(Script script)
+				{
+					Object invoke;
+					try
+					{
+						Object[] params = new Object[argumentNames.length];
+
+						for (int i = 0; i < arguments.length; i++)
+						{
+							Value argument = arguments[i];
+							if (argument instanceof PrimitiveValue<?> pv)
+								params[i] = pv.get();
+							if (argument instanceof UniversalValue pv)
+								params[i] = pv.get("java object");
+						}
+
+						invoke = constructor.newInstance(params);
+						return Result.value(transformObject(invoke, script));
+					} catch (IllegalAccessException | InvocationTargetException | InstantiationException e)
+					{
+						throw new RuntimeException(e);
+					}
+				}
+			};
+
+			FunctionParameters build = builder.build();
+			type.constructors.put(build, function);
+			Log.scriptDebug(ScriptItSettings.CLASS_TRANSFORMER_DEBUG, Log.YELLOW + "\tCreated Constructor for " + build);
+
+		}
+	}
+
+	private static void generateFunctions(Class<?> clazz, Type type, Script script)
 	{
 		if (FUNCTION_GENERATED.contains(type))
 			return;
@@ -108,10 +190,16 @@ public class JavaTransformer
 //				}
 //			}
 
+			if (!canTransformMethod(script, clazz, declaredMethod))
+			{
+				Log.scriptDebug(ScriptItSettings.CLASS_TRANSFORMER_IGNORED_DEBUG, "Ignoring disabled method " + declaredMethod);
+				continue;
+			}
+
 			Parameter[] parameters = declaredMethod.getParameters();
 			String[] argumentNames = new String[parameters.length];
 
-			Log.scriptDebug(ScriptItSettings.CLASS_TRANSFORMER_DEBUG, "Adding function -> " + declaredMethod.getName() + " (" + parameters.length + ")");
+			Log.scriptDebug(ScriptItSettings.CLASS_TRANSFORMER_DEBUG, "Adding function -> " + declaredMethod.getName() + " (" + parameters.length + ")" + declaredMethod.getDeclaringClass());
 
 			FunctionParameters.FunctionParametersBuilder builder = FunctionParameters.function(declaredMethod.getName());
 
@@ -119,12 +207,18 @@ public class JavaTransformer
 			{
 				argumentNames[i] = parameters[i].getName();
 				Log.scriptDebug(ScriptItSettings.CLASS_TRANSFORMER_DEBUG, Log.YELLOW + "\tGenerating argument " + argumentNames[i] + ", " + parameters[i].getType());
-				Type type1 = generateType(parameters[i].getType());
-//				generateFunctions(parameters[i].getType(), type1);
-				builder.addType(type1);
+				try
+				{
+					Type type1 = generateType(parameters[i].getType(), script);
+//					generateFunctions(parameters[i].getType(), type1);
+					builder.addType(type1);
+				} catch (Exception exception)
+				{
+					throw new RuntimeException(
+						"Error thrown when generating types for method parameters (" + declaredMethod.getName() + Arrays.toString(declaredMethod.getParameters()) + " of class " + clazz.getName() + ")"
+						, exception);
+				}
 			}
-
-			Log.scriptDebug(ScriptItSettings.CLASS_TRANSFORMER_DEBUG, "");
 
 			Function function = new Function(argumentNames)
 			{
@@ -148,7 +242,7 @@ public class JavaTransformer
 						invoke = declaredMethod.invoke(returnThisHelper.asUniversal().get("java object"), params);
 						if (invoke != null)
 						{
-							return Result.value(transformObject(invoke));
+							return Result.value(transformObject(invoke, script));
 						} else {
 							return Result.pass();
 						}
@@ -159,13 +253,21 @@ public class JavaTransformer
 				}
 			};
 
-			type.addFunction(builder.build(), function);
+			FunctionParameters build = builder.build();
+			type.addFunction(build, function);
+			Log.scriptDebug(ScriptItSettings.CLASS_TRANSFORMER_DEBUG, Log.BLUE + "Created function -> " + build);
 		}
 	}
 
-	public static Value transformObject(Object object) throws IllegalAccessException
+	public static Value transformObject(Object object, Script script) throws IllegalAccessException
 	{
 		Class<?> clazz = object.getClass();
+
+		if (!canBeTransformed(script, clazz))
+		{
+			throw new RuntimeException("Tried to transform denied class " + clazz.getName());
+		}
+
 		Log.scriptDebug(ScriptItSettings.CLASS_TRANSFORMER_DEBUG, "");
 		Log.scriptDebug(ScriptItSettings.CLASS_TRANSFORMER_DEBUG, "Transforming -> " + clazz.getName());
 
@@ -189,7 +291,7 @@ public class JavaTransformer
 					arr.add(Value.NULL);
 				} else
 				{
-					Value value = transformObject(o);
+					Value value = transformObject(o, script);
 					arr.add(value);
 				}
 			}
@@ -206,12 +308,12 @@ public class JavaTransformer
 		}
 
 
-		Type type = generateType(clazz);
+		Type type = generateType(clazz, script);
 
 		// custom Value, objects are held, accessed when needed and transformed to value
-		JavaValue uv = new JavaValue(type);
+		JavaValue uv = new JavaValue(script, type);
 		uv.setValue("java object", object);
-		generateFunctions(clazz, type);
+		generateFunctions(clazz, type, script);
 
 		for (Field declaredField : clazz.getDeclaredFields())
 		{
@@ -224,6 +326,12 @@ public class JavaTransformer
 
 			if ((declaredField.getModifiers() & Modifier.TRANSIENT) != 0)
 				continue;
+
+			if (!canTransformField(script, clazz, declaredField))
+			{
+				Log.scriptDebug(ScriptItSettings.CLASS_TRANSFORMER_IGNORED_DEBUG, "Ignoring disabled field " + declaredField);
+				continue;
+			}
 
 			try
 			{
@@ -248,5 +356,178 @@ public class JavaTransformer
 		}
 
 		return uv;
+	}
+
+	public static void addClasses(Script script)
+	{
+		for (Config transformerConfig : script.transformerConfigs)
+		{
+			if (transformerConfig instanceof ClassConfig cc)
+			{
+				if (cc.isFullyDisabled())
+					continue;
+
+				try
+				{
+					Type generatedType = generateType(Class.forName(cc.path), script);
+					script.getMemory().addType(generatedType);
+				} catch (ClassNotFoundException e)
+				{
+					throw new RuntimeException(e);
+				}
+			}
+		}
+	}
+
+	public static boolean canBeTransformed(Script script, Class<?> clazz)
+	{
+		if (CACHE.containsKey(clazz))
+			return true;
+
+		for (Config transformerConfig : script.transformerConfigs)
+		{
+			if (transformerConfig instanceof ClassConfig cc)
+			{
+				if (cc.path.equals(clazz.getName()))
+					return !cc.isFullyDisabled();
+			}
+		}
+		return false;
+	}
+
+	public static boolean canTransformField(Script script, Class<?> clazz, Field field)
+	{
+		for (Config transformerConfig : script.transformerConfigs)
+		{
+			if (transformerConfig instanceof ClassConfig cc)
+			{
+				if (cc.path.equals(clazz.getName()))
+				{
+					if (cc.type == Setting.ALLOW || cc.type == Setting.ALLOW_FIELDS)
+						return true;
+
+					for (FieldConfig fieldConfig : cc.fields)
+					{
+						if (fieldConfig.type.equals(field.getType().getName()) && field.getName().equals(fieldConfig.name))
+						{
+							return fieldConfig.setting == Setting.ALLOW;
+						}
+					}
+
+					return false;
+				}
+			}
+		}
+		return false;
+	}
+
+	public static boolean canTransformMethod(Script script, Class<?> clazz, Method method)
+	{
+		for (Config transformerConfig : script.transformerConfigs)
+		{
+			if (transformerConfig instanceof ClassConfig cc)
+			{
+				if (cc.path.equals(clazz.getName()))
+				{
+					if (method.getDeclaringClass().equals(Object.class) && cc.objectSetting == Setting.DENY)
+						return false;
+
+					if (cc.type == Setting.ALLOW || cc.type == Setting.ALLOW_METHODS)
+						return true;
+
+					methods: for (MethodConfig methodConfig : cc.methods)
+					{
+						if (methodConfig.returnType.equals(method.getReturnType().getName()) && method.getName().equals(methodConfig.name))
+						{
+							// not the same method
+							if (method.getParameters().length != methodConfig.arguments.size())
+								continue;
+
+							for (int i = 0; i < method.getParameters().length; i++)
+							{
+								// Use JAVA_ALIAS to translate int -> java.lang.Integer
+								if (!methodConfig.arguments
+									.get(i)
+									.equals(SchemeParser.JAVA_ALIAS.getOrDefault(method.getParameters()[i]
+										.getType()
+										.getName(), method.getParameters()[i].getType().getName())))
+								{
+									continue methods;
+								}
+							}
+
+							return methodConfig.setting == Setting.ALLOW;
+						}
+					}
+
+					return false;
+				}
+			}
+		}
+		return false;
+	}
+
+	public static boolean canTransformConstructor(Script script, Class<?> clazz, Constructor<?> constructor)
+	{
+		for (Config transformerConfig : script.transformerConfigs)
+		{
+			if (transformerConfig instanceof ClassConfig cc)
+			{
+				if (cc.path.equals(clazz.getName()))
+				{
+					if (cc.type == Setting.ALLOW || cc.type == Setting.ALLOW_METHODS)
+						return true;
+
+					methods: for (MethodConfig methodConfig : cc.methods)
+					{
+						if (clazz.getSimpleName().equals(methodConfig.name))
+						{
+							// not the same method
+							if (constructor.getParameters().length !=  methodConfig.arguments.size())
+								continue;
+
+							for (int i = 0; i < constructor.getParameters().length; i++)
+							{
+								// Use JAVA_ALIAS to translate int -> java.lang.Integer
+								if (!methodConfig.arguments
+									.get(i)
+									.equals(SchemeParser.JAVA_ALIAS.getOrDefault(constructor.getParameters()[i]
+										.getType()
+										.getName(), constructor.getParameters()[i].getType().getName())))
+								{
+									continue methods;
+								}
+							}
+
+							return methodConfig.setting == Setting.ALLOW;
+						}
+					}
+
+					return false;
+				}
+			}
+		}
+		return false;
+	}
+
+	private static String getAliasFromClass(Script script, Class<?> clazz)
+	{
+		for (String s : SchemeParser.JAVA_ALIAS.keySet())
+		{
+			String s1 = SchemeParser.JAVA_ALIAS.get(s);
+			if (s1.equals(clazz.getName()))
+				return s;
+		}
+
+		for (Config transformerConfig : script.transformerConfigs)
+		{
+			if (transformerConfig instanceof AliasConfig ac)
+			{
+				if (ac.getJavaPath().equals(clazz.getName()))
+					return ac.getAlias();
+			}
+		}
+
+		return clazz.getSimpleName();
 	}
 }

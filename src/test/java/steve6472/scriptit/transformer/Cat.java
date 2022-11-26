@@ -9,6 +9,11 @@ public class Cat extends Feline
 {
 	public String name;
 
+	public Cat(String name)
+	{
+		this.name = name;
+	}
+
 	@Override
 	public FoodType food()
 	{

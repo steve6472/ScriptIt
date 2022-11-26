@@ -21,7 +21,7 @@ public class AttributeJavaParamInjector extends Attribute
 	{
 		if (!ScriptItSettings.ALLOW_UNSAFE)
 		{
-			throw new RuntimeException("Unsafe operation detected! Allow unsafe or remove operation.");
+			throw new RuntimeException("Unsafe operation detected! Allow unsafe or remove operation. (attribute java param injector)");
 		}
 
 		if (!(nextExpr instanceof DeclareFunction func))
@@ -39,7 +39,7 @@ public class AttributeJavaParamInjector extends Attribute
 		try
 		{
 			Class<?> aClass = Class.forName(path);
-			type = JavaTransformer.generateType(aClass);
+			type = JavaTransformer.generateType(aClass, script);
 		} catch (ClassNotFoundException e)
 		{
 			throw new RuntimeException(e);

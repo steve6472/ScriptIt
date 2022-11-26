@@ -55,6 +55,7 @@ public class TokenParser
 		prefixParslets.put(Operator.OVERLOAD, new OverloadParslet());
 		prefixParslets.put(Operator.BRACKET_SQUARE_LEFT, new AttributeParslet());
 		prefixParslets.put(Operator.AUTO, new AutoParslet());
+		prefixParslets.put(Operator.TRANSFORMER, new TransformerParslet());
 
 		prefixParslets.put(Operator.SINGLE_LINE_COMMENT, new SingleLineCommentParslet());
 		prefixParslets.put(Operator.MULTI_LINE_COMMENT_BEGIN, new MultiLineCommentParslet());

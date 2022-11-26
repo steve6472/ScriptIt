@@ -76,11 +76,14 @@ public class Log
 	public static Consumer<String> scriptWarning = System.out::println;
 	public static Consumer<String> scriptDebug = System.out::println;
 
+	public static String DEBUG_PREFIX = WHITE + "[" + BRIGHT_BLACK + "DEBUG" + WHITE + "] ";
+	public static String WARNING_PREFIX = WHITE + "[" + BRIGHT_YELLOW + "WARNING" + WHITE + "] ";
+
 	public static void scriptWarning(boolean warningType, String text)
 	{
 		if (warningType)
 		{
-			scriptWarning.accept(WHITE + "[" + BRIGHT_YELLOW + "WARNING" + WHITE + "] " + YELLOW + text + RESET);
+			scriptWarning.accept(WARNING_PREFIX + YELLOW + text + RESET);
 		}
 	}
 
@@ -88,7 +91,7 @@ public class Log
 	{
 		if (debugType)
 		{
-			scriptDebug.accept(WHITE + "[" + BRIGHT_BLACK + "DEBUG" + WHITE + "] " + CYAN + text + RESET);
+			scriptDebug.accept(DEBUG_PREFIX + CYAN + text + RESET);
 		}
 	}
 

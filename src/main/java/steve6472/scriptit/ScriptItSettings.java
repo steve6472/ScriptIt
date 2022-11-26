@@ -18,6 +18,8 @@ public class ScriptItSettings
 	public static boolean DELAY_DEBUG = false;
 	public static boolean TOKENIZER_DEBUG = false;
 	public static boolean CLASS_TRANSFORMER_DEBUG = false;
+	public static boolean CLASS_TRANSFORMER_IGNORED_DEBUG = false;
+	public static boolean SCHEME_PARSER_DEBUG = false;
 	public static boolean STACK_TRACE = false;
 	public static int MAX_STACK_TRACE_SIZE = 1024;
 	public static boolean PARSER_WARNINGS = false;
@@ -27,6 +29,7 @@ public class ScriptItSettings
 	public static boolean ALLOW_AUTOMATIC_CONVERSION = true;
 	public static boolean ALLOW_CLASS_TYPE_CONVERSION = true;
 	public static boolean ALLOW_UNSAFE = false;
+	public static boolean ALLOW_UNSAFE_CUSTOM_TRANSFORMER = false;
 
 
 	/**

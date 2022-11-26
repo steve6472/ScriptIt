@@ -100,6 +100,7 @@ public enum Operator implements IOperator
 	OVERLOAD("overload"),
 	THIS("this"),
 	AUTO("auto"),
+	TRANSFORMER("transformer"),
 
 	// Other special
 	NUMBER_INT(""),

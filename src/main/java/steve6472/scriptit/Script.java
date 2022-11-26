@@ -8,6 +8,8 @@ import steve6472.scriptit.simple.Comment;
 import steve6472.scriptit.tokenizer.Operator;
 import steve6472.scriptit.tokenizer.Precedence;
 import steve6472.scriptit.tokenizer.TokenParser;
+import steve6472.scriptit.transformer.SchemeParser;
+import steve6472.scriptit.transformer.parser.config.Config;
 import steve6472.scriptit.type.PrimitiveTypes;
 import steve6472.scriptit.type.Type;
 import steve6472.scriptit.value.Value;
@@ -39,6 +41,9 @@ public class Script
 
 	private final Workspace workspace;
 
+	public SchemeParser schemeParser;
+	public List<Config> transformerConfigs = new ArrayList<>();
+
 	public TokenParser parser;
 	public MemoryStack memory;
 	MainExecutor mainExecutor;
@@ -67,6 +72,7 @@ public class Script
 
 		Script script = new Script(workspace);
 		script.parser = new TokenParser();
+		script.schemeParser = new SchemeParser();
 
 		script.parser.setExpression(script, code);
 		List<Expression> parse = script.parser.parseAll();
@@ -78,6 +84,7 @@ public class Script
 	{
 		Script script = new Script(workspace);
 		script.parser = new TokenParser();
+		script.schemeParser = new SchemeParser();
 
 		script.parser.setExpression(script, code);
 		List<Expression> parse = script.parser.parseAll();
@@ -93,6 +100,7 @@ public class Script
 
 		Script script = new Script(workspace);
 		script.parser = parser;
+		script.schemeParser = new SchemeParser();
 
 		script.parser.setExpression(script, code);
 		List<Expression> parse = script.parser.parseAll();
@@ -104,6 +112,7 @@ public class Script
 	{
 		Script script = new Script(workspace);
 		script.parser = parser;
+		script.schemeParser = new SchemeParser();
 
 		script.parser.setExpression(script, code);
 		List<Expression> parse = script.parser.parseAll();

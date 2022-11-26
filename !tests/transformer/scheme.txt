@@ -4,29 +4,24 @@ alias steve6472.scriptit.transformer.Feline: Feline
 alias steve6472.scriptit.transformer.FoodType: FoodType
 alias steve6472.scriptit.transformer.Farm: Farm
 
-//alias java.lang.String: String
-
-/*
-    class:
-        deny default
-        allow
-
-        allow_methods
-        allow_fields
-
-    methods fields:
-        deny default
-        allow
-
-    object:
-        deny
-        allow
-*/
-
 class Farm:
 {
     type: allow_methods
     object: deny
+
+    methods:
+    {
+        void addAnimal(Animal): allow
+    }
+}
+
+class java.util.ArrayList:
+{
+    methods:
+    {
+        ArrayList ArrayList(): allow
+        Object get(int): allow
+    }
 }
 
 class Animal:
@@ -43,6 +38,8 @@ class Cat:
     methods:
     {
         String getName(): allow
+        Cat Cat(String): allow
+        String id(): allow
     }
 
     fields:
@@ -50,3 +47,24 @@ class Cat:
         String name: deny
     }
 }
+
+
+
+
+
+/*
+    class:
+        deny default
+        allow
+
+        allow_methods
+        allow_fields
+
+    methods  fields:
+        deny  default
+        allow
+
+    object:
+        deny  default
+        allow
+*/
