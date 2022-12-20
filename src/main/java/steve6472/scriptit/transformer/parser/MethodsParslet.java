@@ -4,6 +4,7 @@ import steve6472.scriptit.newtokenizer.PrefixParselet;
 import steve6472.scriptit.newtokenizer.TokenParser;
 import steve6472.scriptit.newtokenizer.Tokenizer;
 import steve6472.scriptit.transformer.SchemeParser;
+import steve6472.scriptit.transformer.parser.config.CommentInformation;
 import steve6472.scriptit.transformer.parser.config.Config;
 import steve6472.scriptit.transformer.parser.config.MethodConfig;
 import steve6472.scriptit.transformer.parser.config.MethodsConfig;
@@ -30,6 +31,10 @@ public class MethodsParslet implements PrefixParselet<Config, SchemeParser.Data>
 
 		do
 		{
+			while (tokenizer.peekToken().type() == SchemeParser.Token.COMMENT)
+			{
+				parser.parse(CommentInformation.class);
+			}
 			MethodConfig parse = (MethodConfig) parser.parse(TokenParser.MIN_PRECEDENCE, SchemeParser.METHOD_PARSLET);
 			methodsConfig.configs.add(parse);
 

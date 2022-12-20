@@ -156,10 +156,17 @@ public class Memory
 					continue;
 				}
 
-				// Automatic type conversion int -> double
+				// Automatic type conversion
+				// int -> double
+				// double -> float
 				if (ScriptItSettings.ALLOW_AUTOMATIC_CONVERSION)
 				{
 					if (functionParams.getTypes()[i] == PrimitiveTypes.DOUBLE && types[i] == PrimitiveTypes.INT)
+					{
+						fitness += 2;
+						foundExactMatch = false;
+						continue;
+					} else if (functionParams.getTypes()[i] == PrimitiveTypes.DOUBLE && types[i] == PrimitiveTypes.FLOAT)
 					{
 						fitness += 2;
 						foundExactMatch = false;

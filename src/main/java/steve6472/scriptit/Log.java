@@ -74,16 +74,20 @@ public class Log
 	}
 
 	public static Consumer<String> scriptWarning = System.out::println;
-	public static Consumer<String> scriptDebug = System.out::println;
-
-	public static String DEBUG_PREFIX = WHITE + "[" + BRIGHT_BLACK + "DEBUG" + WHITE + "] ";
 	public static String WARNING_PREFIX = WHITE + "[" + BRIGHT_YELLOW + "WARNING" + WHITE + "] ";
+	public static String WARNING_COLOR = YELLOW;
+
+	public static Consumer<String> scriptDebug = System.out::println;
+	public static String DEBUG_PREFIX = WHITE + "[" + BRIGHT_BLACK + "DEBUG" + WHITE + "] ";
+	public static String DEBUG_COLOR = CYAN;
+
+	public static String RESET_MESSAGES = RESET;
 
 	public static void scriptWarning(boolean warningType, String text)
 	{
 		if (warningType)
 		{
-			scriptWarning.accept(WARNING_PREFIX + YELLOW + text + RESET);
+			scriptWarning.accept(WARNING_PREFIX + WARNING_COLOR + text + RESET_MESSAGES);
 		}
 	}
 
@@ -91,7 +95,7 @@ public class Log
 	{
 		if (debugType)
 		{
-			scriptDebug.accept(DEBUG_PREFIX + CYAN + text + RESET);
+			scriptDebug.accept(DEBUG_PREFIX + DEBUG_COLOR + text + RESET_MESSAGES);
 		}
 	}
 

@@ -27,6 +27,7 @@ public class PrimitiveTypes extends TypesInit
 	static
 	{
 		DOUBLE.createArraySubtype();
+		FLOAT.createArraySubtype();
 		INT.createArraySubtype();
 		BOOL.createArraySubtype();
 		STRING.createArraySubtype();
@@ -37,6 +38,7 @@ public class PrimitiveTypes extends TypesInit
 		 */
 		{
 			DOUBLE.addConstructor(FunctionParameters.create(DOUBLE, DOUBLE), new Constructor(args -> newPrimitive(DOUBLE, args[0].asPrimitive().getDouble())));
+			DOUBLE.addConstructor(FunctionParameters.create(DOUBLE, FLOAT), new Constructor(args -> newPrimitive(DOUBLE, (double) args[0].asPrimitive().getFloat())));
 			DOUBLE.addConstructor(FunctionParameters.create(DOUBLE, INT), new Constructor(args -> newPrimitive(DOUBLE, (double) args[0].asPrimitive().getInt())));
 			DOUBLE.addConstructor(FunctionParameters.create(DOUBLE), new Constructor(args -> newPrimitive(DOUBLE, 0.0)));
 
@@ -80,6 +82,57 @@ public class PrimitiveTypes extends TypesInit
 
 			DOUBLE.addUnaryOperator(Operator.ADD, new PUnaryOperatorOverload<>(right -> newPrimitive(DOUBLE, +right.get())));
 			DOUBLE.addUnaryOperator(Operator.SUB, new PUnaryOperatorOverload<>(right -> newPrimitive(DOUBLE, -right.get())));
+		}
+
+		/*
+		 * Float
+		 */
+		{
+			FLOAT.addConstructor(FunctionParameters.create(FLOAT, FLOAT), new Constructor(args -> newPrimitive(FLOAT, args[0].asPrimitive().getFloat())));
+			FLOAT.addConstructor(FunctionParameters.create(FLOAT, DOUBLE), new Constructor(args -> newPrimitive(FLOAT, (float) args[0].asPrimitive().getDouble())));
+			FLOAT.addConstructor(FunctionParameters.create(FLOAT, INT), new Constructor(args -> newPrimitive(FLOAT, (float) args[0].asPrimitive().getInt())));
+			FLOAT.addConstructor(FunctionParameters.create(FLOAT), new Constructor(args -> newPrimitive(FLOAT, 0.0f)));
+
+			FLOAT.addBinaryOperator(FLOAT, Operator.ADD, new PBinaryOperatorOverload<>((left, right) -> newPrimitive(FLOAT, left.get() + right.get())));
+			FLOAT.addBinaryOperator(FLOAT, Operator.SUB, new PBinaryOperatorOverload<>((left, right) -> newPrimitive(FLOAT, left.get() - right.get())));
+			FLOAT.addBinaryOperator(FLOAT, Operator.MUL, new PBinaryOperatorOverload<>((left, right) -> newPrimitive(FLOAT, left.get() * right.get())));
+			FLOAT.addBinaryOperator(FLOAT, Operator.DIV, new PBinaryOperatorOverload<>((left, right) -> newPrimitive(FLOAT, left.get() / right.get())));
+			FLOAT.addBinaryOperator(FLOAT, Operator.MOD, new PBinaryOperatorOverload<>((left, right) -> newPrimitive(FLOAT, left.get() % right.get())));
+
+			FLOAT.addBinaryOperator(INT, Operator.ADD, new PBinaryOperatorOverload<>((left, right) -> newPrimitive(FLOAT, left.get() + right.get())));
+			FLOAT.addBinaryOperator(INT, Operator.SUB, new PBinaryOperatorOverload<>((left, right) -> newPrimitive(FLOAT, left.get() - right.get())));
+			FLOAT.addBinaryOperator(INT, Operator.MUL, new PBinaryOperatorOverload<>((left, right) -> newPrimitive(FLOAT, left.get() * right.get())));
+			FLOAT.addBinaryOperator(INT, Operator.DIV, new PBinaryOperatorOverload<>((left, right) -> newPrimitive(FLOAT, left.get() / right.get())));
+			FLOAT.addBinaryOperator(INT, Operator.MOD, new PBinaryOperatorOverload<>((left, right) -> newPrimitive(FLOAT, left.get() % right.get())));
+
+			FLOAT.addBinaryOperator(FLOAT, Operator.ASSIGN_ADD, new PBinaryOperatorOverload<>((itself, right) -> itself.asPrimitive().set(itself.get() + right.get())));
+			FLOAT.addBinaryOperator(FLOAT, Operator.ASSIGN_SUB, new PBinaryOperatorOverload<>((itself, right) -> itself.asPrimitive().set(itself.get() - right.get())));
+			FLOAT.addBinaryOperator(FLOAT, Operator.ASSIGN_MUL, new PBinaryOperatorOverload<>((itself, right) -> itself.asPrimitive().set(itself.get() * right.get())));
+			FLOAT.addBinaryOperator(FLOAT, Operator.ASSIGN_DIV, new PBinaryOperatorOverload<>((itself, right) -> itself.asPrimitive().set(itself.get() / right.get())));
+			FLOAT.addBinaryOperator(FLOAT, Operator.ASSIGN_MOD, new PBinaryOperatorOverload<>((itself, right) -> itself.asPrimitive().set(itself.get() % right.get())));
+
+			FLOAT.addBinaryOperator(INT, Operator.ASSIGN_ADD, new PBinaryOperatorOverload<>((itself, right) -> itself.set(itself.get() + right.get())));
+			FLOAT.addBinaryOperator(INT, Operator.ASSIGN_SUB, new PBinaryOperatorOverload<>((itself, right) -> itself.set(itself.get() - right.get())));
+			FLOAT.addBinaryOperator(INT, Operator.ASSIGN_MUL, new PBinaryOperatorOverload<>((itself, right) -> itself.set(itself.get() * right.get())));
+			FLOAT.addBinaryOperator(INT, Operator.ASSIGN_DIV, new PBinaryOperatorOverload<>((itself, right) -> itself.set(itself.get() / right.get())));
+			FLOAT.addBinaryOperator(INT, Operator.ASSIGN_MOD, new PBinaryOperatorOverload<>((itself, right) -> itself.set(itself.get() % right.get())));
+
+			FLOAT.addBinaryOperator(FLOAT, Operator.EQUAL, new PBinaryOperatorOverload<>((left, right) -> left.getDouble() == right.getDouble() ? TRUE() : FALSE()));
+			FLOAT.addBinaryOperator(FLOAT, Operator.NOT_EQUAL, new PBinaryOperatorOverload<>((left, right) -> left.getDouble() != right.getDouble() ? TRUE() : FALSE()));
+			FLOAT.addBinaryOperator(FLOAT, Operator.LESS_THAN, new PBinaryOperatorOverload<>((left, right) -> left.get() < right.get() ? TRUE() : FALSE()));
+			FLOAT.addBinaryOperator(FLOAT, Operator.GREATER_THAN, new PBinaryOperatorOverload<>((left, right) -> left.get() > right.get() ? TRUE() : FALSE()));
+			FLOAT.addBinaryOperator(FLOAT, Operator.LESS_THAN_EQUAL, new PBinaryOperatorOverload<>((left, right) -> left.get() <= right.get() ? TRUE() : FALSE()));
+			FLOAT.addBinaryOperator(FLOAT, Operator.GREATER_THAN_EQUAL, new PBinaryOperatorOverload<>((left, right) -> left.get() >= right.get() ? TRUE() : FALSE()));
+
+			FLOAT.addBinaryOperator(INT, Operator.EQUAL, new PBinaryOperatorOverload<>((left, right) -> left.getDouble() == right.getInt() ? TRUE() : FALSE()));
+			FLOAT.addBinaryOperator(INT, Operator.NOT_EQUAL, new PBinaryOperatorOverload<>((left, right) -> left.getDouble() != right.getInt() ? TRUE() : FALSE()));
+			FLOAT.addBinaryOperator(INT, Operator.LESS_THAN, new PBinaryOperatorOverload<>((left, right) -> left.get() < right.get() ? TRUE() : FALSE()));
+			FLOAT.addBinaryOperator(INT, Operator.GREATER_THAN, new PBinaryOperatorOverload<>((left, right) -> left.get() > right.get() ? TRUE() : FALSE()));
+			FLOAT.addBinaryOperator(INT, Operator.LESS_THAN_EQUAL, new PBinaryOperatorOverload<>((left, right) -> left.get() <= right.get() ? TRUE() : FALSE()));
+			FLOAT.addBinaryOperator(INT, Operator.GREATER_THAN_EQUAL, new PBinaryOperatorOverload<>((left, right) -> left.get() >= right.get() ? TRUE() : FALSE()));
+
+			FLOAT.addUnaryOperator(Operator.ADD, new PUnaryOperatorOverload<>(right -> newPrimitive(FLOAT, +right.get())));
+			FLOAT.addUnaryOperator(Operator.SUB, new PUnaryOperatorOverload<>(right -> newPrimitive(FLOAT, -right.get())));
 		}
 
 		/*

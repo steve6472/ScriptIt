@@ -81,6 +81,13 @@ public class PrimitiveValue<T> extends Value
 		return (double) value;
 	}
 
+	public float getFloat()
+	{
+		if (type != PrimitiveTypes.FLOAT)
+			throw new TypeMismatchException("Tried to get %s, but value is %s", PrimitiveTypes.FLOAT, type);
+		return (float) value;
+	}
+
 	public char getChar()
 	{
 		if (type != PrimitiveTypes.CHAR)
@@ -124,7 +131,8 @@ public class PrimitiveValue<T> extends Value
 			{
 				throw new RuntimeException("Can not set to PrimitiveValue, class mismatch other: %s != this: %s".formatted(v.value.getClass(), value.getClass()));
 			}
-		} else
+		}
+		else
 		{
 			throw new RuntimeException("Can not set to PrimitiveValue from %s".formatted(other.getClass().getSimpleName()));
 		}

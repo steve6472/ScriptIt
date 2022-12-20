@@ -1,0 +1,8 @@
+transformer hell;
+import library System;
+
+Dog dog = Dog();
+dog.a();
+dog.b();
+dog.c();
+dog.d();

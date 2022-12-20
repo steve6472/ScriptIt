@@ -17,6 +17,7 @@ import steve6472.scriptit.value.Value;
 public class TypesInit
 {
 	public static final PrimitiveType<PrimitiveValue<Double>> DOUBLE = new PrimitiveType<>("double");
+	public static final PrimitiveType<PrimitiveValue<Float>> FLOAT = new PrimitiveType<>("float");
 	public static final PrimitiveType<PrimitiveValue<Integer>> INT = new PrimitiveType<>("int");
 	public static final PrimitiveType<PrimitiveValue<Boolean>> BOOL = new PrimitiveType<>("bool");
 	public static final PrimitiveType<PrimitiveValue<String>> STRING = new PrimitiveType<>("string");

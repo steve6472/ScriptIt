@@ -5,7 +5,7 @@ package steve6472.scriptit.transformer;
  * Date: 9/2/2022
  * Project: ScriptIt
  */
-public class Cat extends Feline
+public class Cat extends Feline implements Mewoable
 {
 	public String name;
 
@@ -23,5 +23,17 @@ public class Cat extends Feline
 	public String getName()
 	{
 		return name;
+	}
+
+	@Override
+	public void meow()
+	{
+		System.out.println("meow");
+	}
+
+	@Override
+	public boolean isFemale()
+	{
+		return Math.random() >= 0.5;
 	}
 }

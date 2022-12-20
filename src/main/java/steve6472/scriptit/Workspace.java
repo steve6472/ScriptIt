@@ -9,6 +9,7 @@ import steve6472.scriptit.transformer.parser.config.Config;
 import steve6472.scriptit.type.PrimitiveTypes;
 import steve6472.scriptit.type.Type;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -37,6 +38,7 @@ public class Workspace
 		PrimitiveTypes.TRUE();
 
 		addType(PrimitiveTypes.DOUBLE);
+		addType(PrimitiveTypes.FLOAT);
 		addType(PrimitiveTypes.INT);
 		addType(PrimitiveTypes.BOOL);
 		addType(PrimitiveTypes.STRING);
@@ -65,6 +67,11 @@ public class Workspace
 
 		if (type.getArraySubtype() != null)
 			this.types.put(type.getArraySubtype().getKeyword(), type.getArraySubtype());
+	}
+
+	public Collection<Type> getTypes()
+	{
+		return types.values();
 	}
 
 	public void addTransformer(String name, List<Config> loadedConfig)

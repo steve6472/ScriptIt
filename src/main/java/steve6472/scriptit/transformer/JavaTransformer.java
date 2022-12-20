@@ -16,6 +16,7 @@ import steve6472.scriptit.value.Value;
 
 import java.lang.reflect.*;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Created by steve6472
@@ -44,23 +45,27 @@ public class JavaTransformer
 	{
 		CACHE.put(int.class, PrimitiveTypes.INT);
 		CACHE.put(double.class, PrimitiveTypes.DOUBLE);
+		CACHE.put(float.class, PrimitiveTypes.FLOAT);
 		CACHE.put(String.class, PrimitiveTypes.STRING);
 		CACHE.put(boolean.class, PrimitiveTypes.BOOL);
 		CACHE.put(char.class, PrimitiveTypes.CHAR);
 
 		CACHE.put(Integer.class, PrimitiveTypes.INT);
 		CACHE.put(Double.class, PrimitiveTypes.DOUBLE);
+		CACHE.put(Float.class, PrimitiveTypes.FLOAT);
 		CACHE.put(Boolean.class, PrimitiveTypes.BOOL);
 		CACHE.put(Character.class, PrimitiveTypes.CHAR);
 
 		CACHE.put(int[].class, PrimitiveTypes.INT.getArraySubtype());
 		CACHE.put(double[].class, PrimitiveTypes.DOUBLE.getArraySubtype());
+		CACHE.put(float[].class, PrimitiveTypes.FLOAT.getArraySubtype());
 		CACHE.put(String[].class, PrimitiveTypes.STRING.getArraySubtype());
 		CACHE.put(boolean[].class, PrimitiveTypes.BOOL.getArraySubtype());
 		CACHE.put(char[].class, PrimitiveTypes.CHAR.getArraySubtype());
 
 		CACHE.put(Integer[].class, PrimitiveTypes.INT.getArraySubtype());
 		CACHE.put(Double[].class, PrimitiveTypes.DOUBLE.getArraySubtype());
+		CACHE.put(Float[].class, PrimitiveTypes.FLOAT.getArraySubtype());
 		CACHE.put(Boolean[].class, PrimitiveTypes.BOOL.getArraySubtype());
 		CACHE.put(Character[].class, PrimitiveTypes.CHAR.getArraySubtype());
 
@@ -69,16 +74,16 @@ public class JavaTransformer
 
 	public static Type generateType(Class<?> clazz, Script script)
 	{
-		if (!canBeTransformed(script, clazz))
-		{
-			throw new RuntimeException("Tried to transform denied class '" + clazz.getName() + "'");
-		}
-
 		Type cachedType = CACHE.get(clazz);
 
 		if (cachedType != null)
 		{
 			return cachedType;
+		}
+
+		if (!canBeTransformed(script, clazz))
+		{
+			throw new RuntimeException("Tried to transform denied class '" + clazz.getName() + "'");
 		}
 
 		Log.scriptDebug(ScriptItSettings.CLASS_TRANSFORMER_DEBUG, Log.RED + "-".repeat(32));
@@ -119,6 +124,8 @@ public class JavaTransformer
 			String[] argumentNames = new String[parameters.length];
 
 			FunctionParameters.FunctionParametersBuilder builder = FunctionParameters.function(type.getKeyword());
+
+			Log.scriptDebug(ScriptItSettings.CLASS_TRANSFORMER_DEBUG, "Creating Constructor " + constructor);
 
 			for (int i = 0; i < parameters.length; i++)
 			{
@@ -199,7 +206,7 @@ public class JavaTransformer
 			Parameter[] parameters = declaredMethod.getParameters();
 			String[] argumentNames = new String[parameters.length];
 
-			Log.scriptDebug(ScriptItSettings.CLASS_TRANSFORMER_DEBUG, "Adding function -> " + declaredMethod.getName() + " (" + parameters.length + ")" + declaredMethod.getDeclaringClass());
+			Log.scriptDebug(ScriptItSettings.CLASS_TRANSFORMER_DEBUG, "Adding function -> " + declaredMethod.getReturnType() + " " + declaredMethod.getName() + " (" + parameters.length + ")" + declaredMethod.getDeclaringClass());
 
 			FunctionParameters.FunctionParametersBuilder builder = FunctionParameters.function(declaredMethod.getName());
 
@@ -215,7 +222,8 @@ public class JavaTransformer
 				} catch (Exception exception)
 				{
 					throw new RuntimeException(
-						"Error thrown when generating types for method parameters (" + declaredMethod.getName() + Arrays.toString(declaredMethod.getParameters()) + " of class " + clazz.getName() + ")"
+						"Error thrown when generating types for method parameters (" + declaredMethod.getReturnType() + " " + declaredMethod.getName() + Arrays.toString(declaredMethod.getParameters()) + " of class " + clazz.getName() + ")" +
+						"\n" + declaredMethod.getReturnType().getSimpleName() + " " + declaredMethod.getName() + "(" + Arrays.stream(declaredMethod.getParameters()).map(p -> p.getType().getSimpleName()).collect(Collectors.joining(" ")) + ")"
 						, exception);
 				}
 			}
@@ -379,133 +387,220 @@ public class JavaTransformer
 		}
 	}
 
+	private static boolean isSameClass(String path, Class<?> clazz)
+	{
+		try
+		{
+			return Class.forName(path).isAssignableFrom(clazz);
+		} catch (ClassNotFoundException e)
+		{
+			throw new RuntimeException(e);
+		}
+	}
+
 	public static boolean canBeTransformed(Script script, Class<?> clazz)
 	{
+		if (script == null)
+			return true;
+
 		if (CACHE.containsKey(clazz))
 			return true;
 
 		for (Config transformerConfig : script.transformerConfigs)
 		{
-			if (transformerConfig instanceof ClassConfig cc)
+			if (!(transformerConfig instanceof ClassConfig cc)) continue;
+
+//			Log.scriptDebug(ScriptItSettings.CLASS_TRANSFORMER_DEBUG, "Testing transformationability -> " +  cc.path + " == " + clazz.getName() + " : " + isSameClass(cc.path, clazz));
+			if (isSameClass(cc.path, clazz))
 			{
-				if (cc.path.equals(clazz.getName()))
-					return !cc.isFullyDisabled();
+				return !cc.isFullyDisabled();
 			}
+			//				if (cc.path.equals(clazz.getName()))
+			//					return !cc.isFullyDisabled();
 		}
 		return false;
 	}
 
 	public static boolean canTransformField(Script script, Class<?> clazz, Field field)
 	{
+		if (script == null)
+			return false;
+
 		for (Config transformerConfig : script.transformerConfigs)
 		{
-			if (transformerConfig instanceof ClassConfig cc)
+			if (!(transformerConfig instanceof ClassConfig cc)) continue;
+			if (!isSameClass(cc.path, clazz)) continue;
+
+			// First check individual field overrites
+			for (FieldConfig fieldConfig : cc.fields)
 			{
-				if (cc.path.equals(clazz.getName()))
+				if (fieldConfig.type.equals(field.getType().getName()) && field.getName().equals(fieldConfig.name))
 				{
-					if (cc.type == Setting.ALLOW || cc.type == Setting.ALLOW_FIELDS)
-						return true;
+					return fieldConfig.setting == Setting.ALLOW;
+				}
+			}
 
-					for (FieldConfig fieldConfig : cc.fields)
+			// If field override does not exist use the global field override
+			return cc.type == Setting.ALLOW || cc.type == Setting.ALLOW_FIELDS;
+		}
+		return false;
+	}
+
+	private static boolean interfaceIterator(Script script, Class<?> anInterface, Method method)
+	{
+		if (canTransformMethod(script, anInterface, method))
+		{
+			// Confirm that the method exists in the interface as well
+			for (Method declaredMethod : anInterface.getDeclaredMethods())
+			{
+				if (!declaredMethod.getName().equals(method.getName()) || declaredMethod.getParameterCount() != method.getParameterCount())
+					continue;
+
+				int matched = 0;
+
+				Log.scriptDebug(ScriptItSettings.CLASS_TRANSFORMER_DEBUG, "Mathcing in interface " + anInterface);
+
+				for (int i = 0; i < method.getParameterCount(); i++)
+				{
+					Log.scriptDebug(ScriptItSettings.CLASS_TRANSFORMER_DEBUG, declaredMethod.getParameterTypes()[i] + " == " + method.getParameterTypes()[i]);
+					if (declaredMethod.getParameterTypes()[i] != method.getParameterTypes()[i])
 					{
-						if (fieldConfig.type.equals(field.getType().getName()) && field.getName().equals(fieldConfig.name))
-						{
-							return fieldConfig.setting == Setting.ALLOW;
-						}
+						break;
+					} else
+					{
+						matched++;
 					}
+				}
 
-					return false;
+				if (matched == method.getParameterCount())
+				{
+					Log.scriptDebug(ScriptItSettings.CLASS_TRANSFORMER_DEBUG, "Interface Override for " + method);
+					return true;
 				}
 			}
 		}
+
+		for (Class<?> anInterfaceInterface : anInterface.getInterfaces())
+		{
+			if (interfaceIterator(script, anInterfaceInterface, method))
+				return true;
+		}
+
 		return false;
 	}
 
 	public static boolean canTransformMethod(Script script, Class<?> clazz, Method method)
 	{
+		if (script == null)
+			return false;
+
+		// Not supported by ScriptIt yet
+		if (method.isVarArgs())
+			return false;
+
 		for (Config transformerConfig : script.transformerConfigs)
 		{
-			if (transformerConfig instanceof ClassConfig cc)
+			if (!(transformerConfig instanceof ClassConfig cc)) continue;
+
+			if (!cc.path.equals(clazz.getName()))
 			{
-				if (cc.path.equals(clazz.getName()))
+				// Try interfaces
+				for (Class<?> anInterface : clazz.getInterfaces())
 				{
-					if (method.getDeclaringClass().equals(Object.class) && cc.objectSetting == Setting.DENY)
-						return false;
-
-					if (cc.type == Setting.ALLOW || cc.type == Setting.ALLOW_METHODS)
+					if (interfaceIterator(script, anInterface, method))
 						return true;
-
-					methods: for (MethodConfig methodConfig : cc.methods)
-					{
-						if (methodConfig.returnType.equals(method.getReturnType().getName()) && method.getName().equals(methodConfig.name))
-						{
-							// not the same method
-							if (method.getParameters().length != methodConfig.arguments.size())
-								continue;
-
-							for (int i = 0; i < method.getParameters().length; i++)
-							{
-								// Use JAVA_ALIAS to translate int -> java.lang.Integer
-								if (!methodConfig.arguments
-									.get(i)
-									.equals(SchemeParser.JAVA_ALIAS.getOrDefault(method.getParameters()[i]
-										.getType()
-										.getName(), method.getParameters()[i].getType().getName())))
-								{
-									continue methods;
-								}
-							}
-
-							return methodConfig.setting == Setting.ALLOW;
-						}
-					}
-
-					return false;
 				}
+				continue;
+			}
+
+			// Decide wheather to include Objects methods or not
+			if (method.getDeclaringClass().equals(Object.class) && cc.objectSetting == Setting.DENY)
+				return false;
+
+			// First check individual method overrites
+			methods: for (MethodConfig methodConfig : cc.methods)
+			{
+				// Use JAVA_ALIAS to translate int -> java.lang.Integer
+				if (!methodConfig.returnType.equals(SchemeParser.JAVA_ALIAS.getOrDefault(method
+					.getReturnType()
+					.getName(), method.getReturnType().getName())) || !method.getName().equals(methodConfig.name))
+					continue;
+
+				// not the same method
+				if (method.getParameters().length != methodConfig.arguments.size()) continue;
+
+				for (int i = 0; i < method.getParameters().length; i++)
+				{
+					// universal Object
+					if (methodConfig.arguments.get(i).equals(Object.class.getName()))
+						continue;
+
+					// Use JAVA_ALIAS to translate int -> java.lang.Integer
+					if (!methodConfig.arguments
+						.get(i)
+						.equals(SchemeParser.JAVA_ALIAS.getOrDefault(method.getParameters()[i]
+							.getType()
+							.getName(), method.getParameters()[i].getType().getName())))
+					{
+						continue methods;
+					}
+				}
+
+				return methodConfig.setting == Setting.ALLOW;
+			}
+
+			// If method override does not exist use the global method override
+			if (cc.type == Setting.ALLOW || cc.type == Setting.ALLOW_METHODS)
+			{
+//				Log.scriptDebug(ScriptItSettings.CLASS_TRANSFORMER_DEBUG, "Allowing " + method + " using global override");
+				return true;
 			}
 		}
+
+
 		return false;
 	}
 
 	public static boolean canTransformConstructor(Script script, Class<?> clazz, Constructor<?> constructor)
 	{
+		if (script == null)
+			return false;
+
 		for (Config transformerConfig : script.transformerConfigs)
 		{
-			if (transformerConfig instanceof ClassConfig cc)
+			if (!(transformerConfig instanceof ClassConfig cc)) continue;
+
+			if (!cc.path.equals(clazz.getName())) continue;
+
+			methods: for (MethodConfig methodConfig : cc.methods)
 			{
-				if (cc.path.equals(clazz.getName()))
+				if (!clazz.getSimpleName().equals(methodConfig.name)) continue;
+
+				// not the same method
+				if (constructor.getParameters().length !=  methodConfig.arguments.size())
+					continue;
+
+				for (int i = 0; i < constructor.getParameters().length; i++)
 				{
-					if (cc.type == Setting.ALLOW || cc.type == Setting.ALLOW_METHODS)
-						return true;
-
-					methods: for (MethodConfig methodConfig : cc.methods)
+					// Use JAVA_ALIAS to translate int -> java.lang.Integer
+					if (!methodConfig.arguments
+						.get(i)
+						.equals(SchemeParser.JAVA_ALIAS.getOrDefault(constructor.getParameters()[i]
+							.getType()
+							.getName(), constructor.getParameters()[i].getType().getName())))
 					{
-						if (clazz.getSimpleName().equals(methodConfig.name))
-						{
-							// not the same method
-							if (constructor.getParameters().length !=  methodConfig.arguments.size())
-								continue;
-
-							for (int i = 0; i < constructor.getParameters().length; i++)
-							{
-								// Use JAVA_ALIAS to translate int -> java.lang.Integer
-								if (!methodConfig.arguments
-									.get(i)
-									.equals(SchemeParser.JAVA_ALIAS.getOrDefault(constructor.getParameters()[i]
-										.getType()
-										.getName(), constructor.getParameters()[i].getType().getName())))
-								{
-									continue methods;
-								}
-							}
-
-							return methodConfig.setting == Setting.ALLOW;
-						}
+						continue methods;
 					}
-
-					return false;
 				}
+
+				return methodConfig.setting == Setting.ALLOW;
 			}
+
+			// If method override does not exist use the global method override
+			if (cc.type == Setting.ALLOW || cc.type == Setting.ALLOW_METHODS)
+				return true;
+
+			return false;
 		}
 		return false;
 	}

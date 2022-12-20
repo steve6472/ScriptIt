@@ -134,6 +134,7 @@ public class Script
 		{
 			addTypeIfFound(PrimitiveTypes.INT);
 			addTypeIfFound(PrimitiveTypes.DOUBLE);
+			addTypeIfFound(PrimitiveTypes.FLOAT);
 			addTypeIfFound(PrimitiveTypes.CHAR);
 			addTypeIfFound(PrimitiveTypes.STRING);
 			addTypeIfFound(PrimitiveTypes.BOOL);

@@ -6,10 +6,8 @@ import steve6472.scriptit.newtokenizer.Tokenizer;
 import steve6472.scriptit.transformer.SchemeParser;
 import steve6472.scriptit.transformer.parser.config.Config;
 import steve6472.scriptit.transformer.parser.config.MethodConfig;
+import steve6472.scriptit.transformer.parser.config.PathConfig;
 import steve6472.scriptit.transformer.parser.config.Setting;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by steve6472
@@ -21,7 +19,7 @@ public class MethodParslet implements PrefixParselet<Config, SchemeParser.Data>
 	@Override
 	public Config parse(Tokenizer tokenizer, TokenParser<Config, SchemeParser.Data> parser, SchemeParser.Data data)
 	{
-		String returnType = tokenizer.nextToken().sval();
+		String returnType = parser.parse(PathConfig.class).getPath();
 		String name = tokenizer.nextToken().sval();
 		tokenizer.matchToken(SchemeParser.Token.PARAMETERS_START, true);
 		MethodConfig methodConfig = new MethodConfig();
@@ -32,7 +30,7 @@ public class MethodParslet implements PrefixParselet<Config, SchemeParser.Data>
 		{
 			while (!tokenizer.matchToken(SchemeParser.Token.PARAMETERS_END, true))
 			{
-				methodConfig.arguments.add(tokenizer.nextToken().sval());
+				methodConfig.arguments.add(parser.parse(PathConfig.class).getPath());
 			}
 		}
 		tokenizer.matchToken(SchemeParser.Token.OP, true);

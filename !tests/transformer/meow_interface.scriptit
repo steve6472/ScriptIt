@@ -1,0 +1,8 @@
+transformer meow;
+import library System;
+import library Cats;
+
+//System.dumpFunctions();
+
+auto cat = Cats.createCat();
+cat.meow();

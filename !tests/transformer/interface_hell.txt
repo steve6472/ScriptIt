@@ -1,0 +1,10 @@
+alias steve6472.scriptit.transformer.interfacehell.Bar: Bar
+alias steve6472.scriptit.transformer.interfacehell.Dog: Dog
+alias steve6472.scriptit.transformer.interfacehell.Faa: Faa
+alias steve6472.scriptit.transformer.interfacehell.Fee: Fee
+alias steve6472.scriptit.transformer.interfacehell.Foo: Foo
+
+class Dog: { type: allow }
+class Faa: { type: allow }
+class Fee: { type: allow }
+class Foo: { type: allow }

@@ -1,0 +1,10 @@
+alias steve6472.scriptit.transformer.Mewoable: Meowable
+
+class Meowable:
+{
+    type: allow_methods
+    methods:
+    {
+        boolean isFemale(): deny
+    }
+}
