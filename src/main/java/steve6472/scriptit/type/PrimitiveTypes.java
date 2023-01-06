@@ -7,7 +7,7 @@ import steve6472.scriptit.tokenizer.Operator;
 import steve6472.scriptit.value.PrimitiveValue;
 
 /**********************
- * Created by steve6472 (Mirek Jozefek)
+ * Created by steve6472
  * On date: 5/21/2021
  * Project: ScriptIt
  *

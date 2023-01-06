@@ -10,7 +10,7 @@ import steve6472.scriptit.value.Value;
 import java.util.Arrays;
 
 /**********************
- * Created by steve6472 (Mirek Jozefek)
+ * Created by steve6472
  * On date: 5/20/2021
  * Project: ScriptIt
  *

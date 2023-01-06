@@ -5,7 +5,7 @@ import steve6472.scriptit.Log;
 import steve6472.scriptit.Workspace;
 
 /**********************
- * Created by steve6472 (Mirek Jozefek)
+ * Created by steve6472
  * On date: 5/23/2021
  * Project: ScriptIt
  *

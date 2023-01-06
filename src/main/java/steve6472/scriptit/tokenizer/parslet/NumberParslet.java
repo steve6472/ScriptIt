@@ -9,7 +9,7 @@ import steve6472.scriptit.type.PrimitiveTypes;
 import steve6472.scriptit.value.PrimitiveValue;
 
 /**********************
- * Created by steve6472 (Mirek Jozefek)
+ * Created by steve6472
  * On date: 12/19/2021
  * Project: ScriptIt
  *

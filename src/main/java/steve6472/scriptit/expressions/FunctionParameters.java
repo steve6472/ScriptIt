@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Objects;
 
 /**********************
- * Created by steve6472 (Mirek Jozefek)
+ * Created by steve6472
  * On date: 5/1/2021
  * Project: ScriptIt
  *

@@ -7,7 +7,7 @@ import steve6472.scriptit.executor.Executor;
 import steve6472.scriptit.type.PrimitiveTypes;
 
 /**********************
- * Created by steve6472 (Mirek Jozefek)
+ * Created by steve6472
  * On date: 5/22/2021
  * Project: ScriptIt
  *

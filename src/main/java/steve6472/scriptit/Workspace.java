@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.Map;
 
 /**********************
- * Created by steve6472 (Mirek Jozefek)
+ * Created by steve6472
  * On date: 5/23/2021
  * Project: ScriptIt
  *

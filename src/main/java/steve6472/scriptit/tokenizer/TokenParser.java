@@ -12,7 +12,7 @@ import steve6472.scriptit.tokenizer.parslet.*;
 import java.util.*;
 
 /**********************
- * Created by steve6472 (Mirek Jozefek)
+ * Created by steve6472
  * On date: 5/13/2021
  * Project: ScriptIt
  * <p>

@@ -5,7 +5,7 @@ import steve6472.scriptit.Script;
 import steve6472.scriptit.ScriptItSettings;
 
 /**********************
- * Created by steve6472 (Mirek Jozefek)
+ * Created by steve6472
  * On date: 5/20/2021
  * Project: ScriptIt
  *

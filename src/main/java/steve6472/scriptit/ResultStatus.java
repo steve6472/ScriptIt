@@ -1,7 +1,7 @@
 package steve6472.scriptit;
 
 /**********************
- * Created by steve6472 (Mirek Jozefek)
+ * Created by steve6472
  * On date: 5/21/2021
  * Project: ScriptIt
  *

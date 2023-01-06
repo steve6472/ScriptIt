@@ -7,7 +7,7 @@ import static steve6472.scriptit.type.PrimitiveTypes.INT;
 import static steve6472.scriptit.type.TypesInit.newPrimitive;
 
 /**********************
- * Created by steve6472 (Mirek Jozefek)
+ * Created by steve6472
  * On date: 5/29/2021
  * Project: ScriptIt
  *
